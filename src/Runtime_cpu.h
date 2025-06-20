@@ -34,7 +34,8 @@ _FPC_HTABLE_T *_FPC_HTABLE_;
 #ifdef FPC_MULTI_THREADED
 pthread_mutex_t fpc_lock;
 #endif
-
+#define MAX_ERROR_ENTRIES 1000
+#define MAX_NAME_LENGTH 100
 /** Program name and input **/
 int _FPC_PROG_INPUTS;
 char **_FPC_PROG_ARGS;
@@ -584,13 +585,91 @@ void _FPC_FP64_CHECK_(
 // ====================================================
 */
 // #else
+static char error_names[MAX_ERROR_ENTRIES][MAX_NAME_LENGTH];  // Store up to 1000 variable names
+static double error_values[MAX_ERROR_ENTRIES];    // Store corresponding errors
+static int error_count = 0;
+
+double _FPC_FP32_FIND_ERROR_(const char* name) {
+    if (!name) return 0.0;
+    
+    for (int i = 0; i < error_count; i++) {
+        if (strcmp(error_names[i], name) == 0) {
+            return error_values[i];
+        }
+    }
+    return 0.0;  // No error found
+}
+
+void _FPC_FP32_STORE_ERROR_(const char* name, double error) {
+    if (!name || error_count >= 1000) return;
+    
+    // Check if name already exists and update
+    for (int i = 0; i < error_count; i++) {
+        if (strcmp(error_names[i], name) == 0) {
+            error_values[i] = error;  // Update existing
+            return;
+        }
+    }
+    
+    // Add new entry
+    strncpy(error_names[error_count], name, 99);
+    error_names[error_count][99] = '\0';  // Ensure null termination
+    error_values[error_count] = error;
+    error_count++;
+}
+
 
 void _FPC_FP32_CHECK_(
-    float x, float y, float z, int loc, char *file_name, int op, int cond)
-{
+    float x, float y, float z, int loc, char *file_name, int op, int cond, const char *result_name, 
+  const char *op1_name, const char *op2_name)
+{ 
+  printf("#FPCHECKER: Entered _FPC_FP32_CHECK_\n");
+  printf("#FPCHECKER: Debugging check for %s | op1 = %s (%.3e), op2 = %s (%.3e)\n",result_name, op1_name, y, op2_name, z);
   if (!cond)
     return;
 
+   // Error accumulation
+  double err_op1 = _FPC_FP32_FIND_ERROR_(op1_name);
+  double err_op2 = _FPC_FP32_FIND_ERROR_(op2_name);
+   
+   printf("#FPCHECKER: Found errors: op1=%.9e, op2=%.9e\n", err_op1, err_op2);
+  
+  double perturbed_op1 = (double)y + err_op1;
+  double perturbed_op2 = (double)z + err_op2;
+  double r_high = 0.0;
+
+  static double last_multiplication= 0.0;
+  static double second_last_mul = 0.0;
+  
+  switch (op) {
+    case 0: r_high = perturbed_op1 + perturbed_op2; break; // FAdd
+    case 1: r_high = perturbed_op1 - perturbed_op2; break; // FSub
+    case 2: r_high = perturbed_op1 * perturbed_op2; 
+            second_last_mul = last_multiplication;
+            last_multiplication = r_high;
+            break; // FMul
+    case 3: 
+        if(perturbed_op2 != 0.0){
+        r_high = perturbed_op1 / perturbed_op2; break; // FDiv
+        }
+        else {printf("#FPCHECKER: Division by zero");
+        r_high = 0.0;}
+    case 4: r_high = fmod(perturbed_op1, perturbed_op2); break;
+    case 5: r_high = perturbed_op1 * perturbed_op2 + second_last_mul; break;
+    case 6: r_high = perturbed_op1 * perturbed_op2 - second_last_mul; break;
+    // case 6: r_high = fma(perturbed_op1, perturbed_op2, -err_op1);
+    default:
+    printf("#FPCHECKER: Not a basic math operation. op=%d\n",op);
+  }
+  
+  double r_low = (double)x;
+  double err_result = r_high - r_low;
+
+  printf("#FPCHECKER: r_high=%.12e, r_low=%.12e, error=%.12e\n", r_high, r_low, err_result);
+  
+  _FPC_FP32_STORE_ERROR_(result_name, err_result);
+  printf("#FPCHECKER: Accumulated error for %s = %.17e\n", result_name, err_result);
+  fflush(stdout);
 #ifdef FPC_FAST_CHECKING
   // Check for NaN, infinity, or subnormals
   uint64_t exponent = _FPC_FP32_GET_EXPONENT(x);
@@ -652,7 +731,7 @@ void _FPC_FP32_CHECK_(
 }
 
 void _FPC_FP64_CHECK_(
-    double x, double y, double z, int loc, char *file_name, int op, int cond)
+    double x, double y, double z, double error_y, double error_z, int loc, char *file_name, int op, int cond)
 {
   if (!cond)
     return;

@@ -132,6 +132,8 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
     SET_ODR_LIKAGE("_FPC_TRAP_HERE")
     SET_ODR_LIKAGE("_FPC_STRING_ENDS_WITH")
     SET_ODR_LIKAGE("_FPC_CHECK_AND_TRAP")
+    SET_ODR_LIKAGE("_FPC_FP32_FIND_ERROR_")
+    SET_ODR_LIKAGE("_FPC_FP32_STORE_ERROR_")
     // Hash table
     SET_ODR_LIKAGE("_FPC_HT_CREATE_")
     SET_ODR_LIKAGE("_FPC_HT_HASH_")
@@ -217,6 +219,17 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
         }
         args.push_back(inst->getOperand(0));
         args.push_back(inst->getOperand(1));
+
+        // Push error values for single and double precision 
+        // if (isSingleFPOperation(inst)){
+        //   args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0));  // y_error
+        //   args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0));  // z_error
+        // }
+        // else if (isDoubleFPOperation(inst)) {
+        // // For FP64 operations: error parameters are double  
+        //   args.push_back(ConstantFP::get(builder.getDoubleTy(), 0.0));  // y_error (double)
+        //   args.push_back(ConstantFP::get(builder.getDoubleTy(), 0.0));  // z_error (double)
+        // }
 
         // Push location parameter (line number)
         int lineNumber = CUDAAnalysis::getLineOfCode(inst);
@@ -308,6 +321,51 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
               ConstantInt::get(mod->getContext(), APInt(32, 1, true));
           args.push_back(cond);
         }
+      
+        static int instr_counter = 0;
+        static std::map<Value*, std::string> value_to_name_map;
+      
+        // Generate result name
+        std::string res_name = inst->hasName() ? inst->getName().str() : "res_" + std::to_string(instr_counter);
+        value_to_name_map[inst] = res_name;
+
+        // Map operands to their source names
+        std::string op1_name, op2_name;
+        Value* op1 = inst->getOperand(0);
+        Value* op2 = inst->getOperand(1);
+
+        if (value_to_name_map.count(op1)) {
+            op1_name = value_to_name_map[op1];
+        } else {
+            op1_name = "input_" + std::to_string(instr_counter) + "_1";
+        }
+
+        if (value_to_name_map.count(op2)) {
+            op2_name = value_to_name_map[op2];
+        } else {
+            op2_name = "input_" + std::to_string(instr_counter) + "_2";
+        }
+        instr_counter++;
+
+        // Debug output to see the mapping
+        printf("#FPCHECKER INSTRUMENTATION %s = operand_1 %s operand_2 %s operation %d \n", 
+          res_name.c_str(), op1_name.c_str(), op2_name.c_str(), operationType);
+
+        args.push_back(builder.CreateGlobalStringPtr(res_name));
+        args.push_back(builder.CreateGlobalStringPtr(op1_name));
+        args.push_back(builder.CreateGlobalStringPtr(op2_name));
+
+        // printf("[INSTRUMENTATION DEBUG] Processing instruction: ");
+        // inst->print(llvm::outs());
+        // printf("\n");
+        // printf("[INSTRUMENTATION DEBUG] Operand 0: ");
+        // op1->print(llvm::outs());
+        // printf("\n");
+        // printf("[INSTRUMENTATION DEBUG] Operand 1: ");
+        // op2->print(llvm::outs());
+        // printf("\n");
+        // printf("[INSTRUMENTATION DEBUG] op1_name=%s, op2_name=%s\n", op1_name.c_str(), op2_name.c_str());
+        // printf("[INSTRUMENTATION DEBUG] value_to_name_map size: %zu\n", value_to_name_map.size());
 
         ArrayRef<Value *> args_ref(args);
 
