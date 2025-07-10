@@ -195,6 +195,25 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
       if (isFPOperation(inst) &&
           (isSingleFPOperation(inst) || isDoubleFPOperation(inst)))
       {
+
+        llvm::Value *storeAddr = nullptr;
+        // Iterate through all users of the instruction
+        for (llvm::User *user : inst->users())
+        {
+          // Check if the user is an Instruction (which it almost always will be
+          // in this context, but it's good practice to check if you're not 100% sure)
+          if (llvm::Instruction *userInst = llvm::dyn_cast<llvm::Instruction>(user))
+          {
+            // Check if the user instruction is a StoreInst
+            if (llvm::isa<llvm::StoreInst>(userInst))
+            {
+              llvm::errs() << "Found a StoreInst using the instruction: " << *userInst << "\n";
+              storeAddr = userInst->getOperand(1);
+              // llvm::errs() << "  Store address operand: " << *storeAddr << "\n";
+            }
+          }
+        }
+
         DebugLoc loc = inst->getDebugLoc();
 
         // Create builder to add stuff after the instruction
@@ -308,6 +327,9 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
               ConstantInt::get(mod->getContext(), APInt(32, 1, true));
           args.push_back(cond);
         }
+
+        // Pushing address of Store instruction
+        args.push_back(storeAddr);
 
         ArrayRef<Value *> args_ref(args);
 

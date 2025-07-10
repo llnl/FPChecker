@@ -586,8 +586,10 @@ void _FPC_FP64_CHECK_(
 // #else
 
 void _FPC_FP32_CHECK_(
-    float x, float y, float z, int loc, char *file_name, int op, int cond)
+    float x, float y, float z, int loc, char *file_name, int op, int cond, uintptr_t storeAddr)
 {
+  printf("Store address: %lu\n", storeAddr);
+
   if (!cond)
     return;
 
@@ -652,8 +654,10 @@ void _FPC_FP32_CHECK_(
 }
 
 void _FPC_FP64_CHECK_(
-    double x, double y, double z, int loc, char *file_name, int op, int cond)
+    double x, double y, double z, int loc, char *file_name, int op, int cond, uintptr_t storeAddr)
 {
+  printf("Store address: %lu\n", storeAddr);
+
   if (!cond)
     return;
 
