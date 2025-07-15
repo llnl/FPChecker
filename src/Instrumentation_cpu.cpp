@@ -197,9 +197,128 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
       if (isFPOperation(inst) &&
           (isSingleFPOperation(inst) || isDoubleFPOperation(inst)))
       {
+        // llvm::Value *storeAddr = nullptr;
+        // Iterate through all users of the instruction
+        // for (llvm::User *user : inst->users())
+        // {
+        //   // Check if the user is an Instruction
+        //   if (llvm::Instruction *userInst = llvm::dyn_cast<llvm::Instruction>(user))
+        //   {
+        //     // Check if the user instruction is a StoreInst
+        //     if (llvm::isa<llvm::StoreInst>(userInst))
+        //     {
+        //       llvm::errs() << "Found a StoreInst using the instruction: " << *userInst << "\n";
+        //       storeAddr = userInst->getOperand(1);
+        //     }
+        //   }
+        // }
+
+        std::string storeAddrString = "";
+
+        for (llvm::User *user : inst->users()) {
+          if (auto *userInst = llvm::dyn_cast<llvm::Instruction>(user)) {
+            if (llvm::isa<llvm::StoreInst>(userInst)) {
+              storeAddrString += "0;";
+            }
+          }
+        }  
+        if (storeAddrString.empty()) {
+            storeAddrString = "0;";
+          }
+
+
+        llvm::Value *op1Addr = nullptr;
+        llvm::Value *op2Addr = nullptr;
+        llvm::Value *fmaAddr = nullptr;
+        // int foundLoads = 0;
+
+        //Iterate with all the operands of an instruction
+        for (unsigned i = 0; i < inst->getNumOperands(); ++i) {
+          llvm::Value *operand = inst->getOperand(i);
+          // check if the operand has load instruction
+          if (auto *loadInst = llvm::dyn_cast<llvm::LoadInst>(operand)) {
+              llvm::Value *addr = loadInst->getPointerOperand();
+              llvm::errs() << "Operand " << i << " is loaded from address: " << *addr << "\n";
+
+              // Assign to the first available slot
+              if (!op1Addr) op1Addr = addr;
+              else if (!op2Addr) op2Addr = addr;
+              else if (!fmaAddr) fmaAddr = addr;
+
+              // ++foundLoads;
+          }
+        }
+        // llvm::errs() << "Found " << foundLoads << " load instructions out of " 
+        //      << inst->getNumOperands() << " operands\n";
+
+        // // Check each operand individually
+        // if (inst->getNumOperands() > 0) {
+        //     if (auto *loadInst = llvm::dyn_cast<llvm::LoadInst>(inst->getOperand(0))) {
+        //         op1Addr = loadInst->getPointerOperand();
+        //         llvm::errs() << "Operand 0 (op1) is loaded from address: " << *op1Addr << "\n";
+        //     }
+        // }
+
+        // if (inst->getNumOperands() > 1) {
+        //     if (auto *loadInst = llvm::dyn_cast<llvm::LoadInst>(inst->getOperand(1))) {
+        //         op2Addr = loadInst->getPointerOperand();
+        //         llvm::errs() << "Operand 1 (op2) is loaded from address: " << *op2Addr << "\n";
+        //     }
+        // }
+
+        // if (inst->getNumOperands() > 2) {
+        //     if (auto *loadInst = llvm::dyn_cast<llvm::LoadInst>(inst->getOperand(2))) {
+        //         fmaAddr = loadInst->getPointerOperand();
+        //         llvm::errs() << "Operand 2 (fma) is loaded from address: " << *fmaAddr << "\n";
+        //     }
+        // }
+
+        // Initialize two Value pointers, one for each potential load address.
+        // llvm::Value *loadAddr1 = nullptr;
+        // llvm::Value *loadAddr2 = nullptr;
+
+        // // --- Inspect the first operand of the arithmetic instruction ---
+        // llvm::Value *operand1 = inst->getOperand(0);
+
+        // // Check if the first operand is itself an instruction, and if so, if it's a LoadInst
+        // if (llvm::LoadInst *loadInst1 = llvm::dyn_cast<llvm::LoadInst>(operand1))
+        // {
+        //   // The operand came from a load. Get the address that was loaded from.
+        //   // The address is the pointer operand of the LoadInst (which is its operand 0).
+        //   loadAddr1 = loadInst1->getOperand(0);
+        //   llvm::errs() << "Operand 1 came from a LoadInst: " << *loadInst1 << "\n";
+        // }
+
+
+        // // --- Inspect the second operand of the arithmetic instruction ---
+        // // Check that a second operand exists (some instructions like fneg might not have one)
+        // if (inst->getNumOperands() > 1)
+        // {
+        //   llvm::Value *operand2 = inst->getOperand(1);
+
+        //   // Check if the second operand is the result of a LoadInst
+        //   if (llvm::LoadInst *loadInst2 = llvm::dyn_cast<llvm::LoadInst>(operand2))
+        //   {
+        //     // The operand came from a load. Get the address.
+        //     loadAddr2 = loadInst2->getOperand(0);
+        //     llvm::errs() << "Operand 2 came from a LoadInst: " << *loadInst2 << "\n";
+        //   }
+        // }
+
+      //   for (unsigned i = 0; i < inst->getNumOperands(); ++i) {
+      //     Value *operand = inst->getOperand(i);
+      //     if (auto *instOperand = dyn_cast<Instruction>(operand)) {
+      //         if (auto *loadInst = dyn_cast<LoadInst>(instOperand)) {
+      //             llvm::Value *loadAddr = loadInst->getPointerOperand();
+      //             llvm::errs() << "Found Load used in: " << *inst << "\n";
+      //             llvm::errs() << "Memory address loaded from: " << *loadAddr << "\n";
+      //         }
+      //     }
+      // }
+
         DebugLoc loc = inst->getDebugLoc();
 
-        // Create builder to add stuff after the instruction
+        //Create builder to add stuff after the instruction
         BasicBlock::iterator nextInst(inst);
         nextInst++;
         IRBuilder<> builder(&(*nextInst));
@@ -220,16 +339,10 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
         args.push_back(inst->getOperand(0));
         args.push_back(inst->getOperand(1));
 
-        // Push error values for single and double precision 
-        // if (isSingleFPOperation(inst)){
-        //   args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0));  // y_error
-        //   args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0));  // z_error
-        // }
-        // else if (isDoubleFPOperation(inst)) {
-        // // For FP64 operations: error parameters are double  
-        //   args.push_back(ConstantFP::get(builder.getDoubleTy(), 0.0));  // y_error (double)
-        //   args.push_back(ConstantFP::get(builder.getDoubleTy(), 0.0));  // z_error (double)
-        // }
+        if (inst->getNumOperands() >= 3)  // For FMA operation
+          args.push_back(inst->getOperand(2));
+        else
+          args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0f));
 
         // Push location parameter (line number)
         int lineNumber = CUDAAnalysis::getLineOfCode(inst);
@@ -322,50 +435,100 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
           args.push_back(cond);
         }
       
-        static int instr_counter = 0;
-        static std::map<Value*, std::string> value_to_name_map;
-      
-        // Generate result name
-        std::string res_name = inst->hasName() ? inst->getName().str() : "res_" + std::to_string(instr_counter);
-        value_to_name_map[inst] = res_name;
+        
+    std::string result_name;
+    {
+        std::string str;
+        llvm::raw_string_ostream rso(str);
+        inst->printAsOperand(rso, false);
+        result_name = rso.str();
+    }
 
-        // Map operands to their source names
-        std::string op1_name, op2_name;
-        Value* op1 = inst->getOperand(0);
-        Value* op2 = inst->getOperand(1);
+    std::string op1_name;
+    {
+        std::string str;
+        llvm::raw_string_ostream rso(str);
+        inst->getOperand(0)->printAsOperand(rso, false);
+        op1_name = rso.str();
+    }
 
-        if (value_to_name_map.count(op1)) {
-            op1_name = value_to_name_map[op1];
-        } else {
-            op1_name = "input_" + std::to_string(instr_counter) + "_1";
-        }
+    std::string op2_name;
+    {
+        std::string str;
+        llvm::raw_string_ostream rso(str);
+        inst->getOperand(1)->printAsOperand(rso, false);
+        op2_name = rso.str();
+    }
 
-        if (value_to_name_map.count(op2)) {
-            op2_name = value_to_name_map[op2];
-        } else {
-            op2_name = "input_" + std::to_string(instr_counter) + "_2";
-        }
-        instr_counter++;
+    std::string fma_name = "null";
+    if (inst->getNumOperands() >= 3) {
+        std::string str;
+        llvm::raw_string_ostream rso(str);
+        inst->getOperand(2)->printAsOperand(rso, false);
+        fma_name = rso.str();
+    }
 
-        // Debug output to see the mapping
-        printf("#FPCHECKER INSTRUMENTATION %s = operand_1 %s operand_2 %s operation %d \n", 
-          res_name.c_str(), op1_name.c_str(), op2_name.c_str(), operationType);
-
-        args.push_back(builder.CreateGlobalStringPtr(res_name));
+        args.push_back(builder.CreateGlobalStringPtr(result_name));
         args.push_back(builder.CreateGlobalStringPtr(op1_name));
         args.push_back(builder.CreateGlobalStringPtr(op2_name));
+        args.push_back(builder.CreateGlobalStringPtr(fma_name));
 
-        // printf("[INSTRUMENTATION DEBUG] Processing instruction: ");
+        // llvm::outs() << "\n[LLVM-FPCHECKER] Instrumenting Instruction: ";
         // inst->print(llvm::outs());
-        // printf("\n");
-        // printf("[INSTRUMENTATION DEBUG] Operand 0: ");
-        // op1->print(llvm::outs());
-        // printf("\n");
-        // printf("[INSTRUMENTATION DEBUG] Operand 1: ");
-        // op2->print(llvm::outs());
-        // printf("\n");
-        // printf("[INSTRUMENTATION DEBUG] op1_name=%s, op2_name=%s\n", op1_name.c_str(), op2_name.c_str());
-        // printf("[INSTRUMENTATION DEBUG] value_to_name_map size: %zu\n", value_to_name_map.size());
+        // llvm::outs() << "\n";
+
+        // unsigned numOperands = inst->getNumOperands();
+        // for (unsigned i = 0; i < numOperands; ++i) {
+        //   llvm::outs() << "  Operand " << i << ": ";
+        //   inst->getOperand(i)->print(llvm::outs());
+        //   llvm::outs() << "\n";
+        //   }
+        
+        llvm::Value *storeAddrStr = builder.CreateGlobalStringPtr(storeAddrString);
+        args.push_back(storeAddrStr);
+
+        // if (storeAddr) {
+        //   args.push_back(storeAddr); 
+        // } else {
+        //   llvm::LLVMContext &context = inst->getContext();  
+        //   llvm::ConstantInt *zero = llvm::ConstantInt::get(llvm::Type::getInt64Ty(context), 0);
+        //   args.push_back(zero);
+        // } 
+
+        // args.push_back(loadAddr);
+        // if (loadAddr) {
+        //   args.push_back(loadAddr);  // push actual address
+        // } else {
+        //   llvm::LLVMContext &context = inst->getContext();
+        //   llvm::ConstantInt *zero = llvm::ConstantInt::get(llvm::Type::getInt64Ty(context), 0);
+        //   args.push_back(zero);  // push default zero
+        // }
+
+        if (op1Addr) {
+          llvm::Value *castedOp1 = builder.CreatePtrToInt(op1Addr, llvm::Type::getInt64Ty(inst->getContext()));
+          args.push_back(castedOp1);
+        } else {
+          llvm::errs() << "op1Addr not found — defaulting to 0\n";
+          args.push_back(llvm::ConstantInt::get(llvm::Type::getInt64Ty(inst->getContext()), 0));
+        }
+
+        // op2Addr
+        if (op2Addr) {
+          llvm::Value *castedOp2 = builder.CreatePtrToInt(op2Addr, llvm::Type::getInt64Ty(inst->getContext()));
+          args.push_back(castedOp2);
+        } else {
+          llvm::errs() << "op2Addr not found — defaulting to 0\n";
+          args.push_back(llvm::ConstantInt::get(llvm::Type::getInt64Ty(inst->getContext()), 0));
+        }
+
+        // fmaAddr
+        if (fmaAddr) {
+          llvm::Value *castedFma = builder.CreatePtrToInt(fmaAddr, llvm::Type::getInt64Ty(inst->getContext()));
+          args.push_back(castedFma);
+        } else {
+          llvm::errs() << "fmaaddr not found — defaulting to 0\n";
+          args.push_back(llvm::ConstantInt::get(llvm::Type::getInt64Ty(inst->getContext()), 0));
+        }
 
         ArrayRef<Value *> args_ref(args);
 

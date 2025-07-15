@@ -1,12 +1,12 @@
 # Compiler and flags
 CXX = clang++-fpchecker
 #CXXFLAGS = -Wno-format -std=c++11 -g -O2
-CXXFLAGS = -Wno-format -std=c++11 -g -O2
+CXXFLAGS = -Wno-format -std=c++11 -g -O0
 
 # Source file(s)
-SRC = derivatives.cpp
+SRC = memory_access.cpp
 OBJ = $(SRC:.cpp=.o)
-EXECUTABLE_NAME = derivatives
+EXECUTABLE_NAME = memory_access
 
 # Library location and name (reused from common folder)
 LIB_DIR = ../common

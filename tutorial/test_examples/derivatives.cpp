@@ -38,12 +38,6 @@ int main(int argc, char **argv){
     float x = atof(argv[1]);
     float epsilon = atof(argv[2]);
     float float_result = finite_difference(x, epsilon);
-
-    // double x_double = (double)x;
-    // double eps_double = (double)epsilon;
-    // double double_result = finite_difference_double(x_double, eps_double);
-    // cout << "Difference " << (double_result - float_result) << endl;
-
     return 0;
 
 }
