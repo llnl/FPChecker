@@ -3,9 +3,6 @@
 using namespace std;
 
 float difference_of_squares(float x, float y) {
-    // float a  = x * x;
-    // float b = y * y;
-    // return a - b;
      return x * x - y * y;
 }
 

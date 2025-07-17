@@ -9,10 +9,9 @@ int main(int argc, char **argv){
     // float epsilon = 0.0002;  //1e-7f; 
     float x = atof(argv[1]);
     float epsilon = atof(argv[2]);
-    // float x ,epsilon;
+    
     float float_result = finite_difference(x, epsilon);
-    printf("final result: \n",float_result);
+    printf("final result: %.9f\n", float_result);
 
     return 0;
-
 }

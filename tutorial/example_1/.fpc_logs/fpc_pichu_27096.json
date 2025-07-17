@@ -1,0 +1,17 @@
+[
+  {
+	"input": "./lu_solve matrix.csv ",
+	"file": "/Users/sharmin1/Documents/tutorial/FPChecker/tutorial/common/blas.cpp",
+	"line": 264,
+	"infinity_pos": 0,
+	"infinity_neg": 0,
+	"nan": 0,
+	"division_zero": 0,
+	"cancellation": 4,
+	"comparison": 0,
+	"underflow": 0,
+	"latent_infinity_pos": 0,
+	"latent_infinity_neg": 0,
+	"latent_underflow": 0
+  }
+]

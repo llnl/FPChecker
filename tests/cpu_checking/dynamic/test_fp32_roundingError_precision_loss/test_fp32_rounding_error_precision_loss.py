@@ -5,7 +5,7 @@ import sys
 import re
 import numpy as np
 
-from dynamic import report
+# from dynamic import report
 
 def setup_module(module):
     THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -17,6 +17,7 @@ def teardown_module(module):
 
 def parse_fpchecker_output():
     try:
+        subprocess.check_output(["make", "clean"], stderr=subprocess.STDOUT)
         make_result = subprocess.check_output(["make"], stderr=subprocess.STDOUT)
         make_output = make_result.decode()
     except subprocess.CalledProcessError as e:
@@ -34,9 +35,9 @@ def parse_fpchecker_output():
 
     # Run the instrumented binary
     try:
-        result = subprocess.check_output(["./main", "200", "0.0002"], stderr=subprocess.STDOUT)
+        result = subprocess.check_output(["./main", "2e2", "0.0002"], stderr=subprocess.STDOUT)
         runtime_output = result.decode()
-        # print(runtime_output)
+        print(runtime_output)
     except subprocess.CalledProcessError as e:
         print("[RUNTIME ERROR]", e.output.decode())
         return
@@ -57,7 +58,7 @@ def parse_fpchecker_output():
 def test_fp32_precision_loss():
     found = False
     precision_error = parse_fpchecker_output()
-    # print(precision_error)
+    print(precision_error)
     assert precision_error is not None
    
     assert abs(precision_error) > 1e-9, f"Precision error too small: {precision_error}"
