@@ -10,15 +10,13 @@ float finite_difference( float x, float eps){
     float fx = derivates(x);
 
     float derivative = (fx_with_eps - fx) / eps;
-
-    cout << "f(x + eps): " << fx_with_eps << endl;
-    cout << "fx: " << fx <<endl;
+    // cout << "f(x + eps): " << fx_with_eps << endl;
+    // cout << "fx: " << fx <<endl;
     cout << "derivative: " << derivative << endl;
 
     return derivative;
 
 }
-
 
 
 // double derivatives_double(double x){
@@ -38,6 +36,7 @@ int main(int argc, char **argv){
     float x = atof(argv[1]);
     float epsilon = atof(argv[2]);
     float float_result = finite_difference(x, epsilon);
+    // double test = finite_difference_double(x, epsilon);
     return 0;
 
 }

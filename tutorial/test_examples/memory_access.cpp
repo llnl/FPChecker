@@ -17,3 +17,36 @@ int main(){
     
     return 0;
 }
+
+
+//program 1
+// #include <stdio.h>
+
+// int main() {
+//     float a = 1.5f, b = 2.5f;
+//     float result = a + b;  // FP operation
+
+//     float x, y;
+//     x = result;  // Store 1
+//     y = result;  // Store 2
+
+//     printf("x = %.2f, y = %.2f\n", x, y);
+//     return 0;
+// }
+
+//Program 2 
+// #include <stdio.h>
+
+// int main() {
+//     float a = 3.0f, b = 4.0f, d = 2.0f;
+
+//     float tmp = a + b;  // FP operation
+//     float c;
+//     c = tmp;            // Store the result
+
+//     float reused = c;   // Load the stored value
+//     float final = reused * d;  // Use it in another FP operation
+
+//     printf("final = %.2f\n", final);
+//     return 0;
+// }

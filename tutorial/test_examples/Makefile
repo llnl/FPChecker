@@ -4,9 +4,9 @@ CXX = clang++-fpchecker
 CXXFLAGS = -Wno-format -std=c++11 -g -O0
 
 # Source file(s)
-SRC = memory_access.cpp
+SRC = test.cpp
 OBJ = $(SRC:.cpp=.o)
-EXECUTABLE_NAME = memory_access
+EXECUTABLE_NAME = test
 
 # Library location and name (reused from common folder)
 LIB_DIR = ../common
