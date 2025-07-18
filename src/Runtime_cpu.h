@@ -630,8 +630,9 @@ static uintptr_t error_addresses[MAX_ERROR_ENTRIES];
 //     printf("#FPCHECKER-FIND: No error found for [%s] → returning 0.0\n", ssa_name);
 //     return 0.0;
 
-//   }
+//  }
 
+  //checking with one store
 double _FPC_FP32_FIND_ERROR_(const char* name, uintptr_t addr) {
     char ssa_name[MAX_NAME_LENGTH] = "";
     if (name && strlen(name) > 0)
@@ -661,171 +662,162 @@ double _FPC_FP32_FIND_ERROR_(const char* name, uintptr_t addr) {
     return 0.0;
 }
 
-// void _FPC_FP32_STORE_ERROR_(const char* name, double error, void* memory_address) {
-//     if (!name || error_count >= 1000) {
-//     //printf("#FPCHECKER-STORE: Invalid name or error table full. name=%s, count=%d\n", name ? name : "NULL", error_count);
-//     return;
-//     }
-//     char key[MAX_NAME_LENGTH];
-//     // Check if name already exists and update
-//     for (int i = 0; i < error_count; i++) {
-//         if (strcmp(error_names[i], name) == 0) {
-//             //printf("#FPCHECKER-STORE: Updating error for [%s] from %.17e to %.17e\n", name, error_values[i], error);
-//             error_values[i] = error;  // Update existing
-//             return;
-//         }
-//     }
-    
-//     // Add new entry
-//     strncpy(error_names[error_count], name, 99);
-//     error_names[error_count][99] = '\0';  // Ensure null termination
-//     error_values[error_count] = error;
-//     //printf("#FPCHECKER-STORE: Stored new error for %s = %.17e\n", name, error);
-//     error_count++;
-// }
+void _FPC_FP32_STORE_ERROR_(const char* name, double error, uintptr_t addr) {
+   if ((name == NULL || strlen(name) == 0) && addr == 0) return;
 
-void _FPC_FP32_STORE_ERROR_(const char* name, double error, const char* storeAddrStr) {
-    if ((name == NULL || strlen(name) == 0) && (storeAddrStr == NULL || strlen(storeAddrStr) == 0))
-        return;
 
-    char ssa_name[MAX_NAME_LENGTH] = "";
-    if (name && strlen(name) > 0)
-        snprintf(ssa_name, sizeof(ssa_name), "%s", name);
+   char ssa_name[MAX_NAME_LENGTH] = "";
+   if (name && strlen(name) > 0) snprintf(ssa_name, sizeof(ssa_name), "%s", name);
 
-    // --- 1. Update by register ---
-    if (strlen(ssa_name) > 0) {
-        for (int i = 0; i < error_count; i++) {
-            if (strcmp(error_names[i], ssa_name) == 0) {
-                error_values[i] = error;
-                printf("#FPCHECKER-STORE: Updated error for name [%s] = %.17e\n", ssa_name, error);
-                break; 
-            }
-        }
-    }
 
-    // --- 2. Update/create entries all address ---
-    if (storeAddrStr && strlen(storeAddrStr) > 0) {
-        char addrStrCopy[1024];
-        strncpy(addrStrCopy, storeAddrStr, sizeof(addrStrCopy) - 1);
-        addrStrCopy[sizeof(addrStrCopy) - 1] = '\0';
+   for (int i = 0; i < error_count; i++) {
+       if ((strlen(ssa_name) > 0 && strcmp(error_names[i], ssa_name) == 0) ||
+           (addr != 0 && error_addresses[i] == addr)) {
+           error_values[i] = error;
+           printf("#FPCHECKER-STORE: Updated error for [%s|%lu] = %.17e\n", ssa_name, addr, error);
+           return;
+       }
+   }
 
-        char *token = strtok(addrStrCopy, ";");
-        while (token != NULL) {
-            uintptr_t addr = (uintptr_t)strtoull(token, NULL, 10);
-            if (addr > 0) {
-                // Check if this address already exists
-                bool found = false;
-                for (int i = 0; i < error_count; i++) {
-                    if (error_addresses[i] == addr) {
-                        error_values[i] = error;
-                        printf("#FPCHECKER-STORE: Updated error for address [%lu] = %.17e\n", addr, error);
-                        found = true;
-                        break;
-                    }
-                }
-            // If address not found, create new entry
-                if (!found && error_count < MAX_ERROR_ENTRIES) {
-                    // For addresses, store empty name or a generated name
-                    snprintf(error_names[error_count], MAX_NAME_LENGTH, "addr_%lu", addr);
-                    error_addresses[error_count] = addr;
-                    error_values[error_count] = error;
-                    printf("#FPCHECKER-STORE: Stored new error for address [%lu] = %.17e\n", addr, error);
-                    error_count++;
-                }
-            }
-            token = strtok(NULL, ";");
-        }
-    } 
 
-    // 3. If only register exists (no addresses), create SSA entry
-    else if (strlen(ssa_name) > 0) {
-        if (error_count < MAX_ERROR_ENTRIES) {
-            strncpy(error_names[error_count], ssa_name, MAX_NAME_LENGTH - 1);
-            error_names[error_count][MAX_NAME_LENGTH - 1] = '\0';
-            error_addresses[error_count] = 0; // No address
-            error_values[error_count] = error;
-            printf("#FPCHECKER-STORE: Stored new error for [%s] = %.17e\n", ssa_name, error);
-            error_count++;
-        }
-    } else {
-        printf("#FPCHECKER-STORE: Error table full\n");
-    }
+   if (error_count < MAX_ERROR_ENTRIES) {
+       strncpy(error_names[error_count], ssa_name, MAX_NAME_LENGTH - 1);
+       error_names[error_count][MAX_NAME_LENGTH - 1] = '\0';
+       error_addresses[error_count] = addr;
+       error_values[error_count] = error;
+       printf("#FPCHECKER-STORE: Stored new error for [%s|%lu] = %.17e\n", ssa_name, addr, error);
+       error_count++;
+   } else {
+       printf("#FPCHECKER-STORE: Error table full\n");
+   }
 }
 
 
+// void _FPC_FP32_STORE_ERROR_(const char* name, double error, const char* storeAddrStr) {
+//     if ((name == NULL || strlen(name) == 0) && (storeAddrStr == NULL || strlen(storeAddrStr) == 0))
+//         return;
+
+//     char ssa_name[MAX_NAME_LENGTH] = "";
+//     if (name && strlen(name) > 0)
+//         snprintf(ssa_name, sizeof(ssa_name), "%s", name);
+
+//     // --- 1. Update by register ---
+//     if (strlen(ssa_name) > 0) {
+//         for (int i = 0; i < error_count; i++) {
+//             if (strcmp(error_names[i], ssa_name) == 0) {
+//                 error_values[i] = error;
+//                 printf("#FPCHECKER-STORE: Updated error for name [%s] = %.17e\n", ssa_name, error);
+//                 break; 
+//             }
+//         }
+//     }
+
+//     // --- 2. Update/create entries all address ---
+//     if (storeAddrStr && strlen(storeAddrStr) > 0) {
+//         char addrStrCopy[1024];
+//         strncpy(addrStrCopy, storeAddrStr, sizeof(addrStrCopy) - 1);
+//         addrStrCopy[sizeof(addrStrCopy) - 1] = '\0';
+
+//         char *token = strtok(addrStrCopy, ";");
+//         while (token != NULL) {
+//             uintptr_t addr = (uintptr_t)strtoull(token, NULL, 10);
+//             if (addr > 0) {
+//                 // Check if this address already exists
+//                 bool found = false;
+//                 for (int i = 0; i < error_count; i++) {
+//                     if (error_addresses[i] == addr) {
+//                         error_values[i] = error;
+//                         printf("#FPCHECKER-STORE: Updated error for address [%lu] = %.17e\n", addr, error);
+//                         found = true;
+//                         break;
+//                     }
+//                 }
+//             // If address not found, create new entry
+//                 if (!found && error_count < MAX_ERROR_ENTRIES) {
+//                     // For addresses, store empty name or a generated name
+//                     snprintf(error_names[error_count], MAX_NAME_LENGTH, "addr_%lu", addr);
+//                     error_addresses[error_count] = addr;
+//                     error_values[error_count] = error;
+//                     printf("#FPCHECKER-STORE: Stored new error for address [%lu] = %.17e\n", addr, error);
+//                     error_count++;
+//                 }
+//             }
+//             token = strtok(NULL, ";");
+//         }
+//     } 
+
+//     // 3. If only register exists (no addresses), create SSA entry
+//     else if (strlen(ssa_name) > 0) {
+//         if (error_count < MAX_ERROR_ENTRIES) {
+//             strncpy(error_names[error_count], ssa_name, MAX_NAME_LENGTH - 1);
+//             error_names[error_count][MAX_NAME_LENGTH - 1] = '\0';
+//             error_addresses[error_count] = 0; // No address
+//             error_values[error_count] = error;
+//             printf("#FPCHECKER-STORE: Stored new error for [%s] = %.17e\n", ssa_name, error);
+//             error_count++;
+//         }
+//     } else {
+//         printf("#FPCHECKER-STORE: Error table full\n");
+//     }
+// }
+
+
 void _FPC_FP32_CHECK_(
-    float x, float y, float z, float w,
-    int loc, char *file_name,
-    int op, int cond,
-    const char *result_name, 
-    const char *op1_name, const char *op2_name, const char *fma_name,
-    const char* storeAddrStr,
-    uintptr_t loadAddr_y, uintptr_t loadAddr_z, uintptr_t loadAddr_w)
+   float x, float y, float z, float w, int loc, char *file_name, int op, int cond, const char *result_name,
+ const char *op1_name, const char *op2_name, const char *fma_name, uintptr_t storeAddr, uintptr_t loadAddr_y, uintptr_t loadAddr_z, uintptr_t loadAddr_w)
 {
-    printf("\n#FPCHECKER: ========== Entered _FPC_FP32_CHECK_ ==========\n");
-
-    if (!cond) return;
-
-    // Debug store and load addresses
-    printf("Store address (in check function): %s\n", storeAddrStr);
-    printf("Load addresses: y=%lu, z=%lu, w=%lu\n", loadAddr_y, loadAddr_z, loadAddr_w);
+ printf("Store address: %lu\n", storeAddr);
+ printf("Load address: %lu %lu %lu \n", loadAddr_y, loadAddr_z, loadAddr_w);
+ printf("\n#FPCHECKER: ========== Entered _FPC_FP32_CHECK_ ==========\n");
+ if (!cond)
+   return;
 
 
-    // Debugging 
-    // printf("#FPCHECKER: Current error table has %d entries:\n", error_count);
-    // for (int i = 0; i < error_count; i++) {
-    //     printf("  [%d] Address: %lu, Error: %.17e\n", i, error_addresses[i], error_values[i]);
-    // }
-    
-    printf("Store addresses: %s\n", storeAddrStr);
-    printf("Load addresses: y=%lu, z=%lu, w=%lu\n", loadAddr_y, loadAddr_z, loadAddr_w);
-    
-    // Debug: Check if any load address exists in error table
-    if (loadAddr_y != 0) {
-        for (int i = 0; i < error_count; i++) {
-            if (error_addresses[i] == loadAddr_y) {
-                printf("#FPCHECKER: FOUND MATCH for loadAddr_y=%lu at index %d\n", loadAddr_y, i);
-            }
-        }
-    }
+  // Error accumulation
+ double err_y = _FPC_FP32_FIND_ERROR_(op1_name, loadAddr_y);
+ double err_z = _FPC_FP32_FIND_ERROR_(op2_name, loadAddr_z);
+ double err_w = _FPC_FP32_FIND_ERROR_(fma_name, loadAddr_w);
+ 
+ // printf("#FPCHECKER: Found errors: op1=%.9e, op2=%.9e, op3=%.9e\n", err_y, err_z, err_w);
+ // printf("Errors before accumulation %f %f %f\n",err_y, err_z, err_w);
+ double y_high = (double)y + err_y;
+ double z_high = (double)z + err_z;
+ double w_high = (double)w + err_w;
 
 
-    // Error propagation
-    double err_y = _FPC_FP32_FIND_ERROR_(op1_name, loadAddr_y);
-    double err_z = _FPC_FP32_FIND_ERROR_(op2_name, loadAddr_z);
-    double err_w = _FPC_FP32_FIND_ERROR_(fma_name, loadAddr_w);
+ printf("#FPCHECKER: Operands and error propagation:\n");
+ printf("   y = %.9e + err(%.9e) => y_high = %.9e\n", y, err_y, y_high);
+ printf("   z = %.9e + err(%.9e) => z_high = %.9e\n", z, err_z, z_high);
+ printf("   w = %.9e + err(%.9e) => w_high = %.9e\n", w, err_w, w_high);
+  double r_high = 0.0;
 
-    double y_high = (double)y + err_y;
-    double z_high = (double)z + err_z;
-    double w_high = (double)w + err_w;
 
-    printf("   y = %.9e + err(%.9e) → y_high = %.9e\n", y, err_y, y_high);
-    printf("   z = %.9e + err(%.9e) → z_high = %.9e\n", z, err_z, z_high);
-    printf("   w = %.9e + err(%.9e) → w_high = %.9e\n", w, err_w, w_high);
+ switch (op) {
+   case 0: r_high = y_high + z_high; break;
+   case 1: r_high = y_high - z_high; break;
+   case 2: r_high = y_high * z_high; break;
+   case 3:
+       if(z_high != 0.0){
+       r_high = y_high / z_high; break;
+       }
+       else {printf("#FPCHECKER: Division by zero");
+       r_high = 0.0;} break;
+   case 5: r_high = fmod(y_high, z_high); break;
+   // case 6 : r_high = y_high * z_high + w_high; break;
+   case 6: r_high = fma(y_high, z_high, w_high); break;
+   default:
+   printf("#FPCHECKER: Unknown operation. op=%d\n",op);
+ }
+  double r_low = (double)x;
+ double err_result = r_high - r_low;
 
-    double r_high = 0.0;
-    switch (op) {
-        case 0: r_high = y_high + z_high; break;
-        case 1: r_high = y_high - z_high; break;
-        case 2: r_high = y_high * z_high; break;
-        case 3:
-            if (z_high != 0.0) r_high = y_high / z_high;
-            else { printf("#FPCHECKER: Division by zero\n"); r_high = 0.0; }
-            break;
-        case 5: r_high = fmod(y_high, z_high); break;
-        case 6: r_high = fma(y_high, z_high, w_high); break;
-        default: printf("#FPCHECKER: Unknown operation op=%d\n", op); break;
-    }
 
-    double r_low = (double)x;
-    double err_result = r_high - r_low;
+ printf("#FPCHECKER: Result computation:\n");
+ printf("   r_high (double) = %.12e\n", r_high);
+ printf("   r_low (float ) = %.12e\n", r_low);
+ printf("   Error = r_high - r_low = %.12e\n", err_result);
+  _FPC_FP32_STORE_ERROR_(result_name, err_result, storeAddr);
 
-    printf("#FPCHECKER: Result comparison:\n");
-    printf("   r_high = %.12e\n", r_high);
-    printf("   r_low  = %.12e\n", r_low);
-    printf("   error  = %.12e\n", err_result);
-
-    _FPC_FP32_STORE_ERROR_(result_name, err_result, storeAddrStr);
     fflush(stdout);
 
     printf("\n======================= FPCHECKER: Error Table =========================\n");
