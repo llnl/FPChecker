@@ -97,6 +97,12 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
                    GlobalValue::LinkageTypes::LinkOnceODRLinkage,
                    "_FPC_PRINT_LOCATIONS_");
     }
+    if (f->getName().str().find("_FPC_FP32_STORE_INST_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp32_store_inst,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP32_STORE_INST_");
+    }
 
     SET_ODR_LIKAGE("_FPC_FP32_IS_INF")
     SET_ODR_LIKAGE("_FPC_FP32_GET_MANTISSA")
@@ -134,6 +140,7 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
     SET_ODR_LIKAGE("_FPC_CHECK_AND_TRAP")
     SET_ODR_LIKAGE("_FPC_FP32_FIND_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP32_STORE_ERROR_")
+    SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     // Hash table
     SET_ODR_LIKAGE("_FPC_HT_CREATE_")
     SET_ODR_LIKAGE("_FPC_HT_HASH_")
@@ -194,6 +201,45 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
     {
       Instruction *inst = &(*i);
 
+      // ----------------------------------------------------------------------------
+      // Instrumentation of LOAD and STORE instructions
+      if (llvm::isa<llvm::StoreInst>(inst))
+      {
+        // This is a store instruction
+        llvm::Value *storedValue = llvm::cast<llvm::StoreInst>(inst)->getValueOperand();
+        if (storedValue->getType()->isFloatTy() || storedValue->getType()->isDoubleTy())
+        {
+          BasicBlock::iterator nextInst(inst);
+          nextInst++;
+          IRBuilder<> builder(&(*nextInst));
+
+          llvm::errs() << "[FPC DEBUG] STORE is storing a floating-point value: " << *storedValue << "\n";
+
+          llvm::Value *storeAddr = llvm::cast<llvm::StoreInst>(inst)->getPointerOperand();
+          llvm::Value *storeAddrInt = builder.CreatePtrToInt(storeAddr, llvm::Type::getInt64Ty(inst->getContext()));
+
+          llvm::errs() << "[FPC DEBUG] STORE address (as int): " << *storeAddrInt << "\n";
+
+          // Push parameters
+          std::vector<Value *> args;
+          std::string op_name;
+          std::string str;
+          llvm::raw_string_ostream rso(str);
+          inst->getOperand(1)->printAsOperand(rso, false);
+          op_name = rso.str();
+          args.push_back(builder.CreateGlobalStringPtr(op_name));
+          args.push_back(storeAddrInt);
+
+          ArrayRef<Value *> args_ref(args);
+          CallInst *callInst = nullptr;
+          callInst = builder.CreateCall(fpc_fp32_store_inst, args_ref);
+
+          assert(callInst && "Invalid call instruction!");
+          setFakeDebugLocation(inst, callInst, f);
+        }
+      }
+      // ----------------------------------------------------------------------------
+
       if (isFPOperation(inst) &&
           (isSingleFPOperation(inst) || isDoubleFPOperation(inst)))
       {
@@ -213,8 +259,8 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
           }
         }
 
-        //working code
-      
+        // working code
+
         // std::string allStoreAddrsStr;
         // bool firstStore = true;
         // std::set<Value*> trackedMemoryLocations;
@@ -224,10 +270,10 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
         //         if (storeInst->getValueOperand() == inst) {
         //             errs() << "[FPC DEBUG] Found DIRECT store: " << *storeInst << "\n";
         //             Value *storePtr = storeInst->getPointerOperand();
-                    
+
         //             // Track this memory location
         //             trackedMemoryLocations.insert(storePtr);
-                    
+
         //             std::stringstream ss;
         //             ss << reinterpret_cast<uintptr_t>(storePtr);
         //             if (!firstStore)
@@ -248,7 +294,7 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
         //                     if (store2->getValueOperand() == loadInst) {
         //                         errs() << "[FPC DEBUG] Found INDIRECT store: " << *store2 << "\n";
         //                         Value *storePtr = store2->getPointerOperand();
-                                
+
         //                         std::stringstream ss;
         //                         ss << reinterpret_cast<uintptr_t>(storePtr);
         //                         if (!firstStore)
@@ -261,14 +307,13 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
         //         }
         //     }
         // }
-                  
-      // added today
-     
+
+        // added today
 
         // llvm::Value *op1Addr = nullptr;
         // llvm::Value *op2Addr = nullptr;
         // llvm::Value *fmaAddr = nullptr;
-        
+
         // //Iterate with all the operands of an instruction
         // for (unsigned i = 0; i < inst->getNumOperands(); ++i) {
         //   llvm::Value *operand = inst->getOperand(i);
@@ -284,27 +329,23 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
         //   }
         // }
 
-
-
-
-        // llvm::errs() << "Found " << foundLoads << " load instructions out of " 
+        // llvm::errs() << "Found " << foundLoads << " load instructions out of "
         //      << inst->getNumOperands() << " operands\n";
 
-
-      //   for (unsigned i = 0; i < inst->getNumOperands(); ++i) {
-      //     Value *operand = inst->getOperand(i);
-      //     if (auto *instOperand = dyn_cast<Instruction>(operand)) {
-      //         if (auto *loadInst = dyn_cast<LoadInst>(instOperand)) {
-      //             llvm::Value *loadAddr = loadInst->getPointerOperand();
-      //             llvm::errs() << "Found Load used in: " << *inst << "\n";
-      //             llvm::errs() << "Memory address loaded from: " << *loadAddr << "\n";
-      //         }
-      //     }
-      // }
+        //   for (unsigned i = 0; i < inst->getNumOperands(); ++i) {
+        //     Value *operand = inst->getOperand(i);
+        //     if (auto *instOperand = dyn_cast<Instruction>(operand)) {
+        //         if (auto *loadInst = dyn_cast<LoadInst>(instOperand)) {
+        //             llvm::Value *loadAddr = loadInst->getPointerOperand();
+        //             llvm::errs() << "Found Load used in: " << *inst << "\n";
+        //             llvm::errs() << "Memory address loaded from: " << *loadAddr << "\n";
+        //         }
+        //     }
+        // }
 
         DebugLoc loc = inst->getDebugLoc();
 
-        //Create builder to add stuff after the instruction
+        // Create builder to add stuff after the instruction
         BasicBlock::iterator nextInst(inst);
         nextInst++;
         IRBuilder<> builder(&(*nextInst));
@@ -325,7 +366,7 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
         args.push_back(inst->getOperand(0));
         args.push_back(inst->getOperand(1));
 
-        if (inst->getNumOperands() >= 3)  // For FMA operation
+        if (inst->getNumOperands() >= 3) // For FMA operation
           args.push_back(inst->getOperand(2));
         else
           args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0f));
@@ -420,80 +461,86 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
               ConstantInt::get(mod->getContext(), APInt(32, 1, true));
           args.push_back(cond);
         }
-    
-    //load instrumentation becasue we need builder
-    llvm::Value *loadAddrY_arg = llvm::ConstantInt::get(llvm::Type::getInt64Ty(inst->getContext()), 0);
-    llvm::Value *loadAddrZ_arg = llvm::ConstantInt::get(llvm::Type::getInt64Ty(inst->getContext()), 0);
-    llvm::Value *loadAddrW_arg = llvm::ConstantInt::get(llvm::Type::getInt64Ty(inst->getContext()), 0);
 
-    std::string allLoadAddrsStr; // Just for debugging
-    bool firstLoad = true;
+        // load instrumentation becasue we need builder
+        llvm::Value *loadAddrY_arg = llvm::ConstantInt::get(llvm::Type::getInt64Ty(inst->getContext()), 0);
+        llvm::Value *loadAddrZ_arg = llvm::ConstantInt::get(llvm::Type::getInt64Ty(inst->getContext()), 0);
+        llvm::Value *loadAddrW_arg = llvm::ConstantInt::get(llvm::Type::getInt64Ty(inst->getContext()), 0);
 
-    // Process ALL operands (remove the i < 3 constraint)
-    for (unsigned i = 0; i < inst->getNumOperands(); ++i) {
-        llvm::Value *operand = inst->getOperand(i);
-        llvm::Value *addrArg = nullptr;
-        
-        if (auto *loadInst = llvm::dyn_cast<llvm::LoadInst>(operand)) {
+        std::string allLoadAddrsStr; // Just for debugging
+        bool firstLoad = true;
+
+        // Process ALL operands (remove the i < 3 constraint)
+        for (unsigned i = 0; i < inst->getNumOperands(); ++i)
+        {
+          llvm::Value *operand = inst->getOperand(i);
+          llvm::Value *addrArg = nullptr;
+
+          if (auto *loadInst = llvm::dyn_cast<llvm::LoadInst>(operand))
+          {
             // Convert pointer to runtime address
             llvm::Value *addrVal = loadInst->getPointerOperand();
             addrArg = builder.CreatePtrToInt(addrVal, llvm::Type::getInt64Ty(inst->getContext()));
-            
+
             // Debug output
             llvm::errs() << "[LOAD DEBUG] Found load from: " << *addrVal << "\n";
-            
+
             // Add to debug string (this won't be passed to function)
             std::stringstream ss;
             ss << reinterpret_cast<uintptr_t>(addrVal);
             if (!firstLoad)
-                allLoadAddrsStr += ";";
+              allLoadAddrsStr += ";";
             allLoadAddrsStr += ss.str();
             firstLoad = false;
-            
-        } else {
+          }
+          else
+          {
             addrArg = llvm::ConstantInt::get(llvm::Type::getInt64Ty(inst->getContext()), 0);
             llvm::errs() << "[LOAD DEBUG] Operand " << i << " not from memory load: " << *operand << "\n";
-        }
+          }
           // Assign based on operand position (only for first 3)
-          if (i == 0) loadAddrY_arg = addrArg;
-          else if (i == 1) loadAddrZ_arg = addrArg;
-          else if (i == 2) loadAddrW_arg = addrArg;
-         
-      }
+          if (i == 0)
+            loadAddrY_arg = addrArg;
+          else if (i == 1)
+            loadAddrZ_arg = addrArg;
+          else if (i == 2)
+            loadAddrW_arg = addrArg;
+        }
 
-    llvm::errs() << "Load addresses string (debug only): " << allLoadAddrsStr << "\n";
+        llvm::errs() << "Load addresses string (debug only): " << allLoadAddrsStr << "\n";
 
-      std::string result_name;
-      {
+        std::string result_name;
+        {
           std::string str;
           llvm::raw_string_ostream rso(str);
           inst->printAsOperand(rso, false);
           result_name = rso.str();
-      }
+        }
 
-      std::string op1_name;
-      {
+        std::string op1_name;
+        {
           std::string str;
           llvm::raw_string_ostream rso(str);
           inst->getOperand(0)->printAsOperand(rso, false);
           op1_name = rso.str();
-      }
+        }
 
-      std::string op2_name;
-      {
+        std::string op2_name;
+        {
           std::string str;
           llvm::raw_string_ostream rso(str);
           inst->getOperand(1)->printAsOperand(rso, false);
           op2_name = rso.str();
-      }
+        }
 
-      std::string fma_name = "null";
-      if (inst->getNumOperands() >= 3) {
+        std::string fma_name = "null";
+        if (inst->getNumOperands() >= 3)
+        {
           std::string str;
           llvm::raw_string_ostream rso(str);
           inst->getOperand(2)->printAsOperand(rso, false);
           fma_name = rso.str();
-      }
+        }
 
         args.push_back(builder.CreateGlobalStringPtr(result_name));
         args.push_back(builder.CreateGlobalStringPtr(op1_name));
@@ -510,7 +557,7 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
         //   inst->getOperand(i)->print(llvm::outs());
         //   llvm::outs() << "\n";
         //   }
-        
+
         // llvm::Value *storeAddrStr = builder.CreateGlobalStringPtr(storeAddrString);
         // args.push_back(storeAddrStr);
 
@@ -523,17 +570,19 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
 
         // llvm::errs() << "Store string: " << allStoreAddrsStr << "\n";
         // llvm::Value *storeAddrsArg = builder.CreateGlobalStringPtr(allStoreAddrsStr);
-        // args.push_back(storeAddrsArg);    
+        // args.push_back(storeAddrsArg);
 
-        llvm::errs() << "Found a StoreInst using the instruction: " <<storeAddr << "\n";
-        if (storeAddr) {
-          args.push_back(storeAddr); 
-        } else {
-          llvm::LLVMContext &context = inst->getContext();  
+        llvm::errs() << "Found a StoreInst using the instruction: " << storeAddr << "\n";
+        if (storeAddr)
+        {
+          args.push_back(storeAddr);
+        }
+        else
+        {
+          llvm::LLVMContext &context = inst->getContext();
           llvm::ConstantInt *zero = llvm::ConstantInt::get(llvm::Type::getInt64Ty(context), 0);
           args.push_back(zero);
-        } 
-        
+        }
 
         // args.push_back(loadAddr);
         // if (loadAddr) {
@@ -544,9 +593,9 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
         //   args.push_back(zero);  // push default zero
         // }
 
-        //added today
+        // added today
         args.push_back(loadAddrY_arg);
-        args.push_back(loadAddrZ_arg); 
+        args.push_back(loadAddrZ_arg);
         args.push_back(loadAddrW_arg);
 
         // if (op1Addr) {
