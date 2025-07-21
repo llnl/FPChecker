@@ -4,9 +4,9 @@ CXX = clang++-fpchecker
 CXXFLAGS = -Wno-format -std=c++11 -g -O0
 
 # Source file(s)
-SRC = vector_division.cpp
+SRC = multiple_stores.cpp
 OBJ = $(SRC:.cpp=.o)
-EXECUTABLE_NAME = vector_division
+EXECUTABLE_NAME = multiple_stores
 
 # Library location and name (reused from common folder)
 LIB_DIR = ../common

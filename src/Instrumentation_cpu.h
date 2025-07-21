@@ -24,7 +24,8 @@ namespace CPUAnalysis
     Function *fpc_init_args;
     Function *fpc_print_locations;
     Function *fpc_fp32_store_inst;
-
+    Function *fpc_fp32_load_inst;
+    
     bool codeIsAnnotated = false;
 
     // maximum number for a code line

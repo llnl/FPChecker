@@ -28,27 +28,34 @@
 // }
 
 
-void multiple_stores(float a, float b, float *ptr1, float *ptr2, float *ptr3) {
-    float result = a + b;
-    *ptr1 = result;
-    *ptr2 = result;
-    *ptr3 = result;
-}
+// void multiple_stores(float a, float b, float *ptr1, float *ptr2, float *ptr3) {
+//     float result = a + b;
+//     *ptr1 = result;
+//     *ptr2 = result;
+//     *ptr3 = result;
+// }
 
-int main() {
-    float a = 3.5f;
-    float b = 2.5f;
-    float x, y, z;
+// int main() {
+//     float a = 3.5f;
+//     float b = 2.5f;
+//     float x, y, z;
     
    
-    multiple_stores(a, b, &x, &y, &z);
+//     multiple_stores(a, b, &x, &y, &z);
     
-    // // Alternative: direct multiple stores in main
-    // float result = a + b;
-    // float location1 = result;
-    // float location2 = result;
-    // float location3 = result;
+//     // // Alternative: direct multiple stores in main
+//     // float result = a + b;
+//     // float location1 = result;
+//     // float location2 = result;
+//     // float location3 = result;
     
+//     return 0;
+// }
+
+// checking the square 
+int main(){
+    float x= 1e-2f, result = 0.0f;
+    result = x * x;
     return 0;
 }
 
