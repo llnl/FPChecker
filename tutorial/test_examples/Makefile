@@ -4,9 +4,9 @@ CXX = clang++-fpchecker
 CXXFLAGS = -Wno-format -std=c++11 -g -O0
 
 # Source file(s)
-SRC = multiple_stores.cpp
+SRC = derivatives.cpp
 OBJ = $(SRC:.cpp=.o)
-EXECUTABLE_NAME = multiple_stores
+EXECUTABLE_NAME = derivatives
 
 # Library location and name (reused from common folder)
 LIB_DIR = ../common
