@@ -4,9 +4,9 @@ CXX = clang++-fpchecker
 CXXFLAGS = -Wno-format -std=c++11 -g -O0
 
 # Source file(s)
-SRC = derivatives.cpp
+SRC = test_loop.cpp
 OBJ = $(SRC:.cpp=.o)
-EXECUTABLE_NAME = derivatives
+EXECUTABLE_NAME = test_loop
 
 # Library location and name (reused from common folder)
 LIB_DIR = ../common

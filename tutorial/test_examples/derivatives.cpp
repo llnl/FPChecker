@@ -1,22 +1,22 @@
 #include <iostream>
 using namespace std;
 
-float derivates (float x) {
-    return x * x;
-}
+typedef float Real_t;
+//typedef double Real_t;
 
-float finite_difference( float x, float eps){
-    float fx_with_eps = derivates(x + eps);
-    float fx = derivates(x);
+// Real_t derivates (Real_t x) {
+//     return x * x;
+// }
 
-    float derivative = (fx_with_eps - fx) / eps;
-    // cout << "f(x + eps): " << fx_with_eps << endl;
-    // cout << "fx: " << fx <<endl;
-    cout << "derivative: " << derivative << endl;
+// Real_t finite_difference( Real_t x, Real_t eps){
+//     Real_t fx_with_eps = derivates(x + eps);
+//     Real_t fx = derivates(x);
 
-    return derivative;
+//     Real_t derivative = (fx_with_eps - fx) / eps;
+//     cout << "derivative: " << derivative << endl;
+//     return derivative;
 
-}
+// }
 
 
 // double derivatives_double(double x){
@@ -33,9 +33,15 @@ float finite_difference( float x, float eps){
 
 int main(int argc, char **argv){
     
-    float x = atof(argv[1]);
-    float epsilon = atof(argv[2]);
-    float float_result = finite_difference(x, epsilon);
+    Real_t x = atof(argv[1]);
+    Real_t epsilon = atof(argv[2]);
+
+    Real_t fx = x * x;                                    // f(x) = x^2
+    Real_t x_plus_eps = x + epsilon;                      // x + epsilon
+    Real_t fx_with_eps = x_plus_eps * x_plus_eps;        // f(x + eps) = (x + eps)^2
+    
+    Real_t derivative = (fx_with_eps - fx) / epsilon;
+    cout << "derivative: " << derivative << endl;
     // double test = finite_difference_double(x, epsilon);
     return 0;
 

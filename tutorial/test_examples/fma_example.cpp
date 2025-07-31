@@ -1,20 +1,42 @@
 #include <iostream>
 using namespace std;
 
-float fused_operation(float a, float b, float c) {
-    return a * b + c;
-}
+typedef float Real_t;
+//typedef double Real_t;
+
+// float fused_operation(float a, float b, float c) {
+//     return a * b + c;
+// }
+
+// int main(int argc, char** argv) {
+
+//     float a = atof(argv[1]);
+//     float b = atof(argv[2]);
+//     float c = atof(argv[3]);
+
+//     float result = fused_operation(a, b, c);
+//     result = result * b + c;
+//     b = a + b ;
+//     result = result * 2+ 3;
+//     printf("FMA result: %f\n", result);
+//     return 0;
+// }
 
 int main(int argc, char** argv) {
+    if (argc < 4) {
+        printf("Usage: %s a b c\n", argv[0]);
+        return 1;
+    }
 
-    float a = atof(argv[1]);
-    float b = atof(argv[2]);
-    float c = atof(argv[3]);
+    Real_t a = atof(argv[1]);
+    Real_t b = atof(argv[2]);
+    Real_t c = atof(argv[3]);
 
-    float result = fused_operation(a, b, c);
+    Real_t result = a * b + c;
     result = result * b + c;
-    b = a + b ;
-    result = result * 2+ 3;
+    b = a + b;
+    result = result * 2 + 3;
+
     printf("FMA result: %f\n", result);
     return 0;
 }

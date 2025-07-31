@@ -146,6 +146,8 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
     SET_ODR_LIKAGE("_FPC_CHECK_AND_TRAP")
     SET_ODR_LIKAGE("_FPC_FP32_FIND_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP32_STORE_ERROR_")
+    SET_ODR_LIKAGE("_FPC_FP32_FIND_BY_REGISTER_")
+    SET_ODR_LIKAGE("_FPC_FP32_FIND_BY_ADDRESS_")
     SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
     // Hash table
@@ -214,31 +216,31 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
       {
         // This is a store instruction
         llvm::Value *storedValue = llvm::cast<llvm::StoreInst>(inst)->getValueOperand();
-        if (storedValue->getType()->isFloatTy() || storedValue->getType()->isDoubleTy())
-        {
+        if  ((storedValue->getType()->isFloatTy() || storedValue->getType()->isDoubleTy()) 
+             && !llvm::isa<llvm::Constant>(storedValue))
+          {
           BasicBlock::iterator nextInst(inst);
           nextInst++;
           IRBuilder<> builder(&(*nextInst));
 
-          // llvm::errs() << "[FPC-STORE] STORE is storing a floating-point value: " << *storedValue << "\n";
-
-          llvm::Value *storeAddr = llvm::cast<llvm::StoreInst>(inst)->getPointerOperand();
+          llvm::Value *storeAddr = llvm::cast<StoreInst>(inst)->getPointerOperand(); // ptr %2
           llvm::Value *storeAddrInt = builder.CreatePtrToInt(storeAddr, llvm::Type::getInt64Ty(inst->getContext()));
+          /*------------------------------------------------------------------*
+          *  Get the SSA Name being Stored.                                  *
+          *------------------------------------------------------------------*/
+          std::string reg;
+          llvm::raw_string_ostream rso(reg);
+          storedValue->printAsOperand(rso, false); 
+          rso.flush();
+          // llvm::errs() << "[DEBUG] Creating string for register: '" << reg << "'\n";
+          // llvm::errs() << "[DEBUG] storedValue: " << *storedValue << "\n";
+          llvm::Value *regStr = builder.CreateGlobalStringPtr(reg);
 
-          // llvm::errs() << "[FPC-STORE] STORE address (as int): " << *storeAddrInt << "\n";
-          llvm::errs() << "[FPC-STORE] STORE to ptr " << *storeAddr << " (int: " << *storeAddrInt << ")\n";
-
-
-          // Push parameters
           std::vector<Value *> args;
-          std::string op_name;
-          std::string str;
-          llvm::raw_string_ostream rso(str);
-          inst->getOperand(1)->printAsOperand(rso, false);
-          op_name = rso.str();
-          args.push_back(builder.CreateGlobalStringPtr(op_name));
+          // Push parameters
+          args.push_back(regStr); 
           args.push_back(storeAddrInt);
-
+          // llvm::errs() << "[#FPC-STORE] Store register: " << reg << ", address: " << *storeAddr << "\n";
           ArrayRef<Value *> args_ref(args);
           CallInst *callInst = nullptr;
           callInst = builder.CreateCall(fpc_fp32_store_inst, args_ref);
@@ -247,47 +249,46 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
           setFakeDebugLocation(inst, callInst, f);
         }
       }
-        if (auto *loadInst = llvm::dyn_cast<llvm::LoadInst>(inst)) {
-          if (loadInst->getType()->isFloatTy() || loadInst->getType()->isDoubleTy()) {
-            BasicBlock::iterator nextInst(inst);
-            ++nextInst;
-            IRBuilder<> builder(&(*nextInst));
+      // This is for load instrustions
+      if (auto *loadInst = llvm::dyn_cast<llvm::LoadInst>(inst)) {
+        if (loadInst->getType()->isFloatTy() || loadInst->getType()->isDoubleTy()) 
+        {
+          BasicBlock::iterator nextInst(inst);
+          ++nextInst;
+          IRBuilder<> builder(&(*nextInst));
 
-          /*------------------------------------------------------------------*
-            Compute the address in uintptr_t                              *
-          *------------------------------------------------------------------*/
+        /*------------------------------------------------------------------*
+          Compute the address in uintptr_t                              *
+        *------------------------------------------------------------------*/
 
-            llvm::Value *addr    = loadInst->getPointerOperand();
-            llvm::Value *addrInt = builder.CreatePtrToInt(
-                               addr, llvm::Type::getInt64Ty(inst->getContext()));
-            
-          /*------------------------------------------------------------------*
-          * Get the SSA name of the result (%15, %23 …)                  
-          * loadInst itself is the “result”, so print it as an operand.  
-          *------------------------------------------------------------------*/
-            std::string regName;
-            llvm::raw_string_ostream rso(regName);
-            loadInst->printAsOperand(rso, /*PrintType=*/false);   // yields "%15"
-            rso.flush();
-            llvm::Value *regStr  = builder.CreateGlobalStringPtr(regName);
+          llvm::Value *addr    = loadInst->getPointerOperand();
+          llvm::Value *addrInt = builder.CreatePtrToInt(
+                              addr, llvm::Type::getInt64Ty(inst->getContext()));
+          
+        /*------------------------------------------------------------------*
+        * Get the SSA name of the result (%15, %23 …)                  
+        * loadInst itself is the “result”, so print it as an operand.  
+        *------------------------------------------------------------------*/
+          std::string regName;
+          llvm::raw_string_ostream rso(regName);
+          loadInst->printAsOperand(rso, /*PrintType=*/false);   // yields "%15"
+          rso.flush();
+          llvm::Value *regStr  = builder.CreateGlobalStringPtr(regName);
 
-            // llvm::errs() << "[FPC-LOAD] LOAD from address " << *addr
-            //      << " (int " << *addrInt << ") into " << regName << "\n";;
-            llvm::errs() << "[FPC-LOAD] LOAD from address " << *addr << "into " << regName << "\n";
+          // llvm::errs() << "[FPC-LOAD] LOAD from address " << *addr << "into " << regName << "\n";
 
-
-            std::vector<Value *> args;
-            args.push_back(regStr); // const char *load_reg
-            args.push_back(addrInt);   
-            
-            ArrayRef<Value *> args_ref(args);
-            CallInst *callInst = nullptr;
-            callInst = builder.CreateCall(fpc_fp32_load_inst, args_ref);
-            assert(callInst && "Invalid call instruction!");
-            setFakeDebugLocation(inst, callInst, f);
-       }
-
+          std::vector<Value *> args;
+          args.push_back(regStr); // const char *load_reg
+          args.push_back(addrInt);   
+          // llvm::errs() << "[#FPC-LOAD] Load register: " << regName << ", address: " << *addr << "\n";
+          ArrayRef<Value *> args_ref(args);
+          CallInst *callInst = nullptr;
+          callInst = builder.CreateCall(fpc_fp32_load_inst, args_ref);
+          assert(callInst && "Invalid call instruction!");
+          setFakeDebugLocation(inst, callInst, f);
       }
+
+    }
       // ----------------------------------------------------------------------------
 
       if (isFPOperation(inst) &&
