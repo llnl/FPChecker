@@ -54,7 +54,6 @@ void _FPC_INIT_HASH_TABLE_()
   _FPC_HTABLE_ = _FPC_HT_CREATE_(size);
   _FPC_ERROR_HTABLE_ = _FPC_ERROR_HT_CREATE_(FPC_ERROR_HTABLE_SIZE);
 
-
 #ifdef FPC_MULTI_THREADED
   if (pthread_mutex_init(&fpc_lock, NULL) != 0)
   {
@@ -83,7 +82,6 @@ void _FPC_PRINT_LOCATIONS_()
 #endif
   _FPC_PRINT_HASH_TABLE_(_FPC_HTABLE_);
   _FPC_PRINT_ERROR_TABLE_(_FPC_ERROR_HTABLE_);
-
 }
 
 /*----------------------------------------------------------------------------*/
@@ -591,7 +589,6 @@ void _FPC_FP64_CHECK_(
 */
 // #else
 
-
 /*----------------------------------------------------------------------------*/
 /* Error Accumulation                                                        */
 /*----------------------------------------------------------------------------*/
@@ -603,31 +600,38 @@ double errors[MAX_ERROR_ENTRIES];
 int entry_count = 0;
 
 // Find entry by register name
-int _FPC_FP32_FIND_BY_REGISTER_(const char *reg_name) {
-    for (int i = 0; i < entry_count; i++) {
-        if (strcmp(registers[i], reg_name) == 0) {
-            return i;
-        }
+int _FPC_FP32_FIND_BY_REGISTER_(const char *reg_name)
+{
+  for (int i = 0; i < entry_count; i++)
+  {
+    if (strcmp(registers[i], reg_name) == 0)
+    {
+      return i;
     }
-    printf("Register names:\n");
-    for (int j = 0; j < entry_count; j++) {
-      printf("  [%d] %s\n", j, registers[j]);
-    }
-    return -1; // No register available in the table
+  }
+  printf("Register names:\n");
+  for (int j = 0; j < entry_count; j++)
+  {
+    printf("  [%d] %s\n", j, registers[j]);
+  }
+  return -1; // No register available in the table
 }
 
 // Find entry by address
-int _FPC_FP32_FIND_BY_ADDRESS_(uintptr_t addr) {
-    for (int i = 0; i < entry_count; i++) {
-        if (addresses[i] == addr) {
-            return i;
-        }
+int _FPC_FP32_FIND_BY_ADDRESS_(uintptr_t addr)
+{
+  for (int i = 0; i < entry_count; i++)
+  {
+    if (addresses[i] == addr)
+    {
+      return i;
     }
-    return -1;
+  }
+  return -1;
 }
 
-
-void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address) {
+void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address)
+{
   // printf("Instrumented store registers so far:\n");
   // for (int i = 0; i < entry_count; i++) {
   //   if (strlen(registers[i]) > 0) {
@@ -635,202 +639,187 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address) {
   //   }
   // }
   //   printf("\n>>> STORE: %s || addr %lu\n", reg, address);
-    
-    double store_error = 0.0;
-    
-    // First, check if this register already exists with an error
-    int reg_id = _FPC_FP32_FIND_BY_REGISTER_(reg);
-    if (reg_id >= 0) {
-        store_error = errors[reg_id];
-        addresses[reg_id] = address;
-        printf("Register  %s exists with error %.17e\n", reg, store_error);
-    } else {
-        
-        int last_non_zero_error_id = -1;
-        double last_seen_error = 0.0;
-        
-          for (int i = entry_count - 1; i >= 0; i--) {
-            if (errors[i] != 0.0) {
-                // Found a register with error
-                last_non_zero_error_id = i;
-                last_seen_error = errors[i];
-                printf("Propagating Error from %s gets error from value %s (%.17e)\n", 
-                       reg, registers[i], last_seen_error);
-                break;
-            }
-        }
-        
-        store_error = last_seen_error;
-        
-        // Create new register entry for the pointer
-        if (entry_count < MAX_ERROR_ENTRIES) {
-            addresses[entry_count] = address;
-            strncpy(registers[entry_count], reg, MAX_NAME_SIZE - 1);
-            registers[entry_count][MAX_NAME_SIZE - 1] = '\0';
-            errors[entry_count] = store_error;
-            entry_count++;
-        }
-    }
-    
-    int addr_id = _FPC_FP32_FIND_BY_ADDRESS_(address);
-    if (addr_id >= 0 && addr_id != reg_id) {
-        errors[addr_id] = store_error;
-        printf("Updated existing memory location %lu with error %.17e\n", address, store_error);
-    }
-    else if (addr_id < 0){
-      //Create a new memory entry for this address
-      if(entry_count < MAX_ERROR_ENTRIES){
-        addresses[entry_count] =address;
-        errors[entry_count] = store_error;
-        printf("Created new memory entry for addr %lu with error %.17e\n", address, store_error);
-        entry_count++;
+
+  double store_error = 0.0;
+
+  // First, check if this register already exists with an error
+  int reg_id = _FPC_FP32_FIND_BY_REGISTER_(reg);
+  if (reg_id >= 0)
+  {
+    store_error = errors[reg_id];
+    addresses[reg_id] = address;
+    printf("Register  %s exists with error %.17e\n", reg, store_error);
+  }
+  else
+  {
+
+    int last_non_zero_error_id = -1;
+    double last_seen_error = 0.0;
+
+    for (int i = entry_count - 1; i >= 0; i--)
+    {
+      if (errors[i] != 0.0)
+      {
+        // Found a register with error
+        last_non_zero_error_id = i;
+        last_seen_error = errors[i];
+        printf("Propagating Error from %s gets error from value %s (%.17e)\n",
+               reg, registers[i], last_seen_error);
+        break;
       }
     }
-    
-    printf(" %s || %lu  <- error %.17e\n", reg, address, store_error);
-    for(int i = 0; i< entry_count ; i++){
-      printf("[%d] %-10s|| %-10lu = %.17e\n", i, registers[i], addresses[i], errors[i]);
+
+    store_error = last_seen_error;
+
+    // Create new register entry for the pointer
+    if (entry_count < MAX_ERROR_ENTRIES)
+    {
+      addresses[entry_count] = address;
+      strncpy(registers[entry_count], reg, MAX_NAME_SIZE - 1);
+      registers[entry_count][MAX_NAME_SIZE - 1] = '\0';
+      errors[entry_count] = store_error;
+      entry_count++;
     }
-    
-    // if (store_error != 0.0) {
-    //     printf("ERROR PROPAGATED TO MEMORY!\n");
-    // } else {
-    //     // DEBUG: Show what we have in the table
-    //     printf(" DEBUG: Table Entry\n");
-    //     for (int i = 0; i < entry_count; i++) {
-    //         printf("[%d] %-10s|| %-10lu = %.17e\n", i, registers[i], addresses[i], errors[i]);
-    //     }
-    // }
+  }
+
+  int addr_id = _FPC_FP32_FIND_BY_ADDRESS_(address);
+  if (addr_id >= 0 && addr_id != reg_id)
+  {
+    errors[addr_id] = store_error;
+    printf("Updated existing memory location %lu with error %.17e\n", address, store_error);
+  }
+  else if (addr_id < 0)
+  {
+    // Create a new memory entry for this address
+    if (entry_count < MAX_ERROR_ENTRIES)
+    {
+      addresses[entry_count] = address;
+      errors[entry_count] = store_error;
+      printf("Created new memory entry for addr %lu with error %.17e\n", address, store_error);
+      entry_count++;
+    }
+  }
+
+  printf(" %s || %lu  <- error %.17e\n", reg, address, store_error);
+  for (int i = 0; i < entry_count; i++)
+  {
+    printf("[%d] %-10s|| %-10lu = %.17e\n", i, registers[i], addresses[i], errors[i]);
+  }
+
+  // if (store_error != 0.0) {
+  //     printf("ERROR PROPAGATED TO MEMORY!\n");
+  // } else {
+  //     // DEBUG: Show what we have in the table
+  //     printf(" DEBUG: Table Entry\n");
+  //     for (int i = 0; i < entry_count; i++) {
+  //         printf("[%d] %-10s|| %-10lu = %.17e\n", i, registers[i], addresses[i], errors[i]);
+  //     }
+  // }
 }
 
 // Load instruction
-void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address) {
-    printf("\n>>> LOAD: addr %lu -> %s\n", address, load_reg);
-    
-    // Find the error at this memory address
-    double memory_error = 0.0;
-    
-    int addr_id = _FPC_FP32_FIND_BY_ADDRESS_(address);
-    if (addr_id >= 0) {
-        memory_error = errors[addr_id];
-        printf("Found error %.17e for address %lu\n", memory_error, address);
+void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
+{
+  printf("\n>>> LOAD: addr %lu -> %s\n", address, load_reg);
+
+  // Find the error at this memory address
+  double memory_error = 0.0;
+
+  int addr_id = _FPC_FP32_FIND_BY_ADDRESS_(address);
+  if (addr_id >= 0)
+  {
+    memory_error = errors[addr_id];
+    printf("Found error %.17e for address %lu\n", memory_error, address);
+  }
+
+  // Update or create the register entry
+  int reg_id = _FPC_FP32_FIND_BY_REGISTER_(load_reg);
+  if (reg_id >= 0)
+  {
+    addresses[reg_id] = address;
+    errors[reg_id] = memory_error;
+  }
+  else
+  {
+    if (entry_count < MAX_ERROR_ENTRIES)
+    {
+      addresses[entry_count] = address;
+      strncpy(registers[entry_count], load_reg, MAX_NAME_SIZE - 1);
+      registers[entry_count][MAX_NAME_SIZE - 1] = '\0';
+      errors[entry_count] = memory_error;
+      entry_count++;
     }
-    
-    // Update or create the register entry
-    int reg_id = _FPC_FP32_FIND_BY_REGISTER_(load_reg);
-    if (reg_id >= 0) {
-        addresses[reg_id] = address;
-        errors[reg_id] = memory_error;
-    } else {
-        if (entry_count < MAX_ERROR_ENTRIES) {
-            addresses[entry_count] = address;
-            strncpy(registers[entry_count], load_reg, MAX_NAME_SIZE - 1);
-            registers[entry_count][MAX_NAME_SIZE - 1] = '\0';
-            errors[entry_count] = memory_error;
-            entry_count++;
-        }
-    }
-    printf(" %s || %lu || %.17e \n", load_reg, address, memory_error);
-    
-    // if (memory_error != 0.0) {
-    //     printf("ERROR INHERITED!\n");
-    //}
+  }
+  printf(" %s || %lu || %.17e \n", load_reg, address, memory_error);
+
+  // if (memory_error != 0.0) {
+  //     printf("ERROR INHERITED!\n");
+  //}
 }
 
 // Find error - unchanged
-double _FPC_FP32_FIND_ERROR_(const char *reg_name) {
-    if (!reg_name || strlen(reg_name) == 0) {
-        printf("#FPCHECKER-FIND: No register name provided → returning 0.0\n");
-        return 0.0;
-    }
-
-    int id = _FPC_FP32_FIND_BY_REGISTER_(reg_name);
-    if (id >= 0) {
-        printf("#FPCHECKER-FIND: Found error for [%s || %lu] = %.17e\n", 
-               reg_name, addresses[id], errors[id]);
-        return errors[id];
-    }
-
-    printf("#FPCHECKER-FIND: No error found for [%s] -> returning 0.0\n", reg_name);
+double _FPC_FP32_FIND_ERROR_(const char *reg_name)
+{
+  if (!reg_name || strlen(reg_name) == 0)
+  {
+    printf("#FPCHECKER-FIND: No register name provided → returning 0.0\n");
     return 0.0;
+  }
+
+  int id = _FPC_FP32_FIND_BY_REGISTER_(reg_name);
+  if (id >= 0)
+  {
+    printf("#FPCHECKER-FIND: Found error for [%s || %lu] = %.17e\n",
+           reg_name, addresses[id], errors[id]);
+    return errors[id];
+  }
+
+  printf("#FPCHECKER-FIND: No error found for [%s] -> returning 0.0\n", reg_name);
+  return 0.0;
 }
 
 // Store error
-void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error) {
-    if (!reg_name || strlen(reg_name) == 0) {
-        printf("#FPCHECKER-STORE: No register name provided\n");
-        return;
-    }
+void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error)
+{
+  if (!reg_name || strlen(reg_name) == 0)
+  {
+    printf("#FPCHECKER-STORE: No register name provided\n");
+    return;
+  }
 
-    int id = _FPC_FP32_FIND_BY_REGISTER_(reg_name);
-    if (id >= 0) {
-        // Update existing entry's error
-        errors[id] = error;
-        printf("#FPCHECKER-STORE: Updated error for [%s || %lu] = %.17e\n", 
-               reg_name, addresses[id], error);
-    } else {
-        // Create new entry (address will be 0 until LOAD/STORE sets it)
-        if (entry_count < MAX_ERROR_ENTRIES) {
-            addresses[entry_count] = 0;  // Will be reset by LOAD/STORE
-            strncpy(registers[entry_count], reg_name, MAX_NAME_SIZE - 1);
-            registers[entry_count][MAX_NAME_SIZE - 1] = '\0';
-            errors[entry_count] = error;
-            printf("#FPCHECKER-STORE: Stored new error for [%s || %lu] = %.17e\n", 
-                   reg_name, addresses[entry_count], error);
-            entry_count++;
-        } else {
-            printf("#FPCHECKER-STORE: Error table full\n");
-        }
+  int id = _FPC_FP32_FIND_BY_REGISTER_(reg_name);
+  if (id >= 0)
+  {
+    // Update existing entry's error
+    errors[id] = error;
+    printf("#FPCHECKER-STORE: Updated error for [%s || %lu] = %.17e\n",
+           reg_name, addresses[id], error);
+  }
+  else
+  {
+    // Create new entry (address will be 0 until LOAD/STORE sets it)
+    if (entry_count < MAX_ERROR_ENTRIES)
+    {
+      addresses[entry_count] = 0; // Will be reset by LOAD/STORE
+      strncpy(registers[entry_count], reg_name, MAX_NAME_SIZE - 1);
+      registers[entry_count][MAX_NAME_SIZE - 1] = '\0';
+      errors[entry_count] = error;
+      printf("#FPCHECKER-STORE: Stored new error for [%s || %lu] = %.17e\n",
+             reg_name, addresses[entry_count], error);
+      entry_count++;
     }
+    else
+    {
+      printf("#FPCHECKER-STORE: Error table full\n");
+    }
+  }
 }
 
-
 void _FPC_FP32_CHECK_(
-    float x, float y, float z, float w, int loc, char *file_name, int op, int cond, 
-    const char *result_name, const char *op1_name, const char *op2_name, const char *fma_name) {
-    
-    // printf("\n>>> CHECK: %s = %s op %s\n", 
-    //        result_name ? result_name : "null",
-    //        op1_name ? op1_name : "null", 
-    //        op2_name ? op2_name : "null");
-    
-    double err_y = _FPC_FP32_FIND_ERROR_(op1_name);
-    double err_z = _FPC_FP32_FIND_ERROR_(op2_name);
-    // double err_w = (fma_name && strlen(fma_name) > 0) ? _FPC_FP32_FIND_ERROR_(fma_name) : 0.0;
-    double err_w = _FPC_FP32_FIND_ERROR_(fma_name);
-    
-    double y_high = (double)y + err_y;
-    double z_high = (double)z + err_z;
-    double w_high = (double)w + err_w;
-    
-    double r_high = 0.0;
-    switch (op) {
-        case 0: r_high = y_high + z_high; break;
-        case 1: r_high = y_high - z_high; break;
-        case 2: r_high = y_high * z_high; break;
-        case 3: 
-            if (z_high != 0.0) {
-                r_high = y_high / z_high; 
-            } else {
-                printf("#FPCHECKER_ERROR: Division by zero\n");
-                r_high = 0.0;
-            }
-            break;
-        case 5: r_high = fmod(y_high, z_high); break;
-        case 6: r_high = fma(y_high, z_high, w_high); break;
-        default:
-            printf("FPCHECKER_ERROR: Unknown operation %d\n", op);
-    }
-    
-    double r_low = (double)x;
-   
-    double err_result = r_high - r_low;
-    
-    printf("Inputs: %.17e, %.17e -> Error: %.17e\n", y_high, z_high, err_result);
-    
-    _FPC_FP32_STORE_ERROR_(result_name, err_result);
-     printf("Result in runtime (double) : %.17e and (float) %.7f\n", r_low, x);
-    fflush(stdout);
+    float x, float y, float z, int loc, char *file_name, int op, int cond)
+{
+  if (!cond)
+    return;
 
 #ifdef FPC_FAST_CHECKING
   // Check for NaN, infinity, or subnormals
@@ -860,13 +849,6 @@ void _FPC_FP32_CHECK_(
   item.latent_infinity_pos = (uint64_t)_FPC_FP32_IS_LATENT_INFINITY_POS(x);
   item.latent_infinity_neg = (uint64_t)_FPC_FP32_IS_LATENT_INFINITY_NEG(x);
   item.latent_underflow = (uint64_t)_FPC_FP32_IS_LATENT_SUBNORMAL(x);
-
- _FPC_ERROR_ITEM_T_ new_item;
-  new_item.file_name = file_name;
-  new_item.line = (uint64_t)loc;
-  new_item.error = err_result;
-  _FPC_ERROR_HT_SET_(_FPC_ERROR_HTABLE_, &new_item);
-
 
   if (getenv("FPC_EXPONENT_USAGE") != NULL)
   {
@@ -968,20 +950,77 @@ void _FPC_FP64_CHECK_(
 // #endif
 
 /*----------------------------------------------------------------------------*/
+/* Error Analysis.                                                            */
+/*----------------------------------------------------------------------------*/
+
+void _FPC_FP32_CALCULATE_ERROR_(
+    float x, float y, float z, float w, int loc, char *file_name, int op, int cond,
+    const char *result_name, const char *op1_name, const char *op2_name, const char *fma_name)
+{
+  double err_y = _FPC_FP32_FIND_ERROR_(op1_name);
+  double err_z = _FPC_FP32_FIND_ERROR_(op2_name);
+  double err_w = _FPC_FP32_FIND_ERROR_(fma_name);
+
+  double y_high = (double)y + err_y;
+  double z_high = (double)z + err_z;
+  double w_high = (double)w + err_w;
+
+  double r_high = 0.0;
+  switch (op)
+  {
+  case 0:
+    r_high = y_high + z_high;
+    break;
+  case 1:
+    r_high = y_high - z_high;
+    break;
+  case 2:
+    r_high = y_high * z_high;
+    break;
+  case 3:
+    if (z_high != 0.0)
+    {
+      r_high = y_high / z_high;
+    }
+    else
+    {
+      printf("#FPCHECKER_ERROR: Division by zero\n");
+      r_high = 0.0;
+    }
+    break;
+  case 5:
+    r_high = fmod(y_high, z_high);
+    break;
+  case 6:
+    r_high = fma(y_high, z_high, w_high);
+    break;
+  default:
+    printf("FPCHECKER_ERROR: Unknown operation %d\n", op);
+  }
+
+  double r_low = (double)x;
+
+  double err_result = r_high - r_low;
+
+  printf("Inputs: %.17e, %.17e -> Error: %.17e\n", y_high, z_high, err_result);
+
+  _FPC_FP32_STORE_ERROR_(result_name, err_result);
+  printf("Result in runtime (double) : %.17e and (float) %.7f\n", r_low, x);
+  fflush(stdout);
+
+  _FPC_ERROR_ITEM_T_ new_item;
+  new_item.file_name = file_name;
+  new_item.line = (uint64_t)loc;
+  new_item.error = err_result;
+  _FPC_ERROR_HT_SET_(_FPC_ERROR_HTABLE_, &new_item);
+}
+
+/*----------------------------------------------------------------------------*/
 /* Annotation Macros                                                          */
 /*----------------------------------------------------------------------------*/
 
 #define FPC_INSTRUMENT_BLOCK __attribute__((annotate("_FPC_INSTRUMENT_BLOCK_"))) int _marker __attribute__((unused)) = 0;
 #define FPC_INSTRUMENT_FUNC __attribute__((annotate("_FPC_INSTRUMENT_FUNCTION_")))
-
-// void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address)
-// {
-//   printf("*** Storing %s to address %lu\n", reg, address);
-// }
-
-// void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
-// {
-//   printf("*** Loading address %lu into register %s\n", address, load_reg);
-// }
+#define FPC_CALCULATE_ERROR __attribute__((annotate("_FPC_CALCULATE_ERROR_")))
 
 #endif /* SRC_RUNTIME_CPU_H_ */

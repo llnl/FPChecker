@@ -1,0 +1,22 @@
+[
+  {
+    "file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/test_examples_error_accumulation/annotations.cpp",
+    "line": 8,
+    "error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/test_examples_error_accumulation/annotations.cpp",
+    "line": 10,
+    "error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/test_examples_error_accumulation/annotations.cpp",
+    "line": 15,
+    "error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/test_examples_error_accumulation/annotations.cpp",
+    "line": 22,
+    "error": 0.00000000000000000e+00
+  }
+]

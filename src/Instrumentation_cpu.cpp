@@ -109,6 +109,12 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
                    GlobalValue::LinkageTypes::LinkOnceODRLinkage,
                    "_FPC_FP32_LOAD_INST_");
     }
+    if (f->getName().str().find("_FPC_FP32_CALCULATE_ERROR_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp32_calculate_function,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP32_CALCULATE_ERROR_");
+    }
 
     SET_ODR_LIKAGE("_FPC_FP32_IS_INF")
     SET_ODR_LIKAGE("_FPC_FP32_GET_MANTISSA")
@@ -150,6 +156,7 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
     SET_ODR_LIKAGE("_FPC_FP32_FIND_BY_ADDRESS_")
     SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
+    SET_ODR_LIKAGE("_FPC_FP32_CALCULATE_ERROR_")
     // Hash table
     SET_ODR_LIKAGE("_FPC_HT_CREATE_")
     SET_ODR_LIKAGE("_FPC_HT_HASH_")
@@ -188,24 +195,16 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
   }
 }
 
-void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
+void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
 {
-  if (CUDAAnalysis::CodeMatching::isUnwantedFunction(f))
-    return;
-  bool funAnnotated = functionisAnnotated(f);
-
-  assert((fp32_check_function != nullptr) && "Function not initialized!");
-  assert((fp64_check_function != nullptr) && "Function not initialized!");
+  assert((fpc_fp32_calculate_function != nullptr) && "Function not initialized!");
 
 #ifdef FPC_DEBUG
-  CUDAAnalysis::Logging::info("Entering main loop in instrumentFunction...");
+  CUDAAnalysis::Logging::info("Entering main loop in instrumentFunctionErrorAnalysis...");
 #endif
 
-  long int instrumentedOps = 0;
   for (auto bb = f->begin(), end = f->end(); bb != end; ++bb)
   {
-    if (codeIsAnnotated && !funAnnotated && !basicBlockisAnnotated(&(*bb)))
-      continue;
     for (auto i = bb->begin(), bend = bb->end(); i != bend; ++i)
     {
       Instruction *inst = &(*i);
@@ -216,9 +215,8 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
       {
         // This is a store instruction
         llvm::Value *storedValue = llvm::cast<llvm::StoreInst>(inst)->getValueOperand();
-        if  ((storedValue->getType()->isFloatTy() || storedValue->getType()->isDoubleTy()) 
-             && !llvm::isa<llvm::Constant>(storedValue))
-          {
+        if ((storedValue->getType()->isFloatTy() || storedValue->getType()->isDoubleTy()) && !llvm::isa<llvm::Constant>(storedValue))
+        {
           BasicBlock::iterator nextInst(inst);
           nextInst++;
           IRBuilder<> builder(&(*nextInst));
@@ -226,11 +224,11 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
           llvm::Value *storeAddr = llvm::cast<StoreInst>(inst)->getPointerOperand(); // ptr %2
           llvm::Value *storeAddrInt = builder.CreatePtrToInt(storeAddr, llvm::Type::getInt64Ty(inst->getContext()));
           /*------------------------------------------------------------------*
-          *  Get the SSA Name being Stored.                                  *
-          *------------------------------------------------------------------*/
+           *  Get the SSA Name being Stored.                                  *
+           *------------------------------------------------------------------*/
           std::string reg;
           llvm::raw_string_ostream rso(reg);
-          storedValue->printAsOperand(rso, false); 
+          storedValue->printAsOperand(rso, false);
           rso.flush();
           // llvm::errs() << "[DEBUG] Creating string for register: '" << reg << "'\n";
           // llvm::errs() << "[DEBUG] storedValue: " << *storedValue << "\n";
@@ -238,7 +236,7 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
 
           std::vector<Value *> args;
           // Push parameters
-          args.push_back(regStr); 
+          args.push_back(regStr);
           args.push_back(storeAddrInt);
           // llvm::errs() << "[#FPC-STORE] Store register: " << reg << ", address: " << *storeAddr << "\n";
           ArrayRef<Value *> args_ref(args);
@@ -250,45 +248,45 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
         }
       }
       // This is for load instrustions
-      if (auto *loadInst = llvm::dyn_cast<llvm::LoadInst>(inst)) {
-        if (loadInst->getType()->isFloatTy() || loadInst->getType()->isDoubleTy()) 
+      if (auto *loadInst = llvm::dyn_cast<llvm::LoadInst>(inst))
+      {
+        if (loadInst->getType()->isFloatTy() || loadInst->getType()->isDoubleTy())
         {
           BasicBlock::iterator nextInst(inst);
           ++nextInst;
           IRBuilder<> builder(&(*nextInst));
 
-        /*------------------------------------------------------------------*
-          Compute the address in uintptr_t                              *
-        *------------------------------------------------------------------*/
+          /*------------------------------------------------------------------*
+            Compute the address in uintptr_t                              *
+          *------------------------------------------------------------------*/
 
-          llvm::Value *addr    = loadInst->getPointerOperand();
+          llvm::Value *addr = loadInst->getPointerOperand();
           llvm::Value *addrInt = builder.CreatePtrToInt(
-                              addr, llvm::Type::getInt64Ty(inst->getContext()));
-          
-        /*------------------------------------------------------------------*
-        * Get the SSA name of the result (%15, %23 …)                  
-        * loadInst itself is the “result”, so print it as an operand.  
-        *------------------------------------------------------------------*/
+              addr, llvm::Type::getInt64Ty(inst->getContext()));
+
+          /*------------------------------------------------------------------*
+           * Get the SSA name of the result (%15, %23 …)
+           * loadInst itself is the “result”, so print it as an operand.
+           *------------------------------------------------------------------*/
           std::string regName;
           llvm::raw_string_ostream rso(regName);
-          loadInst->printAsOperand(rso, /*PrintType=*/false);   // yields "%15"
+          loadInst->printAsOperand(rso, /*PrintType=*/false); // yields "%15"
           rso.flush();
-          llvm::Value *regStr  = builder.CreateGlobalStringPtr(regName);
+          llvm::Value *regStr = builder.CreateGlobalStringPtr(regName);
 
           // llvm::errs() << "[FPC-LOAD] LOAD from address " << *addr << "into " << regName << "\n";
 
           std::vector<Value *> args;
           args.push_back(regStr); // const char *load_reg
-          args.push_back(addrInt);   
+          args.push_back(addrInt);
           // llvm::errs() << "[#FPC-LOAD] Load register: " << regName << ", address: " << *addr << "\n";
           ArrayRef<Value *> args_ref(args);
           CallInst *callInst = nullptr;
           callInst = builder.CreateCall(fpc_fp32_load_inst, args_ref);
           assert(callInst && "Invalid call instruction!");
           setFakeDebugLocation(inst, callInst, f);
+        }
       }
-
-    }
       // ----------------------------------------------------------------------------
 
       if (isFPOperation(inst) &&
@@ -452,17 +450,174 @@ void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
         args.push_back(builder.CreateGlobalStringPtr(op2_name));
         args.push_back(builder.CreateGlobalStringPtr(fma_name));
 
-        // llvm::outs() << "\n[LLVM-FPCHECKER] Instrumenting Instruction: ";
-        // inst->print(llvm::outs());
-        // llvm::outs() << "\n";
+        ArrayRef<Value *> args_ref(args);
 
-        // unsigned numOperands = inst->getNumOperands();
-        // for (unsigned i = 0; i < numOperands; ++i) {
-        //   llvm::outs() << "  Operand " << i << ": ";
-        //   inst->getOperand(i)->print(llvm::outs());
-        //   llvm::outs() << "\n";
-        //   }
+        CallInst *callInst = nullptr;
+        if (isSingleFPOperation(inst))
+        {
+          callInst = builder.CreateCall(fpc_fp32_calculate_function, args_ref);
+        }
+        else if (isDoubleFPOperation(inst))
+        {
+          // callInst = builder.CreateCall(fpc_fp64_calculate_function, args_ref);
+        }
 
+        assert(callInst && "Invalid call instruction!");
+        setFakeDebugLocation(inst, callInst, f);
+      }
+    }
+  }
+}
+
+void CPUFPInstrumentation::instrumentFunction(Function *f, long int *c)
+{
+  if (CUDAAnalysis::CodeMatching::isUnwantedFunction(f))
+    return;
+
+  if (functionisAnnotated(f, "_FPC_CALCULATE_ERROR_"))
+  {
+    // Instrument for error calculation
+    CUDAAnalysis::Logging::info(
+        ("Annotating function for error calculation: " + f->getName()).str().c_str());
+    instrumentFunctionErrorAnalysis(f);
+  }
+
+  // original FPCHCKER annotations
+  bool funAnnotated = functionisAnnotated(f, "_FPC_INSTRUMENT_FUNCTION_");
+
+  assert((fp32_check_function != nullptr) && "Function not initialized!");
+  assert((fp64_check_function != nullptr) && "Function not initialized!");
+
+#ifdef FPC_DEBUG
+  CUDAAnalysis::Logging::info("Entering main loop in instrumentFunction...");
+#endif
+
+  long int instrumentedOps = 0;
+  for (auto bb = f->begin(), end = f->end(); bb != end; ++bb)
+  {
+    if (codeIsAnnotated && !funAnnotated && !basicBlockisAnnotated(&(*bb)))
+      continue;
+    for (auto i = bb->begin(), bend = bb->end(); i != bend; ++i)
+    {
+      Instruction *inst = &(*i);
+
+      if (isFPOperation(inst) &&
+          (isSingleFPOperation(inst) || isDoubleFPOperation(inst)))
+      {
+
+        DebugLoc loc = inst->getDebugLoc();
+
+        // Create builder to add stuff after the instruction
+        BasicBlock::iterator nextInst(inst);
+        nextInst++;
+        IRBuilder<> builder(&(*nextInst));
+
+        // Push parameters
+        std::vector<Value *> args;
+        if (!isCmpEqual(inst))
+        {
+          args.push_back(inst);
+        }
+        else
+        {
+          if (isSingleFPOperation(inst))
+            args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0));
+          else
+            args.push_back(ConstantFP::get(builder.getDoubleTy(), 0.0));
+        }
+        args.push_back(inst->getOperand(0));
+        args.push_back(inst->getOperand(1));
+
+        // Push location parameter (line number)
+        int lineNumber = CUDAAnalysis::getLineOfCode(inst);
+        // Discard if line number is invalid (no debug info for inst)
+        if (lineNumber == -1)
+          continue;
+        ConstantInt *locId =
+            ConstantInt::get(mod->getContext(), APInt(32, lineNumber, true));
+        args.push_back(locId);
+
+        // Push file name
+        // Get global fileName pointer
+        GlobalVariable *fName = nullptr;
+        fName =
+            mod->getGlobalVariable("_ZL15_FPC_FILE_NAME_", true); // C++ binding
+        if (fName == nullptr)
+          fName =
+              mod->getGlobalVariable("_FPC_FILE_NAME_", true); // try C binding
+        assert((fName != nullptr) && "Global filename var not found");
+        Type *gvType = fName->getType();
+        auto loadInst =
+            builder.CreateAlignedLoad(gvType, fName, MaybeAlign(), "my");
+
+        std::string fileName = CUDAAnalysis::getFileNameFromInstruction(inst);
+        Constant *c = builder.CreateGlobalStringPtr(fileName);
+        fName->setInitializer(NULL);
+        fName->setInitializer(c);
+        args.push_back(loadInst);
+
+        // Push operation type
+        int operationType = 0;
+        if (inst->getOpcode() == Instruction::FAdd)
+          operationType = 0;
+        else if (inst->getOpcode() == Instruction::FSub)
+          operationType = 1;
+        else if (inst->getOpcode() == Instruction::FMul)
+          operationType = 2;
+        else if (inst->getOpcode() == Instruction::FDiv)
+          operationType = 3;
+        else if (isCmpEqual(inst))
+          operationType = 4;
+        else if (inst->getOpcode() == Instruction::FRem)
+          operationType = 5;
+        else if (isFMAOperation(inst))
+          operationType = 6;
+        else
+          operationType = -1;
+        assert(operationType >= 0 && "Unknown operation");
+
+        ConstantInt *opType =
+            ConstantInt::get(mod->getContext(), APInt(32, operationType, true));
+        args.push_back(opType);
+
+        // Check if instruction is selected based on a condition
+        Instruction *select_inst = nullptr;
+        Value *condition = nullptr;  // condition value
+        Value *cond_instr = nullptr; // condition instruction
+        int inverse;                 // inverse the semantics of the condition?
+        if (selectedBasedOnCondition(inst, f, &select_inst, &condition,
+                                     &inverse))
+        {
+          // Set insertion point after the select instruction
+          assert(select_inst && "Invalid select instruction");
+          BasicBlock::iterator nextOne(select_inst);
+          nextOne++;
+          builder.SetInsertPoint(&(*nextOne));
+          // Inverse semantics of condition if needed
+          if (inverse)
+          {
+            // Add XOR to negate the condition
+            auto neg_inst = builder.CreateXor(condition, 1, "my");
+            cond_instr =
+                builder.CreateZExt(neg_inst, builder.getInt32Ty(), "my");
+            assert(cond_instr && "Invalid extension instruction");
+            args.push_back(cond_instr);
+          }
+          else
+          {
+            // Add extension of condition (from i1 to i32 integer)
+            cond_instr =
+                builder.CreateZExt(condition, builder.getInt32Ty(), "my");
+            assert(cond_instr && "Invalid extension instruction");
+            args.push_back(cond_instr);
+          }
+        }
+        else
+        {
+          ConstantInt *cond =
+              ConstantInt::get(mod->getContext(), APInt(32, 1, true));
+          args.push_back(cond);
+        }
 
         ArrayRef<Value *> args_ref(args);
 
@@ -575,7 +730,7 @@ bool CPUFPInstrumentation::basicBlockisAnnotated(const BasicBlock *bb)
 }
 
 // Check if the function is annotated.
-bool CPUFPInstrumentation::functionisAnnotated(const Function *f)
+bool CPUFPInstrumentation::functionisAnnotated(const Function *f, const char *annotation)
 {
   assert((f != nullptr) && "Function not initialized!");
   const llvm::Module *M = f->getParent();
@@ -636,7 +791,8 @@ bool CPUFPInstrumentation::functionisAnnotated(const Function *f)
         {
           // Found the string data
           llvm::StringRef AnnotationString = CDA->getAsString();
-          if (AnnotationString.contains("_FPC_INSTRUMENT_FUNCTION_"))
+          // if (AnnotationString.contains("_FPC_INSTRUMENT_FUNCTION_"))
+          if (AnnotationString.contains(annotation))
           {
             // Print the annotation string
             // llvm::outs() << "Annotation for function '" << f->getName() << "': " << AnnotationString << "\n";
