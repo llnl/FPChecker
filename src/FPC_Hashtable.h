@@ -3,7 +3,7 @@
 
 #define _BSD_SOURCE
 #define _DEFAULT_SOURCE
-
+#define ERROR_TABLE_SIZE 1000
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
@@ -38,6 +38,23 @@ typedef struct _FPC_ITEM_S_
   uint64_t fp64_exponent_count[FPC_HISTOGRAM_LEN];
   struct _FPC_ITEM_S_ *next;
 } _FPC_ITEM_T_;
+
+typedef struct _FPC_ERROR_ITEM_S_ {
+  char *file_name;
+  uint64_t line;
+  double error;
+  struct _FPC_ERROR_ITEM_S_ *next;
+} _FPC_ERROR_ITEM_T_;
+
+#define FPC_ERROR_HTABLE_SIZE 1000
+
+typedef struct _FPC_ERROR_HTABLE_S {
+  uint64_t size;
+  struct _FPC_ERROR_ITEM_S_ **table;
+} _FPC_ERROR_HTABLE_T_;
+
+static _FPC_ERROR_HTABLE_T_ *_FPC_ERROR_HTABLE_ = NULL;
+
 
 // typedef struct _FPC_ITEM_S_ _FPC_ITEM_T_;
 
@@ -418,6 +435,88 @@ void _FPC_PRINT_HASH_TABLE_(_FPC_HTABLE_T *hashtable)
     fprintf(fpe, "]\n");
     fclose(fpe);
   }
+}
+
+_FPC_ERROR_HTABLE_T_ *_FPC_ERROR_HT_CREATE_(int64_t size) {
+  _FPC_ERROR_HTABLE_T_ *hashtable = NULL;
+  int64_t i;
+
+  if (size < 1)
+    return NULL;
+
+  hashtable = (_FPC_ERROR_HTABLE_T_ *)malloc(sizeof(_FPC_ERROR_HTABLE_T_));
+  hashtable->size = size;
+  hashtable->table = (_FPC_ERROR_ITEM_T_ **)malloc(sizeof(_FPC_ERROR_ITEM_T_ *) * size);
+  for (i = 0; i < size; i++)
+    hashtable->table[i] = NULL;
+  return hashtable;
+}
+int _FPC_ERROR_HT_HASH_(_FPC_ERROR_HTABLE_T_ *hashtable, _FPC_ERROR_ITEM_T_ *val) {
+  uint64_t key = (uint64_t)(val->file_name);
+  key += val->line;
+  return (int)(key % hashtable->size);
+}
+
+void _FPC_ERROR_HT_SET_(_FPC_ERROR_HTABLE_T_ *hashtable, _FPC_ERROR_ITEM_T_ *newVal) {
+  if (!hashtable) return;
+
+  int bin = _FPC_ERROR_HT_HASH_(hashtable, newVal);
+  _FPC_ERROR_ITEM_T_ *next = hashtable->table[bin];
+  _FPC_ERROR_ITEM_T_ *last = NULL;
+
+  // Look for same (file, line)
+  while (next != NULL && !(next->file_name == newVal->file_name && next->line == newVal->line)) {
+    last = next;
+    next = next->next;
+  }
+
+  if (next != NULL) {
+    // Overwrite error value (or use max, as you prefer)
+    next->error = newVal->error;
+  } else {
+    _FPC_ERROR_ITEM_T_ *newpair = (_FPC_ERROR_ITEM_T_ *)malloc(sizeof(_FPC_ERROR_ITEM_T_));
+    newpair->file_name = newVal->file_name;
+    newpair->line = newVal->line;
+    newpair->error = newVal->error;
+    newpair->next = hashtable->table[bin];
+    hashtable->table[bin] = newpair;
+  }
+}
+void _FPC_PRINT_ERROR_TABLE_(_FPC_ERROR_HTABLE_T_ *hashtable) {
+  // Create directory
+  struct stat st;
+  char dir_name[] = ".fpc_logs";
+  if (stat(dir_name, &st) == -1)
+    mkdir(dir_name, 0775);
+
+  // Set filename
+  char executionId[5000];
+  char fileName[5000];
+  fileName[0] = '\0';
+  strcpy(fileName, ".fpc_logs/error_");
+  _FPC_GET_EXECUTION_ID_(executionId);
+  strcat(executionId, ".json");
+  strcat(fileName, executionId);
+
+  FILE *fp = fopen(fileName, "w");
+  fprintf(fp, "[\n");
+
+  int first = 1;
+  for (int i = 0; i < hashtable->size; ++i) {
+    _FPC_ERROR_ITEM_T_ *next = hashtable->table[i];
+    while (next != NULL) {
+      if (!first) fprintf(fp, ",\n");
+      first = 0;
+      fprintf(fp, "  {\n");
+      fprintf(fp, "    \"file\": \"%s\",\n", next->file_name);
+      fprintf(fp, "    \"line\": %llu,\n", next->line);
+      fprintf(fp, "    \"error\": %.17e\n", next->error);
+      fprintf(fp, "  }");
+      next = next->next;
+    }
+  }
+  fprintf(fp, "\n]\n");
+  fclose(fp);
 }
 
 #endif /* SRC_FPC_HASHTABLE_H_ */

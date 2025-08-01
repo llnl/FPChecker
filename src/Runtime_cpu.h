@@ -36,7 +36,7 @@ _FPC_HTABLE_T *_FPC_HTABLE_;
 pthread_mutex_t fpc_lock;
 #endif
 #define MAX_ERROR_ENTRIES 1000
-#define MAX_NAME_LENGTH 100
+#define MAX_NAME_SIZE 100
 /** Program name and input **/
 int _FPC_PROG_INPUTS;
 char **_FPC_PROG_ARGS;
@@ -52,6 +52,8 @@ void _FPC_INIT_HASH_TABLE_()
 #endif
   int64_t size = 1000;
   _FPC_HTABLE_ = _FPC_HT_CREATE_(size);
+  _FPC_ERROR_HTABLE_ = _FPC_ERROR_HT_CREATE_(FPC_ERROR_HTABLE_SIZE);
+
 
 #ifdef FPC_MULTI_THREADED
   if (pthread_mutex_init(&fpc_lock, NULL) != 0)
@@ -80,6 +82,8 @@ void _FPC_PRINT_LOCATIONS_()
   printf("#FPCHECKER: Finalizing and writing traces...\n");
 #endif
   _FPC_PRINT_HASH_TABLE_(_FPC_HTABLE_);
+  _FPC_PRINT_ERROR_TABLE_(_FPC_ERROR_HTABLE_);
+
 }
 
 /*----------------------------------------------------------------------------*/
@@ -594,7 +598,7 @@ void _FPC_FP64_CHECK_(
 
 // Simple structure: address || register || error
 uintptr_t addresses[MAX_ERROR_ENTRIES];
-char registers[MAX_ERROR_ENTRIES][MAX_NAME_LENGTH];
+char registers[MAX_ERROR_ENTRIES][MAX_NAME_SIZE];
 double errors[MAX_ERROR_ENTRIES];
 int entry_count = 0;
 
@@ -661,8 +665,8 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address) {
         // Create new register entry for the pointer
         if (entry_count < MAX_ERROR_ENTRIES) {
             addresses[entry_count] = address;
-            strncpy(registers[entry_count], reg, MAX_NAME_LENGTH - 1);
-            registers[entry_count][MAX_NAME_LENGTH - 1] = '\0';
+            strncpy(registers[entry_count], reg, MAX_NAME_SIZE - 1);
+            registers[entry_count][MAX_NAME_SIZE - 1] = '\0';
             errors[entry_count] = store_error;
             entry_count++;
         }
@@ -720,8 +724,8 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address) {
     } else {
         if (entry_count < MAX_ERROR_ENTRIES) {
             addresses[entry_count] = address;
-            strncpy(registers[entry_count], load_reg, MAX_NAME_LENGTH - 1);
-            registers[entry_count][MAX_NAME_LENGTH - 1] = '\0';
+            strncpy(registers[entry_count], load_reg, MAX_NAME_SIZE - 1);
+            registers[entry_count][MAX_NAME_SIZE - 1] = '\0';
             errors[entry_count] = memory_error;
             entry_count++;
         }
@@ -768,8 +772,8 @@ void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error) {
         // Create new entry (address will be 0 until LOAD/STORE sets it)
         if (entry_count < MAX_ERROR_ENTRIES) {
             addresses[entry_count] = 0;  // Will be reset by LOAD/STORE
-            strncpy(registers[entry_count], reg_name, MAX_NAME_LENGTH - 1);
-            registers[entry_count][MAX_NAME_LENGTH - 1] = '\0';
+            strncpy(registers[entry_count], reg_name, MAX_NAME_SIZE - 1);
+            registers[entry_count][MAX_NAME_SIZE - 1] = '\0';
             errors[entry_count] = error;
             printf("#FPCHECKER-STORE: Stored new error for [%s || %lu] = %.17e\n", 
                    reg_name, addresses[entry_count], error);
@@ -856,6 +860,13 @@ void _FPC_FP32_CHECK_(
   item.latent_infinity_pos = (uint64_t)_FPC_FP32_IS_LATENT_INFINITY_POS(x);
   item.latent_infinity_neg = (uint64_t)_FPC_FP32_IS_LATENT_INFINITY_NEG(x);
   item.latent_underflow = (uint64_t)_FPC_FP32_IS_LATENT_SUBNORMAL(x);
+
+ _FPC_ERROR_ITEM_T_ new_item;
+  new_item.file_name = file_name;
+  new_item.line = (uint64_t)loc;
+  new_item.error = err_result;
+  _FPC_ERROR_HT_SET_(_FPC_ERROR_HTABLE_, &new_item);
+
 
   if (getenv("FPC_EXPONENT_USAGE") != NULL)
   {
