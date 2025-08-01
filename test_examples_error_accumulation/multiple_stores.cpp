@@ -1,6 +1,8 @@
 #include <iostream>
 using namespace std;
 
+FPC_CALCULATE_ERROR
+
 void kernel(float *x, float *y)
 {
     float result = 0.0f;

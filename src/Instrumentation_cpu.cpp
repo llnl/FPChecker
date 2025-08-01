@@ -215,7 +215,8 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
       {
         // This is a store instruction
         llvm::Value *storedValue = llvm::cast<llvm::StoreInst>(inst)->getValueOperand();
-        if ((storedValue->getType()->isFloatTy() || storedValue->getType()->isDoubleTy()) && !llvm::isa<llvm::Constant>(storedValue))
+        if ((storedValue->getType()->isFloatTy() || storedValue->getType()->isDoubleTy()) 
+        && !llvm::isa<llvm::Constant>(storedValue))
         {
           BasicBlock::iterator nextInst(inst);
           nextInst++;

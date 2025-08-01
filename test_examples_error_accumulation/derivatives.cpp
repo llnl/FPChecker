@@ -30,7 +30,7 @@ typedef float Real_t;
 //     cout << "derivative in double: " << derivative << endl;
 //     return derivative;
 // }
-
+FPC_CALCULATE_ERROR
 int main(int argc, char **argv){
     
     Real_t x = atof(argv[1]);

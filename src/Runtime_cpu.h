@@ -8,7 +8,6 @@
 #include <signal.h>
 #include <unistd.h>
 #include <sys/types.h>
-// #include<string.h>
 
 #ifdef FPC_MULTI_THREADED
 #include <pthread.h>
@@ -37,6 +36,14 @@ pthread_mutex_t fpc_lock;
 #endif
 #define MAX_ERROR_ENTRIES 1000
 #define MAX_NAME_SIZE 100
+
+typedef struct {
+    char file[MAX_NAME_SIZE];
+    long int line;
+    double error;
+} FPC_ERROR_LOG_ENTRY;
+
+
 /** Program name and input **/
 int _FPC_PROG_INPUTS;
 char **_FPC_PROG_ARGS;
@@ -52,7 +59,7 @@ void _FPC_INIT_HASH_TABLE_()
 #endif
   int64_t size = 1000;
   _FPC_HTABLE_ = _FPC_HT_CREATE_(size);
-  _FPC_ERROR_HTABLE_ = _FPC_ERROR_HT_CREATE_(FPC_ERROR_HTABLE_SIZE);
+  // _FPC_ERROR_HTABLE_ = _FPC_ERROR_HT_CREATE_(FPC_ERROR_HTABLE_SIZE);
 
 #ifdef FPC_MULTI_THREADED
   if (pthread_mutex_init(&fpc_lock, NULL) != 0)
@@ -81,7 +88,7 @@ void _FPC_PRINT_LOCATIONS_()
   printf("#FPCHECKER: Finalizing and writing traces...\n");
 #endif
   _FPC_PRINT_HASH_TABLE_(_FPC_HTABLE_);
-  _FPC_PRINT_ERROR_TABLE_(_FPC_ERROR_HTABLE_);
+  // _FPC_PRINT_ERROR_TABLE_(_FPC_ERROR_HTABLE_);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -593,7 +600,6 @@ void _FPC_FP64_CHECK_(
 /* Error Accumulation                                                        */
 /*----------------------------------------------------------------------------*/
 
-// Simple structure: address || register || error
 uintptr_t addresses[MAX_ERROR_ENTRIES];
 char registers[MAX_ERROR_ENTRIES][MAX_NAME_SIZE];
 double errors[MAX_ERROR_ENTRIES];
@@ -609,11 +615,7 @@ int _FPC_FP32_FIND_BY_REGISTER_(const char *reg_name)
       return i;
     }
   }
-  printf("Register names:\n");
-  for (int j = 0; j < entry_count; j++)
-  {
-    printf("  [%d] %s\n", j, registers[j]);
-  }
+
   return -1; // No register available in the table
 }
 
@@ -632,13 +634,6 @@ int _FPC_FP32_FIND_BY_ADDRESS_(uintptr_t addr)
 
 void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address)
 {
-  // printf("Instrumented store registers so far:\n");
-  // for (int i = 0; i < entry_count; i++) {
-  //   if (strlen(registers[i]) > 0) {
-  //     printf("  [%d] %s\n", i, registers[i]);
-  //   }
-  // }
-  //   printf("\n>>> STORE: %s || addr %lu\n", reg, address);
 
   double store_error = 0.0;
 
@@ -705,16 +700,6 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address)
   {
     printf("[%d] %-10s|| %-10lu = %.17e\n", i, registers[i], addresses[i], errors[i]);
   }
-
-  // if (store_error != 0.0) {
-  //     printf("ERROR PROPAGATED TO MEMORY!\n");
-  // } else {
-  //     // DEBUG: Show what we have in the table
-  //     printf(" DEBUG: Table Entry\n");
-  //     for (int i = 0; i < entry_count; i++) {
-  //         printf("[%d] %-10s|| %-10lu = %.17e\n", i, registers[i], addresses[i], errors[i]);
-  //     }
-  // }
 }
 
 // Load instruction
@@ -1008,11 +993,12 @@ void _FPC_FP32_CALCULATE_ERROR_(
   printf("Result in runtime (double) : %.17e and (float) %.7f\n", r_low, x);
   fflush(stdout);
 
-  _FPC_ERROR_ITEM_T_ new_item;
-  new_item.file_name = file_name;
-  new_item.line = (uint64_t)loc;
-  new_item.error = err_result;
-  _FPC_ERROR_HT_SET_(_FPC_ERROR_HTABLE_, &new_item);
+  // _FPC_ERROR_ITEM_T_ new_item;
+  // new_item.file_name = file_name;
+  // new_item.line = (uint64_t)loc;
+  // new_item.error = err_result;
+  // _FPC_ERROR_HT_SET_(_FPC_ERROR_HTABLE_, &new_item);
+
 }
 
 /*----------------------------------------------------------------------------*/

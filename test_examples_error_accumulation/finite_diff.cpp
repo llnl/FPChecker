@@ -6,13 +6,13 @@ using namespace std;
 
 typedef float Real_t;
 
-
 // float shifted_square(float x, float h)
 // {
 //     Real_t x_plus_eps = x + h;
 //     Real_t fx_x_h = x_plus_eps * x_plus_eps;
 //     return fx_x_h;
 // }
+FPC_CALCULATE_ERROR
 
 int main(int argc, char **argv){
 

@@ -4,9 +4,9 @@ CXX = clang++-fpchecker
 CXXFLAGS = -Wno-format -std=c++11 -g -O0
 
 # Source file(s)
-SRC = derivatives.cpp
+SRC = finite_diff.cpp
 OBJ = $(SRC:.cpp=.o)
-EXECUTABLE_NAME = derivatives
+EXECUTABLE_NAME = finite_diff
 
 # Library location and name (reused from common folder)
 LIB_DIR = ../tutorial/common

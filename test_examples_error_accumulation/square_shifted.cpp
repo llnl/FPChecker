@@ -1,4 +1,5 @@
 typedef float Real_t;
+FPC_CALCULATE_ERROR
 
 Real_t shifted_square(Real_t x, Real_t h)
 {
