@@ -157,6 +157,7 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
     SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_CALCULATE_ERROR_")
+    SET_ODR_LIKAGE("_FPC_PRINT_ERRORS_")
     // Hash table
     SET_ODR_LIKAGE("_FPC_HT_CREATE_")
     SET_ODR_LIKAGE("_FPC_HT_HASH_")
@@ -185,6 +186,28 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
   prog_args = mod->getGlobalVariable("_FPC_PROG_ARGS", true);
   assert(prog_args && "Invalid table!");
   prog_args->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  /* -------------------- For error tracking ---------------------- */
+  GlobalVariable *prog_addresses = nullptr;
+  prog_addresses = mod->getGlobalVariable("_FPC_ADDRESSES_", true);
+  assert(prog_addresses && "Invalid table!");
+  prog_addresses->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *prog_registers = nullptr;
+  prog_registers = mod->getGlobalVariable("_FPC_REGISTERS_", true);
+  assert(prog_registers && "Invalid table!");
+  prog_registers->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *prog_errors = nullptr;
+  prog_errors = mod->getGlobalVariable("_FPC_ERRORS_", true);
+  assert(prog_errors && "Invalid table!");
+  prog_errors->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *prog_entry_count = nullptr;
+  prog_entry_count = mod->getGlobalVariable("_FPC_ENTRY_COUNT_", true);
+  assert(prog_entry_count && "Invalid table!");
+  prog_entry_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  /* -------------------------------------------------------------- */
 
   GlobalVariable *fpc_lock = nullptr;
   fpc_lock = mod->getGlobalVariable("fpc_lock", true);
@@ -215,8 +238,7 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
       {
         // This is a store instruction
         llvm::Value *storedValue = llvm::cast<llvm::StoreInst>(inst)->getValueOperand();
-        if ((storedValue->getType()->isFloatTy() || storedValue->getType()->isDoubleTy()) 
-        && !llvm::isa<llvm::Constant>(storedValue))
+        if ((storedValue->getType()->isFloatTy() || storedValue->getType()->isDoubleTy()) && !llvm::isa<llvm::Constant>(storedValue))
         {
           BasicBlock::iterator nextInst(inst);
           nextInst++;
