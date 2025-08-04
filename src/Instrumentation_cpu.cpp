@@ -158,6 +158,8 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_CALCULATE_ERROR_")
     SET_ODR_LIKAGE("_FPC_PRINT_ERRORS_")
+    SET_ODR_LIKAGE("_FPC_LOG_ERROR_")
+    SET_ODR_LIKAGE("_FPC_WRITE_AND_PRINT_TO_JSON_")
     // Hash table
     SET_ODR_LIKAGE("_FPC_HT_CREATE_")
     SET_ODR_LIKAGE("_FPC_HT_HASH_")
@@ -207,6 +209,13 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
   prog_entry_count = mod->getGlobalVariable("_FPC_ENTRY_COUNT_", true);
   assert(prog_entry_count && "Invalid table!");
   prog_entry_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *prog_error_log_count = nullptr;
+  prog_error_log_count = mod->getGlobalVariable("ERROR_LOG", true);
+  assert(prog_error_log_count && "Invalid table!");
+  prog_error_log_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+
   /* -------------------------------------------------------------- */
 
   GlobalVariable *fpc_lock = nullptr;

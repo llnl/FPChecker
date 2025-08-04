@@ -4,9 +4,9 @@ CXX = clang++-fpchecker
 CXXFLAGS = -Wno-format -std=c++11 -g -O0
 
 # Source file(s)
-SRC = finite_diff.cpp
+SRC = nested_operation.cpp
 OBJ = $(SRC:.cpp=.o)
-EXECUTABLE_NAME = finite_diff
+EXECUTABLE_NAME = nested_operation
 
 # Library location and name (reused from common folder)
 LIB_DIR = ../tutorial/common

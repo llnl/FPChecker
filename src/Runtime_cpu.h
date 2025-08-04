@@ -38,12 +38,18 @@ pthread_mutex_t fpc_lock;
 #define MAX_ERROR_ENTRIES 1000
 #define MAX_NAME_SIZE 100
 
-typedef struct
-{
+typedef struct {
   char file[MAX_NAME_SIZE];
-  long int line;
+  int line;
+  char operation[20];
+  float input1;
+  float input2;
+  float input3;
   double error;
 } FPC_ERROR_LOG_ENTRY;
+
+FPC_ERROR_LOG_ENTRY ERROR_LOG[MAX_ERROR_ENTRIES];
+
 
 /** Program name and input **/
 int _FPC_PROG_INPUTS;
@@ -89,6 +95,65 @@ void _FPC_INIT_ARGS_FPCHECKER(int argc, char **argv)
   _FPC_INIT_HASH_TABLE_();
 }
 
+void _FPC_LOG_ERROR_(const char* file, int line, const char* operation,
+               float input1, float input2,float input3, double error) {
+    static int error_log_count = 0;
+    if (error_log_count < MAX_ERROR_ENTRIES) {
+        strncpy(ERROR_LOG[error_log_count].file, file, MAX_NAME_SIZE - 1);
+        ERROR_LOG[error_log_count].file[MAX_NAME_SIZE-1] = '\0';
+        ERROR_LOG[error_log_count].line = line;
+        strncpy(ERROR_LOG[error_log_count].operation, operation, 19);
+        ERROR_LOG[error_log_count].operation[19] = '\0';
+        ERROR_LOG[error_log_count].input1 = input1;
+        ERROR_LOG[error_log_count].input2 = input2;
+        ERROR_LOG[error_log_count].input3 = input3;
+        ERROR_LOG[error_log_count].error = error;
+        error_log_count++;
+    }
+
+    // FILE *fp = fopen("fpc_error_log.json", "w");
+    // if (!fp) return;
+
+    // fprintf(fp, "[\n");
+    // for (int i = 0; i < error_log_count; ++i) {
+    //     fprintf(fp, "  {\n");
+    //     fprintf(fp, "    \"file\": \"%s\",\n", ERROR_LOG[i].file);
+    //     fprintf(fp, "    \"line\": %d,\n", ERROR_LOG[i].line);
+    //     fprintf(fp, "    \"operation\": \"%s\",\n", ERROR_LOG[i].operation);
+    //     fprintf(fp, "    \"input1\": %.9e,\n", ERROR_LOG[i].input1);
+    //     fprintf(fp, "    \"input2\": %.9e,\n", ERROR_LOG[i].input2);
+    //     fprintf(fp, "    \"error\": %.17e\n", ERROR_LOG[i].error);
+    //     fprintf(fp, "  }%s\n", (i == error_log_count - 1) ? "" : ",");
+    // }
+    // fprintf(fp, "]\n");
+    // fclose(fp);
+}
+
+void _FPC_WRITE_AND_PRINT_TO_JSON_(const char* filename) {
+    FILE *fp = fopen(filename, "w");
+    if (!fp) return;
+
+    fprintf(fp, "[\n");
+    int printed = 0;
+    for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i) {
+      if (strlen(ERROR_LOG[i].file) > 0 && ERROR_LOG[i].line != 0) {
+        if (printed > 0) fprintf(fp, ",\n");
+        fprintf(fp, "  {\n");
+        fprintf(fp, "    \"file\": \"%s\",\n", ERROR_LOG[i].file);
+        fprintf(fp, "    \"line\": %d,\n", ERROR_LOG[i].line);
+        fprintf(fp, "    \"operation\": \"%s\",\n", ERROR_LOG[i].operation);
+        fprintf(fp, "    \"input1\": %.9e,\n", ERROR_LOG[i].input1);
+        fprintf(fp, "    \"input2\": %.9e,\n", ERROR_LOG[i].input2);
+        fprintf(fp, "    \"input3\": %.9e,\n", ERROR_LOG[i].input3);
+        fprintf(fp, "    \"error\": %.17e\n", ERROR_LOG[i].error);
+        // fprintf(fp, "  }%s\n", (i == _FPC_ENTRY_COUNT_ - 1) ? "" : ",");
+        printed++;
+    }
+    }
+    fprintf(fp, "]\n");
+    fclose(fp);
+}
+
 void _FPC_PRINT_ERRORS_()
 {
   FILE *fp = fopen("fpc_error_log.txt", "w");
@@ -105,7 +170,28 @@ void _FPC_PRINT_ERRORS_()
   {
     printf("Failed to open fpc_error_log.txt for writing\n");
   }
+
+  //   FILE *fp1 = fopen("fpc_error_log.json", "w");
+  //   // FILE *fp = fopen(filename, "w");
+  //   if (fp1 != NULL) {
+  //   fprintf(fp1, "[\n");
+  //   for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i) {
+  //       fprintf(fp1, "  {\n");
+  //       fprintf(fp1, "    \"file\": \"%s\",\n", ERROR_LOG[i].file);
+  //       fprintf(fp1, "    \"line\": %d,\n", ERROR_LOG[i].line);
+  //       fprintf(fp1, "    \"operation\": \"%s\",\n", ERROR_LOG[i].operation);
+  //       fprintf(fp1, "    \"input1\": %.9e,\n", ERROR_LOG[i].input1);
+  //       fprintf(fp1, "    \"input2\": %.9e,\n", ERROR_LOG[i].input2);
+  //       fprintf(fp1, "    \"error\": %.17e\n", ERROR_LOG[i].error);
+  //       fprintf(fp1, "  }%s\n", (i == _FPC_ENTRY_COUNT_ - 1) ? "" : ",");
+  //   }
+  //   fprintf(fp1, "]\n");
+  //   fclose(fp1);
+  // } else {
+  //   printf("Failed to open fpc_error_log.json for writing\n");
+  // }
 }
+
 
 void _FPC_PRINT_LOCATIONS_()
 {
@@ -114,6 +200,7 @@ void _FPC_PRINT_LOCATIONS_()
 #endif
   _FPC_PRINT_HASH_TABLE_(_FPC_HTABLE_);
   _FPC_PRINT_ERRORS_();
+  _FPC_WRITE_AND_PRINT_TO_JSON_("fpc_error_log.json");
 }
 
 /*----------------------------------------------------------------------------*/
@@ -1008,6 +1095,19 @@ void _FPC_FP32_CALCULATE_ERROR_(
   double err_result = r_high - r_low;
 
   printf("Inputs: %.17e, %.17e -> Error: %.17e\n", y_high, z_high, err_result);
+  
+  const char *op_name;
+  switch (op){
+  case 0: op_name = "add"; break;
+  case 1: op_name = "sub"; break;
+  case 2: op_name = "mul"; break;     
+  case 3: op_name = "div"; break;
+  case 5: op_name = "mod"; break;
+  case 6: op_name = "fma"; break;
+  default: op_name = "unknown"; break;
+  }
+
+  _FPC_LOG_ERROR_( file_name, loc, op_name, y, z, w, err_result);
 
   _FPC_FP32_STORE_ERROR_(result_name, err_result);
   printf("Result in runtime (double) : %.17e and (float) %.7f\n", r_low, x);
