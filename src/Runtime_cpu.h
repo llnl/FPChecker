@@ -739,63 +739,51 @@ int _FPC_FP32_FIND_BY_ADDRESS_(uintptr_t addr)
   return -1;
 }
 
-void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address)
-{
-
+void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address) {
   double store_error = 0.0;
 
   // First, check if this register already exists with an error
   int reg_id = _FPC_FP32_FIND_BY_REGISTER_(reg);
-  if (reg_id >= 0)
-  {
+  if (reg_id >= 0) {
     store_error = _FPC_ERRORS_[reg_id];
     _FPC_ADDRESSES_[reg_id] = address;
     printf("Register  %s exists with error %.17e\n", reg, store_error);
-  }
-  else
-  {
-
-    int last_non_zero_error_id = -1;
-    double last_seen_error = 0.0;
-
-    for (int i = _FPC_ENTRY_COUNT_ - 1; i >= 0; i--)
-    {
-      if (_FPC_ERRORS_[i] != 0.0)
-      {
-        // Found a register with error
-        last_non_zero_error_id = i;
-        last_seen_error = _FPC_ERRORS_[i];
+  } else {
+    // Register does not exist, try to propagate the last seen non-zero error
+    for (int i = _FPC_ENTRY_COUNT_ - 1; i >= 0; i--) {
+      if (_FPC_ERRORS_[i] != 0.0) {
+        store_error = _FPC_ERRORS_[i];
         printf("Propagating Error from %s gets error from value %s (%.17e)\n",
-               reg, _FPC_REGISTERS_[i], last_seen_error);
+               reg, _FPC_REGISTERS_[i], store_error);
         break;
       }
     }
 
-    store_error = last_seen_error;
-
-    // Create new register entry for the pointer
-    if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES)
-    {
+    // Insert new register entry
+    if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES) {
       _FPC_ADDRESSES_[_FPC_ENTRY_COUNT_] = address;
       strncpy(_FPC_REGISTERS_[_FPC_ENTRY_COUNT_], reg, MAX_NAME_SIZE - 1);
       _FPC_REGISTERS_[_FPC_ENTRY_COUNT_][MAX_NAME_SIZE - 1] = '\0';
       _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = store_error;
       _FPC_ENTRY_COUNT_++;
+      printf("Created new entry for register %s at address %lu with error %.17e\n",
+             reg, address, store_error);
     }
   }
 
+  // Update or insert based on address
   int addr_id = _FPC_FP32_FIND_BY_ADDRESS_(address);
-  if (addr_id >= 0 && addr_id != reg_id)
-  {
+  if (addr_id >= 0) {
     _FPC_ERRORS_[addr_id] = store_error;
+    strncpy(_FPC_REGISTERS_[addr_id], reg, MAX_NAME_SIZE - 1);
+    _FPC_REGISTERS_[addr_id][MAX_NAME_SIZE - 1] = '\0';
     printf("Updated existing memory location %lu with error %.17e\n", address, store_error);
-  }
-  else if (addr_id < 0)
-  {
-    // Create a new memory entry for this address
-    if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES)
-    {
+  } else if (addr_id < 0) {
+    // Memory entry not found — create only if not already added above
+    if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES) {
       _FPC_ADDRESSES_[_FPC_ENTRY_COUNT_] = address;
+      strncpy(_FPC_REGISTERS_[_FPC_ENTRY_COUNT_], reg, MAX_NAME_SIZE - 1);
+      _FPC_REGISTERS_[_FPC_ENTRY_COUNT_][MAX_NAME_SIZE - 1] = '\0';
       _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = store_error;
       printf("Created new memory entry for addr %lu with error %.17e\n", address, store_error);
       _FPC_ENTRY_COUNT_++;
@@ -803,8 +791,7 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address)
   }
 
   printf(" %s || %lu  <- error %.17e\n", reg, address, store_error);
-  for (int i = 0; i < _FPC_ENTRY_COUNT_; i++)
-  {
+  for (int i = 0; i < _FPC_ENTRY_COUNT_; i++) {
     printf("[%d] %-10s|| %-10lu = %.17e\n", i, _FPC_REGISTERS_[i], _FPC_ADDRESSES_[i], _FPC_ERRORS_[i]);
   }
 }
@@ -844,9 +831,6 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
   }
   printf(" %s || %lu || %.17e \n", load_reg, address, memory_error);
 
-  // if (memory_error != 0.0) {
-  //     printf("ERROR INHERITED!\n");
-  //}
 }
 
 // Find error - unchanged
@@ -1110,7 +1094,7 @@ void _FPC_FP32_CALCULATE_ERROR_(
   _FPC_LOG_ERROR_( file_name, loc, op_name, y, z, w, err_result);
 
   _FPC_FP32_STORE_ERROR_(result_name, err_result);
-  printf("Result in runtime (double) : %.17e and (float) %.7f\n", r_low, x);
+  printf("Result in runtime (double) : %.17e and (float) %.7f\n", r_high, x);
   fflush(stdout);
 
   // _FPC_ERROR_ITEM_T_ new_item;

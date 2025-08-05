@@ -1,12 +1,12 @@
 # Compiler and flags
 CXX = clang++-fpchecker
-#CXXFLAGS = -Wno-format -std=c++11 -g -O2
-CXXFLAGS = -Wno-format -std=c++11 -g -O0
+ CXXFLAGS = -Wno-format -std=c++11 -g -O2
+#  CXXFLAGS = -Wno-format -std=c++11 -g -O0
 
 # Source file(s)
-SRC = nested_operation.cpp
+SRC = derivatives.cpp
 OBJ = $(SRC:.cpp=.o)
-EXECUTABLE_NAME = nested_operation
+EXECUTABLE_NAME = derivatives
 
 # Library location and name (reused from common folder)
 LIB_DIR = ../tutorial/common

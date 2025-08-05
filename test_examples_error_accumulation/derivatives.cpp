@@ -4,32 +4,7 @@ using namespace std;
 typedef float Real_t;
 //typedef double Real_t;
 
-// Real_t derivates (Real_t x) {
-//     return x * x;
-// }
 
-// Real_t finite_difference( Real_t x, Real_t eps){
-//     Real_t fx_with_eps = derivates(x + eps);
-//     Real_t fx = derivates(x);
-
-//     Real_t derivative = (fx_with_eps - fx) / eps;
-//     cout << "derivative: " << derivative << endl;
-//     return derivative;
-
-// }
-
-
-// double derivatives_double(double x){
-//     return x * x;
-// }
-
-// double finite_difference_double(double x, double eps) {
-//     double fx_with_eps = derivatives_double(x + eps);
-//     double fx = derivatives_double(x);
-//     double derivative = (fx_with_eps - fx) / eps;
-//     cout << "derivative in double: " << derivative << endl;
-//     return derivative;
-// }
 FPC_CALCULATE_ERROR
 int main(int argc, char **argv){
     
