@@ -94,32 +94,28 @@ int _FPC_IS_FINAL_SINK_(int index) {
     const char *reg = _FPC_REGISTERS_[index];
     uintptr_t addr = _FPC_ADDRESSES_[index];
 
-    // Is the register that holds the result used later?
-    // This is the primary check for all operations that produce a register result.
-    for (int i = 0; i < use_reg_count; ++i) {
-        // If the register name is valid and it's found in the used set, it's not a sink.
-        if (reg && reg[0] != '\0' && strcmp(use_reg_set[i], reg) == 0) {
-            return 0; // Not a sink.
+    // Case 1: Check if the register was used
+    if (reg && reg[0] != '\0') {
+        for (int i = 0; i < use_reg_count; ++i) {
+            if (strcmp(use_reg_set[i], reg) == 0) {
+                return 0; // Not a sink: register was reused
+            }
         }
     }
 
-    // Is the address where a result was stored used later?
-    // This check should only apply to memory-producing operations (STORES).
-    // We can heuristically identify a STORE as an operation where the register name is null or invalid,
-    // as it doesn't produce a register result.
-    if (reg == NULL || reg[0] == '\0') {
-      if (addr != 0) {
-          for (int i = 0; i < use_addr_count; ++i) {
-              if (use_addr_set[i] == addr) {
-                  return 0; // The stored value was used. Not a sink.
-              }
-          }
-      }
+    // Case 2: If register is empty (FMA or raw store), check address
+    if ((!reg || reg[0] == '\0') && addr != 0) {
+        for (int i = 0; i < use_addr_count; ++i) {
+            if (use_addr_set[i] == addr) {
+                return 0; // Not a sink: address was reused
+            }
+        }
     }
 
-    // If neither of the applicable checks failed, it is a final sink.
+    // If neither reg nor addr were reused → it's a final sink
     return 1;
 }
+
 
 /*----------------------------------------------------------------------------*/
 /* Initialize                                                                 */
@@ -168,8 +164,8 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(const char* filename) {
             if (!first) fprintf(fp, ",\n");
             first = 0;
             fprintf(fp, "  {\n");
-            fprintf(fp, "    \"file\": \"%s\",\n", ERROR_LOG[i].file);  // <-- CHANGE: add .file
-            fprintf(fp, "    \"line\": %d,\n", ERROR_LOG[i].line);      // <-- CHANGE: add .line
+            fprintf(fp, "    \"file\": \"%s\",\n", ERROR_LOG[i].file);  
+            fprintf(fp, "    \"line\": %d,\n", ERROR_LOG[i].line);     
             fprintf(fp, "    \"error\": %.17e\n", _FPC_ERRORS_[i]);
             fprintf(fp, "  }");
         }
@@ -750,67 +746,7 @@ int _FPC_FP32_FIND_BY_ADDRESS_(uintptr_t addr)
   return -1;
 }
 
-// void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address) {
-//   // _FPC_USED_ADDR_(address);
-//   double store_error = 0.0;
-
-//   // First, check if this register already exists with an error
-//   int reg_id = _FPC_FP32_FIND_BY_REGISTER_(reg);
-//   if (reg_id >= 0) {
-//     store_error = _FPC_ERRORS_[reg_id];
-//     _FPC_ADDRESSES_[reg_id] = address;
-//     printf("Register  %s exists with error %.17e\n", reg, store_error);
-//   } else {
-//     // Register does not exist, try to propagate the last seen non-zero error
-//     for (int i = _FPC_ENTRY_COUNT_ - 1; i >= 0; i--) {
-//       if (_FPC_ERRORS_[i] != 0.0) {
-//         store_error = _FPC_ERRORS_[i];
-//         printf("Propagating Error from %s gets error from value %s (%.17e)\n",
-//                reg, _FPC_REGISTERS_[i], store_error);
-//         break;
-//       }
-//     }
-
-//     // Insert new register entry
-//     if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES) {
-//       _FPC_ADDRESSES_[_FPC_ENTRY_COUNT_] = address;
-//       strncpy(_FPC_REGISTERS_[_FPC_ENTRY_COUNT_], reg, MAX_NAME_SIZE - 1);
-//       _FPC_REGISTERS_[_FPC_ENTRY_COUNT_][MAX_NAME_SIZE - 1] = '\0';
-//       _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = store_error;
-//       _FPC_ENTRY_COUNT_++;
-//       printf("Created new entry for register %s at address %lu with error %.17e\n",
-//              reg, address, store_error);
-//     }
-//   }
-
-//   // Update or insert based on address
-//   int addr_id = _FPC_FP32_FIND_BY_ADDRESS_(address);
-//   if (addr_id >= 0) {
-//     _FPC_ERRORS_[addr_id] = store_error;
-//     strncpy(_FPC_REGISTERS_[addr_id], reg, MAX_NAME_SIZE - 1);
-//     _FPC_REGISTERS_[addr_id][MAX_NAME_SIZE - 1] = '\0';
-//     printf("Updated existing memory location %lu with error %.17e\n", address, store_error);
-//   } else if (addr_id < 0) {
-//     // Memory entry not found — create only if not already added above
-//     if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES) {
-//       _FPC_ADDRESSES_[_FPC_ENTRY_COUNT_] = address;
-//       strncpy(_FPC_REGISTERS_[_FPC_ENTRY_COUNT_], reg, MAX_NAME_SIZE - 1);
-//       _FPC_REGISTERS_[_FPC_ENTRY_COUNT_][MAX_NAME_SIZE - 1] = '\0';
-//       _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = store_error;
-//       printf("Created new memory entry for addr %lu with error %.17e\n", address, store_error);
-//       _FPC_ENTRY_COUNT_++;
-//     }
-//   }
-
-//   printf(" %s || %lu  <- error %.17e\n", reg, address, store_error);
-//   for (int i = 0; i < _FPC_ENTRY_COUNT_; i++) {
-//     printf("[%d] %-10s|| %-10lu = %.17e\n", i, _FPC_REGISTERS_[i], _FPC_ADDRESSES_[i], _FPC_ERRORS_[i]);
-//   }
-
-// }
-
 /**
- * Correctly handles a STORE instruction.
  * A STORE consumes a register and produces a value at a memory address.
  */
 
@@ -856,7 +792,6 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address) {
     printf("Inserted new memory entry %lu (%s) with error %.17e\n", address, reg, store_error);
     _FPC_ENTRY_COUNT_++;
   }
-
   // _FPC_USED_ADDR_(address);
   // _FPC_USED_REG_(reg);
 }
@@ -1101,14 +1036,15 @@ void _FPC_FP32_CALCULATE_ERROR_(
     float x, float y, float z, float w, int loc, char *file_name, int op, int cond,
     const char *result_name, const char *op1_name, const char *op2_name, const char *fma_name)
 {
-  double err_y = _FPC_FP32_FIND_ERROR_(op1_name);
-  double err_z = _FPC_FP32_FIND_ERROR_(op2_name);
-  double err_w = _FPC_FP32_FIND_ERROR_(fma_name);
-
 
   if (op1_name) _FPC_USED_REG_(op1_name);
   if (op2_name) _FPC_USED_REG_(op2_name);
   if (fma_name) _FPC_USED_REG_(fma_name);
+
+  double err_y = _FPC_FP32_FIND_ERROR_(op1_name);
+  double err_z = _FPC_FP32_FIND_ERROR_(op2_name);
+  double err_w = _FPC_FP32_FIND_ERROR_(fma_name);
+
 
   double y_high = (double)y + err_y;
   double z_high = (double)z + err_z;
@@ -1154,9 +1090,9 @@ void _FPC_FP32_CALCULATE_ERROR_(
   printf("Inputs: %.17e, %.17e -> Error: %.17e\n", y_high, z_high, err_result);
   
 
-
   _FPC_FP32_STORE_ERROR_(result_name, err_result);
   
+ 
   _FPC_LOG_LOCATION_(file_name, loc);
   
   printf("Result in runtime (double) : %.17e and (float) %.7f\n", r_high, x);
