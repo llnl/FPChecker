@@ -1,7 +1,57 @@
 [
   {
-    "file": "/Users/sharmin1/Documents/tutorial/FPChecker/test_examples_error_accumulation/derivatives.cpp",
+    "file": "",
+    "line": 0,
+    "error": 0.00000000000000000e+00
+  },
+  {
+    "file": "",
+    "line": 0,
+    "error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/test_examples_error_accumulation/derivatives.cpp",
+    "line": 14,
+    "error": 0.00000000000000000e+00
+  },
+  {
+    "file": "",
+    "line": 0,
+    "error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/test_examples_error_accumulation/derivatives.cpp",
+    "line": 15,
+    "error": -7.08003062754869461e-06
+  },
+  {
+    "file": "",
+    "line": 0,
+    "error": -7.08003062754869461e-06
+  },
+  {
+    "file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/test_examples_error_accumulation/derivatives.cpp",
+    "line": 16,
+    "error": -2.34273100068094209e-03
+  },
+  {
+    "file": "",
+    "line": 0,
+    "error": -2.34273100068094209e-03
+  },
+  {
+    "file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/test_examples_error_accumulation/derivatives.cpp",
     "line": 18,
-    "error": 9.37520001607987297e+00
+    "error": -2.34271948213086034e+00
+  },
+  {
+    "file": "",
+    "line": 0,
+    "error": -2.34271948213086034e+00
+  },
+  {
+    "file": "",
+    "line": 0,
+    "error": -2.34271948213086034e+00
   }
 ]

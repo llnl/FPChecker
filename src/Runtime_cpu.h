@@ -37,13 +37,13 @@ pthread_mutex_t fpc_lock;
 #define MAX_ERROR_ENTRIES 1000
 #define MAX_NAME_SIZE 100
 
-typedef struct {
+typedef struct
+{
   char file[MAX_NAME_SIZE];
   int line;
 } FPC_ERROR_LOG_ENTRY;
 
 FPC_ERROR_LOG_ENTRY ERROR_LOG[MAX_ERROR_ENTRIES];
-
 
 /** Program name and input **/
 int _FPC_PROG_INPUTS;
@@ -61,61 +61,77 @@ int use_reg_count = 0;
 uintptr_t use_addr_set[MAX_ERROR_ENTRIES];
 int use_addr_count = 0;
 
-
-void _FPC_USED_REG_(const char *reg){
-  if (!reg || strlen(reg) == 0) return;
+void _FPC_USED_REG_(const char *reg)
+{
+  if (!reg || strlen(reg) == 0)
+    return;
 
   printf("#FPCHECKER: Register marked as used: %s\n", reg);
-  for (int i = 0 ; i < use_reg_count ; i++){
-    if (strcmp(use_reg_set[i], reg) == 0) return;
+  for (int i = 0; i < use_reg_count; i++)
+  {
+    if (strcmp(use_reg_set[i], reg) == 0)
+      return;
   }
-  if (use_reg_count < MAX_ERROR_ENTRIES) {
+  if (use_reg_count < MAX_ERROR_ENTRIES)
+  {
     strncpy(use_reg_set[use_reg_count++], reg, MAX_NAME_SIZE - 1);
   }
 }
 
-void _FPC_USED_ADDR_(uintptr_t addr){
-  for(int i = 0 ; i < use_addr_count; ++i){
-    if(use_addr_set[i] == addr) return;
+void _FPC_USED_ADDR_(uintptr_t addr)
+{
+  for (int i = 0; i < use_addr_count; ++i)
+  {
+    if (use_addr_set[i] == addr)
+      return;
   }
-  if (use_addr_count < MAX_ERROR_ENTRIES) {
+  if (use_addr_count < MAX_ERROR_ENTRIES)
+  {
     use_addr_set[use_addr_count++] = addr;
   }
 }
 
-void _FPC_LOG_LOCATION_(const char* file, int line) {
-    if ( _FPC_ENTRY_COUNT_ > 0) {
-        strncpy(ERROR_LOG[_FPC_ENTRY_COUNT_ - 1].file, file, MAX_NAME_SIZE - 1);
-        ERROR_LOG[_FPC_ENTRY_COUNT_ - 1].line = line;
-    }
+void _FPC_LOG_LOCATION_(const char *file, int line)
+{
+  if (_FPC_ENTRY_COUNT_ > 0)
+  {
+    strncpy(ERROR_LOG[_FPC_ENTRY_COUNT_ - 1].file, file, MAX_NAME_SIZE - 1);
+    ERROR_LOG[_FPC_ENTRY_COUNT_ - 1].line = line;
+  }
 }
 
-int _FPC_IS_FINAL_SINK_(int index) {
-    const char *reg = _FPC_REGISTERS_[index];
-    uintptr_t addr = _FPC_ADDRESSES_[index];
+int _FPC_IS_FINAL_SINK_(int index)
+{
+  const char *reg = _FPC_REGISTERS_[index];
+  uintptr_t addr = _FPC_ADDRESSES_[index];
 
-    // Case 1: Check if the register was used
-    if (reg && reg[0] != '\0') {
-        for (int i = 0; i < use_reg_count; ++i) {
-            if (strcmp(use_reg_set[i], reg) == 0) {
-                return 0; // Not a sink: register was reused
-            }
-        }
+  // Case 1: Check if the register was used
+  if (reg && reg[0] != '\0')
+  {
+    for (int i = 0; i < use_reg_count; ++i)
+    {
+      if (strcmp(use_reg_set[i], reg) == 0)
+      {
+        return 0; // Not a sink: register was reused
+      }
     }
+  }
 
-    // Case 2: If register is empty (FMA or raw store), check address
-    if ((!reg || reg[0] == '\0') && addr != 0) {
-        for (int i = 0; i < use_addr_count; ++i) {
-            if (use_addr_set[i] == addr) {
-                return 0; // Not a sink: address was reused
-            }
-        }
+  // Case 2: If register is empty (FMA or raw store), check address
+  if ((!reg || reg[0] == '\0') && addr != 0)
+  {
+    for (int i = 0; i < use_addr_count; ++i)
+    {
+      if (use_addr_set[i] == addr)
+      {
+        return 0; // Not a sink: address was reused
+      }
     }
+  }
 
-    // If neither reg nor addr were reused → it's a final sink
-    return 1;
+  // If neither reg nor addr were reused → it's a final sink
+  return 1;
 }
-
 
 /*----------------------------------------------------------------------------*/
 /* Initialize                                                                 */
@@ -151,50 +167,59 @@ void _FPC_INIT_ARGS_FPCHECKER(int argc, char **argv)
   _FPC_INIT_HASH_TABLE_();
 }
 
+void _FPC_WRITE_AND_PRINT_TO_JSON_(const char *filename)
+{
+  FILE *fp = fopen("fpc_error_log.json", "w");
+  if (!fp)
+    return;
 
-void _FPC_WRITE_AND_PRINT_TO_JSON_(const char* filename) {
-    FILE *fp = fopen("fpc_error_log.json", "w");
-    if (!fp) return;
+  fprintf(fp, "[\n");
 
-    fprintf(fp, "[\n");
-
-    int first = 1;
-    for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i) {
-        if (_FPC_IS_FINAL_SINK_(i)) {
-            if (!first) fprintf(fp, ",\n");
-            first = 0;
-            fprintf(fp, "  {\n");
-            fprintf(fp, "    \"file\": \"%s\",\n", ERROR_LOG[i].file);  
-            fprintf(fp, "    \"line\": %d,\n", ERROR_LOG[i].line);     
-            fprintf(fp, "    \"error\": %.17e\n", _FPC_ERRORS_[i]);
-            fprintf(fp, "  }");
-        }
+  int first = 1;
+  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i)
+  {
+    if (_FPC_IS_FINAL_SINK_(i))
+    {
+      if (!first)
+        fprintf(fp, ",\n");
+      first = 0;
+      fprintf(fp, "  {\n");
+      fprintf(fp, "    \"file\": \"%s\",\n", ERROR_LOG[i].file);
+      fprintf(fp, "    \"line\": %d,\n", ERROR_LOG[i].line);
+      fprintf(fp, "    \"error\": %.17e\n", _FPC_ERRORS_[i]);
+      fprintf(fp, "  }");
     }
+  }
 
-    fprintf(fp, "\n]\n");
-    fclose(fp);
-    printf("#FPCHECKER: Final grouped errors written to %s\n", filename);
+  fprintf(fp, "\n]\n");
+  fclose(fp);
+  printf("#FPCHECKER: Final grouped errors written to %s\n", filename);
 }
 
-void _FPC_DEBUG_PRINT_ALL_TRACKED_DATA_() {
+void _FPC_DEBUG_PRINT_ALL_TRACKED_DATA_()
+{
   printf("\n======== REGISTER TABLE ========\n");
-  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i) {
+  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i)
+  {
     printf("Register[%d] = %s\n", i, _FPC_REGISTERS_[i]);
   }
 
   printf("\n======== ADDRESS TABLE ========\n");
-  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i) {
+  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i)
+  {
     if (_FPC_ADDRESSES_[i] != 0)
       printf("Address[%d] = %ld\n", i, _FPC_ADDRESSES_[i]);
   }
 
   printf("\n======== USED REGISTERS ========\n");
-  for (int i = 0; i < use_reg_count; ++i) {
+  for (int i = 0; i < use_reg_count; ++i)
+  {
     printf("Used Reg[%d] = %s\n", i, use_reg_set[i]);
   }
 
   printf("\n======== USED ADDRESSES ========\n");
-  for (int i = 0; i < use_addr_count; ++i) {
+  for (int i = 0; i < use_addr_count; ++i)
+  {
     printf("Used Addr[%d] = %ld\n", i, use_addr_set[i]);
   }
   printf("=================================\n\n");
@@ -750,23 +775,31 @@ int _FPC_FP32_FIND_BY_ADDRESS_(uintptr_t addr)
  * A STORE consumes a register and produces a value at a memory address.
  */
 
-void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address) {
+void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *file_name)
+{
+  printf(">>> STORE: %s -> %d\n", file_name, loc);
+
   double store_error = 0.0;
 
   // Find if this register already has an error
   int reg_id = _FPC_FP32_FIND_BY_REGISTER_(reg);
-  if (reg_id >= 0) {
+  if (reg_id >= 0)
+  {
     store_error = _FPC_ERRORS_[reg_id];
     printf("Register %s exists with error %.17e\n", reg, store_error);
     // if (_FPC_ADDRESSES_[reg_id] == 0) {
     //     _FPC_ADDRESSES_[reg_id] = address;
     //     printf("Updated existing register with address\n");
-    //     return; 
+    //     return;
     // }
-  } else {
+  }
+  else
+  {
     // Try to propagate last non-zero error if any
-    for (int i = _FPC_ENTRY_COUNT_ - 1; i >= 0; i--) {
-      if (_FPC_ERRORS_[i] != 0.0) {
+    for (int i = _FPC_ENTRY_COUNT_ - 1; i >= 0; i--)
+    {
+      if (_FPC_ERRORS_[i] != 0.0)
+      {
         store_error = _FPC_ERRORS_[i];
         printf("Propagating error to %s from %s (%.17e)\n",
                reg, _FPC_REGISTERS_[i], store_error);
@@ -777,13 +810,16 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address) {
 
   // Now update or insert based on the *address*
   int addr_id = _FPC_FP32_FIND_BY_ADDRESS_(address);
-  if (addr_id >= 0) {
+  if (addr_id >= 0)
+  {
     // Address exists — update it
     _FPC_ERRORS_[addr_id] = store_error;
     strncpy(_FPC_REGISTERS_[addr_id], reg, MAX_NAME_SIZE - 1);
     _FPC_REGISTERS_[addr_id][MAX_NAME_SIZE - 1] = '\0';
     printf("Updated memory location %lu (%s) with error %.17e\n", address, reg, store_error);
-  } else if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES) {
+  }
+  else if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES)
+  {
     // Address does not exist — insert new entry
     _FPC_ADDRESSES_[_FPC_ENTRY_COUNT_] = address;
     strncpy(_FPC_REGISTERS_[_FPC_ENTRY_COUNT_], reg, MAX_NAME_SIZE - 1);
@@ -796,12 +832,11 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address) {
   // _FPC_USED_REG_(reg);
 }
 
-
 // Load instruction
 void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
 {
   _FPC_USED_ADDR_(address);
-  
+
   printf("\n>>> LOAD: addr %lu -> %s\n", address, load_reg);
 
   // Find the error at this memory address
@@ -833,7 +868,6 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
     }
   }
   printf(" %s || %lu || %.17e \n", load_reg, address, memory_error);
-  
 }
 
 // Find error - unchanged
@@ -1037,14 +1071,16 @@ void _FPC_FP32_CALCULATE_ERROR_(
     const char *result_name, const char *op1_name, const char *op2_name, const char *fma_name)
 {
 
-  if (op1_name) _FPC_USED_REG_(op1_name);
-  if (op2_name) _FPC_USED_REG_(op2_name);
-  if (fma_name) _FPC_USED_REG_(fma_name);
+  if (op1_name)
+    _FPC_USED_REG_(op1_name);
+  if (op2_name)
+    _FPC_USED_REG_(op2_name);
+  if (fma_name)
+    _FPC_USED_REG_(fma_name);
 
   double err_y = _FPC_FP32_FIND_ERROR_(op1_name);
   double err_z = _FPC_FP32_FIND_ERROR_(op2_name);
   double err_w = _FPC_FP32_FIND_ERROR_(fma_name);
-
 
   double y_high = (double)y + err_y;
   double z_high = (double)z + err_z;
@@ -1088,16 +1124,13 @@ void _FPC_FP32_CALCULATE_ERROR_(
   double err_result = r_high - r_low;
 
   printf("Inputs: %.17e, %.17e -> Error: %.17e\n", y_high, z_high, err_result);
-  
 
   _FPC_FP32_STORE_ERROR_(result_name, err_result);
-  
- 
+
   _FPC_LOG_LOCATION_(file_name, loc);
-  
+
   printf("Result in runtime (double) : %.17e and (float) %.7f\n", r_high, x);
   fflush(stdout);
-
 }
 
 /*----------------------------------------------------------------------------*/

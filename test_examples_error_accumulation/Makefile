@@ -1,7 +1,7 @@
 # Compiler and flags
 CXX = clang++-fpchecker
- CXXFLAGS = -Wno-format -std=c++11 -g -O2
-#  CXXFLAGS = -Wno-format -std=c++11 -g -O0
+#CXXFLAGS = -Wno-format -std=c++11 -g -O2
+CXXFLAGS = -Wno-format -std=c++11 -g -O0
 
 # Source file(s)
 SRC = derivatives.cpp

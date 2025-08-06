@@ -215,7 +215,6 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
   assert(prog_error_log_count && "Invalid table!");
   prog_error_log_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-
   /* -------------------------------------------------------------- */
 
   GlobalVariable *fpc_lock = nullptr;
@@ -266,21 +265,44 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
           // llvm::errs() << "[DEBUG] storedValue: " << *storedValue << "\n";
           llvm::Value *regStr = builder.CreateGlobalStringPtr(reg);
 
-        /*------------------------------------------------------------------*
-         *  Get the Line Number from debug information                      *
-         *------------------------------------------------------------------*/
-        // int lineNumber = 0;
-        // if (DILocation *loc = inst->getDebugLoc()) {
-        //   lineNumber = loc->getLine();
-        // }
-        // llvm::Value *lineNum = llvm::ConstantInt::get(llvm::Type::getInt32Ty(inst->getContext()), lineNumber);
-
+          /*------------------------------------------------------------------*
+           *  Get the Line Number from debug information                      *
+           *------------------------------------------------------------------*/
+          // int lineNumber = 0;
+          // if (DILocation *loc = inst->getDebugLoc()) {
+          //   lineNumber = loc->getLine();
+          // }
+          // llvm::Value *lineNum = llvm::ConstantInt::get(llvm::Type::getInt32Ty(inst->getContext()), lineNumber);
 
           std::vector<Value *> args;
           // Push parameters
           args.push_back(regStr);
           args.push_back(storeAddrInt);
-          // args.push_back(lineNum);
+
+          // Push location parameter (line number)
+          int lineNumber = CUDAAnalysis::getLineOfCode(inst);
+          ConstantInt *locId =
+              ConstantInt::get(mod->getContext(), APInt(32, lineNumber, true));
+          args.push_back(locId);
+
+          // Push file name
+          // Get global fileName pointer
+          GlobalVariable *fName = nullptr;
+          fName =
+              mod->getGlobalVariable("_ZL15_FPC_FILE_NAME_", true); // C++ binding
+          if (fName == nullptr)
+            fName =
+                mod->getGlobalVariable("_FPC_FILE_NAME_", true); // try C binding
+          assert((fName != nullptr) && "Global filename var not found");
+          Type *gvType = fName->getType();
+          auto loadInst =
+              builder.CreateAlignedLoad(gvType, fName, MaybeAlign(), "my");
+
+          std::string fileName = CUDAAnalysis::getFileNameFromInstruction(inst);
+          Constant *c = builder.CreateGlobalStringPtr(fileName);
+          fName->setInitializer(NULL);
+          fName->setInitializer(c);
+          args.push_back(loadInst);
 
           // llvm::errs() << "[#FPC-STORE] Store register: " << reg << ", address: " << *storeAddr << "\n";
           ArrayRef<Value *> args_ref(args);
