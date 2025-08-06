@@ -266,10 +266,22 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
           // llvm::errs() << "[DEBUG] storedValue: " << *storedValue << "\n";
           llvm::Value *regStr = builder.CreateGlobalStringPtr(reg);
 
+        /*------------------------------------------------------------------*
+         *  Get the Line Number from debug information                      *
+         *------------------------------------------------------------------*/
+        // int lineNumber = 0;
+        // if (DILocation *loc = inst->getDebugLoc()) {
+        //   lineNumber = loc->getLine();
+        // }
+        // llvm::Value *lineNum = llvm::ConstantInt::get(llvm::Type::getInt32Ty(inst->getContext()), lineNumber);
+
+
           std::vector<Value *> args;
           // Push parameters
           args.push_back(regStr);
           args.push_back(storeAddrInt);
+          // args.push_back(lineNum);
+
           // llvm::errs() << "[#FPC-STORE] Store register: " << reg << ", address: " << *storeAddr << "\n";
           ArrayRef<Value *> args_ref(args);
           CallInst *callInst = nullptr;
