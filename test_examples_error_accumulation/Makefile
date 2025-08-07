@@ -1,12 +1,12 @@
 # Compiler and flags
 CXX = clang++-fpchecker
-#CXXFLAGS = -Wno-format -std=c++11 -g -O2
-CXXFLAGS = -Wno-format -std=c++11 -g -O0
+CXXFLAGS = -Wno-format -std=c++11 -g -O2
+# CXXFLAGS = -Wno-format -std=c++11 -g -O0
 
 # Source file(s)
-SRC = derivatives.cpp
+SRC = multiple_return.cpp
 OBJ = $(SRC:.cpp=.o)
-EXECUTABLE_NAME = derivatives
+EXECUTABLE_NAME = multiple_return
 
 # Library location and name (reused from common folder)
 LIB_DIR = ../tutorial/common

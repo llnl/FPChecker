@@ -1,25 +1,24 @@
 #include <iostream>
 using namespace std;
 
-typedef float Real_t;
+// typedef float Real_t;
 
 FPC_CALCULATE_ERROR
-
-void compute_motion(float start, float end, float initial_velocity, int time, float &velocity, float &acceleration) {
-    velocity = (start - end) / time;
-    acceleration = (velocity - initial_velocity) / time;
+void sum_and_diff(float a, float b, float *sum, float *diff) {
+    printf("...in sum\n");
+    *sum  = (a + b)+2.000034f - (a/2.0f);
+    *diff = a - b;
 }
 
-int main(int argc, char* argv[]) {
-    float initial_position = atof(argv[1]);
-    float final_position   = atof(argv[2]);
-    float initial_velocity = atof(argv[3]);
-    int  time = atoi(argv[4]);
-    float velocity, acceleration;
+// FPC_CALCULATE_ERROR
+int main(int argc, char **argv) {
 
-    compute_motion(initial_position, final_position, initial_velocity, time, velocity, acceleration);
-    printf("Velocity      = %.7f\n", velocity);
-    printf("Acceleration  = %.7f\n", acceleration);
+    float a = atof(argv[1]);
+    float b = atof(argv[2]);
+    float s, d;
 
+    sum_and_diff(a, b, &s, &d);
+
+    printf("Sum = %f, Difference = %f\n", s, d);
     return 0;
 }
