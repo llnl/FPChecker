@@ -1,3 +1,12 @@
 [
-
+  {
+    "file": "/Users/sharmin1/Documents/tutorial/FPChecker/test_examples_error_accumulation/multiple_return.cpp",
+    "line": 9,
+    "error": 7.87549652159214020e-08
+  },
+  {
+    "file": "/Users/sharmin1/Documents/tutorial/FPChecker/test_examples_error_accumulation/multiple_return.cpp",
+    "line": 10,
+    "error": -5.23868948221206665e-10
+  }
 ]

@@ -157,9 +157,14 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
     SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_CALCULATE_ERROR_")
-    SET_ODR_LIKAGE("_FPC_PRINT_ERRORS_")
-    SET_ODR_LIKAGE("_FPC_LOG_ERROR_")
     SET_ODR_LIKAGE("_FPC_WRITE_AND_PRINT_TO_JSON_")
+    SET_ODR_LIKAGE("_FPC_LOG_LOCATION_")
+    SET_ODR_LIKAGE("_FPC_REMOVE_DUPLICATES_")
+    SET_ODR_LIKAGE("_FPC_USED_REG_")
+    SET_ODR_LIKAGE("_FPC_USED_ADDR_")
+    SET_ODR_LIKAGE("_FPC_DEBUG_PRINT_ALL_TRACKED_DATA_")
+    SET_ODR_LIKAGE("_FPC_IS_FINAL_CHILD_")
+
     // Hash table
     SET_ODR_LIKAGE("_FPC_HT_CREATE_")
     SET_ODR_LIKAGE("_FPC_HT_HASH_")
@@ -215,7 +220,27 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
   assert(prog_error_log_count && "Invalid table!");
   prog_error_log_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  /* -------------------------------------------------------------- */
+/*---------------------For reporting the error--------------------*/
+GlobalVariable *prog_used_registers = nullptr;
+prog_used_registers = mod->getGlobalVariable("_FPC_USED_REG_SET_", true);
+assert(prog_used_registers && "Invalid table!");
+prog_used_registers->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+GlobalVariable *prog_used_addresses = nullptr;
+prog_used_addresses = mod->getGlobalVariable("_FPC_USED_ADDR_SET_", true);
+assert(prog_used_addresses && "Invalid table!");
+prog_used_addresses->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+GlobalVariable *prog_used_reg_count = nullptr;
+prog_used_reg_count = mod->getGlobalVariable("_FPC_USED_REG_COUNT_", true);
+assert(prog_used_reg_count && "Invalid table!");
+prog_used_reg_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+GlobalVariable *prog_used_addr_count = nullptr;
+prog_used_addr_count = mod->getGlobalVariable("_FPC_USED_ADDR_COUNT_", true);
+assert(prog_used_addr_count && "Invalid table!");
+prog_used_addr_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+/* -------------------------------------------------------------- */
 
   GlobalVariable *fpc_lock = nullptr;
   fpc_lock = mod->getGlobalVariable("fpc_lock", true);
