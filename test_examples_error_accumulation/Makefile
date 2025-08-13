@@ -1,17 +1,12 @@
 # Compiler and flags
 CXX = clang++-fpchecker
 CXXFLAGS = -Wno-format -std=c++11 -g -O2  -fno-inline-functions
-# CXXFLAGS = -Wno-format -std=c++11 -g -O0
 
 # Source file(s)
-SRC = multiple_return.cpp
+SRC = matrix_multiply.cpp
 OBJ = $(SRC:.cpp=.o)
-EXECUTABLE_NAME = multiple_return
+EXECUTABLE_NAME = matrix_multiply
 
-# Library location and name (reused from common folder)
-LIB_DIR = ../tutorial/common
-LIB_NAME = solverslib
-LIB_FILE = $(LIB_DIR)/lib$(LIB_NAME).a
 
 # Default target
 all: $(EXECUTABLE_NAME)
@@ -22,7 +17,7 @@ $(OBJ): $(SRC)
 
 # Link with the library
 $(EXECUTABLE_NAME): $(OBJ) $(LIB_FILE)
-	$(CXX) $(CXXFLAGS) -o $@ $^ -L$(LIB_DIR) -l$(LIB_NAME)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # Clean up
 clean:

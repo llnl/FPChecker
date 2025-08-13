@@ -18,7 +18,7 @@
 /* Global data                                                                */
 /*----------------------------------------------------------------------------*/
 
-/** We store the file name and directory in this variable **/
+// We store the file name and directory in this variable (one variable per file)
 __attribute__((used)) static char *_FPC_FILE_NAME_;
 
 /** Hash table pointer **/
@@ -66,6 +66,14 @@ int _FPC_USED_REG_COUNT_ = 0;                              // Counter for the ab
 // *** Error Calculation *** //
 uintptr_t _FPC_USED_ADDR_SET_[MAX_ERROR_ENTRIES]; // Used addresses for child without parent calculation
 int _FPC_USED_ADDR_COUNT_ = 0;                    // Counter for the above array
+
+// *** Error Calculation *** //
+#define _FPC_BB_NAME_SIZE_ 512                   // max size of a basic block name - for example: %bb_26
+char _FPC_LAST_BASIC_BLOCK_[_FPC_BB_NAME_SIZE_]; // Last basic block ID
+
+/*----------------------------------------------------------------------------*/
+/* Error Calculation Functions                                                */
+/*----------------------------------------------------------------------------*/
 
 // *** Error Calculation *** //
 // If a register is used, it is added to the use_reg_set array
@@ -322,7 +330,6 @@ void _FPC_INIT_HASH_TABLE_()
 #endif
   int64_t size = 1000;
   _FPC_HTABLE_ = _FPC_HT_CREATE_(size);
-  // _FPC_ERROR_HTABLE_ = _FPC_ERROR_HT_CREATE_(FPC_ERROR_HTABLE_SIZE);
 
 #ifdef FPC_MULTI_THREADED
   if (pthread_mutex_init(&fpc_lock, NULL) != 0)
@@ -335,6 +342,7 @@ void _FPC_INIT_HASH_TABLE_()
 void _FPC_INIT_FPCHECKER()
 {
   _FPC_PROG_INPUTS = 0;
+  _FPC_LAST_BASIC_BLOCK_[0] = '\0';
   _FPC_INIT_HASH_TABLE_();
 }
 
@@ -1158,6 +1166,72 @@ void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error)
   }
 }
 
+// *** Error Calculation *** //
+void _FPC_FP32_BRANCH_(const char *basic_block_name)
+{
+  printf("BRANCH: BasicBlock %s\n", basic_block_name);
+  strncpy(_FPC_LAST_BASIC_BLOCK_, basic_block_name, _FPC_BB_NAME_SIZE_ - 1);
+  _FPC_LAST_BASIC_BLOCK_[_FPC_BB_NAME_SIZE_ - 1] = '\0';
+}
+
+// *** Error Calculation *** //
+// This function is called for PHI nodes in SSA form
+// It is used to log the values that are being merged
+void _FPC_FP32_PHI_(const char *phi_values)
+{
+  printf("PHI: Values %s\n", phi_values);
+  char input_copy[_FPC_BB_NAME_SIZE_ * 5];
+  strncpy(input_copy, phi_values, sizeof(input_copy) - 1);
+  input_copy[sizeof(input_copy) - 1] = '\0';
+
+  char *register_name = strtok(input_copy, ":");
+  char *second_token = strtok(NULL, ":");
+
+  printf("phi_register: %s\n", register_name ? register_name : "(null)");
+  printf("Second token: %s\n", second_token ? second_token : "(null)");
+
+  if (second_token)
+  {
+    char *saveptr;
+    char *token = strtok_r(second_token, ";", &saveptr);
+    while (token)
+    {
+      printf("\t PHI operand: %s\n", token);
+      char *pipe_pos = strchr(token, '|');
+      if (pipe_pos)
+      {
+        size_t first_len = pipe_pos - token;
+        char first_substr[_FPC_BB_NAME_SIZE_];
+        strncpy(first_substr, token, first_len);
+        first_substr[first_len] = '\0';
+        printf("\t First substring is: %s\n", first_substr);
+        if (pipe_pos)
+        {
+          // Print the second substring after the pipe
+          printf("\t Second substring is: %s\n", pipe_pos + 1);
+
+          if (strcmp(pipe_pos + 1, _FPC_LAST_BASIC_BLOCK_) == 0)
+          {
+            printf("\t\tLast branch was %s\n", _FPC_LAST_BASIC_BLOCK_);
+            printf("\t\tUse error of: %s\n", first_substr);
+
+            // Mark register of the original calculation as used
+            _FPC_USED_REG_(first_substr);
+
+            int id = _FPC_FP32_FIND_BY_REGISTER_(first_substr);
+            if (id >= 0)
+            {
+              double old_error = _FPC_ERRORS_[id];
+              _FPC_FP32_STORE_ERROR_(register_name, old_error);
+            }
+          }
+        }
+      }
+      token = strtok_r(NULL, ";", &saveptr);
+    }
+  }
+}
+
 void _FPC_FP32_CHECK_(
     float x, float y, float z, int loc, char *file_name, int op, int cond)
 {
@@ -1358,19 +1432,16 @@ void _FPC_FP32_CALCULATE_ERROR_(
   if (op1_name && strlen(op1_name) > 0)
   {
     _FPC_USED_REG_(op1_name);
-    // printf("Marked operand %s as used\n", op1_name);
   }
   if (op2_name && strlen(op2_name) > 0)
   {
     _FPC_USED_REG_(op2_name);
-    // printf("Marked operand %s as used\n", op2_name);
   }
   if (fma_name && strlen(fma_name) > 0)
   {
     _FPC_USED_REG_(fma_name);
-    // printf("Marked operand %s as used\n", fma_name);
   }
-  // printf("Result in runtime (double) : %.17e and (float) %.7f\n", r_high, x);
+
   fflush(stdout);
 }
 

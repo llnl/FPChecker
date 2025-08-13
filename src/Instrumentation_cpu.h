@@ -27,6 +27,8 @@ namespace CPUAnalysis
     Function *fpc_fp32_load_inst;
     Function *fpc_fp32_calculate_function;
     // Function *fpc_fp64_calculate_function;
+    Function *fpc_fp32_phi_function;
+    Function *fpc_fp32_branch_function;
 
     bool codeIsAnnotated = false;
 
