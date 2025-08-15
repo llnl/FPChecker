@@ -41,7 +41,7 @@ char **_FPC_PROG_ARGS;
 // *** Error Calculation *** //
 // Maximum number of error entries
 #define MAX_ERROR_ENTRIES 1000
-#define MAX_NAME_SIZE 100
+#define MAX_NAME_SIZE 500
 
 // *** Error Calculation *** //
 // saves the line and file name
@@ -355,18 +355,51 @@ void _FPC_INIT_ARGS_FPCHECKER(int argc, char **argv)
 
 // *** Error Calculation *** //
 // Prints the errors to a JSON file
-void _FPC_WRITE_AND_PRINT_TO_JSON_(const char *filename)
+void _FPC_WRITE_AND_PRINT_TO_JSON_()
 {
-  printf("#FPCHECKER: Writing JSON to: %s\n", filename);
+  // Create directory
+  struct stat st;
+  char dir_name[] = ".fpc_logs";
+  if (stat(dir_name, &st) == -1)
+  { // dir doesn't exists
+    mkdir(dir_name, 0775);
+  }
 
-  // ------ Temporal checking -----
-  /*printf("#FPCHECKER: Printing ERROR_LOG contents:\n");
-  for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
-  {
-    printf("Entry %d: file=\"%s\", line=%d\n", i, ERROR_LOG[i].file, ERROR_LOG[i].line);
-  }*/
+  // Set filename
+  // On Linux: The maximum length for a file name is 255 bytes.
+  // The maximum combined length of both the file name and path name is 4096 bytes.
+  char executionId[5000];
+  char fileName[5000];
+  char errorFileName[5000];
+  errorFileName[0] = '\0';
+  strcpy(errorFileName, ".fpc_logs/rounding_error_");
 
-  FILE *fp = fopen(filename, "w");
+  // ----------- Get execution ID -----------
+  // size_t len=256;
+  //  According to Linux manual:
+  //  Each element of the hostname must be from 1 to 63 characters long
+  //  and the entire hostname, including the dots, can be at most 253
+  //  characters long.
+  executionId[0] = '\0';
+  if (gethostname(executionId, 256) != 0)
+    strcpy(executionId, "node-unknown");
+
+  // Maximum size for PID: we assume 2,000,000,000
+  int pid = (int)getpid();
+  char pidStr[11];
+  // pidStr[0] = '\0';
+  // sprintf(pidStr, "%d", pid);
+  snprintf(pidStr, sizeof(pidStr), "%d", pid);
+  strcat(executionId, "_");
+  strcat(executionId, pidStr);
+  strcat(executionId, ".json");
+
+  strcat(fileName, executionId);
+  strcat(errorFileName, executionId);
+
+  printf("#FPCHECKER: Writing JSON to: %s\n", errorFileName);
+
+  FILE *fp = fopen(errorFileName, "w");
   if (!fp)
   {
     perror("fopen");
@@ -399,7 +432,7 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(const char *filename)
   fprintf(fp, "\n]\n");
   fclose(fp);
 
-  printf("#FPCHECKER: Successfully wrote %d final sink errors to %s\n", entries_written, filename);
+  printf("#FPCHECKER: Successfully wrote %d final sink errors to %s\n", entries_written, errorFileName);
 }
 
 void _FPC_PRINT_LOCATIONS_()
@@ -409,7 +442,7 @@ void _FPC_PRINT_LOCATIONS_()
 #endif
   _FPC_PRINT_HASH_TABLE_(_FPC_HTABLE_);
   //_FPC_REMOVE_DUPLICATES_();
-  _FPC_WRITE_AND_PRINT_TO_JSON_("fpc_error_log.json"); // *** Error Calculation *** //
+  _FPC_WRITE_AND_PRINT_TO_JSON_(); // *** Error Calculation *** //
 }
 
 /*----------------------------------------------------------------------------*/

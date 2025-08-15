@@ -2,34 +2,6 @@
 #include <cmath>
 #include <iomanip>
 
-// ---------------- FP32 --------------------
-
-//__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_")))
-void calc_dot_product_fma_f(const float *a, const float *b, size_t n, float &result)
-{
-    float res = 0.0f;
-
-    for (size_t i = 0; i < n; ++i)
-    {
-        res = std::fma(a[i], b[i], res);
-    }
-
-    result = res;
-}
-
-__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_"))) void calc_dot_product_f(const float *a, const float *b, size_t n, float &result)
-{
-    float res = 0.0f;
-    for (size_t i = 0; i < n; ++i)
-    {
-        res += a[i] * b[i];
-    }
-
-    result = res;
-}
-
-// ---------------- FP64 --------------------
-
 void calc_dot_product_fma_d(const double *a, const double *b, size_t n, double &result)
 {
     double res = 0.0;
@@ -37,6 +9,30 @@ void calc_dot_product_fma_d(const double *a, const double *b, size_t n, double &
     for (size_t i = 0; i < n; ++i)
     {
         res = std::fma(a[i], b[i], res);
+    }
+
+    result = res;
+}
+
+__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_"))) void calc_dot_product_fma_f(const float *a, const float *b, size_t n, float &result)
+{
+    float res = 0.0f;
+
+    for (size_t i = 0; i < n; ++i)
+    {
+        res = std::fma(a[i], b[i], res);
+    }
+
+    result = res;
+}
+
+//__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_")))
+void calc_dot_product_f(const float *a, const float *b, size_t n, float &result)
+{
+    float res = 0.0f;
+    for (size_t i = 0; i < n; ++i)
+    {
+        res += a[i] * b[i];
     }
 
     result = res;
@@ -52,8 +48,6 @@ void calc_dot_product_d(const double *a, const double *b, size_t n, double &resu
 
     result = res;
 }
-
-// ---------------- Initialization --------------------
 
 static float initial_value_f = 0.3f;
 

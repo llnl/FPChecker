@@ -1,7 +1,7 @@
 # Compiler and flags
 CXX = clang++-fpchecker
 #CXXFLAGS = -Wno-format -std=c++11 -g -O2 -fno-inline-functions -fno-vectorize -fno-slp-vectorize
-CXXFLAGS = -Wno-format -std=c++11 -g -O2 -fno-vectorize -fno-slp-vectorize
+CXXFLAGS = -Wno-format -std=c++11 -g -O0 -fno-vectorize -fno-slp-vectorize
 
 # List of executables to build
 EXECUTABLES = simple_sum vector_dot_product
@@ -23,6 +23,6 @@ vector_dot_product: vector_dot_product.o
 
 # Clean up
 clean:
-	rm -rf $(EXECUTABLES) *.o .fpc_logs fpc-report
+	rm -rf $(EXECUTABLES) *.o .fpc_logs fpc-report .fpc_log.txt
 
 .PHONY: all clean
