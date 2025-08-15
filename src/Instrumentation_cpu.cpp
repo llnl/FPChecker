@@ -270,6 +270,9 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
   }
 }
 
+// ********************************************************************
+// Error analysis instrumentation function
+// ********************************************************************
 void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
 {
   assert((fpc_fp32_calculate_function != nullptr) && "Function not initialized!");
@@ -429,6 +432,8 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
       if (isFPOperation(inst) &&
           (isSingleFPOperation(inst) || isDoubleFPOperation(inst)))
       {
+
+        errs() << "[#FPC-OP] Floating-point operation: " << *inst << "\n";
 
         DebugLoc loc = inst->getDebugLoc();
 
@@ -1048,8 +1053,12 @@ bool CPUFPInstrumentation::isCmpEqual(const Instruction *inst)
 /// Returns true if the instruction is a call to the llvm.fmuladd intrinsic.
 bool CPUFPInstrumentation::isFMAOperation(const Instruction *inst)
 {
-  return isa<IntrinsicInst>(inst) &&
-         cast<IntrinsicInst>(inst)->getIntrinsicID() == Intrinsic::fmuladd;
+  if (auto *intrin = dyn_cast<IntrinsicInst>(inst))
+  {
+    auto id = intrin->getIntrinsicID();
+    return id == Intrinsic::fmuladd || id == Intrinsic::fma;
+  }
+  return false;
 }
 
 bool CPUFPInstrumentation::isFPOperation(const Instruction *inst)

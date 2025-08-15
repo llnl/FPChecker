@@ -11,7 +11,7 @@ void compute_sum(int num_additions, float addend_f, float &sum_f)
     }
 }
 
-FPC_CALCULATE_ERROR
+// FPC_CALCULATE_ERROR
 void compute_average(int num_additions, float avg_f, float &average)
 {
     float sum_f = 0.0f;

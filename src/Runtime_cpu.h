@@ -960,9 +960,10 @@ int _FPC_FP32_FIND_BY_ADDRESS_(uintptr_t addr)
 // Instrumentation for STORE instructions
 void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *file_name)
 {
-
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
   printf("_FPC_FP32_STORE_INST_:\n");
   printf("reg=%s, address=%lu\n", reg, address);
+#endif
 
   double store_error = 0.0;
 
@@ -1034,6 +1035,7 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
     exit(1);
   }
 
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
   printf("Address    |  Register Name          |  Error Value\n");
   printf("-----------|-------------------------|--------------\n");
@@ -1048,15 +1050,18 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
     if (i == 10)
       break;
   }
-  // ============================================
+// ============================================
+#endif
 }
 
 // *** Error Calculation *** //
 // Instrumentation for LOAD instructions
 void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
 {
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
   printf("_FPC_FP32_LOAD_INST_:\n");
   printf("reg=%s, address=%lu\n", load_reg, address);
+#endif
 
   // Mark address as used (this address is being read from)
   _FPC_USED_ADDR_(address);
@@ -1109,11 +1114,15 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
   }
   else if (addr_id >= 0 && addr_id == reg_id)
   {
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("LOAD: Same entry (addr_id=%d == reg_id=%d) - no action needed\n", addr_id, reg_id);
+#endif
   }
   else if (addr_id < 0)
   {
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("LOAD: No data found at address %lu\n", address);
+#endif
 
     // Create register with zero error if needed
     if (reg_id >= 0)
@@ -1137,6 +1146,7 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
     }
   }
 
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
   printf("Address    |  Register Name          |  Error Value\n");
   printf("-----------|-------------------------|--------------\n");
@@ -1151,7 +1161,8 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
     if (i == 10)
       break;
   }
-  // ============================================
+// ============================================
+#endif
 }
 
 // *** Error Calculation *** //
@@ -1160,19 +1171,25 @@ double _FPC_FP32_FIND_ERROR_(const char *reg_name)
 {
   if (!reg_name || strlen(reg_name) == 0)
   {
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("#FPCHECKER-FIND: No register name provided → returning 0.0\n");
+#endif
     return 0.0;
   }
 
   int id = _FPC_FP32_FIND_BY_REGISTER_(reg_name);
   if (id >= 0)
   {
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("#FPCHECKER-FIND: Found error for [%s || %lu] = %.17e\n",
            reg_name, _FPC_ADDRESSES_[id], _FPC_ERRORS_[id]);
+#endif
     return _FPC_ERRORS_[id];
   }
 
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
   printf("#FPCHECKER-FIND: No error found for [%s] -> returning 0.0\n", reg_name);
+#endif
   return 0.0;
 }
 
@@ -1182,11 +1199,15 @@ void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error)
 {
   if (!reg_name || strlen(reg_name) == 0)
   {
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("#FPCHECKER-STORE_ERROR: No register name provided\n");
+#endif
     return;
   }
 
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
   printf("#FPCHECKER-STORE_ERROR: Storing error %.17e for register %s\n", error, reg_name);
+#endif
 
   int id = _FPC_FP32_FIND_BY_REGISTER_(reg_name);
   if (id >= 0)
@@ -1194,8 +1215,10 @@ void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error)
     // Update existing register entry - DON'T CREATE DUPLICATE
     double old_error = _FPC_ERRORS_[id];
     _FPC_ERRORS_[id] = error;
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("#FPCHECKER-STORE_ERROR: UPDATED existing register [%s] error: %.17e -> %.17e\n",
            reg_name, old_error, error);
+#endif
     return;
   }
 
@@ -1211,8 +1234,10 @@ void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error)
     ERROR_LOG[_FPC_ENTRY_COUNT_].file[0] = '\0';
     ERROR_LOG[_FPC_ENTRY_COUNT_].line = 0;
 
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("#FPCHECKER-STORE_ERROR: CREATED new register [%s || 0] = %.17e at index %d\n",
            reg_name, error, _FPC_ENTRY_COUNT_);
+#endif
     _FPC_ENTRY_COUNT_++;
   }
 }
@@ -1427,8 +1452,10 @@ void _FPC_FP32_CALCULATE_ERROR_(
     float x, float y, float z, float w, int loc, char *file_name, int op, int cond,
     const char *result_name, const char *op1_name, const char *op2_name, const char *fma_name)
 {
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
   printf("_FPC_FP32_CALCULATE_ERROR_\n");
   printf("op=%d, x=%.7e, y=%.7e, z=%.7e, w=%.7e, result_name=%s, op1_name=%s, op2_name=%s, fma_name=%s\n", op, x, y, z, w, result_name, op1_name, op2_name, fma_name);
+#endif
 
   double err_y = _FPC_FP32_FIND_ERROR_(op1_name);
   double err_z = _FPC_FP32_FIND_ERROR_(op2_name);
@@ -1495,6 +1522,7 @@ void _FPC_FP32_CALCULATE_ERROR_(
     _FPC_USED_REG_(fma_name);
   }
 
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
   printf("Address    |  Register Name          |  Error Value\n");
   printf("-----------|-------------------------|--------------\n");
@@ -1510,6 +1538,7 @@ void _FPC_FP32_CALCULATE_ERROR_(
       break;
   }
   // ============================================
+#endif
 
   fflush(stdout);
 }

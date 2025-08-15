@@ -1,3 +1,7 @@
 [
-
+  {
+    "file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/test_examples_error_accumulation/vector_dot_produ",
+    "line": 26,
+    "error": -3.04588245859375000e+07
+  }
 ]
