@@ -432,6 +432,24 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_()
   fprintf(fp, "\n]\n");
   fclose(fp);
 
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
+  FILE *fp_read = fopen(errorFileName, "r");
+  if (fp_read)
+  {
+    char buffer[1024];
+    size_t n;
+    while ((n = fread(buffer, 1, sizeof(buffer), fp_read)) > 0)
+    {
+      fwrite(buffer, 1, n, stdout);
+    }
+    fclose(fp_read);
+  }
+  else
+  {
+    printf("#FPCHECKER: Could not open %s for reading\n", errorFileName);
+  }
+#endif
+
   printf("#FPCHECKER: Successfully wrote %d final sink errors to %s\n", entries_written, errorFileName);
 }
 
@@ -1541,7 +1559,7 @@ void _FPC_FP32_CALCULATE_ERROR_(
 
   _FPC_LOG_LOCATION_(file_name, loc);
 
-  // Here we mark registers or operands as used
+  // We mark registers or operands as used
   if (op1_name && strlen(op1_name) > 0)
   {
     _FPC_USED_REG_(op1_name);

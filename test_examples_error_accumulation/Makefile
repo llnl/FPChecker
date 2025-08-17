@@ -1,7 +1,7 @@
 # Compiler and flags
 CXX = clang++-fpchecker
-#CXXFLAGS = -Wno-format -std=c++11 -g -O2 -fno-inline-functions -fno-vectorize -fno-slp-vectorize
-CXXFLAGS = -Wno-format -std=c++11 -g -O0 -fno-vectorize -fno-slp-vectorize
+CXXFLAGS = -Wno-format -std=c++11 -g -O2 -fno-vectorize -fno-slp-vectorize -DFPC_DEBUG_ERROR_ANALYSIS
+#CXXFLAGS = -Wno-format -std=c++11 -g -O0 -fno-vectorize -fno-slp-vectorize -ffp-contract=off -DFPC_DEBUG_ERROR_ANALYSIS
 
 # List of executables to build
 EXECUTABLES = simple_sum vector_dot_product

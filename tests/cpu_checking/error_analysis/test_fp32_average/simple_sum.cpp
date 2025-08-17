@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
 
     // The value we are adding has a representation error in float
     float addend_f = atof(argv[2]);
-    double addend_d = atof(argv[3]);
 
     // Initialize sums
     float sum_f = 0.0f;
@@ -41,7 +40,7 @@ int main(int argc, char *argv[])
     // Perform the summations
     for (int i = 0; i < num_additions; ++i)
     {
-        sum_d += addend_d;
+        sum_d += static_cast<double>(addend_f);
     }
 
     // --- Output the results ---
@@ -71,7 +70,7 @@ int main(int argc, char *argv[])
     double sum_avg = 0.0f;
     for (int i = 0; i < num_additions; ++i)
     {
-        sum_avg += addend_d;
+        sum_avg += static_cast<double>(addend_f);
     }
     double average = sum_avg / num_additions;
     std::cout << "Avg calculated in double:     " << average << std::endl;

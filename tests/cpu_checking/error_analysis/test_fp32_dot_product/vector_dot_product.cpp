@@ -50,23 +50,12 @@ void calc_dot_product_d(const double *a, const double *b, size_t n, double &resu
 }
 
 static float initial_value_f = 0.3f;
-
-// Initializes a float vector with a sequence: 0.03, 0.06, 0.09, ...
-void initialize_vector_float(float *vec, size_t n)
+void initialize_vector_all(float *vec_f, double *vec_d, size_t n)
 {
     for (size_t i = 0; i < n; ++i)
     {
-        vec[i] = initial_value_f + i * initial_value_f;
-    }
-}
-static double initial_value_d = 0.3;
-
-// Initializes a double vector with a sequence: 0.03, 0.06, 0.09, ...
-void initialize_vector_double(double *vec, size_t n)
-{
-    for (size_t i = 0; i < n; ++i)
-    {
-        vec[i] = initial_value_d + i * initial_value_d;
+        vec_f[i] = initial_value_f + i * initial_value_f;
+        vec_d[i] = static_cast<double>(vec_f[i]);
     }
 }
 
@@ -82,10 +71,8 @@ int main(int argc, char *argv[])
     double *vec2_d = new double[n];
 
     // Initialize arrays
-    initialize_vector_float(vec1, n);
-    initialize_vector_float(vec2, n);
-    initialize_vector_double(vec1_d, n);
-    initialize_vector_double(vec2_d, n);
+    initialize_vector_all(vec1, vec1_d, n);
+    initialize_vector_all(vec2, vec2_d, n);
 
     float result_f_normal;
     float result_f_fma;

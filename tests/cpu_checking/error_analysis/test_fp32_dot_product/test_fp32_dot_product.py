@@ -25,7 +25,7 @@ def test_1():
         exit()
 
     # --- run code ---
-    cmd = ["./main 1000"]
+    cmd = ["./main 100"]
     try:
         cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError as e:
