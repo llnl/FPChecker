@@ -5,7 +5,7 @@
 
 // Function to compute a final float value using a nested loop.
 // The computation is a weighted sum of a 2D matrix.
-__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_"))) void computeNestedFloatValue_f(const std::vector<std::vector<float>> &matrix, const std::vector<float> &weights, float &result)
+FPC_CALCULATE_ERROR void computeNestedFloatValue_f(const std::vector<std::vector<float>> &matrix, const std::vector<float> &weights, float &result)
 {
     float final_value = 0.0f;
 

@@ -9,7 +9,7 @@ void performComputations_d(double x, double y, double z, double &result1, double
 // This function performs two different computations on its inputs
 // and returns two different floating-point values.
 // The results are returned via reference parameters.
-__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_"))) void performComputations_f(float x, float y, float z, float &result1, float &result2)
+FPC_CALCULATE_ERROR void performComputations_f(float x, float y, float z, float &result1, float &result2)
 {
     result1 = (x * 0.25f) + (y * 0.5f) + (z * 0.25f);
     result2 = (x * x) * (y * y) * (z * z * z);

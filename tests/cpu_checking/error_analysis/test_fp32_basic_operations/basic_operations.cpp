@@ -1,50 +1,50 @@
 #include <iostream>
 
 #ifdef ADD_FUNCTION
-__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_")))
+FPC_CALCULATE_ERROR
 #endif
-void
-function_add(float *array, int size, float &result)
+void function_add(float *array, int size, float &result)
 {
     float x = array[0] + array[1];
     float y = x + array[2];
     float z = y + array[3];
+
     result = z;
 }
 
 #ifdef SUB_FUNCTION
-__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_")))
+FPC_CALCULATE_ERROR
 #endif
-void
-function_sub(float *array, int size, float &result)
+void function_sub(float *array, int size, float &result)
 {
     float x = array[0] - array[1];
     float y = x - array[2];
     float z = y - array[3];
+
     result = z;
 }
 
 #ifdef MUL_FUNCTION
-__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_")))
+FPC_CALCULATE_ERROR
 #endif
-void
-function_mul(float *array, int size, float &result)
+void function_mul(float *array, int size, float &result)
 {
     float x = array[0] * array[1];
     float y = x * array[2];
     float z = y * array[3];
+
     result = z;
 }
 
 #ifdef DIV_FUNCTION
-__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_")))
+FPC_CALCULATE_ERROR
 #endif
-void
-function_div(float *array, int size, float &result)
+void function_div(float *array, int size, float &result)
 {
     float x = array[0] / array[1];
     float y = x / array[2];
     float z = y / array[3];
+
     result = z;
 }
 

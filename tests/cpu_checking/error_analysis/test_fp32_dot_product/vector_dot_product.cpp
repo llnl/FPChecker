@@ -14,7 +14,7 @@ void calc_dot_product_fma_d(const double *a, const double *b, size_t n, double &
     result = res;
 }
 
-__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_"))) void calc_dot_product_fma_f(const float *a, const float *b, size_t n, float &result)
+FPC_CALCULATE_ERROR void calc_dot_product_fma_f(const float *a, const float *b, size_t n, float &result)
 {
     float res = 0.0f;
 
@@ -26,7 +26,7 @@ __attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_"))) voi
     result = res;
 }
 
-//__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_")))
+// FPC_CALCULATE_ERROR
 void calc_dot_product_f(const float *a, const float *b, size_t n, float &result)
 {
     float res = 0.0f;
@@ -49,6 +49,7 @@ void calc_dot_product_d(const double *a, const double *b, size_t n, double &resu
     result = res;
 }
 
+// {0.3f, 0.6f, 0.9f, ..}
 static float initial_value_f = 0.3f;
 void initialize_vector_all(float *vec_f, double *vec_d, size_t n)
 {

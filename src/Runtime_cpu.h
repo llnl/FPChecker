@@ -1598,8 +1598,9 @@ void _FPC_FP32_CALCULATE_ERROR_(
 /* Annotation Macros                                                          */
 /*----------------------------------------------------------------------------*/
 
-#define FPC_INSTRUMENT_BLOCK __attribute__((annotate("_FPC_INSTRUMENT_BLOCK_"))) int _marker __attribute__((unused)) = 0;
-#define FPC_INSTRUMENT_FUNC __attribute__((annotate("_FPC_INSTRUMENT_FUNCTION_")))
-#define FPC_CALCULATE_ERROR __attribute__((annotate("_FPC_CALCULATE_ERROR_"))) // *** Error Calculation *** //
+// #define FPC_INSTRUMENT_BLOCK __attribute__((annotate("_FPC_INSTRUMENT_BLOCK_"))) int _marker __attribute__((unused)) = 0;
+// #define FPC_INSTRUMENT_FUNC __attribute__((annotate("_FPC_INSTRUMENT_FUNCTION_")))
+// #define FPC_CALCULATE_ERROR __attribute__((annotate("_FPC_CALCULATE_ERROR_"))) // *** Error Calculation *** //
+#include "FPC_Annotations.h"
 
 #endif /* SRC_RUNTIME_CPU_H_ */

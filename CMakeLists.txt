@@ -168,7 +168,7 @@ install(CODE "execute_process( \
 )
 
 #install(FILES "src/Runtime.h" "src/Runtime_plugin.h" "src/Runtime_parser.h" "src/Runtime_cpu.h" "src/FPC_Hashtable.h"
-install(FILES "src/Runtime_cpu.h" "src/FPC_Hashtable.h"
+install(FILES "src/Runtime_cpu.h" "src/FPC_Hashtable.h" "src/FPC_Annotations.h"
         DESTINATION "src"
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ
 )
