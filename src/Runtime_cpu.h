@@ -59,6 +59,8 @@ uintptr_t _FPC_ADDRESSES_[MAX_ERROR_ENTRIES];           // Runtime addresses
 char _FPC_REGISTERS_[MAX_ERROR_ENTRIES][MAX_NAME_SIZE]; // Runtime register names
 double _FPC_ERRORS_[MAX_ERROR_ENTRIES];                 // Runtime (rounding) error values
 double _FPC_RELATIVE_ERRORS_[MAX_ERROR_ENTRIES];        // Runtime relative error values
+int _FPC_OPERATION_CLOCK_[MAX_ERROR_ENTRIES];           // Operation clock
+int _FPC_CLOCK_ = 0;                                    // Counter for the order of operations (1, 2, 3, ...)
 int _FPC_ENTRY_COUNT_ = 0;                              // Counter of the number of entries in the above arrays
 
 // *** Error Calculation *** //
@@ -410,9 +412,9 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_()
 
   fprintf(fp, "[\n");
 
+  /*
   int first = 1;
   int entries_written = 0;
-
   for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i)
   {
     // Only include final sinks that have valid file information
@@ -429,6 +431,76 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_()
       fprintf(fp, "  }");
       entries_written++;
     }
+  }
+  */
+
+  int first = 1;
+  int entries_written = 0;
+  // Array to keep track of printed indices to avoid duplicates
+  int *printed_indices = (int *)malloc(sizeof(int) * _FPC_ENTRY_COUNT_); // 0 = not printed, 1 = printed
+  if (!printed_indices)
+  {
+    fprintf(stderr, "Failed to allocate memory for printed_indices\n");
+    fclose(fp);
+    return;
+  }
+  for (int i = 0; i < _FPC_ENTRY_COUNT_; i++)
+  {
+    printed_indices[i] = 0;
+  }
+
+  for (int i = 0; i < _FPC_ENTRY_COUNT_; i++)
+  {
+    // Skip if this entry has already been processed
+    if (printed_indices[i])
+    {
+      continue;
+    }
+
+    if (ERROR_LOG[i].file[0] == '\0')
+    {
+      // Skip this entry if the file name is empty
+      continue;
+    }
+
+    // Initialize variables to track the highest clock
+    int highest_clock = _FPC_OPERATION_CLOCK_[i];
+    int highest_clock_index = i;
+
+    // Find other files with the same name and line and check for a higher clock
+    for (int j = i + 1; j < _FPC_ENTRY_COUNT_; j++)
+    {
+      if (strcmp(ERROR_LOG[i].file, ERROR_LOG[j].file) == 0 && ERROR_LOG[i].line == ERROR_LOG[j].line &&
+          !_FPC_IS_FINAL_CHILD_(j) && !printed_indices[j])
+      {
+        // We found a duplicate. Compare clocks.
+        if (_FPC_OPERATION_CLOCK_[j] > highest_clock)
+        {
+          highest_clock = _FPC_OPERATION_CLOCK_[j];
+          highest_clock_index = j;
+        }
+        // Mark this entry as processed to avoid re-evaluation later
+        printed_indices[j] = 1;
+      }
+    }
+
+    // Print the entry with the highest clock for this unique file
+    printf("File: %s, Line: %d, Clock: %d\n", ERROR_LOG[highest_clock_index].file, ERROR_LOG[highest_clock_index].line, highest_clock);
+
+    if (!first)
+      fprintf(fp, ",\n");
+    first = 0;
+
+    fprintf(fp, "  {\n");
+    fprintf(fp, "    \"file\": \"%s\",\n", ERROR_LOG[highest_clock_index].file);
+    fprintf(fp, "    \"line\": %d,\n", ERROR_LOG[highest_clock_index].line);
+    fprintf(fp, "    \"error\": %.17e,\n", _FPC_ERRORS_[highest_clock_index]);
+    fprintf(fp, "    \"relative_error\": %.17e\n", _FPC_RELATIVE_ERRORS_[highest_clock_index]);
+    fprintf(fp, "  }");
+    entries_written++;
+
+    // Mark the chosen entry as printed
+    printed_indices[highest_clock_index] = 1;
   }
 
   fprintf(fp, "\n]\n");
@@ -1027,6 +1099,10 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
   {
     error = _FPC_ERRORS_[reg_id];
     relative_error = _FPC_RELATIVE_ERRORS_[reg_id];
+
+    // Increment clock
+    _FPC_CLOCK_++;
+    _FPC_OPERATION_CLOCK_[reg_id] = _FPC_CLOCK_;
   }
   else
   {
@@ -1052,6 +1128,10 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
     strncpy(ERROR_LOG[addr_id].file, file_name, MAX_NAME_SIZE - 1);
     ERROR_LOG[addr_id].file[MAX_NAME_SIZE - 1] = '\0';
     ERROR_LOG[addr_id].line = loc;
+
+    // Increment clock
+    _FPC_CLOCK_++;
+    _FPC_OPERATION_CLOCK_[addr_id] = _FPC_CLOCK_;
   }
   else if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES)
   {
@@ -1068,6 +1148,10 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
     ERROR_LOG[_FPC_ENTRY_COUNT_].line = loc;
 
     _FPC_ENTRY_COUNT_++;
+
+    // Increment clock
+    _FPC_CLOCK_++;
+    _FPC_OPERATION_CLOCK_[_FPC_ENTRY_COUNT_] = _FPC_CLOCK_;
   }
   else
   {
@@ -1081,15 +1165,17 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
-  printf("Address    |  Register Name          |  Error Value         |  Relative Error\n");
-  printf("-----------|-------------------------|----------------------|----------------\n");
+  printf("Address    |  Register Name          |  Error Value         |  Relative Error     | Operation Clock  | Line\n");
+  printf("-----------|-------------------------|----------------------|---------------------|------------------|------\n");
   for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
   {
-    printf("%-10lu | %-23s | %-12.17e | %-14.17e\n",
+    printf("%-10lu | %-23s | %-12.17e | %-14.17e | %d                | %d\n",
            (unsigned long)_FPC_ADDRESSES_[i],
            _FPC_REGISTERS_[i],
            _FPC_ERRORS_[i],
-           _FPC_RELATIVE_ERRORS_[i]);
+           _FPC_RELATIVE_ERRORS_[i],
+           _FPC_OPERATION_CLOCK_[i],
+           ERROR_LOG[i].line);
 
     // print only first 10 entries
     if (i == 10)
@@ -1120,7 +1206,12 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
   // CRITICAL: Only process if different entries (addr_id != reg_id)
   if (addr_id >= 0 && addr_id != reg_id)
   {
-    double memory_error = _FPC_ERRORS_[addr_id];
+    double error = _FPC_ERRORS_[addr_id];
+    double relative_error = _FPC_RELATIVE_ERRORS_[addr_id];
+
+    // Increment clock
+    _FPC_CLOCK_++;
+    _FPC_OPERATION_CLOCK_[reg_id] = _FPC_CLOCK_;
 
     if (reg_id >= 0)
     {
@@ -1129,7 +1220,12 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
       double old_error = _FPC_ERRORS_[reg_id];
 
       _FPC_ADDRESSES_[reg_id] = address;
-      _FPC_ERRORS_[reg_id] = memory_error;
+      _FPC_ERRORS_[reg_id] = error;
+      _FPC_RELATIVE_ERRORS_[reg_id] = relative_error;
+
+      // Increment clock
+      _FPC_CLOCK_++;
+      _FPC_OPERATION_CLOCK_[reg_id] = _FPC_CLOCK_;
     }
     else if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES)
     {
@@ -1137,13 +1233,18 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
       _FPC_ADDRESSES_[_FPC_ENTRY_COUNT_] = address;
       strncpy(_FPC_REGISTERS_[_FPC_ENTRY_COUNT_], load_reg, MAX_NAME_SIZE - 1);
       _FPC_REGISTERS_[_FPC_ENTRY_COUNT_][MAX_NAME_SIZE - 1] = '\0';
-      _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = memory_error;
+      _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = error;
+      _FPC_RELATIVE_ERRORS_[_FPC_ENTRY_COUNT_] = relative_error;
 
       // No location info for LOAD-created entries
       ERROR_LOG[_FPC_ENTRY_COUNT_].file[0] = '\0';
       ERROR_LOG[_FPC_ENTRY_COUNT_].line = 0;
 
       _FPC_ENTRY_COUNT_++;
+
+      // Increment clock
+      _FPC_CLOCK_++;
+      _FPC_OPERATION_CLOCK_[_FPC_ENTRY_COUNT_] = _FPC_CLOCK_;
     }
   }
   else if (addr_id >= 0 && addr_id == reg_id)
@@ -1180,15 +1281,17 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
-  printf("Address    |  Register Name          |  Error Value         |  Relative Error\n");
-  printf("-----------|-------------------------|----------------------|----------------\n");
+  printf("Address    |  Register Name          |  Error Value         |  Relative Error     | Operation Clock  | Line\n");
+  printf("-----------|-------------------------|----------------------|---------------------|------------------|------\n");
   for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
   {
-    printf("%-10lu | %-23s | %-12.17e | %-14.17e\n",
+    printf("%-10lu | %-23s | %-12.17e | %-14.17e | %d                | %d\n",
            (unsigned long)_FPC_ADDRESSES_[i],
            _FPC_REGISTERS_[i],
            _FPC_ERRORS_[i],
-           _FPC_RELATIVE_ERRORS_[i]);
+           _FPC_RELATIVE_ERRORS_[i],
+           _FPC_OPERATION_CLOCK_[i],
+           ERROR_LOG[i].line);
 
     // print only first 10 entries
     if (i == 10)
@@ -1249,6 +1352,10 @@ void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error, double relative_
     double old_error = _FPC_ERRORS_[id];
     _FPC_ERRORS_[id] = error;
     _FPC_RELATIVE_ERRORS_[id] = relative_error;
+
+    // Increment clock
+    _FPC_CLOCK_++;
+    _FPC_OPERATION_CLOCK_[id] = _FPC_CLOCK_;
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("#FPCHECKER-STORE_ERROR: UPDATED existing register [%s] error: %.17e -> %.17e\n",
            reg_name, old_error, error);
@@ -1274,6 +1381,10 @@ void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error, double relative_
            reg_name, error, _FPC_ENTRY_COUNT_);
 #endif
     _FPC_ENTRY_COUNT_++;
+
+    // Increment clock
+    _FPC_CLOCK_++;
+    _FPC_OPERATION_CLOCK_[_FPC_ENTRY_COUNT_] = _FPC_CLOCK_;
   }
 }
 
@@ -1572,15 +1683,17 @@ void _FPC_FP32_CALCULATE_ERROR_(
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
-  printf("Address    |  Register Name          |  Error Value         |  Relative Error\n");
-  printf("-----------|-------------------------|----------------------|----------------\n");
+  printf("Address    |  Register Name          |  Error Value         |  Relative Error     | Operation Clock  | Line\n");
+  printf("-----------|-------------------------|----------------------|---------------------|------------------|------\n");
   for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
   {
-    printf("%-10lu | %-23s | %-12.17e | %-14.17e\n",
+    printf("%-10lu | %-23s | %-12.17e | %-14.17e | %d                | %d\n",
            (unsigned long)_FPC_ADDRESSES_[i],
            _FPC_REGISTERS_[i],
            _FPC_ERRORS_[i],
-           _FPC_RELATIVE_ERRORS_[i]);
+           _FPC_RELATIVE_ERRORS_[i],
+           _FPC_OPERATION_CLOCK_[i],
+           ERROR_LOG[i].line);
 
     // print only first 10 entries
     if (i == 10)

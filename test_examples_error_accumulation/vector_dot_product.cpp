@@ -4,7 +4,8 @@
 
 // ---------------- FP32 --------------------
 
-__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_"))) void calc_dot_product_fma_f(const float *a, const float *b, size_t n, float &result)
+//__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_")))
+void calc_dot_product_fma_f(const float *a, const float *b, size_t n, float &result)
 {
     float res = 0.0f;
 
@@ -16,8 +17,7 @@ __attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_"))) voi
     result = res;
 }
 
-//__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_")))
-void calc_dot_product_f(const float *a, const float *b, size_t n, float &result)
+__attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_"))) void calc_dot_product_f(const float *a, const float *b, size_t n, float &result)
 {
     float res = 0.0f;
     for (size_t i = 0; i < n; ++i)
