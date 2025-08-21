@@ -4,14 +4,16 @@ using namespace std;
 // typedef float Real_t;
 
 FPC_CALCULATE_ERROR
-void sum_and_diff(float a, float b, float *sum, float *diff) {
+void sum_and_diff(float a, float b, float *sum, float *diff)
+{
     printf("...in sum\n");
-    *sum  = (a + b)+2.000034f - (a/2.0f);
+    *sum = (a + b) + 2.000034f - (a / 2.0f);
     *diff = a - b;
 }
 
 // FPC_CALCULATE_ERROR
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
 
     float a = atof(argv[1]);
     float b = atof(argv[2]);

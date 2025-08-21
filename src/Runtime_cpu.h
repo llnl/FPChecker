@@ -7,6 +7,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <float.h>
 
 #ifdef FPC_MULTI_THREADED
 #include <pthread.h>
@@ -56,7 +57,8 @@ FPC_ERROR_LOG_ENTRY ERROR_LOG[MAX_ERROR_ENTRIES];
 // *** Error Calculation *** //
 uintptr_t _FPC_ADDRESSES_[MAX_ERROR_ENTRIES];           // Runtime addresses
 char _FPC_REGISTERS_[MAX_ERROR_ENTRIES][MAX_NAME_SIZE]; // Runtime register names
-double _FPC_ERRORS_[MAX_ERROR_ENTRIES];                 // Runtime error values
+double _FPC_ERRORS_[MAX_ERROR_ENTRIES];                 // Runtime (rounding) error values
+double _FPC_RELATIVE_ERRORS_[MAX_ERROR_ENTRIES];        // Runtime relative error values
 int _FPC_ENTRY_COUNT_ = 0;                              // Counter of the number of entries in the above arrays
 
 // *** Error Calculation *** //
@@ -1016,36 +1018,24 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
   printf("reg=%s, address=%lu\n", reg, address);
 #endif
 
-  double store_error = 0.0;
+  double error = 0.0;
+  double relative_error = 0.0;
 
   // Find if this register already has an error
   int reg_id = _FPC_FP32_FIND_BY_REGISTER_(reg);
   if (reg_id >= 0)
   {
-    store_error = _FPC_ERRORS_[reg_id];
+    error = _FPC_ERRORS_[reg_id];
+    relative_error = _FPC_RELATIVE_ERRORS_[reg_id];
   }
   else
   {
-
     printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    printf("\t Incorrect Branch taken!");
     printf("\t Trying to STORE the result for this register: %s", reg);
-    printf("\t but it was never computed!");
+    printf("\t But we don't have its error!");
     printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    exit(1);
-    /*
-    // Try to propagate last non-zero error if any
-    for (int i = _FPC_ENTRY_COUNT_ - 1; i >= 0; i--)
-    {
-      if (_FPC_ERRORS_[i] != 0.0)
-      {
-        store_error = _FPC_ERRORS_[i];
-        // printf("Propagating error to %s from %s (%.17e)\n",
-        //        reg, _FPC_REGISTERS_[i], store_error);
-        break;
-      }
-    }
-    */
+    // exit(1);
+    return;
   }
 
   // Now update or insert based on the *address*
@@ -1053,7 +1043,8 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
   if (addr_id >= 0)
   {
     // Address exists — update it
-    _FPC_ERRORS_[addr_id] = store_error;
+    _FPC_ERRORS_[addr_id] = error;
+    _FPC_RELATIVE_ERRORS_[addr_id] = relative_error;
     strncpy(_FPC_REGISTERS_[addr_id], reg, MAX_NAME_SIZE - 1);
     _FPC_REGISTERS_[addr_id][MAX_NAME_SIZE - 1] = '\0';
 
@@ -1068,7 +1059,8 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
     _FPC_ADDRESSES_[_FPC_ENTRY_COUNT_] = address;
     strncpy(_FPC_REGISTERS_[_FPC_ENTRY_COUNT_], reg, MAX_NAME_SIZE - 1);
     _FPC_REGISTERS_[_FPC_ENTRY_COUNT_][MAX_NAME_SIZE - 1] = '\0';
-    _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = store_error;
+    _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = error;
+    _FPC_RELATIVE_ERRORS_[_FPC_ENTRY_COUNT_] = relative_error;
 
     // CRITICAL: Add location logging for new entry
     strncpy(ERROR_LOG[_FPC_ENTRY_COUNT_].file, file_name, MAX_NAME_SIZE - 1);
@@ -1079,29 +1071,31 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
   }
   else
   {
+    // This should never happen
     printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     printf("\t Incorrect Branch taken!");
     printf("\t Cannot handle this address: %lu", address);
     printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    exit(1);
+    exit(-1);
   }
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
-  printf("Address    |  Register Name          |  Error Value\n");
-  printf("-----------|-------------------------|--------------\n");
+  printf("Address    |  Register Name          |  Error Value         |  Relative Error\n");
+  printf("-----------|-------------------------|----------------------|----------------\n");
   for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
   {
-    printf("%-10lu | %-23s | %-12.17e\n",
+    printf("%-10lu | %-23s | %-12.17e | %-14.17e\n",
            (unsigned long)_FPC_ADDRESSES_[i],
            _FPC_REGISTERS_[i],
-           _FPC_ERRORS_[i]);
+           _FPC_ERRORS_[i],
+           _FPC_RELATIVE_ERRORS_[i]);
 
     // print only first 10 entries
     if (i == 10)
       break;
   }
-// ============================================
+  // ============================================
 #endif
 }
 
@@ -1116,7 +1110,6 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
 
   // Mark address as used (this address is being read from)
   _FPC_USED_ADDR_(address);
-  // printf("Marked address %lu as used (loaded from)\n", address);
 
   // Find if the register already exists
   int reg_id = _FPC_FP32_FIND_BY_REGISTER_(load_reg);
@@ -1124,15 +1117,10 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
   // Find what's at this memory address
   int addr_id = _FPC_FP32_FIND_BY_ADDRESS_(address);
 
-  // printf("LOAD: reg_id=%d, addr_id=%d\n", reg_id, addr_id);
-
   // CRITICAL: Only process if different entries (addr_id != reg_id)
   if (addr_id >= 0 && addr_id != reg_id)
   {
     double memory_error = _FPC_ERRORS_[addr_id];
-
-    // printf("LOAD: Found data at address %lu (entry %d: %s, error %.17e)\n",
-    //        address, addr_id, _FPC_REGISTERS_[addr_id], memory_error);
 
     if (reg_id >= 0)
     {
@@ -1142,9 +1130,6 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
 
       _FPC_ADDRESSES_[reg_id] = address;
       _FPC_ERRORS_[reg_id] = memory_error;
-
-      // printf("LOAD: Updated register %s: addr %lu->%lu, error %.17e->%.17e\n",
-      //        load_reg, old_addr, address, old_error, memory_error);
     }
     else if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES)
     {
@@ -1158,8 +1143,6 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
       ERROR_LOG[_FPC_ENTRY_COUNT_].file[0] = '\0';
       ERROR_LOG[_FPC_ENTRY_COUNT_].line = 0;
 
-      // printf("LOAD: Created register %s with error %.17e from address %lu\n",
-      //        load_reg, memory_error, address);
       _FPC_ENTRY_COUNT_++;
     }
   }
@@ -1180,7 +1163,6 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
     {
       _FPC_ADDRESSES_[reg_id] = address;
       _FPC_ERRORS_[reg_id] = 0.0;
-      // printf("LOAD: Updated existing register %s to address %lu with zero error\n", load_reg, address);
     }
     else if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES)
     {
@@ -1192,27 +1174,27 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
       ERROR_LOG[_FPC_ENTRY_COUNT_].file[0] = '\0';
       ERROR_LOG[_FPC_ENTRY_COUNT_].line = 0;
 
-      // printf("LOAD: Created register %s at address %lu with zero error\n", load_reg, address);
       _FPC_ENTRY_COUNT_++;
     }
   }
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
-  printf("Address    |  Register Name          |  Error Value\n");
-  printf("-----------|-------------------------|--------------\n");
+  printf("Address    |  Register Name          |  Error Value         |  Relative Error\n");
+  printf("-----------|-------------------------|----------------------|----------------\n");
   for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
   {
-    printf("%-10lu | %-23s | %-12.17e\n",
+    printf("%-10lu | %-23s | %-12.17e | %-14.17e\n",
            (unsigned long)_FPC_ADDRESSES_[i],
            _FPC_REGISTERS_[i],
-           _FPC_ERRORS_[i]);
+           _FPC_ERRORS_[i],
+           _FPC_RELATIVE_ERRORS_[i]);
 
     // print only first 10 entries
     if (i == 10)
       break;
   }
-// ============================================
+  // ============================================
 #endif
 }
 
@@ -1246,7 +1228,7 @@ double _FPC_FP32_FIND_ERROR_(const char *reg_name)
 
 // *** Error Calculation *** //
 // Looks for the register names, and updates entry values with errors
-void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error)
+void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error, double relative_error)
 {
   if (!reg_name || strlen(reg_name) == 0)
   {
@@ -1266,6 +1248,7 @@ void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error)
     // Update existing register entry - DON'T CREATE DUPLICATE
     double old_error = _FPC_ERRORS_[id];
     _FPC_ERRORS_[id] = error;
+    _FPC_RELATIVE_ERRORS_[id] = relative_error;
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("#FPCHECKER-STORE_ERROR: UPDATED existing register [%s] error: %.17e -> %.17e\n",
            reg_name, old_error, error);
@@ -1280,6 +1263,7 @@ void _FPC_FP32_STORE_ERROR_(const char *reg_name, double error)
     strncpy(_FPC_REGISTERS_[_FPC_ENTRY_COUNT_], reg_name, MAX_NAME_SIZE - 1);
     _FPC_REGISTERS_[_FPC_ENTRY_COUNT_][MAX_NAME_SIZE - 1] = '\0';
     _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = error;
+    _FPC_RELATIVE_ERRORS_[_FPC_ENTRY_COUNT_] = relative_error;
 
     // Initialize location (will be set by _FPC_LOG_LOCATION_)
     ERROR_LOG[_FPC_ENTRY_COUNT_].file[0] = '\0';
@@ -1314,9 +1298,6 @@ void _FPC_FP32_PHI_(const char *phi_values)
   char *register_name = strtok(input_copy, ":");
   char *second_token = strtok(NULL, ":");
 
-  // printf("phi_register: %s\n", register_name ? register_name : "(null)");
-  // printf("Second token: %s\n", second_token ? second_token : "(null)");
-
   if (second_token)
   {
     char *saveptr;
@@ -1334,14 +1315,8 @@ void _FPC_FP32_PHI_(const char *phi_values)
         // printf("\t First substring is: %s\n", first_substr);
         if (pipe_pos)
         {
-          // Print the second substring after the pipe
-          // printf("\t Second substring is: %s\n", pipe_pos + 1);
-
           if (strcmp(pipe_pos + 1, _FPC_LAST_BASIC_BLOCK_) == 0)
           {
-            // printf("\t\tLast branch was %s\n", _FPC_LAST_BASIC_BLOCK_);
-            // printf("\t\tUse error of: %s\n", first_substr);
-
             // Mark register of the original calculation as used
             _FPC_USED_REG_(first_substr);
 
@@ -1349,7 +1324,8 @@ void _FPC_FP32_PHI_(const char *phi_values)
             if (id >= 0)
             {
               double old_error = _FPC_ERRORS_[id];
-              _FPC_FP32_STORE_ERROR_(register_name, old_error);
+              double old_relative_error = _FPC_RELATIVE_ERRORS_[id];
+              _FPC_FP32_STORE_ERROR_(register_name, old_error, old_relative_error);
             }
           }
         }
@@ -1546,17 +1522,38 @@ void _FPC_FP32_CALCULATE_ERROR_(
     r_high = fma(y_high, z_high, w_high);
     break;
   default:
-    printf("FPCHECKER_ERROR: Unknown operation %d\n", op);
+    printf("#FPCHECKER_ERROR: Unknown operation %d\n", op);
   }
 
   double r_low = (double)x;
 
   double err_result = r_high - r_low;
 
-  // printf("Inputs: %.17e, %.17e -> Error: %.17e\n", y_high, z_high, err_result);
+  // Calculate relative error
+  double rel_error = 0.0;
+  double largest_subnormal_d = nextafter(DBL_MIN, 0.0);
+  if (err_result == 0.0)
+  {
+    rel_error = 0.0;
+  }
+  else
+  {
+    // Only compute relative error if r_low is not zero and
+    // is larger than the largest subnormal
+    if (fabs(r_low) > largest_subnormal_d)
+    {
+      rel_error = fabs(err_result) / fabs(r_low);
+    }
+    else
+    {
+      rel_error = INFINITY;
+    }
+  }
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
+  printf("\t >>> Relative Error: %.7e <<< \n", rel_error);
+#endif
 
-  _FPC_FP32_STORE_ERROR_(result_name, err_result);
-
+  _FPC_FP32_STORE_ERROR_(result_name, err_result, rel_error);
   _FPC_LOG_LOCATION_(file_name, loc);
 
   // We mark registers or operands as used
@@ -1575,14 +1572,15 @@ void _FPC_FP32_CALCULATE_ERROR_(
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
-  printf("Address    |  Register Name          |  Error Value\n");
-  printf("-----------|-------------------------|--------------\n");
+  printf("Address    |  Register Name          |  Error Value         |  Relative Error\n");
+  printf("-----------|-------------------------|----------------------|----------------\n");
   for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
   {
-    printf("%-10lu | %-23s | %-12.17e\n",
+    printf("%-10lu | %-23s | %-12.17e | %-14.17e\n",
            (unsigned long)_FPC_ADDRESSES_[i],
            _FPC_REGISTERS_[i],
-           _FPC_ERRORS_[i]);
+           _FPC_ERRORS_[i],
+           _FPC_RELATIVE_ERRORS_[i]);
 
     // print only first 10 entries
     if (i == 10)
