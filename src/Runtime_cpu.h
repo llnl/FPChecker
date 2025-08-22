@@ -470,8 +470,7 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_()
     // Find other files with the same name and line and check for a higher clock
     for (int j = i + 1; j < _FPC_ENTRY_COUNT_; j++)
     {
-      if (strcmp(ERROR_LOG[i].file, ERROR_LOG[j].file) == 0 && ERROR_LOG[i].line == ERROR_LOG[j].line &&
-          !_FPC_IS_FINAL_CHILD_(j) && !printed_indices[j])
+      if (strcmp(ERROR_LOG[i].file, ERROR_LOG[j].file) == 0 && ERROR_LOG[i].line == ERROR_LOG[j].line)
       {
         // We found a duplicate. Compare clocks.
         if (_FPC_OPERATION_CLOCK_[j] > highest_clock)
@@ -1165,6 +1164,7 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
+  int max_lines = 20;
   printf("Address    |  Register Name          |  Error Value         |  Relative Error     | Operation Clock  | Line\n");
   printf("-----------|-------------------------|----------------------|---------------------|------------------|------\n");
   for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
@@ -1177,8 +1177,8 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
            _FPC_OPERATION_CLOCK_[i],
            ERROR_LOG[i].line);
 
-    // print only first 10 entries
-    if (i == 10)
+    // print only first max_lines entries
+    if (i == max_lines)
       break;
   }
   // ============================================
@@ -1281,6 +1281,7 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
+  int max_lines = 20;
   printf("Address    |  Register Name          |  Error Value         |  Relative Error     | Operation Clock  | Line\n");
   printf("-----------|-------------------------|----------------------|---------------------|------------------|------\n");
   for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
@@ -1293,8 +1294,8 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
            _FPC_OPERATION_CLOCK_[i],
            ERROR_LOG[i].line);
 
-    // print only first 10 entries
-    if (i == 10)
+    // print only first max_lines entries
+    if (i == max_lines)
       break;
   }
   // ============================================
@@ -1683,6 +1684,7 @@ void _FPC_FP32_CALCULATE_ERROR_(
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   // ============== Print Tables ==============
+  int max_lines = 20;
   printf("Address    |  Register Name          |  Error Value         |  Relative Error     | Operation Clock  | Line\n");
   printf("-----------|-------------------------|----------------------|---------------------|------------------|------\n");
   for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
@@ -1695,8 +1697,8 @@ void _FPC_FP32_CALCULATE_ERROR_(
            _FPC_OPERATION_CLOCK_[i],
            ERROR_LOG[i].line);
 
-    // print only first 10 entries
-    if (i == 10)
+    // print only first max_lines entries
+    if (i == max_lines)
       break;
   }
   // ============================================
