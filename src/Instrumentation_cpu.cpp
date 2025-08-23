@@ -239,6 +239,21 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
   assert(last_bb && "Invalid table!");
   last_bb->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
+  GlobalVariable *rel_errors = nullptr;
+  rel_errors = mod->getGlobalVariable("_FPC_RELATIVE_ERRORS_", true);
+  assert(rel_errors && "Invalid table!");
+  rel_errors->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *op_clock = nullptr;
+  op_clock = mod->getGlobalVariable("_FPC_OPERATION_CLOCK_", true);
+  assert(op_clock && "Invalid table!");
+  op_clock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *clock = nullptr;
+  clock = mod->getGlobalVariable("_FPC_CLOCK_", true);
+  assert(clock && "Invalid table!");
+  clock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
   /*---------------------For reporting the error--------------------*/
   GlobalVariable *prog_used_registers = nullptr;
   prog_used_registers = mod->getGlobalVariable("_FPC_USED_REG_SET_", true);
@@ -429,8 +444,8 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
       }
       // ----------------------------------------------------------------------------
 
-      if (isFPOperation(inst) &&
-          (isSingleFPOperation(inst) || isDoubleFPOperation(inst)))
+      if ((isFPOperation(inst) || (inst->getOpcode() == Instruction::FNeg)) &&
+          (inst->getOperand(0)->getType()->isFloatTy() || inst->getOperand(0)->getType()->isDoubleTy()))
       {
 
         errs() << "[#FPC-OP] Floating-point operation: " << *inst << "\n";
@@ -450,13 +465,20 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
         }
         else
         {
+          // CompEqual case
           if (isSingleFPOperation(inst))
             args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0));
           else
             args.push_back(ConstantFP::get(builder.getDoubleTy(), 0.0));
         }
+
+        // Every arithmetic instruction has at least one operand
         args.push_back(inst->getOperand(0));
-        args.push_back(inst->getOperand(1));
+
+        if (inst->getNumOperands() >= 2) // For fneg operation
+          args.push_back(inst->getOperand(1));
+        else
+          args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0f));
 
         if (inst->getNumOperands() >= 3) // For FMA operation
           args.push_back(inst->getOperand(2));
@@ -489,6 +511,8 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
           operationType = 5;
         else if (isFMAOperation(inst))
           operationType = 6;
+        else if (inst->getOpcode() == Instruction::FNeg)
+          operationType = 7;
         else
           operationType = -1;
         assert(operationType >= 0 && "Unknown operation");
@@ -552,7 +576,8 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
           op1_name = rso.str();
         }
 
-        std::string op2_name;
+        std::string op2_name = "null";
+        if (inst->getNumOperands() >= 2)
         {
           std::string str;
           llvm::raw_string_ostream rso(str);
@@ -577,11 +602,11 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
         ArrayRef<Value *> args_ref(args);
 
         CallInst *callInst = nullptr;
-        if (isSingleFPOperation(inst))
+        if (inst->getType()->isFloatTy())
         {
           callInst = builder.CreateCall(fpc_fp32_calculate_function, args_ref);
         }
-        else if (isDoubleFPOperation(inst))
+        else if (inst->getType()->isDoubleTy())
         {
           // CUDAAnalysis::Logging::info("Trying to call fp64 calculate function");
           //  callInst = builder.CreateCall(fpc_fp64_calculate_function, args_ref);

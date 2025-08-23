@@ -41,7 +41,7 @@ char **_FPC_PROG_ARGS;
 
 // *** Error Calculation *** //
 // Maximum number of error entries
-#define MAX_ERROR_ENTRIES 1000
+#define MAX_ERROR_ENTRIES 100000
 #define MAX_NAME_SIZE 500
 
 // *** Error Calculation *** //
@@ -974,6 +974,7 @@ int _FPC_EVENT_OCURRED(_FPC_ITEM_T_ *item)
  * CMP = 4 (comparison)
  * REM = 5 (reminder)
  * FMA = 6 (FMA function call)
+ * NEG = 7 (negation)
  * -------------------------
  **/
 
@@ -1109,8 +1110,8 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
     printf("\t Trying to STORE the result for this register: %s", reg);
     printf("\t But we don't have its error!");
     printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    // exit(1);
-    return;
+    exit(1);
+    // return;
   }
 
   // Now update or insert based on the *address*
@@ -1155,19 +1156,21 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
   else
   {
     // This should never happen
-    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    printf("\t Incorrect Branch taken!");
-    printf("\t Cannot handle this address: %lu", address);
-    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    printf("\t Out of memory!");
+    printf("\t Cannot handle this address: %lu\n", address);
+    printf("\t addr_id: %d\n", addr_id);
+    printf("\t _FPC_ENTRY_COUNT_: %d\n", _FPC_ENTRY_COUNT_);
+    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     exit(-1);
   }
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
-  // ============== Print Tables ==============
-  int max_lines = 20;
+  //  ============== Print Tables ==============
+  // int max_lines = 20;
   printf("Address    |  Register Name          |  Error Value         |  Relative Error     | Operation Clock  | Line\n");
   printf("-----------|-------------------------|----------------------|---------------------|------------------|------\n");
-  for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
+  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i)
   {
     printf("%-10lu | %-23s | %-12.17e | %-14.17e | %d                | %d\n",
            (unsigned long)_FPC_ADDRESSES_[i],
@@ -1178,10 +1181,10 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
            ERROR_LOG[i].line);
 
     // print only first max_lines entries
-    if (i == max_lines)
-      break;
+    // if (i == max_lines)
+    //  break;
   }
-  // ============================================
+// ============================================
 #endif
 }
 
@@ -1280,11 +1283,11 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
   }
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
-  // ============== Print Tables ==============
-  int max_lines = 20;
+  //  ============== Print Tables ==============
+  // int max_lines = 20;
   printf("Address    |  Register Name          |  Error Value         |  Relative Error     | Operation Clock  | Line\n");
   printf("-----------|-------------------------|----------------------|---------------------|------------------|------\n");
-  for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
+  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i)
   {
     printf("%-10lu | %-23s | %-12.17e | %-14.17e | %d                | %d\n",
            (unsigned long)_FPC_ADDRESSES_[i],
@@ -1295,10 +1298,10 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
            ERROR_LOG[i].line);
 
     // print only first max_lines entries
-    if (i == max_lines)
-      break;
+    // if (i == max_lines)
+    //  break;
   }
-  // ============================================
+// ============================================
 #endif
 }
 
@@ -1633,6 +1636,9 @@ void _FPC_FP32_CALCULATE_ERROR_(
   case 6:
     r_high = fma(y_high, z_high, w_high);
     break;
+  case 7:
+    r_high = -y_high; // Negation operation
+    break;
   default:
     printf("#FPCHECKER_ERROR: Unknown operation %d\n", op);
   }
@@ -1640,6 +1646,10 @@ void _FPC_FP32_CALCULATE_ERROR_(
   double r_low = (double)x;
 
   double err_result = r_high - r_low;
+
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
+  printf("Error Result: %.17e\n", err_result);
+#endif
 
   // Calculate relative error
   double rel_error = 0.0;
@@ -1650,17 +1660,18 @@ void _FPC_FP32_CALCULATE_ERROR_(
   }
   else
   {
-    // Only compute relative error if r_low is not zero and
+    // Only compute relative error if r_high is not zero and
     // is larger than the largest subnormal
-    if (fabs(r_low) > largest_subnormal_d)
+    if (fabs(r_high) > largest_subnormal_d)
     {
-      rel_error = fabs(err_result) / fabs(r_low);
+      rel_error = fabs(err_result) / fabs(r_high);
     }
     else
     {
       rel_error = INFINITY;
     }
   }
+
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   printf("\t >>> Relative Error: %.7e <<< \n", rel_error);
 #endif
@@ -1683,11 +1694,11 @@ void _FPC_FP32_CALCULATE_ERROR_(
   }
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
-  // ============== Print Tables ==============
-  int max_lines = 20;
+  //  ============== Print Tables ==============
+  // int max_lines = 20;
   printf("Address    |  Register Name          |  Error Value         |  Relative Error     | Operation Clock  | Line\n");
   printf("-----------|-------------------------|----------------------|---------------------|------------------|------\n");
-  for (int i = 0; i < MAX_ERROR_ENTRIES; ++i)
+  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i)
   {
     printf("%-10lu | %-23s | %-12.17e | %-14.17e | %d                | %d\n",
            (unsigned long)_FPC_ADDRESSES_[i],
@@ -1698,10 +1709,10 @@ void _FPC_FP32_CALCULATE_ERROR_(
            ERROR_LOG[i].line);
 
     // print only first max_lines entries
-    if (i == max_lines)
-      break;
+    // if (i == max_lines)
+    //  break;
   }
-  // ============================================
+// ============================================
 #endif
 
   fflush(stdout);
