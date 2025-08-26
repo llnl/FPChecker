@@ -228,6 +228,9 @@ code {
 .highlightme { 
 	background-color:#FFFF00; 
 }
+.highlightme_error {
+    background-color: #BBFFED;
+}
 .th_class {
     text-align: left;
 }
@@ -314,4 +317,13 @@ code {
 
 .mytabs input[type='radio']:checked + label {
     background-color: #C5C5C5;
+}
+
+.error_table_header {
+    border-left: 1px solid #6C6C6C;
+    padding-left: 10px;
+}
+
+.report_box_source tbody tr:hover {
+    background-color: #f7fafc; /* A light gray color for hover */
 }
