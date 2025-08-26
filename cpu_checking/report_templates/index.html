@@ -17,7 +17,11 @@
 <!-- REPORT_TITLE -->mpirun -n 4 ./lulesh -i -p 40 40 40
 </div>
 
-<div class="separation_class"></div>
+<div class="mytabs"> <!-- Begin of MYTABS -->
+<input type="radio" id="tabevents" name="mytabs" checked="checked">
+<label for="tabevents">Events</label>
+<div class="tab">
+	
 <div class="hierarchy_class"><a href="#">Main Report</a></div>
 <h2 id="heading">Main Report</h2>
 	
@@ -221,6 +225,20 @@
 <div class="separation_class"></div>
 <div class="separation_class"></div>
 <div class="separation_class"></div>	
+	
+</div> <!-- End of class=tab -->
+	
+<input type="radio" id="taberror" name="mytabs">
+<label for="taberror">Rounding Error</label>
+<div class="tab">
+	
+<div class="hierarchy_class"><a href="#">Main Report</a></div>
+<h2 id="heading">Main Report</h2>
+	
+</div> <!-- End of class=tab -->
+
+</div> <!-- End of MYTABS -->
+	
 <div class="auspices">
 <img src="llnl_logo.png" class="llnl_logo">
 This work was produced under the auspices of the U.S. Department of

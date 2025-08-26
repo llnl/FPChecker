@@ -29,10 +29,10 @@
     -webkit-box-shadow: 3px 3px 3px #D5D5D5;
     box-shadow: 3px 3px 3px #D5D5D5;
     background-color: #FFFFFF;
-    margin-left: auto;
-    margin-right: auto;
     font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
     border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
 }
 .report_box_files {
     width: 700px;
@@ -281,4 +281,37 @@ code {
     width: 100%;
     margin-top: 1px;
     margin-bottom: 1px;
+}
+
+.mytabs {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 10px;
+	justify-content: center;
+}
+.mytabs input[type="radio"]{
+	display: none;
+}
+.mytabs label {
+    padding-top: 10px;
+    padding-right: 50px;
+    padding-left: 50px;
+    padding-bottom: 10px;
+    background: #FFFFFF;
+    font-weight: bold;
+    color: #000000;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+}
+.mytabs .tab {
+    width: 100%;
+    padding-top: 10px;
+    order: 1;
+    display: none;
+}
+.mytabs input[type='radio']:checked + label + .tab {
+    display: block;
+}
+
+.mytabs input[type='radio']:checked + label {
+    background-color: #C5C5C5;
 }
