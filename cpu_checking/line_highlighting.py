@@ -75,8 +75,23 @@ def createHTMLCode_with_errors(file_full_path:str, highligth_set:set, error_1_di
       line = line + '</tr>'
     elif d[k] == 'H':
       line = line + '<td><span class="highlightme_error"><code>'+all_lines[k-1][:-1]+'</code></span></td>'
-      line = line + '<td class="error_table_header">'+str(error_1_dict.get(k, ""))+'</td>'
-      line = line + '<td class="error_table_header">'+str(error_2_dict.get(k, ""))+'</td>'
+      error_1 = error_1_dict.get(k, "")
+      # Convert to string with 7 decimal places
+      if error_1 != "":
+        try:
+          error_1 = "{:.7e}".format(float(error_1))
+        except Exception:
+          error_1 = ""
+      line = line + '<td class="error_table_header">'+error_1+'</td>'
+      error_2 = error_2_dict.get(k, "")
+      # Convert to string with 7 decimal places
+      if error_2 != "":
+        try:
+          error_2 = "{:.7e}".format(float(error_2))
+        except Exception:
+          error_2 = ""
+      line = line + '<td class="error_table_header">'+error_2+'</td>'
+
       line = line + '</tr>'
     ret.append(line)
   
@@ -90,8 +105,8 @@ if __name__ == '__main__':
     print(l)
 
   print("\n")
-  errors_1 = {4: 1.4726153e-7, 12: 12.382393299e-8}
-  errors_2 = {4: 1.4726153e-6, 12: 2.58329202e-7}
+  errors_1 = {4: 1.1472780556687212e-06, 12: 3.767558613316918e-09}
+  errors_2 = {4: 1.1472780556687212e-06, 12: 2.58329202364726452e-7}
   lines = createHTMLCode_with_errors(file_full_path, highligth_set, errors_1, errors_2)
   for l in lines:
     print(l)

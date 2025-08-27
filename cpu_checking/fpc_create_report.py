@@ -10,7 +10,7 @@ import sys
 import json
 from collections import defaultdict
 import shutil 
-from line_highlighting import createHTMLCode
+from line_highlighting import createHTMLCode, createHTMLCode_with_errors
 from colors import prGreen, prCyan, prRed
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
@@ -37,6 +37,7 @@ P_FP64_HISTOGRAM = '<!-- FP64_HISTOGRAM -->'
 P_FP32_HISTOGRAM = '<!-- FP32_HISTOGRAM -->'
 P_FP32_INSTRUCTIONS = '<!-- FP32_INSTRUCTIONS -->'
 P_FP64_INSTRUCTIONS = '<!-- FP64_INSTRUCTIONS -->'
+P_ERROR_LINE = '<!-- ERROR_LINE -->'
 
 # -------------------------------------------------------- #
 # PATHS
@@ -63,6 +64,7 @@ fp64_plot_filename = 'histogram_fp64.svg'
 fp32_plot_filename = 'histogram_fp32.svg'
 fp64_exp_usage_per_file = defaultdict(int)
 fp32_exp_usage_per_file = defaultdict(int)
+rounding_errors_per_file_line = defaultdict(lambda: defaultdict(list) ) # ['file'][line] = [1.2e-6, 3.2e-9]
 
 def getEventFilePaths(p):
   fileList = []
@@ -80,6 +82,16 @@ def getExponentUsageFilePaths(p):
     for file in files:
       fileName = os.path.split(file)[1]
       if fileName.startswith('exponent_usage_') and fileName.endswith(".json"):
+        f = str(os.path.join(root, file))
+        fileList.append(f)
+  return fileList
+
+def getErrorFilePaths(p):
+  fileList = []
+  for root, dirs, files in os.walk(p):
+    for file in files:
+      fileName = os.path.split(file)[1]
+      if fileName.startswith('rounding_error_') and fileName.endswith(".json"):
         f = str(os.path.join(root, file))
         fileList.append(f)
   return fileList
@@ -204,6 +216,23 @@ def loadExponentUsageTraces(files):
                 exp_base10 = math.floor(math.log10(2)*exponent_base2)
                 fp64_bin_values[exp_base10] += value
                 fp64_exp_usage_per_file[file_name] += value
+
+def loadRoundingErrorTraces(files):
+    for f in files:
+        data = loadReport(f)
+        for i in range(len(data)):
+            file_name       = data[i]['file']
+            line            = data[i]['line']
+            error           = data[i]['error']
+            relative_error  = data[i]['relative_error']
+            if not rounding_errors_per_file_line[file_name][line]:
+              rounding_errors_per_file_line[file_name][line] = [0.0, 0.0]
+            current_errors = [rounding_errors_per_file_line[file_name][line][0], rounding_errors_per_file_line[file_name][line][1]]
+            if error > current_errors[0]:
+              current_errors[0] = error
+            if relative_error > current_errors[1]:
+              current_errors[1] = relative_error
+            rounding_errors_per_file_line[file_name][line] = current_errors
 
 def plot_exp_usage_bars(data_dict, group_size, filename):
     data_points = list(data_dict.keys())
@@ -425,6 +454,10 @@ def createRootReport():
     elif P_FP32_INSTRUCTIONS in templateLines[i]:
       fd.write(str(sum(fp32_exp_usage_per_file.values()))+'\n')
 
+    # Rounding error report
+    elif P_ERROR_LINE in templateLines[i]:
+      fd.write(createRoundingErrorsReport()+'\n')
+
     else:
         fd.write(templateLines[i])
 
@@ -501,6 +534,22 @@ def createCodeReport(event_name, file_full_path, id):
     else:
       fd.write(templateLines[i])
   fd.close()
+
+def createRoundingErrorsReport():
+  report_text = ""
+  for file_name in rounding_errors_per_file_line:
+    error_dict = {}
+    relative_error_dict = {}
+    highligth_set = set([])
+    for line in rounding_errors_per_file_line[file_name]:
+      error = rounding_errors_per_file_line[file_name][line][0]
+      relative_error = rounding_errors_per_file_line[file_name][line][1]
+      error_dict[line] = error
+      relative_error_dict[line] = relative_error
+      highligth_set.add(line)
+    htmlCode = createHTMLCode_with_errors(file_name, highligth_set, error_dict, relative_error_dict)
+    report_text += '\n'.join(htmlCode) + '\n'
+  return report_text
 
 def removeReportDir():
   if os.path.exists(REPORTS_DIR):
@@ -609,9 +658,17 @@ if __name__ == '__main__':
   reports_path = args.dir  
   prCyan('Generating FPChecker report...')
   fileList = getEventFilePaths(reports_path)
+
+  # Find files
   fileListExpUsage = getExponentUsageFilePaths(reports_path)
+  fileListEErrors = getErrorFilePaths(reports_path)
   print('Trace files found:', len(fileList))
   print('Exponent usage files found:', len(fileListExpUsage))
+  print('Error files found:', len(fileListEErrors))
+
+  # Load events
   loadEvents(fileList)
   loadExponentUsageTraces(fileListExpUsage)
+  loadRoundingErrorTraces(fileListEErrors)
+
   createRootReport()

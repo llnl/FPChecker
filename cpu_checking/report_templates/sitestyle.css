@@ -297,17 +297,20 @@ code {
 }
 .mytabs label {
     padding-top: 10px;
-    padding-right: 50px;
-    padding-left: 50px;
+    padding-right: 20px;
+    padding-left: 20px;
     padding-bottom: 10px;
-    background: #FFFFFF;
+    background-color: #D2D2D2;
     font-weight: bold;
     color: #000000;
     font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+    cursor: pointer;
+    text-align: center;
+    width: 10%;
 }
 .mytabs .tab {
-    width: 100%;
-    padding-top: 10px;
+    width: 80%;
+    padding-top: 0px;
     order: 1;
     display: none;
 }
@@ -316,14 +319,15 @@ code {
 }
 
 .mytabs input[type='radio']:checked + label {
-    background-color: #C5C5C5;
+    background-color: #FFFFFF;
 }
 
 .error_table_header {
     border-left: 1px solid #6C6C6C;
     padding-left: 10px;
+    padding-right: 10px;
 }
 
 .report_box_source tbody tr:hover {
-    background-color: #f7fafc; /* A light gray color for hover */
+    background-color: #E3F3FF; /* A light gray color for hover */
 }
