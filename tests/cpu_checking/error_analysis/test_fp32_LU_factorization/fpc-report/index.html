@@ -1,0 +1,304 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FPChecker Report</title>
+<link href="sitestyle.css" rel="stylesheet" type="text/css">	
+	
+</head>
+<body class="body_class">
+<header>
+<div class="header_class">&nbsp;&nbsp;<img src="icons_4/logo_fpchecker.png" alt=""/></div>
+</header>
+
+<div class="separation_class"></div>
+<div class="report_title">
+<b>Report Title:</b>
+
+</div>
+
+<div class="mytabs"> <!-- Begin of MYTABS -->
+<input type="radio" id="tabevents" name="mytabs" checked="checked">
+<label for="tabevents">Events</label>
+<div class="tab">
+	
+<div class="hierarchy_class"><a href="#">Main Report</a></div>
+<h2 id="heading">Main Report</h2>
+	
+<table width="150" border="0" class="report_box_top">
+<tbody>
+	<tr class="tr_class">
+	<th></th> <th> </th> <th class="th_class"> Events</th>
+	</tr>
+	<tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/infinity.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Infinity (+)
+  		<span class="tooltiptext">Detected when operations produce positive infinity, such as 1.0 / 0.0. 
+			Infinities propagate through calculations: for example, 2 + ∞ = ∞.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+	 <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/infinity.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Infinity (-)
+		  <span class="tooltiptext">Detected when operations produce negative infinity.</span></div>
+		</td>
+      <td>
+0
+	  </td>
+    </tr>
+	<tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/nan.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">NaN
+		  <span class="tooltiptext">NaN (not a number) are the result of invalid operations, such as 0/0 or sqrt(-1).</span></div>
+	   </td>
+       <td>
+0
+	   </td>
+    </tr>	  
+</tbody>
+</table>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+		
+<table width="150" border="0" class="report_box">
+  <tbody>
+
+	
+    <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/div_zero.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Division by zero
+		  <span class="tooltiptext">Occurs when a finite nonzero number is divided by zero; typically produces infinity.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+	<tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/underflow.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Underflow (subnormal)
+		  <span class="tooltiptext">Detected when an operation produces a subnormal number 
+			  because the result was not representable as a normal number.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+    <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/comparison.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Comparison
+		  <span class="tooltiptext">Occurs when two floating-point numbers are compared for equality. 
+			  Often comparing if two floating-point numbers are equal is not good practice.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+	<tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/cancellation.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Cancellation
+		  <span class="tooltiptext">Occurs when two nearly equal numbers are subtracted. 
+			  By default, this event is detected when at least ten decimal digits are lost due to a subtraction.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+    <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/warning.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Latent Infinity (+)
+		  <span class="tooltiptext">Detected when an operation produces a normal number that is large, 
+			  and it is in close proximity to positive infinity.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+    <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/warning.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Latent Infinity (-)
+		  <span class="tooltiptext">Detected when an operation produces a normal number that is large, 
+			  and it is in close proximity to negative infinity.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+    <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/warning.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Latent underflow
+		  <span class="tooltiptext">Detected when an operation produces a normal number that is small 
+			  and it is in close proximity to becoming an underflow (subnormal number).</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+	
+<table width="200" border="0" class="report_box_stats">
+  <tbody>
+    <tr>
+      <td class="td_class">Code paths:</td>
+      <td class="td_class">
+Not found
+	  </td>
+    </tr>
+    <tr>
+      <td class="td_class">Files affected:</td>
+      <td class="td_class">
+0
+	  </td>
+    </tr>
+    <tr>
+      <td class="td_class">Lines affected:</td>
+      <td class="td_class">
+0
+	  </td>
+    </tr>
+  </tbody>
+</table>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<h2 id="heading">Exponent Usage Report</h2>
+	
+<div class="separation_class"></div>
+<h3 id="heading">FP64 Distribution</h3>
+	
+<table width="200" border="0" class="report_box_numbers">
+  <tbody>
+    <tr>
+      	<td>Smallest number: 4.940...x10<span class="superscript">-324</span></td>
+		<td>Largest number: 1.797...x10<span class="superscript">308</span></td>
+  </tbody>
+</table>
+	
+<div class="plot-container">
+<img src="default_fp64_plot.svg"
+	   alt="Histogram" class="histogram-svg">
+</div>
+	
+<div class="separation_class"></div>
+<h3 id="heading">FP32 Distribution</h3>
+<table width="200" border="0" class="report_box_numbers">
+  <tbody>
+    <tr>
+      	<td>Smallest number: 1.401...x10<span class="superscript">-45</span></td>
+		<td>Largest number: 3.402...x10<span class="superscript">+38</span></td>
+  </tbody>
+</table>
+<div class="plot-container">
+<img src="default_fp32_plot.svg"
+	   alt="Histogram" class="histogram-svg">
+</div>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+	
+<h4 id="heading">Instrumented Instructions</h4>
+<table width="200" border="0" class="report_box_stats_short">
+  <tbody>
+    <tr>
+      <td class="td_class_short">FP32:</td>
+      <td class="td_class">
+0
+	  </td>
+    </tr>
+    <tr>
+      <td class="td_class_short">FP64:</td>
+      <td class="td_class">
+0
+	  </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<div class="separation_class"></div>	
+	
+</div> <!-- End of class=tab -->
+	
+<input type="radio" id="taberror" name="mytabs">
+<label for="taberror">Rounding Error</label>
+<div class="tab">
+	
+<div class="hierarchy_class"><a href="#">File:</a></div>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<table width="600" class="report_box_source">
+  <tbody>
+
+  <tr>
+	<th></th>
+    <th></th>
+    <th class="error_table_header">Rounding Error</th>
+    <th class="error_table_header">Relative Error</th>
+  </tr>
+	  
+<tr><td class="code_line_class">1</td><td><code>// -*- C++ -*-</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">2</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">10</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">11</td><td><code>#define _LIBCPP_VECTOR</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">12</td><td><span class="highlightme_error"><code></code></span></td><td class="error_table_header">9.5367432e-08</td><td class="error_table_header">2.8049245e-08</td></tr>
+<tr><td class="code_line_class">13</td><td><code>// clang-format off</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">14</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">41</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">42</td><td><code>    explicit vector(size_type n, const allocator_type&); // C++14</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">43</td><td><span class="highlightme_error"><code>    vector(size_type n, const value_type& value, const allocator_type& = allocator_type());</code></span></td><td class="error_table_header">0.0000000e+00</td><td class="error_table_header">0.0000000e+00</td></tr>
+<tr><td class="code_line_class">44</td><td><span class="highlightme_error"><code>    template <class InputIterator></code></span></td><td class="error_table_header">0.0000000e+00</td><td class="error_table_header">0.0000000e+00</td></tr>
+<tr><td class="code_line_class">45</td><td><code>        vector(InputIterator first, InputIterator last, const allocator_type& = allocator_type());</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">46</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">69</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">70</td><td><code>    const_iterator         begin()   const noexcept;</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">71</td><td><span class="highlightme_error"><code>    iterator               end() noexcept;</code></span></td><td class="error_table_header">5.9604645e-09</td><td class="error_table_header">1.4901161e-08</td></tr>
+<tr><td class="code_line_class">72</td><td><code>    const_iterator         end()     const noexcept;</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">73</td><td><code></code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">74</td><td><span class="highlightme_error"><code>    reverse_iterator       rbegin() noexcept;</code></span></td><td class="error_table_header">-9.5367432e-08</td><td class="error_table_header">2.8049245e-08</td></tr>
+<tr><td class="code_line_class">75</td><td><span class="highlightme_error"><code>    const_reverse_iterator rbegin()  const noexcept;</code></span></td><td class="error_table_header">5.9604645e-09</td><td class="error_table_header">1.4901161e-08</td></tr>
+<tr><td class="code_line_class">76</td><td><code>    reverse_iterator       rend() noexcept;</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">77</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+
+	  
+	   <!--
+	  <tr><td class="code_line_class">2</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">3</td><td><code></code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">4</td><td><span class="highlightme_error"><code>float compute(float *x, int n) {</code></span></td><td class="error_table_header">1.4726153e-07</td><td class="error_table_header">1.4726153e-06</td></tr>
+<tr><td class="code_line_class">5</td><td><span class="highlightme_error"><code>  float res = 0.0f;</code></span></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">6</td><td><span class="highlightme_error"><code>  for (int i=0; i < n; ++i) {</code></span></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">7</td><td><span class="highlightme_error"><code>    res = res + x[i];</code></span></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">8</td><td><span class="highlightme_error"><code></code></span></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">9</td><td><code>    // NaN</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">10</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+-->
+	  
+
+	  
+  </tbody>
+</table>
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+	
+</div> <!-- End of class=tab -->
+
+</div> <!-- End of MYTABS -->
+	
+<div class="auspices">
+<img src="llnl_logo.png" class="llnl_logo">
+This work was produced under the auspices of the U.S. Department of
+Energy by Lawrence Livermore National Laboratory under Contract
+DE-AC52-07NA27344.
+</div>
+	
+</body>
+</html>

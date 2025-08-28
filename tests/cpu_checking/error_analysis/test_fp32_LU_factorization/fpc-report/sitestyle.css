@@ -1,0 +1,333 @@
+@charset "UTF-8";
+
+#heading {
+    color: #1C75BC;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+    text-align: center;
+}
+#box {
+    width: 50%;
+    text-shadow: 0px 0px #D8D8D8;
+    border-color: #1F53D2;
+}
+.report_box {
+    width: 800px;
+    color: #5D5D5D;
+    border-style: solid;
+    -webkit-box-shadow: 3px 3px 3px #D5D5D5;
+    box-shadow: 3px 3px 3px #D5D5D5;
+    background-color: #FFFFFF;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+    border-collapse: collapse;
+}
+.report_box_top {
+    width: 800px;
+    color: #5D5D5D;
+    border-style: solid;
+    -webkit-box-shadow: 3px 3px 3px #D5D5D5;
+    box-shadow: 3px 3px 3px #D5D5D5;
+    background-color: #FFFFFF;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+.report_box_files {
+    width: 700px;
+    color: #5D5D5D;
+    border-style: solid;
+    -webkit-box-shadow: 4px 4px 5px #D5D5D5;
+    box-shadow: 4px 4px 5px #D5D5D5;
+    background-color: #FFFFFF;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+    border-collapse: collapse;
+}
+.report_box_source {
+    width: 700px;
+    color: #000000;
+    border-style: solid;
+    background-color: #FFFFFF;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New", monospace;
+    border-collapse: collapse;
+    white-space: pre;
+    tab-size: 4;
+    border-width: thin;
+}
+.report_box_stats {
+    width: 800px;
+    color: #000000;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-top-style: solid;
+    -webkit-box-shadow: 3px 3px 3px #D5D5D5;
+    box-shadow: 3px 3px 3px #D5D5D5;
+    background-color: #FFFFFF;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+    height: 200px;
+    font-style: normal;
+    text-align: center;
+    font-size: small;
+    max-width: 800px;
+    border-collapse: collapse;
+}
+.report_box_stats_short {
+    width: 800px;
+    color: #000000;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-top-style: solid;
+    -webkit-box-shadow: 3px 3px 3px #D5D5D5;
+    box-shadow: 3px 3px 3px #D5D5D5;
+    background-color: #FFFFFF;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+    border-collapse: collapse;
+    height: 100px;
+    font-style: normal;
+    text-align: center;
+    font-size: small;
+    max-width: 800px;
+}
+.body_class {
+    background-color: #F2F2F2;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+}
+.icon_class {
+    text-align: center;
+    width: 125px;
+}
+.files_class {
+    height: 30px;
+    position: relative;
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.code_line_class {
+    position: relative;
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 50px;
+}
+.body_class header .header_class {
+    background-color: #FFFFFF;
+    width: 100%;
+    -webkit-box-shadow: 3px 3px 3px #D5D5D5;
+    box-shadow: 3px 3px 3px #D5D5D5;
+}
+.body_class .hierarchy_class {
+    height: 40px;
+    line-height: 40px;
+    background-color: #FFFFFF;
+    padding-left: 10px;
+    -webkit-box-shadow: 3px 3px 3px #D5D5D5;
+    box-shadow: 3px 3px 3px #D5D5D5;
+}
+.body_class .separation_class {
+    height: 7px;
+}
+a {
+    color: #1C75BC;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+	position: relative;
+}
+.plot-container {
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border-collapse: collapse;
+    justify-content: center;
+    display: flex;
+}
+.plot-container .histogram-svg {
+    width: 800px;
+    height: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+}
+a:hover {
+    color: #EC6663;
+}
+a:hover span {
+	display: block; 
+	text-align: center;
+}
+.report_frame {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: antiquewhite;
+    color: black;
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 110%;
+    font-size: small;
+}
+.llnl_logo {
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    margin-right: 20px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.td_class {
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    text-align: left;
+    max-width: 400px;
+    overflow-x: scroll;
+}
+.td_class_short {
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    text-align: left;
+    width: 50px;
+    overflow-x: scroll;
+}
+code {
+	font-family: Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New", "monospace";
+	white-space: pre;
+}
+.highlightme { 
+	background-color:#FFFF00; 
+}
+.highlightme_error {
+    background-color: #BBFFED;
+}
+.th_class {
+    text-align: left;
+}
+.tr_class {
+    border-bottom: thin solid #E5E5E5;
+    height: 70px;
+}
+.report_box_numbers {
+    width: 800px;
+    text-align: center;
+    background-color: #FFFFFF;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+    font-size: medium;
+}
+.superscript {
+    vertical-align: super;
+    font-size: small;
+}
+.td_text {
+    width: 500px;
+}
+.report_title {
+    height: 40px;
+    line-height: 40px;
+    background-color: #FFFFFF;
+    padding-left: 10px;
+    -webkit-box-shadow: 3px 3px 3px #D5D5D5;
+    box-shadow: 3px 3px 3px #D5D5D5;
+    font-family: Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New", monospace;
+    color: #1234DF;
+}
+.auspices {
+    height: 35px;
+    line-height: 40px;
+    background-color: #FFFFFF;
+    padding-left: 10px;
+    -webkit-box-shadow: 3px 3px 3px #D5D5D5;
+    box-shadow: 3px 3px 3px #D5D5D5;
+    font-family: Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New", monospace;
+    color: #000000;
+    font-size: x-small;
+    display: flex;
+    justify-content: center;
+}
+.small_linebreak {
+    display: block;
+    height: 2px;
+    width: 100%;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.mytabs {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 10px;
+	justify-content: center;
+}
+.mytabs input[type="radio"]{
+	display: none;
+}
+.mytabs label {
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    background-color: #D2D2D2;
+    font-weight: bold;
+    color: #000000;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+    cursor: pointer;
+    text-align: center;
+    width: 10%;
+}
+.mytabs .tab {
+    width: 80%;
+    padding-top: 0px;
+    order: 1;
+    display: none;
+}
+.mytabs input[type='radio']:checked + label + .tab {
+    display: block;
+}
+
+.mytabs input[type='radio']:checked + label {
+    background-color: #FFFFFF;
+}
+
+.error_table_header {
+    border-left: 1px solid #6C6C6C;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.report_box_source tbody tr:hover {
+    background-color: #E3F3FF; /* A light gray color for hover */
+}

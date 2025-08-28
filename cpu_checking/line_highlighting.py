@@ -60,7 +60,7 @@ def createHTMLCode_with_errors(file_full_path:str, highligth_set:set, error_1_di
   fd = open(file_full_path, 'r')
   all_lines = fd.readlines()
   fd.close()
-  
+
   ret = []
   d = calc_lines_to_highligh(len(all_lines), highligth_set)
   for k in d:

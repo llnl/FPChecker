@@ -218,21 +218,21 @@ def loadExponentUsageTraces(files):
                 fp64_exp_usage_per_file[file_name] += value
 
 def loadRoundingErrorTraces(files):
-    for f in files:
-        data = loadReport(f)
-        for i in range(len(data)):
-            file_name       = data[i]['file']
-            line            = data[i]['line']
-            error           = data[i]['error']
-            relative_error  = data[i]['relative_error']
-            if not rounding_errors_per_file_line[file_name][line]:
-              rounding_errors_per_file_line[file_name][line] = [0.0, 0.0]
-            current_errors = [rounding_errors_per_file_line[file_name][line][0], rounding_errors_per_file_line[file_name][line][1]]
-            if error > current_errors[0]:
-              current_errors[0] = error
-            if relative_error > current_errors[1]:
-              current_errors[1] = relative_error
-            rounding_errors_per_file_line[file_name][line] = current_errors
+  for f in files:
+      data = loadReport(f)
+      for i in range(len(data)):
+          file_name       = data[i]['file']
+          line            = data[i]['line']
+          error           = data[i]['error']
+          relative_error  = data[i]['relative_error']
+          if not rounding_errors_per_file_line[file_name][line]:
+            rounding_errors_per_file_line[file_name][line] = [0.0, 0.0]
+          current_errors = [rounding_errors_per_file_line[file_name][line][0], rounding_errors_per_file_line[file_name][line][1]]
+          if abs(error) > current_errors[0]:
+            current_errors[0] = error
+          if relative_error > current_errors[1]:
+            current_errors[1] = relative_error
+          rounding_errors_per_file_line[file_name][line] = current_errors
 
 def plot_exp_usage_bars(data_dict, group_size, filename):
     data_points = list(data_dict.keys())

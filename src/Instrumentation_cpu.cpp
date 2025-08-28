@@ -336,6 +336,7 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
       builder.CreateAlignedLoad(gvType, fName, MaybeAlign(), loadName);
 
   // Push file name
+  errs() << "Setting file name: " << fileName << "\n";
   Constant *c = builder.CreateGlobalStringPtr(fileName);
   fName->setInitializer(NULL);
   fName->setInitializer(c);
@@ -444,8 +445,12 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
       }
       // ----------------------------------------------------------------------------
 
-      if ((isFPOperation(inst) || (inst->getOpcode() == Instruction::FNeg)) &&
-          (inst->getOperand(0)->getType()->isFloatTy() || inst->getOperand(0)->getType()->isDoubleTy()))
+      // Instrumentation of FP arithmetic operations
+      if ((isFPOperation(inst) ||
+           (inst->getOpcode() == Instruction::FNeg) ||
+           (inst->getOpcode() == Instruction::Select)) &&
+          (inst->getOperand(0)->getType()->isFloatTy() ||
+           inst->getOperand(1)->getType()->isFloatTy()))
       {
 
         errs() << "[#FPC-OP] Floating-point operation: " << *inst << "\n";
@@ -472,8 +477,11 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
             args.push_back(ConstantFP::get(builder.getDoubleTy(), 0.0));
         }
 
-        // Every arithmetic instruction has at least one operand
-        args.push_back(inst->getOperand(0));
+        // Every arithmetic instruction has at least one operand (except Select, which has a boolean)
+        if (inst->getOpcode() == Instruction::Select)
+          args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0f));
+        else
+          args.push_back(inst->getOperand(0));
 
         if (inst->getNumOperands() >= 2) // For fneg operation
           args.push_back(inst->getOperand(1));
@@ -513,6 +521,8 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
           operationType = 6;
         else if (inst->getOpcode() == Instruction::FNeg)
           operationType = 7;
+        else if (inst->getOpcode() == Instruction::Select)
+          operationType = 8;
         else
           operationType = -1;
         assert(operationType >= 0 && "Unknown operation");
@@ -552,6 +562,13 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
             assert(cond_instr && "Invalid extension instruction");
             args.push_back(cond_instr);
           }
+        }
+        else if (inst->getOpcode() == Instruction::Select)
+        {
+          // Handle Select instruction
+          Value *condVal = inst->getOperand(0);
+          Value *condInt = builder.CreateZExt(condVal, builder.getInt32Ty(), "select_cond");
+          args.push_back(condInt);
         }
         else
         {

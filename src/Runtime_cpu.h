@@ -975,6 +975,7 @@ int _FPC_EVENT_OCURRED(_FPC_ITEM_T_ *item)
  * REM = 5 (reminder)
  * FMA = 6 (FMA function call)
  * NEG = 7 (negation)
+ * SELECT = 8 (select)
  * -------------------------
  **/
 
@@ -1106,10 +1107,10 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
   }
   else
   {
-    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    printf("\t Trying to STORE the result for this register: %s", reg);
-    printf("\t But we don't have its error!");
-    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    printf("\t Trying to STORE the result for this register: %s\n", reg);
+    printf("\t But we don't have its error!\n");
+    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     exit(1);
     // return;
   }
@@ -1596,7 +1597,8 @@ void _FPC_FP32_CALCULATE_ERROR_(
 {
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   printf("_FPC_FP32_CALCULATE_ERROR_\n");
-  printf("op=%d, x=%.7e, y=%.7e, z=%.7e, w=%.7e, result_name=%s, op1_name=%s, op2_name=%s, fma_name=%s\n", op, x, y, z, w, result_name, op1_name, op2_name, fma_name);
+  printf("op=%d, x=%.7e, y=%.7e, z=%.7e, w=%.7e, result_name=%s, op1_name=%s, op2_name=%s, fma_name=%s, cond=%d\n", op, x, y, z, w, result_name, op1_name, op2_name, fma_name, cond);
+  printf("Line: %d, File Name: %s\n", loc, file_name);
 #endif
 
   double err_y = _FPC_FP32_FIND_ERROR_(op1_name);
@@ -1638,6 +1640,12 @@ void _FPC_FP32_CALCULATE_ERROR_(
     break;
   case 7:
     r_high = -y_high; // Negation operation
+    break;
+  case 8: // Select instruction
+    if (cond == 1)
+      r_high = z_high;
+    else
+      r_high = w_high;
     break;
   default:
     printf("#FPCHECKER_ERROR: Unknown operation %d\n", op);
