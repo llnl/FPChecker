@@ -303,14 +303,13 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
   // Instrument first instruction in the function
   int load_counter = 0;
   Instruction *first_inst = nullptr;
-  std::string fileName = "";
+  std::string fileName = CUDAAnalysis::getFileNameFromFunction(f);
   for (auto bb = f->begin(), end = f->end(); bb != end; ++bb)
   {
     for (auto i = bb->begin(), bend = bb->end(); i != bend; ++i)
     {
       first_inst = &(*i);
-      fileName = CUDAAnalysis::getFileNameFromInstruction(first_inst);
-      if (fileName != "Unknown")
+      if (CUDAAnalysis::getFileNameFromInstruction(first_inst) != "Unknown")
       {
         break; // we found the file
       }
@@ -336,7 +335,7 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
       builder.CreateAlignedLoad(gvType, fName, MaybeAlign(), loadName);
 
   // Push file name
-  errs() << "Setting file name: " << fileName << "\n";
+  // errs() << "Setting file name: " << fileName << "\n";
   Constant *c = builder.CreateGlobalStringPtr(fileName);
   fName->setInitializer(NULL);
   fName->setInitializer(c);
@@ -680,8 +679,8 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
             combinedStr += incomingValueName + "|" + ostream.str() + ";";
           }
 
-          llvm::errs() << "PHI Instruction: " << *phiInst << "\n";
-          llvm::errs() << "  ---> Combined String: " << combinedStr << "\n";
+          // llvm::errs() << "PHI Instruction: " << *phiInst << "\n";
+          // llvm::errs() << "  ---> Combined String: " << combinedStr << "\n";
 
           // Create builder to add stuff after the last phi instruction
           BasicBlock::iterator insertPt(phiInst);
@@ -712,12 +711,12 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
 
     if (terminator && llvm::isa<llvm::BranchInst>(terminator))
     {
-      llvm::errs() << ">>> Branch instruction found: " << *terminator << "\n";
+      // llvm::errs() << ">>> Branch instruction found: " << *terminator << "\n";
       std::string bbName;
       llvm::raw_string_ostream bbStream(bbName);
       basicBlock->printAsOperand(bbStream, false);
       bbStream.flush();
-      llvm::errs() << "\t Current BasicBlock: " << bbName << "\n";
+      // llvm::errs() << "\t Current BasicBlock: " << bbName << "\n";
 
       // You can use 'terminator' as the branch instruction here
       std::vector<Value *> args;

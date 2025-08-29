@@ -7,4 +7,4 @@ all:
 	$(CXX) -o main solver.o $(OP)
 
 clean:
-	rm -rf *.o main __pycache__ .fpc_logs .fpc_log.txt
+	rm -rf *.o main __pycache__ .fpc_logs .fpc_log.txt fpc-report

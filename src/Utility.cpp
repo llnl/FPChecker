@@ -161,6 +161,30 @@ namespace CUDAAnalysis
     return ret;
   }
 
+  // Iterates on instructions, and when it finds the first
+  // floating-point, it gets the
+  // getFileNameFromInstruction() using that instruction
+  std::string getFileNameFromFunction(const Function *f)
+  {
+    std::string fileName = "UNKNOWN-FILE";
+
+    for (const BasicBlock &BB : *f)
+    {
+      for (const Instruction &I : BB)
+      {
+        if (I.getType()->isFloatingPointTy())
+        {
+          fileName = getFileNameFromInstruction(&I);
+          break;
+        }
+      }
+      if (fileName != "UNKNOWN-FILE")
+        break;
+    }
+
+    return fileName;
+  }
+
   std::string getFileNameFromInstruction(const Instruction *i)
   {
     std::stringstream lineStr("");
