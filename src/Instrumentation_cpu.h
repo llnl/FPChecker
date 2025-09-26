@@ -62,6 +62,7 @@ namespace CPUAnalysis
     /* Helper functions */
     // static bool isUnwantedFunction(Function *f);
     static bool isFPOperation(const Instruction *inst);
+    static bool isFPOperationWithError(const Instruction *inst);
     static bool isDoubleFPOperation(const Instruction *inst);
     static bool isSingleFPOperation(const Instruction *inst);
     // static bool isMainFunction(Function *f);

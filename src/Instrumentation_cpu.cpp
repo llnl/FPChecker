@@ -445,7 +445,7 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
       // ----------------------------------------------------------------------------
 
       // Instrumentation of FP arithmetic operations
-      if ((isFPOperation(inst) ||
+      if ((isFPOperationWithError(inst) ||
            (inst->getOpcode() == Instruction::FNeg) ||
            (inst->getOpcode() == Instruction::Select)) &&
           (inst->getOperand(0)->getType()->isFloatTy() ||
@@ -463,18 +463,18 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
 
         // Push parameters
         std::vector<Value *> args;
-        if (!isCmpEqual(inst))
-        {
-          args.push_back(inst);
-        }
-        else
-        {
-          // CompEqual case
-          if (isSingleFPOperation(inst))
-            args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0));
-          else
-            args.push_back(ConstantFP::get(builder.getDoubleTy(), 0.0));
-        }
+        // if (!isCmpEqual(inst))
+        //{
+        args.push_back(inst);
+        //}
+        // else
+        //{
+        //  CompEqual case
+        //  if (isSingleFPOperation(inst))
+        //    args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0));
+        //  else
+        //    args.push_back(ConstantFP::get(builder.getDoubleTy(), 0.0));
+        //}
 
         // Every arithmetic instruction has at least one operand (except Select, which has a boolean)
         if (inst->getOpcode() == Instruction::Select)
@@ -512,8 +512,8 @@ void CPUFPInstrumentation::instrumentFunctionErrorAnalysis(Function *f)
           operationType = 2;
         else if (inst->getOpcode() == Instruction::FDiv)
           operationType = 3;
-        else if (isCmpEqual(inst))
-          operationType = 4;
+        // else if (isCmpEqual(inst))
+        //   operationType = 4;
         else if (inst->getOpcode() == Instruction::FRem)
           operationType = 5;
         else if (isFMAOperation(inst))
@@ -1111,6 +1111,17 @@ bool CPUFPInstrumentation::isFPOperation(const Instruction *inst)
           (inst->getOpcode() == Instruction::FSub) ||
           (inst->getOpcode() == Instruction::FRem)) ||
          isCmpEqual(inst) ||
+         isFMAOperation(inst);
+}
+
+bool CPUFPInstrumentation::isFPOperationWithError(const Instruction *inst)
+{
+
+  return ((inst->getOpcode() == Instruction::FMul) ||
+          (inst->getOpcode() == Instruction::FDiv) ||
+          (inst->getOpcode() == Instruction::FAdd) ||
+          (inst->getOpcode() == Instruction::FSub) ||
+          (inst->getOpcode() == Instruction::FRem)) ||
          isFMAOperation(inst);
 }
 
