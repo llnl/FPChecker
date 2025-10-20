@@ -4,8 +4,23 @@
 #include <numeric>
 #include <stdexcept>
 #include <iomanip>
+#include <chrono>
 
 using namespace std;
+
+static std::chrono::high_resolution_clock::time_point start_time, end_time;
+
+void start_timer()
+{
+    start_time = std::chrono::high_resolution_clock::now();
+}
+
+void stop_timer()
+{
+    end_time = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end_time - start_time;
+    cout << "Execution time: " << elapsed.count() << " seconds" << endl;
+}
 
 inline __attribute__((always_inline)) float my_sqrt(float x)
 {
@@ -121,7 +136,7 @@ int loadMatrix(std::vector<float> &A, std::vector<float> &b)
     }
 
     // std::vector<std::vector<float>> temp_matrix;
-    char line_buf[4096];
+    char line_buf[300000];
     int cols = -1;
     while (fgets(line_buf, sizeof(line_buf), file))
     {
@@ -136,6 +151,7 @@ int loadMatrix(std::vector<float> &A, std::vector<float> &b)
             cols = row.size();
         else if (row.size() != cols)
         {
+            cout << "Rows: " << row.size() << ", Cols: " << cols << endl;
             std::cerr << "Non-rectangular matrix detected" << std::endl;
             fclose(file);
             exit(-1);
@@ -199,9 +215,14 @@ conjugate_gradient(
     relative_b = my_sqrt(relative_b);
     cout << "Initial Residual Norm: " << my_sqrt(rs_old) << ", ||b||: " << relative_b << endl;
 
+    // --- Timing variables for average iteration time ---
+    std::chrono::duration<double> total_iter_time(0.0);
+
     // CG Iteration Loop
     for (size_t k = 0; k < max_iter; ++k)
     {
+        auto iter_start = std::chrono::high_resolution_clock::now();
+
         // Compute A * p_k
         vector<float> Ap = mat_vec_mult(A, p, n);
 
@@ -220,6 +241,7 @@ conjugate_gradient(
         if (relative_residual < tolerance)
         {
             cout << "Converged in " << k + 1 << " iterations. Residual Norm: " << my_sqrt(rs_new) << endl;
+            cout << "Average time per iteration: " << (total_iter_time.count() / (k + 1)) << " seconds" << endl;
             return x;
         }
 
@@ -231,6 +253,9 @@ conjugate_gradient(
 
         // Prepare for next iteration
         rs_old = rs_new;
+
+        auto iter_end = std::chrono::high_resolution_clock::now();
+        total_iter_time += iter_end - iter_start;
     }
 
     cout << "CG did not converge within " << max_iter << " iterations. Residual Norm: " << my_sqrt(rs_old) << endl;
@@ -265,39 +290,29 @@ int main(int argc, char **argv)
     std::vector<float> A, b;
     int matrix_size = loadMatrix(A, b);
     // Print A as a matrix
-    cout << "Matrix A:" << endl;
-    for (int i = 0; i < matrix_size; ++i)
-    {
-        for (int j = 0; j < matrix_size; ++j)
-        {
-            cout << scientific << setprecision(6) << A[i * matrix_size + j] << " ";
-        }
-        cout << endl;
-    }
+    // cout << "Matrix A:" << endl;
+    // for (int i = 0; i < matrix_size; ++i)
+    //{
+    //    for (int j = 0; j < matrix_size; ++j)
+    //    {
+    //        cout << scientific << setprecision(6) << A[i * matrix_size + j] << " ";
+    //    }
+    //    cout << endl;
+    // }
     // Print b as a vector
-    print_vector("b", b);
-
-    // size_t n = 4;
-    // vector<float> A_flat = {
-    //     4.0f, 1.0f, 0.0f, 0.0f,
-    //     1.0f, 4.0f, 1.0f, 0.0f,
-    //     0.0f, 1.0f, 4.0f, 1.0f,
-    //     0.0f, 0.0f, 1.0f, 4.0f};
-
-    // Right-hand side vector
-    // vector<float> b = {10.0f, 11.0f, 12.0f, 13.0f};
+    // print_vector("b", b);
+    cout << scientific << setprecision(6);
 
     cout << "Solving Ax = b using Conjugate Gradient..." << endl;
-    print_vector("b", b);
+    // print_vector("b", b);
 
     // Run the CG algorithm
+    start_timer();
     vector<float> x_solution = conjugate_gradient(A, b, max_iter, tolerance);
+    stop_timer();
 
-    // Theoretical exact solution (to compare convergence) is approximately:
-    // x* = [1.777, 0.555, 1.222, 2.944]
-
-    cout << "\nCG Solution (x):" << endl;
-    print_vector("x", x_solution);
+    // cout << "\nCG Solution (x):" << endl;
+    // print_vector("x", x_solution);
 
     // Verify the solution (A*x - b should be close to zero)
     vector<float> Ax = mat_vec_mult(A, x_solution, matrix_size);

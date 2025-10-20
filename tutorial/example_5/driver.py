@@ -17,7 +17,7 @@ def cond2_spd(A):
     return float(w.max() / w.min())
 
 if __name__ == "__main__":
-    n = 10
+    n = 100  # size of the matrix
     c = 2*np.cos(np.pi/(n+1))
 
     # delta factors to control conditioning
@@ -37,3 +37,4 @@ if __name__ == "__main__":
         # Save matrix to file as CSV
         np.savetxt(os.path.join(dir_name, f"{i}_matrix_{kappa:.3e}.csv"), A, delimiter=",")
         i += 1
+
