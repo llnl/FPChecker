@@ -12,19 +12,25 @@ using namespace llvm;
 namespace CPUAnalysis
 {
 
-  class CPUFPInstrumentation
+  class CPUFPInstrumentation_error
   {
   private:
     Module *mod;
 
-    Function *fp32_check_function;
-    Function *fp64_check_function;
-    // Function *fpc_init_htable;
+    // Function *fp32_check_function;
+    // Function *fp64_check_function;
+    //  Function *fpc_init_htable;
     Function *fpc_init;
     Function *fpc_init_args;
     Function *fpc_print_locations;
+    Function *fpc_fp32_store_inst;
+    Function *fpc_fp32_load_inst;
+    Function *fpc_fp32_calculate_function;
+    // Function *fpc_fp64_calculate_function;
+    Function *fpc_fp32_phi_function;
+    Function *fpc_fp32_branch_function;
 
-    bool codeIsAnnotated = false;
+    // bool codeIsAnnotated = false;
 
     // maximum number for a code line
     // int maxNumLocations = 0;
@@ -43,26 +49,28 @@ namespace CPUAnalysis
     // void createWriteFunctionForGlobalArray(GlobalVariable *arr, ArrayType *arrType, std::string funcName);
 
   public:
-    CPUFPInstrumentation(Module *M);
-    void instrumentFunction(Function *f, long int *c);
+    CPUFPInstrumentation_error(Module *M);
+    // void instrumentFunction(Function *f, long int *c);
+    void instrumentFunctionErrorAnalysis(Function *f);
     void instrumentMainFunction(Function *f);
-    void setCodeIsAnnotated(bool b);
-    // void generateCodeForInterruption();
-    // void instrumentErrorArray();
-    // void instrumentEndOfKernel(Function *f);
-    // InstSet finalInstrutions(Function *f);
+    // void setCodeIsAnnotated(bool b);
+    //  void generateCodeForInterruption();
+    //  void instrumentErrorArray();
+    //  void instrumentEndOfKernel(Function *f);
+    //  InstSet finalInstrutions(Function *f);
 
     /* Helper functions */
     // static bool isUnwantedFunction(Function *f);
     static bool isFPOperation(const Instruction *inst);
+    static bool isFPOperationWithError(const Instruction *inst);
     static bool isDoubleFPOperation(const Instruction *inst);
     static bool isSingleFPOperation(const Instruction *inst);
     // static bool isMainFunction(Function *f);
     // bool errorsDontAbortMode();
     static bool isCmpEqual(const Instruction *inst);
     static bool isFMAOperation(const Instruction *inst);
-    static bool basicBlockisAnnotated(const BasicBlock *bb);
-    static bool functionisAnnotated(const Function *f);
+    // static bool basicBlockisAnnotated(const BasicBlock *bb);
+    static bool functionisAnnotated(const Function *f, const char *annotation);
   };
 
 }

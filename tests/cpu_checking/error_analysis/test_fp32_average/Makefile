@@ -1,6 +1,6 @@
 
 OP = 	-O2
-CXX = FPC_INSTRUMENT=1 clang++-fpchecker 
+CXX = FPC_INSTRUMENT_ERR_TRACKING=1 clang++-fpchecker 
 
 all:
 	$(CXX) -c simple_sum.cpp $(OP)

@@ -1,6 +1,6 @@
 
 OP = 	-O2 -fno-vectorize -fno-slp-vectorize
-CXX = FPC_INSTRUMENT=1 clang++-fpchecker 
+CXX = FPC_INSTRUMENT_ERR_TRACKING=1 clang++-fpchecker 
 #CXX = clang++-fpchecker 
 
 all:

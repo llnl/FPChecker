@@ -1,6 +1,6 @@
 
 OP = 	-O2 -fno-vectorize -fno-slp-vectorize -DFPC_DEBUG_ERROR_ANALYSIS
-CXX = FPC_INSTRUMENT=1 clang++-fpchecker 
+CXX = FPC_INSTRUMENT_ERR_TRACKING=1 clang++-fpchecker 
 
 add:
 	$(CXX) -c basic_operations.cpp $(OP) -DADD_FUNCTION

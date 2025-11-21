@@ -9,8 +9,8 @@ import pathlib
 import subprocess
 import platform
 import sys
-from colors import prGreen, prCyan, prRed
-from exceptions import CommandException, CompileException, EmptyFileException
+from colors import prRed
+from exceptions import CompileException
 from fpc_logging import logMessage, verbose
 
 # --------------------------------------------------------------------------- #
@@ -19,13 +19,20 @@ from fpc_logging import logMessage, verbose
 
 # Main installation path
 FPCHECKER_PATH      = str(pathlib.Path(__file__).parent.absolute())
+
+# Library and runtime depends on the analysis type
 if platform.system() == 'Darwin':
-  FPCHECKER_LIB       = FPCHECKER_PATH+'/../lib/libfpchecker_cpu.dylib'
+  FPCHECKER_LIB_EXCEPTIONS  = FPCHECKER_PATH+'/../lib/libfpchecker_cpu.dylib'
+  FPCHECKER_LIB_ERROR       = FPCHECKER_PATH+'/../lib/libfpchecker_error.dylib'
 else:
-  FPCHECKER_LIB       = FPCHECKER_PATH+'/../lib/libfpchecker_cpu.so'
-FPCHECKER_RUNTIME   = FPCHECKER_PATH+'/../src/Runtime_cpu.h'
-#LLVM_PASS           = "-Xclang -load -Xclang " + FPCHECKER_LIB + " -include " + FPCHECKER_RUNTIME + ' -g '
-LLVM_PASS           = "-fpass-plugin=" + FPCHECKER_LIB + " -include " + FPCHECKER_RUNTIME + ' -g '
+  FPCHECKER_LIB_EXCEPTIONS  = FPCHECKER_PATH+'/../lib/libfpchecker_cpu.so'
+  FPCHECKER_LIB_ERROR       = FPCHECKER_PATH+'/../lib/libfpchecker_error.so'
+
+FPCHECKER_RUNTIME_EXCEPTIONS   = FPCHECKER_PATH+'/../src/Runtime_cpu.h'
+FPCHECKER_RUNTIME_ERROR        = FPCHECKER_PATH+'/../src/Runtime_error.h'
+
+LLVM_PASS_EXCEPTIONS           = "-fpass-plugin=" + FPCHECKER_LIB_EXCEPTIONS + " -include " + FPCHECKER_RUNTIME_EXCEPTIONS + ' -g '
+LLVM_PASS_ERROR                = "-fpass-plugin=" + FPCHECKER_LIB_ERROR + " -include " + FPCHECKER_RUNTIME_ERROR + ' -g '
 
 # --------------------------------------------------------------------------- #
 # --- Classes --------------------------------------------------------------- #
@@ -33,13 +40,7 @@ LLVM_PASS           = "-fpass-plugin=" + FPCHECKER_LIB + " -include " + FPCHECKE
 
 class Command:
   def __init__(self, compiler_name, params):
-    # We assume the command is clang-fpchecker or clang++-fpchecker
-    #if os.path.split(cmd[0])[1].split('-')[0].endswith('clang++'):
-    #  self.name = 'clang++'
-    #else:
-    #  self.name = 'clang'
     self.name = compiler_name
-    #self.parameters = cmd[1:]
     self.parameters = params
     self.preprocessedFile = None
     self.instrumentedFile = None
@@ -79,13 +80,20 @@ class Command:
     return None
 
   def instrumentIR(self):
+    if 'FPC_INSTRUMENT' in os.environ:
+      LLVM_PASS = LLVM_PASS_EXCEPTIONS
+    elif 'FPC_INSTRUMENT_ERR_TRACKING' in os.environ:
+      LLVM_PASS = LLVM_PASS_ERROR
+    else:
+      prRed("Error: No instrumentation type specified!")
+  
     new_cmd = [self.name] + LLVM_PASS.split() + self.parameters
     for p in self.parameters:
       if '-fopenmp' in p:
         new_cmd += ['-DFPC_MULTI_THREADED']
     try:
       if verbose(): print('Executing:', ' '.join(new_cmd))
-      cmdOutput = subprocess.run(' '.join(new_cmd), shell=True, check=True)
+      subprocess.run(' '.join(new_cmd), shell=True, check=True)
     except Exception as e:
       prRed(e)
       raise CompileException(new_cmd) from e
@@ -95,9 +103,12 @@ if __name__ == '__main__':
   params = os.environ['FPC_COMPILER_PARAMS']
   cmd = Command(compiler_name, params.split())
   
-
-  if 'FPC_INSTRUMENT' not in os.environ:
+  if 'FPC_INSTRUMENT' not in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING' not in os.environ:
     cmd.executeOriginalCommand()
+    exit()
+  
+  if 'FPC_INSTRUMENT' in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING' in os.environ:
+    prRed("Error: Both FPC_INSTRUMENT and FPC_INSTRUMENT_ERR_TRACKING are set!")
     exit()
 
   # Link command
