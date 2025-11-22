@@ -532,9 +532,9 @@ int _FPC_FP32_FIND_BY_ADDRESS_(uintptr_t addr)
  * A STORE consumes a register and produces a value at a memory address.
  */
 
-/*----------------------------------------------------------------------------*/
+/*------------------------------------------------------------------*/
 /* Store Function with Location Logging                             */
-/*----------------------------------------------------------------------------*/
+/*------------------------------------------------------------------*/
 
 // *** Error Calculation *** //
 // Instrumentation for STORE instructions
