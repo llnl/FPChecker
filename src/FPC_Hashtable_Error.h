@@ -11,6 +11,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <sys/stat.h>
+#include <assert.h>
 
 /*----------------------------------------------------------------------------*/
 /* Items                                                                      */
@@ -495,6 +496,8 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
     ERRORS_LOG[i].clock = 0;
   }
 
+  size_t currentEntry = 0;
+
   /* Iterate address hashtable entries */
   if (address_hashtable != NULL)
   {
@@ -509,24 +512,15 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
         char *file = cur->file_name;
         uint64_t clock = cur->clock;
 
+        int found = 0;
         for (size_t j = 0; j < max_entries; j++)
         {
-          if (ERRORS_LOG[j].file == NULL)
-          {
-            // Element not found in ERRORS_LOG, add new entry
-            ERRORS_LOG[j].file = (char *)malloc((strlen(file) + 1) * sizeof(char));
-            ERRORS_LOG[j].file[0] = '\0';
-            strcpy(ERRORS_LOG[j].file, file);
-            ERRORS_LOG[j].line = line;
-            ERRORS_LOG[j].error = err;
-            ERRORS_LOG[j].relative_error = rel_err;
-            ERRORS_LOG[j].clock = clock;
-          }
-          else
+          if (ERRORS_LOG[j].file != NULL) // found entry
           {
             // Check if file and line are the same
             if (strcmp(ERRORS_LOG[j].file, file) == 0 && ERRORS_LOG[j].line == line)
             {
+              found = 1;
               // Check if clock is higher
               if (clock > ERRORS_LOG[j].clock)
               {
@@ -534,8 +528,24 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
                 ERRORS_LOG[j].relative_error = rel_err;
                 ERRORS_LOG[j].clock = clock;
               }
+              break;
             }
           }
+        }
+
+        // If entry not found, add new entry
+        if (!found)
+        {
+          assert(currentEntry < max_entries);
+          // Element not found in ERRORS_LOG, add new entry
+          ERRORS_LOG[currentEntry].file = (char *)malloc((strlen(file) + 1) * sizeof(char));
+          ERRORS_LOG[currentEntry].file[0] = '\0';
+          strcpy(ERRORS_LOG[currentEntry].file, file);
+          ERRORS_LOG[currentEntry].line = line;
+          ERRORS_LOG[currentEntry].error = err;
+          ERRORS_LOG[currentEntry].relative_error = rel_err;
+          ERRORS_LOG[currentEntry].clock = clock;
+          currentEntry++;
         }
 
         cur = cur->next;
@@ -556,24 +566,16 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
         int line = cur->line;
         char *file = cur->file_name;
         uint64_t clock = cur->clock;
+
+        int found = 0;
         for (size_t j = 0; j < max_entries; j++)
         {
-          if (ERRORS_LOG[j].file == NULL)
-          {
-            // Element not found in ERRORS_LOG, add new entry
-            ERRORS_LOG[j].file = (char *)malloc((strlen(file) + 1) * sizeof(char));
-            ERRORS_LOG[j].file[0] = '\0';
-            strcpy(ERRORS_LOG[j].file, file);
-            ERRORS_LOG[j].line = line;
-            ERRORS_LOG[j].error = err;
-            ERRORS_LOG[j].relative_error = rel_err;
-            ERRORS_LOG[j].clock = clock;
-          }
-          else
+          if (ERRORS_LOG[j].file != NULL) // found entry
           {
             // Check if file and line are the same
             if (strcmp(ERRORS_LOG[j].file, file) == 0 && ERRORS_LOG[j].line == line)
             {
+              found = 1;
               // Check if clock is higher
               if (clock > ERRORS_LOG[j].clock)
               {
@@ -581,9 +583,26 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
                 ERRORS_LOG[j].relative_error = rel_err;
                 ERRORS_LOG[j].clock = clock;
               }
+              break;
             }
           }
         }
+
+        // If entry not found, add new entry
+        if (!found)
+        {
+          assert(currentEntry < max_entries);
+          // Element not found in ERRORS_LOG, add new entry
+          ERRORS_LOG[currentEntry].file = (char *)malloc((strlen(file) + 1) * sizeof(char));
+          ERRORS_LOG[currentEntry].file[0] = '\0';
+          strcpy(ERRORS_LOG[currentEntry].file, file);
+          ERRORS_LOG[currentEntry].line = line;
+          ERRORS_LOG[currentEntry].error = err;
+          ERRORS_LOG[currentEntry].relative_error = rel_err;
+          ERRORS_LOG[currentEntry].clock = clock;
+          currentEntry++;
+        }
+
         cur = cur->next;
       }
     }

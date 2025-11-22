@@ -2,7 +2,7 @@
 
 import subprocess
 import os
-import sys
+from error_analysis import report
 
 def setup_module(module):
     THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -87,3 +87,24 @@ def test_1():
     assert found_line_1
     assert found_line_2
     assert found_line_3
+
+    fileName = report.findRoundingErrorFile('.fpc_logs')
+    data = report.loadReport(fileName)
+
+    error_1 = 0.0
+    error_2 = 0.0
+    error_3 = 0.0
+
+    for i in range(len(data)):
+      print('i', i, data[i])
+      if data[i]['file'].endswith('test_json.c'):
+        if data[i]['line'] == 3:
+            error_1 = data[i]['relative_error']
+        elif data[i]['line'] == 4:
+            error_2 = data[i]['relative_error']
+        elif data[i]['line'] == 5:
+            error_3 = data[i]['relative_error']
+    
+    assert error_1 == 0.001
+    assert error_2 == 0.0024
+    assert error_3 == 0.0024

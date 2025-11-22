@@ -51,5 +51,8 @@ int main()
     /*------------------------- Print Tables ---------------------------*/
     _FPC_HT_PRINT_TABLES_(address_table, register_table);
 
+    /*------------------------- Write JSON ---------------------------*/
+    _FPC_WRITE_AND_PRINT_TO_JSON_(address_table, register_table);
+
     return 0;
 }

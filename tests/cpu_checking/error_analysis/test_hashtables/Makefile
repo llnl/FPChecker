@@ -29,4 +29,4 @@ run_json: test_json
 	./test_json
 
 clean:
-	rm -f $(OBJS) $(TARGETS)
+	rm -rf $(OBJS) $(TARGETS) .fpc_logs fpc-report .fpc_log.txt
