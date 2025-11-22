@@ -2,27 +2,28 @@
 triple:          'arm64-apple-darwin'
 binary-path:     test_many_items
 relocations:
-  - { offset: 0x26, size: 0x8, addend: 0x0, symName: __FPC_GET_EXECUTION_ID_, symObjAddr: 0x0, symBinAddr: 0x100007248, symSize: 0xB0 }
-  - { offset: 0x3F, size: 0x8, addend: 0x0, symName: __FPC_CLOCK_, symObjAddr: 0x4CA8, symBinAddr: 0x10000C070, symSize: 0x0 }
-  - { offset: 0x1FF, size: 0x8, addend: 0x0, symName: __FPC_GET_EXECUTION_ID_, symObjAddr: 0x0, symBinAddr: 0x100007248, symSize: 0xB0 }
-  - { offset: 0x2DD, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_CREATE_, symObjAddr: 0xB0, symBinAddr: 0x1000072F8, symSize: 0x6C }
-  - { offset: 0x32B, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_CREATE_, symObjAddr: 0x11C, symBinAddr: 0x100007364, symSize: 0x6C }
-  - { offset: 0x370, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_CREATE_, symObjAddr: 0x11C, symBinAddr: 0x100007364, symSize: 0x6C }
-  - { offset: 0x3BE, size: 0x8, addend: 0x0, symName: __FPC_HT_HASH_ADDRESS_, symObjAddr: 0x188, symBinAddr: 0x1000073D0, symSize: 0x18 }
-  - { offset: 0x3CE, size: 0x8, addend: 0x0, symName: __FPC_HT_HASH_ADDRESS_, symObjAddr: 0x188, symBinAddr: 0x1000073D0, symSize: 0x18 }
-  - { offset: 0x3FB, size: 0x8, addend: 0x0, symName: __FPC_HT_HASH_REGISTER_, symObjAddr: 0x1A0, symBinAddr: 0x1000073E8, symSize: 0x5C }
-  - { offset: 0x43A, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_NEWPAIR_, symObjAddr: 0x1FC, symBinAddr: 0x100007444, symSize: 0x54 }
-  - { offset: 0x484, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_NEWPAIR_, symObjAddr: 0x250, symBinAddr: 0x100007498, symSize: 0x80 }
-  - { offset: 0x494, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_NEWPAIR_, symObjAddr: 0x250, symBinAddr: 0x100007498, symSize: 0x80 }
-  - { offset: 0x511, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_SET_, symObjAddr: 0x2D0, symBinAddr: 0x100007518, symSize: 0xE4 }
-  - { offset: 0x595, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_SET_, symObjAddr: 0x2D0, symBinAddr: 0x100007518, symSize: 0xE4 }
-  - { offset: 0x6A1, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_SET_, symObjAddr: 0x3B4, symBinAddr: 0x1000075FC, symSize: 0xF8 }
-  - { offset: 0x718, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_SET_, symObjAddr: 0x3B4, symBinAddr: 0x1000075FC, symSize: 0xF8 }
-  - { offset: 0x830, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_UPDATE_, symObjAddr: 0x4AC, symBinAddr: 0x1000076F4, symSize: 0x3C }
-  - { offset: 0x88B, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_UPDATE_, symObjAddr: 0x4E8, symBinAddr: 0x100007730, symSize: 0x3C }
-  - { offset: 0x8E6, size: 0x8, addend: 0x0, symName: __FPC_FIND_ERRORS_BY_ADDRESS, symObjAddr: 0x524, symBinAddr: 0x10000776C, symSize: 0x54 }
-  - { offset: 0x968, size: 0x8, addend: 0x0, symName: __FPC_FIND_ERRORS_BY_ADDRESS, symObjAddr: 0x524, symBinAddr: 0x10000776C, symSize: 0x54 }
-  - { offset: 0x9A6, size: 0x8, addend: 0x0, symName: __FPC_FIND_ERRORS_BY_REGISTER, symObjAddr: 0x578, symBinAddr: 0x1000077C0, symSize: 0xB0 }
-  - { offset: 0xA62, size: 0x8, addend: 0x0, symName: __FPC_HT_PRINT_TABLES_, symObjAddr: 0x628, symBinAddr: 0x100007870, symSize: 0x198 }
-  - { offset: 0xCAC, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x7C0, symBinAddr: 0x100007A08, symSize: 0x278 }
+  - { offset: 0x26, size: 0x8, addend: 0x0, symName: __FPC_GET_EXECUTION_ID_, symObjAddr: 0x0, symBinAddr: 0x10000680C, symSize: 0xB0 }
+  - { offset: 0x3F, size: 0x8, addend: 0x0, symName: __FPC_CLOCK_, symObjAddr: 0x7538, symBinAddr: 0x10000C0C0, symSize: 0x0 }
+  - { offset: 0x240, size: 0x8, addend: 0x0, symName: __FPC_WRITE_AND_PRINT_TO_JSON_, symObjAddr: 0x734, symBinAddr: 0x100006F40, symSize: 0x5FC }
+  - { offset: 0x7AD, size: 0x8, addend: 0x0, symName: __FPC_GET_EXECUTION_ID_, symObjAddr: 0x0, symBinAddr: 0x10000680C, symSize: 0xB0 }
+  - { offset: 0x88B, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_CREATE_, symObjAddr: 0xB0, symBinAddr: 0x1000068BC, symSize: 0x6C }
+  - { offset: 0x8D9, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_CREATE_, symObjAddr: 0x11C, symBinAddr: 0x100006928, symSize: 0x6C }
+  - { offset: 0x91E, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_CREATE_, symObjAddr: 0x11C, symBinAddr: 0x100006928, symSize: 0x6C }
+  - { offset: 0x96C, size: 0x8, addend: 0x0, symName: __FPC_HT_HASH_ADDRESS_, symObjAddr: 0x188, symBinAddr: 0x100006994, symSize: 0x18 }
+  - { offset: 0x97C, size: 0x8, addend: 0x0, symName: __FPC_HT_HASH_ADDRESS_, symObjAddr: 0x188, symBinAddr: 0x100006994, symSize: 0x18 }
+  - { offset: 0x9A9, size: 0x8, addend: 0x0, symName: __FPC_HT_HASH_REGISTER_, symObjAddr: 0x1A0, symBinAddr: 0x1000069AC, symSize: 0x5C }
+  - { offset: 0x9E8, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_NEWPAIR_, symObjAddr: 0x1FC, symBinAddr: 0x100006A08, symSize: 0x90 }
+  - { offset: 0xA65, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_NEWPAIR_, symObjAddr: 0x28C, symBinAddr: 0x100006A98, symSize: 0xAC }
+  - { offset: 0xA75, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_NEWPAIR_, symObjAddr: 0x28C, symBinAddr: 0x100006A98, symSize: 0xAC }
+  - { offset: 0xB13, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_SET_, symObjAddr: 0x338, symBinAddr: 0x100006B44, symSize: 0xD4 }
+  - { offset: 0xB74, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_SET_, symObjAddr: 0x338, symBinAddr: 0x100006B44, symSize: 0xD4 }
+  - { offset: 0xCE7, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_SET_, symObjAddr: 0x40C, symBinAddr: 0x100006C18, symSize: 0x124 }
+  - { offset: 0xE20, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_UPDATE_, symObjAddr: 0x530, symBinAddr: 0x100006D3C, symSize: 0x80 }
+  - { offset: 0xEAE, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_UPDATE_, symObjAddr: 0x5B0, symBinAddr: 0x100006DBC, symSize: 0x80 }
+  - { offset: 0xF3C, size: 0x8, addend: 0x0, symName: __FPC_FIND_ERRORS_BY_ADDRESS, symObjAddr: 0x630, symBinAddr: 0x100006E3C, symSize: 0x54 }
+  - { offset: 0xFBE, size: 0x8, addend: 0x0, symName: __FPC_FIND_ERRORS_BY_ADDRESS, symObjAddr: 0x630, symBinAddr: 0x100006E3C, symSize: 0x54 }
+  - { offset: 0xFFC, size: 0x8, addend: 0x0, symName: __FPC_FIND_ERRORS_BY_REGISTER, symObjAddr: 0x684, symBinAddr: 0x100006E90, symSize: 0xB0 }
+  - { offset: 0x152A, size: 0x8, addend: 0x0, symName: __FPC_PRINT_LOCATIONS_, symObjAddr: 0xD30, symBinAddr: 0x10000753C, symSize: 0xC }
+  - { offset: 0x1540, size: 0x8, addend: 0x0, symName: __FPC_HT_PRINT_TABLES_, symObjAddr: 0xD3C, symBinAddr: 0x100007548, symSize: 0x1F0 }
+  - { offset: 0x17BA, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0xF2C, symBinAddr: 0x100007738, symSize: 0x2C8 }
 ...

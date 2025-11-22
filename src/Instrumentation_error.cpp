@@ -189,25 +189,25 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   clock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
   /*---------------------For reporting the error--------------------*/
-  GlobalVariable *prog_used_registers = nullptr;
-  prog_used_registers = mod->getGlobalVariable("_FPC_USED_REG_SET_", true);
-  assert(prog_used_registers && "Invalid table!");
-  prog_used_registers->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  // GlobalVariable *prog_used_registers = nullptr;
+  // prog_used_registers = mod->getGlobalVariable("_FPC_USED_REG_SET_", true);
+  // assert(prog_used_registers && "Invalid table!");
+  // prog_used_registers->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  GlobalVariable *prog_used_addresses = nullptr;
-  prog_used_addresses = mod->getGlobalVariable("_FPC_USED_ADDR_SET_", true);
-  assert(prog_used_addresses && "Invalid table!");
-  prog_used_addresses->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  // GlobalVariable *prog_used_addresses = nullptr;
+  // prog_used_addresses = mod->getGlobalVariable("_FPC_USED_ADDR_SET_", true);
+  // assert(prog_used_addresses && "Invalid table!");
+  // prog_used_addresses->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  GlobalVariable *prog_used_reg_count = nullptr;
-  prog_used_reg_count = mod->getGlobalVariable("_FPC_USED_REG_COUNT_", true);
-  assert(prog_used_reg_count && "Invalid table!");
-  prog_used_reg_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  // GlobalVariable *prog_used_reg_count = nullptr;
+  // prog_used_reg_count = mod->getGlobalVariable("_FPC_USED_REG_COUNT_", true);
+  // assert(prog_used_reg_count && "Invalid table!");
+  // prog_used_reg_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  GlobalVariable *prog_used_addr_count = nullptr;
-  prog_used_addr_count = mod->getGlobalVariable("_FPC_USED_ADDR_COUNT_", true);
-  assert(prog_used_addr_count && "Invalid table!");
-  prog_used_addr_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  // GlobalVariable *prog_used_addr_count = nullptr;
+  // prog_used_addr_count = mod->getGlobalVariable("_FPC_USED_ADDR_COUNT_", true);
+  // assert(prog_used_addr_count && "Invalid table!");
+  // prog_used_addr_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
   /* -------------------------------------------------------------- */
 
   GlobalVariable *fpc_lock = nullptr;

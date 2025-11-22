@@ -63,72 +63,12 @@ int _FPC_CLOCK_ = 0;                                    // Counter for the order
 int _FPC_ENTRY_COUNT_ = 0;                              // Counter of the number of entries in the above arrays
 
 // *** Error Calculation *** //
-char _FPC_USED_REG_SET_[MAX_ERROR_ENTRIES][MAX_NAME_SIZE]; // Used registers for child without parent calculation
-int _FPC_USED_REG_COUNT_ = 0;                              // Counter for the above array
-
-// *** Error Calculation *** //
-uintptr_t _FPC_USED_ADDR_SET_[MAX_ERROR_ENTRIES]; // Used addresses for child without parent calculation
-int _FPC_USED_ADDR_COUNT_ = 0;                    // Counter for the above array
-
-// *** Error Calculation *** //
 #define _FPC_BB_NAME_SIZE_ 512                   // max size of a basic block name - for example: %bb_26
 char _FPC_LAST_BASIC_BLOCK_[_FPC_BB_NAME_SIZE_]; // Last basic block ID
 
 /*----------------------------------------------------------------------------*/
 /* Error Calculation Functions                                                */
 /*----------------------------------------------------------------------------*/
-
-// *** Error Calculation *** //
-// If a register is used, it is added to the use_reg_set array
-void _FPC_USED_REG_(const char *reg)
-{
-  if (!reg || strlen(reg) == 0)
-  {
-    // This is normal for FMA operations where fma_name can be NULL
-    printf("#FPCHECKER: NULL register (normal for FMA) - skipping\n");
-    return;
-  }
-
-  // printf("#FPCHECKER: Marking register as used: %s\n", reg);
-
-  // Check if already in used set
-  for (int i = 0; i < _FPC_USED_REG_COUNT_; i++)
-  {
-    if (strcmp(_FPC_USED_REG_SET_[i], reg) == 0)
-    {
-      // printf("#FPCHECKER: Register %s already marked as used at index %d\n", reg, i);
-      return;
-    }
-  }
-
-  // Add to used set
-  if (_FPC_USED_REG_COUNT_ < MAX_ERROR_ENTRIES)
-  {
-    strncpy(_FPC_USED_REG_SET_[_FPC_USED_REG_COUNT_], reg, MAX_NAME_SIZE - 1);
-    _FPC_USED_REG_SET_[_FPC_USED_REG_COUNT_][MAX_NAME_SIZE - 1] = '\0';
-    // printf("#FPCHECKER: Added %s to used_reg_set[%d]\n", reg, _FPC_USED_REG_COUNT_);
-    _FPC_USED_REG_COUNT_++;
-  }
-  else
-  {
-    printf("#FPCHECKER: Used register set full\n");
-  }
-}
-
-// *** Error Calculation *** //
-// If an address is used, it is added to the use_addr_set array
-void _FPC_USED_ADDR_(uintptr_t addr)
-{
-  for (int i = 0; i < _FPC_USED_ADDR_COUNT_; ++i)
-  {
-    if (_FPC_USED_ADDR_SET_[i] == addr)
-      return;
-  }
-  if (_FPC_USED_ADDR_COUNT_ < MAX_ERROR_ENTRIES)
-  {
-    _FPC_USED_ADDR_SET_[_FPC_USED_ADDR_COUNT_++] = addr;
-  }
-}
 
 // *** Error Calculation *** //
 // This function copies line and file information to the error log
@@ -139,187 +79,6 @@ void _FPC_LOG_LOCATION_(const char *file, int line)
     strncpy(ERROR_LOG[_FPC_ENTRY_COUNT_ - 1].file, file, MAX_NAME_SIZE - 1);
     ERROR_LOG[_FPC_ENTRY_COUNT_ - 1].line = line;
   }
-}
-
-// *** Error Calculation *** //
-// This function removes duplicate entries from the error log
-void _FPC_REMOVE_DUPLICATES_()
-{
-  // printf("\n======== REMOVING DUPLICATES ========\n");
-
-  int unique_count = 0;
-
-  for (int i = 0; i < _FPC_ENTRY_COUNT_; i++)
-  {
-    int found_duplicate = 0;
-
-    for (int j = 0; j < unique_count; j++)
-    {
-      if (strcmp(_FPC_REGISTERS_[j], _FPC_REGISTERS_[i]) == 0)
-      {
-        found_duplicate = 1;
-        // printf("Found duplicate: %s at positions %d and %d\n", _FPC_REGISTERS_[i], j, i);
-
-        // Merge information: prefer the entry with more complete data
-        if (_FPC_ADDRESSES_[i] != 0 && _FPC_ADDRESSES_[j] == 0)
-        {
-          // Current entry has address, existing doesn't - update existing
-          // printf("  Updating position %d with address %lu from position %d\n", j, _FPC_ADDRESSES_[i], i);
-          _FPC_ADDRESSES_[j] = _FPC_ADDRESSES_[i];
-          _FPC_ERRORS_[j] = _FPC_ERRORS_[i];
-          strcpy(ERROR_LOG[j].file, ERROR_LOG[i].file);
-          // ERROR_LOG[j].line = ERROR_LOG[i].line;
-        }
-        else if (ERROR_LOG[i].file[0] != '\0' && ERROR_LOG[j].file[0] == '\0')
-        { // Merge the file and line information
-          strcpy(ERROR_LOG[j].file, ERROR_LOG[i].file);
-          ERROR_LOG[j].line = ERROR_LOG[i].line;
-          _FPC_ERRORS_[j] = _FPC_ERRORS_[i];
-        }
-        break;
-      }
-    }
-
-    if (!found_duplicate)
-    {
-      // No duplicate - keep this entry
-      if (unique_count != i)
-      {
-        // Move entry to write position
-        strcpy(_FPC_REGISTERS_[unique_count], _FPC_REGISTERS_[i]);
-        _FPC_ADDRESSES_[unique_count] = _FPC_ADDRESSES_[i];
-        _FPC_ERRORS_[unique_count] = _FPC_ERRORS_[i];
-        strcpy(ERROR_LOG[unique_count].file, ERROR_LOG[i].file);
-        ERROR_LOG[unique_count].line = ERROR_LOG[i].line;
-        // printf("Moved entry %d to position %d: %s\n", i, unique_count, _FPC_REGISTERS_[i]);
-      }
-      unique_count++;
-    }
-  }
-
-  _FPC_ENTRY_COUNT_ = unique_count;
-}
-
-// *** Error Calculation *** //
-// Here sink == node without child
-// This function looks for nodes (registers or addresses) that are not used
-int _FPC_IS_FINAL_CHILD_(int index)
-{
-  if (index >= _FPC_ENTRY_COUNT_)
-    return 0;
-
-  const char *reg = _FPC_REGISTERS_[index];
-  uintptr_t addr = _FPC_ADDRESSES_[index];
-
-  // Case 1: Register-based
-  if (reg && reg[0] != '\0')
-  {
-    // Check if this register is used as operand later
-    for (int i = 0; i < _FPC_USED_REG_COUNT_; ++i)
-    {
-      if (strcmp(_FPC_USED_REG_SET_[i], reg) == 0)
-        return 0; // Not a sink: reg is used
-    }
-    return 1; // Sink: reg not used
-  }
-
-  // Case 2: Address-based sink (if register is empty/null)
-  if ((!reg || reg[0] == '\0') && addr != 0)
-  {
-    // Check if this address is used (loaded from) later
-    for (int i = 0; i < _FPC_USED_ADDR_COUNT_; ++i)
-    {
-      if (_FPC_USED_ADDR_SET_[i] == addr)
-        return 0; // Not a sink: address is used
-    }
-    return 1; // Sink: address not used
-  }
-
-  // Otherwise, not a sink
-  return 0;
-}
-
-// *** Error Calculation *** //
-// This function is for debugging purposes. It can be removed in production
-void _FPC_DEBUG_PRINT_ALL_TRACKED_DATA_()
-{
-  printf("\n======== REGISTER TABLE ========\n");
-  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i)
-  {
-    printf("%d.  %s\n", i, _FPC_REGISTERS_[i]);
-  }
-
-  printf("\n======== UNIQUE REGISTERS ========\n");
-  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i)
-  {
-    int is_duplicate = 0;
-    for (int j = 0; j < i; ++j)
-    {
-      if (strcmp(_FPC_REGISTERS_[i], _FPC_REGISTERS_[j]) == 0)
-      {
-        is_duplicate = 1;
-        break;
-      }
-    }
-    if (!is_duplicate)
-    {
-      printf("%d. %s\n", i, _FPC_REGISTERS_[i]);
-    }
-  }
-
-  printf("\n======== UNIQUE REGISTERS NOT USED AS OPERANDS ========\n");
-  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i)
-  {
-    const char *reg = _FPC_REGISTERS_[i];
-    if (!reg || reg[0] == '\0')
-      continue;
-    // Check if reg is unique up to i
-    int is_duplicate = 0;
-    for (int j = 0; j < i; ++j)
-    {
-      if (strcmp(_FPC_REGISTERS_[j], reg) == 0)
-      {
-        is_duplicate = 1;
-        break;
-      }
-    }
-    if (is_duplicate)
-      continue;
-    // Check if reg is in used set
-    int is_used = 0;
-    for (int k = 0; k < _FPC_USED_REG_COUNT_; ++k)
-    {
-      if (strcmp(reg, _FPC_USED_REG_SET_[k]) == 0)
-      {
-        is_used = 1;
-        break;
-      }
-    }
-    if (!is_used)
-    {
-      printf("%d. %s\n", i, reg);
-    }
-  }
-
-  printf("\n======== ADDRESS TABLE ========\n");
-  for (int i = 0; i < _FPC_ENTRY_COUNT_; ++i)
-  {
-    if (_FPC_ADDRESSES_[i] != 0)
-      printf("%d. = %ld\n", i, _FPC_ADDRESSES_[i]);
-  }
-
-  printf("\n======== USED REGISTERS ========\n");
-  for (int i = 0; i < _FPC_USED_REG_COUNT_; ++i)
-  {
-    printf("Used Reg[%d] = %s\n", i, _FPC_USED_REG_SET_[i]);
-  }
-
-  printf("\n======== USED ADDRESSES ========\n");
-  for (int i = 0; i < _FPC_USED_ADDR_COUNT_; ++i)
-  {
-    printf("Used Addr[%d] = %ld\n", i, _FPC_USED_ADDR_SET_[i]);
-  }
-  printf("=================================\n\n");
 }
 
 /*----------------------------------------------------------------------------*/
@@ -653,7 +412,7 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address)
 #endif
 
   // Mark address as used (this address is being read from)
-  _FPC_USED_ADDR_(address);
+  //_FPC_USED_ADDR_(address);
 
   // Find if the register already exists
   int reg_id = _FPC_FP32_FIND_BY_REGISTER_(load_reg);
@@ -888,7 +647,7 @@ void _FPC_FP32_PHI_(const char *phi_values)
           if (strcmp(pipe_pos + 1, _FPC_LAST_BASIC_BLOCK_) == 0)
           {
             // Mark register of the original calculation as used
-            _FPC_USED_REG_(first_substr);
+            //_FPC_USED_REG_(first_substr);
 
             int id = _FPC_FP32_FIND_BY_REGISTER_(first_substr);
             if (id >= 0)
@@ -1006,20 +765,6 @@ void _FPC_FP32_CALCULATE_ERROR_(
 
   _FPC_FP32_STORE_ERROR_(result_name, err_result, rel_error);
   _FPC_LOG_LOCATION_(file_name, loc);
-
-  // We mark registers or operands as used
-  if (op1_name && strlen(op1_name) > 0)
-  {
-    _FPC_USED_REG_(op1_name);
-  }
-  if (op2_name && strlen(op2_name) > 0)
-  {
-    _FPC_USED_REG_(op2_name);
-  }
-  if (fma_name && strlen(fma_name) > 0)
-  {
-    _FPC_USED_REG_(fma_name);
-  }
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   //  ============== Print Tables ==============

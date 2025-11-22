@@ -1,0 +1,29 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     test_json
+relocations:
+  - { offset: 0x26, size: 0x8, addend: 0x0, symName: __FPC_GET_EXECUTION_ID_, symObjAddr: 0x0, symBinAddr: 0x100006834, symSize: 0xB0 }
+  - { offset: 0x3F, size: 0x8, addend: 0x0, symName: __FPC_CLOCK_, symObjAddr: 0x7568, symBinAddr: 0x10000C0B8, symSize: 0x0 }
+  - { offset: 0x240, size: 0x8, addend: 0x0, symName: __FPC_WRITE_AND_PRINT_TO_JSON_, symObjAddr: 0x734, symBinAddr: 0x100006F68, symSize: 0x5FC }
+  - { offset: 0x7AD, size: 0x8, addend: 0x0, symName: __FPC_GET_EXECUTION_ID_, symObjAddr: 0x0, symBinAddr: 0x100006834, symSize: 0xB0 }
+  - { offset: 0x88B, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_CREATE_, symObjAddr: 0xB0, symBinAddr: 0x1000068E4, symSize: 0x6C }
+  - { offset: 0x8D9, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_CREATE_, symObjAddr: 0x11C, symBinAddr: 0x100006950, symSize: 0x6C }
+  - { offset: 0x91E, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_CREATE_, symObjAddr: 0x11C, symBinAddr: 0x100006950, symSize: 0x6C }
+  - { offset: 0x96C, size: 0x8, addend: 0x0, symName: __FPC_HT_HASH_ADDRESS_, symObjAddr: 0x188, symBinAddr: 0x1000069BC, symSize: 0x18 }
+  - { offset: 0x97C, size: 0x8, addend: 0x0, symName: __FPC_HT_HASH_ADDRESS_, symObjAddr: 0x188, symBinAddr: 0x1000069BC, symSize: 0x18 }
+  - { offset: 0x9A9, size: 0x8, addend: 0x0, symName: __FPC_HT_HASH_REGISTER_, symObjAddr: 0x1A0, symBinAddr: 0x1000069D4, symSize: 0x5C }
+  - { offset: 0x9E8, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_NEWPAIR_, symObjAddr: 0x1FC, symBinAddr: 0x100006A30, symSize: 0x90 }
+  - { offset: 0xA65, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_NEWPAIR_, symObjAddr: 0x28C, symBinAddr: 0x100006AC0, symSize: 0xAC }
+  - { offset: 0xA75, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_NEWPAIR_, symObjAddr: 0x28C, symBinAddr: 0x100006AC0, symSize: 0xAC }
+  - { offset: 0xB13, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_SET_, symObjAddr: 0x338, symBinAddr: 0x100006B6C, symSize: 0xD4 }
+  - { offset: 0xB74, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_SET_, symObjAddr: 0x338, symBinAddr: 0x100006B6C, symSize: 0xD4 }
+  - { offset: 0xCE7, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_SET_, symObjAddr: 0x40C, symBinAddr: 0x100006C40, symSize: 0x124 }
+  - { offset: 0xE20, size: 0x8, addend: 0x0, symName: __FPC_ADDRESS_HT_UPDATE_, symObjAddr: 0x530, symBinAddr: 0x100006D64, symSize: 0x80 }
+  - { offset: 0xEAE, size: 0x8, addend: 0x0, symName: __FPC_REGISTER_HT_UPDATE_, symObjAddr: 0x5B0, symBinAddr: 0x100006DE4, symSize: 0x80 }
+  - { offset: 0xF3C, size: 0x8, addend: 0x0, symName: __FPC_FIND_ERRORS_BY_ADDRESS, symObjAddr: 0x630, symBinAddr: 0x100006E64, symSize: 0x54 }
+  - { offset: 0xFBE, size: 0x8, addend: 0x0, symName: __FPC_FIND_ERRORS_BY_ADDRESS, symObjAddr: 0x630, symBinAddr: 0x100006E64, symSize: 0x54 }
+  - { offset: 0xFFC, size: 0x8, addend: 0x0, symName: __FPC_FIND_ERRORS_BY_REGISTER, symObjAddr: 0x684, symBinAddr: 0x100006EB8, symSize: 0xB0 }
+  - { offset: 0x152A, size: 0x8, addend: 0x0, symName: __FPC_PRINT_LOCATIONS_, symObjAddr: 0xD30, symBinAddr: 0x100007564, symSize: 0xC }
+  - { offset: 0x1540, size: 0x8, addend: 0x0, symName: __FPC_HT_PRINT_TABLES_, symObjAddr: 0xD3C, symBinAddr: 0x100007570, symSize: 0x1F0 }
+  - { offset: 0x17BA, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0xF2C, symBinAddr: 0x100007760, symSize: 0x2E8 }
+...
