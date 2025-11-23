@@ -335,11 +335,11 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
   int found = _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, reg, &error, &relative_error);
   if (!found)
   {
-    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-    printf("\t Trying to STORE the result for this register: %s\n", reg);
-    printf("\t But we don't have its error!\n");
-    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-    exit(1);
+    printf("\n");
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    printf("#FPCHECKER: Trying to STORE a register's value (%s), but we don't have its error!\n", reg);
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    // exit(1);
   }
 
   // Find if this register already has an error

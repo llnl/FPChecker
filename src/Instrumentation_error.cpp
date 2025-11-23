@@ -700,6 +700,16 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
       setFakeDebugLocation(terminator, callInst, f);
     }
   }
+
+  // Check if the function calls other functions with floating-point values
+  if (functionCallsFunctionWithFloatingPointValues(f))
+  {
+    CUDAAnalysis::Logging::info(
+        ("*** WARNING *** Function " + f->getName() +
+         " calls other functions with floating-point values!")
+            .str()
+            .c_str());
+  }
 }
 
 // We check if the instruction inst is used only by a select instruction.
@@ -916,6 +926,43 @@ bool CPUFPInstrumentation_error::functionisAnnotated(const Function *f, const ch
   }
 
   return false; // No annotation found for this function
+}
+
+bool CPUFPInstrumentation_error::functionCallsFunctionWithFloatingPointValues(const Function *f)
+{
+  // Iterate over all Basic Blocks (BBs) in the Function
+  for (auto &bb : *f)
+  {
+    // Iterate over all Instructions in the Basic Block
+    for (auto &i : bb)
+    {
+      // Use Instruction reference directly
+      const Instruction *inst = &i;
+
+      // Use dyn_cast on CallBase for unified handling of Call/Invoke/CallBr
+      if (const CallBase *callBase = dyn_cast<CallBase>(inst))
+      {
+        // Note: The return type is the type of the Instruction itself.
+        Type *retType = callBase->getType();
+        if (retType->isFloatTy() || retType->isDoubleTy() || retType->isHalfTy() || retType->isFP128Ty())
+        {
+          return true;
+        }
+
+        // Check argument types using range-based for loop
+        for (const Value *arg : callBase->args())
+        {
+          Type *argType = arg->getType();
+          if (argType->isFloatTy() || argType->isDoubleTy() || argType->isHalfTy() || argType->isFP128Ty())
+          {
+            return true;
+          }
+        }
+      }
+    }
+  }
+  // If no floating-point call instruction was found
+  return false;
 }
 
 /* Returns the return first (non-phi) instruction of the module */
