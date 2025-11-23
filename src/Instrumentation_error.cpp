@@ -112,22 +112,42 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     }
 
     // Set ODR linkage to all instrumentation functions
-    SET_ODR_LIKAGE("_FPC_FP32_FIND_ERROR_")
-    SET_ODR_LIKAGE("_FPC_FP32_STORE_ERROR_")
-    SET_ODR_LIKAGE("_FPC_FP32_FIND_BY_REGISTER_")
-    SET_ODR_LIKAGE("_FPC_FP32_FIND_BY_ADDRESS_")
+    // SET_ODR_LIKAGE("_FPC_FP32_FIND_ERROR_")
+    // SET_ODR_LIKAGE("_FPC_FP32_STORE_ERROR_")
+    // SET_ODR_LIKAGE("_FPC_FP32_FIND_BY_REGISTER_")
+    // SET_ODR_LIKAGE("_FPC_FP32_FIND_BY_ADDRESS_")
     SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_CALCULATE_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP32_PHI_")
     SET_ODR_LIKAGE("_FPC_FP32_BRANCH_")
-    SET_ODR_LIKAGE("_FPC_WRITE_AND_PRINT_TO_JSON_")
-    SET_ODR_LIKAGE("_FPC_LOG_LOCATION_")
-    SET_ODR_LIKAGE("_FPC_REMOVE_DUPLICATES_")
-    SET_ODR_LIKAGE("_FPC_USED_REG_")
-    SET_ODR_LIKAGE("_FPC_USED_ADDR_")
-    SET_ODR_LIKAGE("_FPC_DEBUG_PRINT_ALL_TRACKED_DATA_")
-    SET_ODR_LIKAGE("_FPC_IS_FINAL_CHILD_")
+    // SET_ODR_LIKAGE("_FPC_WRITE_AND_PRINT_TO_JSON_")
+    //  SET_ODR_LIKAGE("_FPC_LOG_LOCATION_")
+    //  SET_ODR_LIKAGE("_FPC_REMOVE_DUPLICATES_")
+    //  SET_ODR_LIKAGE("_FPC_USED_REG_")
+    //  SET_ODR_LIKAGE("_FPC_USED_ADDR_")
+    //  SET_ODR_LIKAGE("_FPC_DEBUG_PRINT_ALL_TRACKED_DATA_")
+    //  SET_ODR_LIKAGE("_FPC_IS_FINAL_CHILD_")
+    SET_ODR_LIKAGE("_FPC_PRINT_LOCATIONS_")
+
+    // Hash table functions
+    // SET_ODR_LIKAGE("_FPC_GET_EXECUTION_ID_")
+    SET_ODR_LIKAGE("_FPC_ADDRESS_HT_CREATE_")
+    SET_ODR_LIKAGE("_FPC_REGISTER_HT_CREATE_")
+    SET_ODR_LIKAGE("_FPC_HT_HASH_ADDRESS_")
+    SET_ODR_LIKAGE("_FPC_HT_HASH_REGISTER_")
+    SET_ODR_LIKAGE("_FPC_ADDRESS_HT_NEWPAIR_")
+    SET_ODR_LIKAGE("_FPC_REGISTER_HT_NEWPAIR_")
+    SET_ODR_LIKAGE("_FPC_ADDRESS_EQUAL_")
+    SET_ODR_LIKAGE("_FPC_REGISTER_EQUAL_")
+    SET_ODR_LIKAGE("_FPC_ADDRESS_HT_SET_")
+    SET_ODR_LIKAGE("_FPC_REGISTER_HT_SET_")
+    SET_ODR_LIKAGE("_FPC_ADDRESS_HT_UPDATE_")
+    SET_ODR_LIKAGE("_FPC_REGISTER_HT_UPDATE_")
+    SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_ADDRESS")
+    SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_REGISTER")
+    // SET_ODR_LIKAGE("FPC_WRITE_AND_PRINT_TO_JSON_")
+    SET_ODR_LIKAGE("_FPC_HT_PRINT_TABLES_")
   }
 
   // ---- Globals initializations ---- //
@@ -143,80 +163,70 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   prog_args->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
   /* -------------------- For error tracking ---------------------- */
-  GlobalVariable *prog_addresses = nullptr;
-  prog_addresses = mod->getGlobalVariable("_FPC_ADDRESSES_", true);
-  assert(prog_addresses && "Invalid table!");
-  prog_addresses->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  GlobalVariable *prog_registers = nullptr;
-  prog_registers = mod->getGlobalVariable("_FPC_REGISTERS_", true);
-  assert(prog_registers && "Invalid table!");
-  prog_registers->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  GlobalVariable *addr_table = nullptr;
+  addr_table = mod->getGlobalVariable("_FPC_ADDRESS_HT_", true);
+  assert(addr_table && "Invalid table!");
+  addr_table->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  GlobalVariable *prog_errors = nullptr;
-  prog_errors = mod->getGlobalVariable("_FPC_ERRORS_", true);
-  assert(prog_errors && "Invalid table!");
-  prog_errors->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  GlobalVariable *reg_table = nullptr;
+  reg_table = mod->getGlobalVariable("_FPC_REGISTER_HT_", true);
+  assert(reg_table && "Invalid table!");
+  reg_table->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  GlobalVariable *prog_entry_count = nullptr;
-  prog_entry_count = mod->getGlobalVariable("_FPC_ENTRY_COUNT_", true);
-  assert(prog_entry_count && "Invalid table!");
-  prog_entry_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  //-----
+  /*   GlobalVariable *prog_addresses = nullptr;
+    prog_addresses = mod->getGlobalVariable("_FPC_ADDRESSES_", true);
+    assert(prog_addresses && "Invalid table!");
+    prog_addresses->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  GlobalVariable *prog_error_log_count = nullptr;
-  prog_error_log_count = mod->getGlobalVariable("ERROR_LOG", true);
-  assert(prog_error_log_count && "Invalid table!");
-  prog_error_log_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+    GlobalVariable *prog_registers = nullptr;
+    prog_registers = mod->getGlobalVariable("_FPC_REGISTERS_", true);
+    assert(prog_registers && "Invalid table!");
+    prog_registers->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+    GlobalVariable *prog_errors = nullptr;
+    prog_errors = mod->getGlobalVariable("_FPC_ERRORS_", true);
+    assert(prog_errors && "Invalid table!");
+    prog_errors->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+    GlobalVariable *prog_entry_count = nullptr;
+    prog_entry_count = mod->getGlobalVariable("_FPC_ENTRY_COUNT_", true);
+    assert(prog_entry_count && "Invalid table!");
+    prog_entry_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+    GlobalVariable *prog_error_log_count = nullptr;
+    prog_error_log_count = mod->getGlobalVariable("ERROR_LOG", true);
+    assert(prog_error_log_count && "Invalid table!");
+    prog_error_log_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage); */
 
   GlobalVariable *last_bb = nullptr;
   last_bb = mod->getGlobalVariable("_FPC_LAST_BASIC_BLOCK_", true);
   assert(last_bb && "Invalid table!");
   last_bb->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  GlobalVariable *rel_errors = nullptr;
-  rel_errors = mod->getGlobalVariable("_FPC_RELATIVE_ERRORS_", true);
-  assert(rel_errors && "Invalid table!");
-  rel_errors->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  /*   GlobalVariable *rel_errors = nullptr;
+    rel_errors = mod->getGlobalVariable("_FPC_RELATIVE_ERRORS_", true);
+    assert(rel_errors && "Invalid table!");
+    rel_errors->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage); */
 
-  GlobalVariable *op_clock = nullptr;
-  op_clock = mod->getGlobalVariable("_FPC_OPERATION_CLOCK_", true);
-  assert(op_clock && "Invalid table!");
-  op_clock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  /*   GlobalVariable *op_clock = nullptr;
+    op_clock = mod->getGlobalVariable("_FPC_OPERATION_CLOCK_", true);
+    assert(op_clock && "Invalid table!");
+    op_clock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage); */
 
   GlobalVariable *clock = nullptr;
   clock = mod->getGlobalVariable("_FPC_CLOCK_", true);
   assert(clock && "Invalid table!");
   clock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  /*---------------------For reporting the error--------------------*/
-  // GlobalVariable *prog_used_registers = nullptr;
-  // prog_used_registers = mod->getGlobalVariable("_FPC_USED_REG_SET_", true);
-  // assert(prog_used_registers && "Invalid table!");
-  // prog_used_registers->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-
-  // GlobalVariable *prog_used_addresses = nullptr;
-  // prog_used_addresses = mod->getGlobalVariable("_FPC_USED_ADDR_SET_", true);
-  // assert(prog_used_addresses && "Invalid table!");
-  // prog_used_addresses->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-
-  // GlobalVariable *prog_used_reg_count = nullptr;
-  // prog_used_reg_count = mod->getGlobalVariable("_FPC_USED_REG_COUNT_", true);
-  // assert(prog_used_reg_count && "Invalid table!");
-  // prog_used_reg_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-
-  // GlobalVariable *prog_used_addr_count = nullptr;
-  // prog_used_addr_count = mod->getGlobalVariable("_FPC_USED_ADDR_COUNT_", true);
-  // assert(prog_used_addr_count && "Invalid table!");
-  // prog_used_addr_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-  /* -------------------------------------------------------------- */
-
-  GlobalVariable *fpc_lock = nullptr;
-  fpc_lock = mod->getGlobalVariable("fpc_lock", true);
-  if (fpc_lock)
-  {
-    assert(fpc_lock && "Invalid lock!");
-    fpc_lock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-  }
+  /*  GlobalVariable *fpc_lock = nullptr;
+   fpc_lock = mod->getGlobalVariable("fpc_lock", true);
+   if (fpc_lock)
+   {
+     assert(fpc_lock && "Invalid lock!");
+     fpc_lock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+   } */
 }
 
 // ********************************************************************
@@ -281,7 +291,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f)
   assert((fName != nullptr) && "Global filename var not found");
   Type *gvType = fName->getType();
   std::string loadName = "my_loaded_" + std::to_string(load_counter++);
-  auto loadInst =
+  auto loadInst_filename =
       builder.CreateAlignedLoad(gvType, fName, MaybeAlign(), loadName);
 
   // Push file name
@@ -341,7 +351,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f)
           ConstantInt *locId =
               ConstantInt::get(mod->getContext(), APInt(32, lineNumber, true));
           args.push_back(locId);
-          args.push_back(loadInst);
+          args.push_back(loadInst_filename);
 
           // llvm::errs() << "[#FPC-STORE] Store register: " << reg << ", address: " << *storeAddr << "\n";
           ArrayRef<Value *> args_ref(args);
@@ -384,6 +394,12 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f)
           std::vector<Value *> args;
           args.push_back(regStr); // const char *load_reg
           args.push_back(addrInt);
+          int lineNumber = CUDAAnalysis::getLineOfCode(inst);
+          ConstantInt *locId =
+              ConstantInt::get(mod->getContext(), APInt(32, lineNumber, true));
+          args.push_back(locId);
+          args.push_back(loadInst_filename);
+
           // llvm::errs() << "[#FPC-LOAD] Load register: " << regName << ", address: " << *addr << "\n";
           ArrayRef<Value *> args_ref(args);
           CallInst *callInst = nullptr;
@@ -450,7 +466,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f)
         ConstantInt *locId =
             ConstantInt::get(mod->getContext(), APInt(32, lineNumber, true));
         args.push_back(locId);
-        args.push_back(loadInst);
+        args.push_back(loadInst_filename);
 
         // Push operation type
         int operationType = 0;

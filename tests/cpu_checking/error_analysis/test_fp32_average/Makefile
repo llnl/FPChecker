@@ -1,5 +1,5 @@
 
-OP = 	-O2
+OP = 	-O2 #-DFPC_DEBUG_ERROR_ANALYSIS
 CXX = FPC_INSTRUMENT_ERR_TRACKING=1 clang++-fpchecker 
 
 all:

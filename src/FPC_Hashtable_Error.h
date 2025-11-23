@@ -66,7 +66,7 @@ typedef struct _FPC_REGISTER_HTABLE_S
 /*----------------------------------------------------------------------------*/
 /* Generating  file identifier: hostName+processID                            */
 /*----------------------------------------------------------------------------*/
-void _FPC_GET_EXECUTION_ID_(char *executionId)
+/* void _FPC_GET_EXECUTION_ID_(char *executionId)
 {
   // size_t len=256;
   //  According to Linux manual:
@@ -85,7 +85,7 @@ void _FPC_GET_EXECUTION_ID_(char *executionId)
   snprintf(pidStr, sizeof(pidStr), "%d", pid);
   strcat(executionId, "_");
   strcat(executionId, pidStr);
-}
+} */
 
 /*----------------------------------------------------------------------------*/
 /* Initialization                                                             */
@@ -337,10 +337,11 @@ void _FPC_REGISTER_HT_UPDATE_(
 /* (API used at runtime)                                                      */
 /*----------------------------------------------------------------------------*/
 
-void _FPC_FIND_ERRORS_BY_ADDRESS(_FPC_ADDRESS_HTABLE_T *hashtable,
-                                 uintptr_t address_value,
-                                 double *error,
-                                 double *relative_error)
+// Return 1 if found, 0 otherwise
+int _FPC_FIND_ERRORS_BY_ADDRESS(_FPC_ADDRESS_HTABLE_T *hashtable,
+                                uintptr_t address_value,
+                                double *error,
+                                double *relative_error)
 {
   size_t bin = 0;
   _FPC_ADDRESS_T_ temp;
@@ -360,18 +361,22 @@ void _FPC_FIND_ERRORS_BY_ADDRESS(_FPC_ADDRESS_HTABLE_T *hashtable,
   {
     *error = next->error;
     *relative_error = next->relative_error;
+    return 1;
   }
   else
   {
     *error = 0.0;
     *relative_error = 0.0;
+    return 0;
   }
+  return 0;
 }
 
-void _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
-                                  const char *register_name,
-                                  double *error,
-                                  double *relative_error)
+// Return 1 if found, 0 otherwise
+int _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
+                                 const char *register_name,
+                                 double *error,
+                                 double *relative_error)
 {
   size_t bin = 0;
   _FPC_REGISTER_T_ temp;
@@ -391,12 +396,15 @@ void _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
   {
     *error = next->error;
     *relative_error = next->relative_error;
+    return 1;
   }
   else
   {
     *error = 0.0;
     *relative_error = 0.0;
+    return 0;
   }
+  return 0;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -633,10 +641,10 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
   fclose(fp);
   // ----------- End JSON ----------
 
-  printf("#FPCHECKER: Successfully wrote %d error entries to %s\n", entries_written, errorFileName);
+  printf("#FPCHECKER: Successfully wrote %d error entries.\n", entries_written);
 }
 
-void _FPC_PRINT_LOCATIONS_()
+/* void _FPC_PRINT_LOCATIONS_()
 {
 #ifndef FPC_QUIET
   printf("#FPCHECKER: Finalizing and writing traces...\n");
@@ -644,7 +652,7 @@ void _FPC_PRINT_LOCATIONS_()
   //_FPC_PRINT_HASH_TABLE_(_FPC_HTABLE_);
   //_FPC_REMOVE_DUPLICATES_();
   //_FPC_WRITE_AND_PRINT_TO_JSON_(); // *** Error Calculation *** //
-}
+} */
 
 // Function example output
 //  ============== Print Tables  ==============

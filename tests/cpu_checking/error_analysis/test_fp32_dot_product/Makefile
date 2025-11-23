@@ -1,5 +1,5 @@
 
-OP = 	-O2 -fno-vectorize -fno-slp-vectorize
+OP = 	-O2 -fno-vectorize -fno-slp-vectorize #-DFPDC_DEBUG_CALLSTACK
 CXX = FPC_INSTRUMENT_ERR_TRACKING=1 clang++-fpchecker 
 #CXX = clang++-fpchecker 
 
