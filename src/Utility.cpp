@@ -167,19 +167,59 @@ namespace CUDAAnalysis
   std::string getFileNameFromFunction(const Function *f)
   {
     std::string fileName = "UNKNOWN-FILE";
+    if (!f)
+      return fileName;
 
+    // Prefer the function's own DISubprogram (this avoids picking up inlined callee debug info).
+    if (DISubprogram *fsp = f->getSubprogram())
+    {
+      if (DIFile *file = fsp->getFile())
+        return file->getDirectory().str() + "/" + file->getFilename().str();
+    }
+
+    // Fallback: scan for the first FP instruction but ignore debug locations that come from inlined functions.
+    DISubprogram *funcSP = f->getSubprogram();
     for (const BasicBlock &BB : *f)
     {
       for (const Instruction &I : BB)
       {
-        if (I.getType()->isFloatingPointTy())
+        if (!I.getType()->isFloatingPointTy())
+          continue;
+
+        DebugLoc dl = findBestDebugLocation(&I);
+        if (!dl)
+          continue;
+
+        // If the debug scope is a DISubprogram, accept it only if it belongs to this Function.
+        if (MDNode *scopeNode = dl.getScope())
         {
-          fileName = getFileNameFromInstruction(&I);
-          break;
+          if (DISubprogram *instSP = dyn_cast<DISubprogram>(scopeNode))
+          {
+            // If this instruction's subprogram debug info matches our function, use it.
+            if (funcSP && instSP == funcSP)
+            {
+              if (DIFile *file = instSP->getFile())
+                return file->getDirectory().str() + "/" + file->getFilename().str();
+            }
+            // Otherwise it's likely inlined from another function; skip.
+            continue;
+          }
+
+          // If the debug location itself is a DILocation, skip if it's an inlined location.
+          if (DILocation *dil = dyn_cast<DILocation>(dl.getAsMDNode()))
+          {
+            if (dil->getInlinedAt())
+              continue; // this instruction was inlined from somewhere else
+          }
+
+          // Otherwise try to get the file from a generic DIScope (e.g. lexical block).
+          if (DIScope *diScope = dyn_cast<DIScope>(scopeNode))
+          {
+            if (DIFile *file = diScope->getFile())
+              return file->getDirectory().str() + "/" + file->getFilename().str();
+          }
         }
       }
-      if (fileName != "UNKNOWN-FILE")
-        break;
     }
 
     return fileName;

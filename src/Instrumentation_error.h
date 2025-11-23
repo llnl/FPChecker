@@ -51,7 +51,7 @@ namespace CPUAnalysis
   public:
     CPUFPInstrumentation_error(Module *M);
     // void instrumentFunction(Function *f, long int *c);
-    void instrumentFunctionErrorAnalysis(Function *f);
+    void instrumentFunctionErrorAnalysis(Function *f, long int *insrtrumented_instructions);
     void instrumentMainFunction(Function *f);
     // void setCodeIsAnnotated(bool b);
     //  void generateCodeForInterruption();

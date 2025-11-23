@@ -56,7 +56,7 @@ namespace CPUAnalysis
       CUDAAnalysis::Logging::info(fname.c_str());
 #endif
       long int c = 0;
-      fpInstrumentation->instrumentFunctionErrorAnalysis(F);
+      fpInstrumentation->instrumentFunctionErrorAnalysis(F, &c);
       instrumented += c;
 
       if (CUDAAnalysis::CodeMatching::isMainFunction(F))

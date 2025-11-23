@@ -232,7 +232,7 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
 // ********************************************************************
 // Error analysis instrumentation function
 // ********************************************************************
-void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f)
+void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, long int *insrtrumented_instructions)
 {
   if (CUDAAnalysis::CodeMatching::isUnwantedFunction(f))
     return;
@@ -357,6 +357,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f)
           ArrayRef<Value *> args_ref(args);
           CallInst *callInst = nullptr;
           callInst = builder.CreateCall(fpc_fp32_store_inst, args_ref);
+          (*insrtrumented_instructions)++;
 
           assert(callInst && "Invalid call instruction!");
           setFakeDebugLocation(inst, callInst, f);
@@ -404,6 +405,8 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f)
           ArrayRef<Value *> args_ref(args);
           CallInst *callInst = nullptr;
           callInst = builder.CreateCall(fpc_fp32_load_inst, args_ref);
+          (*insrtrumented_instructions)++;
+
           assert(callInst && "Invalid call instruction!");
           setFakeDebugLocation(inst, callInst, f);
         }
@@ -418,7 +421,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f)
            inst->getOperand(1)->getType()->isFloatTy()))
       {
 
-        errs() << "[#FPC-OP] Floating-point operation: " << *inst << "\n";
+        // errs() << "[#FPC-OP] Floating-point operation: " << *inst << "\n";
 
         DebugLoc loc = inst->getDebugLoc();
 
@@ -587,6 +590,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f)
         if (inst->getType()->isFloatTy())
         {
           callInst = builder.CreateCall(fpc_fp32_calculate_function, args_ref);
+          (*insrtrumented_instructions)++;
         }
         else if (inst->getType()->isDoubleTy())
         {
@@ -661,6 +665,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f)
           args.push_back(builder.CreateGlobalStringPtr(combinedStr));
           ArrayRef<Value *> args_ref(args);
           CallInst *callInst = builder.CreateCall(fpc_fp32_phi_function, args_ref);
+          (*insrtrumented_instructions)++;
           assert(callInst && "Invalid call instruction!");
           setFakeDebugLocation(phiInst, callInst, f);
         }
@@ -689,6 +694,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f)
       args.push_back(builder.CreateGlobalStringPtr(bbName));
       ArrayRef<Value *> args_ref(args);
       CallInst *callInst = builder.CreateCall(fpc_fp32_branch_function, args_ref);
+      (*insrtrumented_instructions)++;
 
       assert(callInst && "Invalid call instruction!");
       setFakeDebugLocation(terminator, callInst, f);
