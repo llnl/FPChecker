@@ -38,6 +38,7 @@ P_FP32_HISTOGRAM = '<!-- FP32_HISTOGRAM -->'
 P_FP32_INSTRUCTIONS = '<!-- FP32_INSTRUCTIONS -->'
 P_FP64_INSTRUCTIONS = '<!-- FP64_INSTRUCTIONS -->'
 P_ERROR_LINE = '<!-- ERROR_LINE -->'
+P_FILE_ERROR_TRACKING = '<!-- FILE_ERROR_TRACKING -->'
 
 # -------------------------------------------------------- #
 # PATHS
@@ -457,6 +458,10 @@ def createRootReport():
     # Rounding error report
     elif P_ERROR_LINE in templateLines[i]:
       fd.write(createRoundingErrorsReport()+'\n')
+
+    elif P_FILE_ERROR_TRACKING in templateLines[i]:
+      # Only print the first file name as a sample
+      fd.write(list(rounding_errors_per_file_line.keys())[0]+'\n')
 
     else:
         fd.write(templateLines[i])

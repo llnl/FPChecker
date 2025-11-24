@@ -624,19 +624,23 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
   {
     if (ERRORS_LOG[i].file != NULL)
     {
-      if (i > 0)
-        fprintf(fp, ",\n");
+      // Skip empty file names and if line number is zero
+      if (ERRORS_LOG[i].file[0] == '\0' || ERRORS_LOG[i].line == 0)
+        continue;
 
       fprintf(fp, "  {\n");
       fprintf(fp, "    \"file\": \"%s\",\n", ERRORS_LOG[i].file);
       fprintf(fp, "    \"line\": %d,\n", ERRORS_LOG[i].line);
       fprintf(fp, "    \"error\": %.17e,\n", ERRORS_LOG[i].error);
       fprintf(fp, "    \"relative_error\": %.17e\n", ERRORS_LOG[i].relative_error);
-      fprintf(fp, "  }");
+      fprintf(fp, "  },\n");
       entries_written++;
     }
   }
 
+  // Removes the last comma and newline
+  fseek(fp, -2, SEEK_END);
+  // Write closing bracket
   fprintf(fp, "\n]\n");
   fclose(fp);
   // ----------- End JSON ----------
