@@ -24,18 +24,13 @@ def test_1():
         print(e.output)
         exit()
 
-# #FPCHECKER: *** WARNING *** Function _Z22compute_sum_of_squaresRKNSt3__16vectorIdNS_9allocatorIdEEEE calls other functions with floating-point values!
 # #FPCHECKER: *** WARNING *** Function _Z3fooPfm calls other functions with floating-point values!
 
     found_warning_1 = False
-    found_warning_2 = False
     for line in cmdOutput.decode().splitlines():
         if "#FPCHECKER:" in line:
-            if "*** WARNING ***" in line and "compute_sum_of_squares" in line and "calls other functions with floating-point values!" in line:
-                found_warning_1 = True
             if "*** WARNING ***" in line and "foo" in line and "calls other functions with floating-point values!" in line:
-                found_warning_2 = True
+                found_warning_1 = True
     
     assert found_warning_1
-    assert found_warning_2
 

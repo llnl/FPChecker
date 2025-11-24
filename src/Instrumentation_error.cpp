@@ -255,6 +255,17 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
   assert((fpc_fp32_store_inst != nullptr) && "Function not initialized!");
   assert((fpc_fp32_phi_function != nullptr) && "Function not initialized!");
 
+  // Warning message
+  // Check if the function calls other functions with floating-point values
+  if (functionCallsFunctionWithFloatingPointValues(f))
+  {
+    CUDAAnalysis::Logging::info(
+        ("*** WARNING *** Function " + f->getName() +
+         " calls other functions with floating-point values!")
+            .str()
+            .c_str());
+  }
+
 #ifdef FPC_DEBUG
   CUDAAnalysis::Logging::info("Entering main loop in instrumentFunctionErrorAnalysis...");
 #endif
@@ -700,16 +711,6 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
       setFakeDebugLocation(terminator, callInst, f);
     }
   }
-
-  // Check if the function calls other functions with floating-point values
-  if (functionCallsFunctionWithFloatingPointValues(f))
-  {
-    CUDAAnalysis::Logging::info(
-        ("*** WARNING *** Function " + f->getName() +
-         " calls other functions with floating-point values!")
-            .str()
-            .c_str());
-  }
 }
 
 // We check if the instruction inst is used only by a select instruction.
@@ -928,6 +929,8 @@ bool CPUFPInstrumentation_error::functionisAnnotated(const Function *f, const ch
   return false; // No annotation found for this function
 }
 
+// Check if the function 'f' calls other functions with floating-point arguments or return types
+// Except: fmuladd intrinsic, or FMA functions
 bool CPUFPInstrumentation_error::functionCallsFunctionWithFloatingPointValues(const Function *f)
 {
   // Iterate over all Basic Blocks (BBs) in the Function
@@ -942,19 +945,29 @@ bool CPUFPInstrumentation_error::functionCallsFunctionWithFloatingPointValues(co
       // Use dyn_cast on CallBase for unified handling of Call/Invoke/CallBr
       if (const CallBase *callBase = dyn_cast<CallBase>(inst))
       {
-        // Note: The return type is the type of the Instruction itself.
-        Type *retType = callBase->getType();
-        if (retType->isFloatTy() || retType->isDoubleTy() || retType->isHalfTy() || retType->isFP128Ty())
+        // If this call is an intrinsic FMA-like operation (fmuladd / fma), skip it.
+        if (const IntrinsicInst *II = dyn_cast<IntrinsicInst>(inst))
         {
+          auto id = II->getIntrinsicID();
+          if (id == Intrinsic::fmuladd || id == Intrinsic::fma)
+            continue; // do not consider FMAs
+        }
+
+        // Note: The return type is the type of the CallBase instruction itself.
+        Type *retType = callBase->getType();
+        if (retType && (retType->isFloatTy() || retType->isDoubleTy() || retType->isHalfTy() || retType->isFP128Ty()))
+        {
+          const Function *callee = callBase->getCalledFunction();
           return true;
         }
 
-        // Check argument types using range-based for loop
+        // Check argument types using range-based for loop (skip FMA intrinsics already above)
         for (const Value *arg : callBase->args())
         {
           Type *argType = arg->getType();
-          if (argType->isFloatTy() || argType->isDoubleTy() || argType->isHalfTy() || argType->isFP128Ty())
+          if (argType && (argType->isFloatTy() || argType->isDoubleTy() || argType->isHalfTy() || argType->isFP128Ty()))
           {
+            const Function *callee = callBase->getCalledFunction();
             return true;
           }
         }
