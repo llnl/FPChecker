@@ -43,6 +43,10 @@ char **_FPC_PROG_ARGS;
 _FPC_ADDRESS_HTABLE_T *_FPC_ADDRESS_HT_;
 _FPC_REGISTER_HTABLE_T *_FPC_REGISTER_HT_;
 
+// Maximum number of warnings to print
+#define MAX_WARNINGS 3
+int _FPC_WARNING_COUNT_;
+
 // *** Error Calculation *** //
 // Maximum number of error entries
 /* #define MAX_ERROR_ENTRIES 100000
@@ -335,11 +339,12 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
   int found = _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, reg, &error, &relative_error);
   if (!found)
   {
-    printf("\n");
-    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-    printf("#FPCHECKER: Trying to STORE a register's value (%s), but we don't have its error!\n", reg);
-    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-    // exit(1);
+    if (_FPC_WARNING_COUNT_ < MAX_WARNINGS)
+    {
+      _FPC_WARNING_COUNT_++;
+      printf("\n");
+      printf("#FPCHECKER: Trying to store a register's value (%s), but we don't have its error!!\n", reg);
+    }
   }
 
   // Find if this register already has an error

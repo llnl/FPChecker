@@ -174,6 +174,16 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   assert(reg_table && "Invalid table!");
   reg_table->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
+  GlobalVariable *war_count = nullptr;
+  war_count = mod->getGlobalVariable("_FPC_WARNING_COUNT_", true);
+  assert(war_count && "Invalid variable!");
+  war_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  // GlobalVariable *error_log_count = nullptr;
+  // error_log_count = mod->getGlobalVariable("_FPC_WARNING_COUNT_", true);
+  // assert(error_log_count && "Invalid table!");
+  // error_log_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
   //-----
   /*   GlobalVariable *prog_addresses = nullptr;
     prog_addresses = mod->getGlobalVariable("_FPC_ADDRESSES_", true);
@@ -957,7 +967,7 @@ bool CPUFPInstrumentation_error::functionCallsFunctionWithFloatingPointValues(co
         Type *retType = callBase->getType();
         if (retType && (retType->isFloatTy() || retType->isDoubleTy() || retType->isHalfTy() || retType->isFP128Ty()))
         {
-          const Function *callee = callBase->getCalledFunction();
+          // const Function *callee = callBase->getCalledFunction();
           return true;
         }
 
@@ -967,7 +977,7 @@ bool CPUFPInstrumentation_error::functionCallsFunctionWithFloatingPointValues(co
           Type *argType = arg->getType();
           if (argType && (argType->isFloatTy() || argType->isDoubleTy() || argType->isHalfTy() || argType->isFP128Ty()))
           {
-            const Function *callee = callBase->getCalledFunction();
+            // const Function *callee = callBase->getCalledFunction();
             return true;
           }
         }
