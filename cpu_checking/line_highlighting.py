@@ -1,3 +1,5 @@
+import os
+from colors import prGreen, prCyan, prRed
 
 # Padding lines: lines printed but not highlighted
 # Dotted lines: only show dots
@@ -57,9 +59,27 @@ def createHTMLCode(file_full_path:str, highligth_set:set):
   return ret
 
 def createHTMLCode_with_errors(file_full_path:str, highligth_set:set, error_1_dict:dict, error_2_dict:dict):
-  fd = open(file_full_path, 'r')
-  all_lines = fd.readlines()
-  fd.close()
+  #fd = open(file_full_path, 'r')
+  #all_lines = fd.readlines()
+  #fd.close()
+
+  # Check File existence and readability
+  if not os.path.exists(file_full_path):
+    prRed(f"FPCHECKER: Error: File '{file_full_path}' does not exist.")
+    return []
+  if not os.path.isfile(file_full_path):
+    prRed(f"FPCHECKER: Error: Path '{file_full_path}' is not a regular file.")
+    return []
+  if not os.access(file_full_path, os.R_OK):
+    prRed(f"FPCHECKER: Error: File '{file_full_path}' is not readable.")
+    return []
+
+  try:
+    with open(file_full_path, 'r') as fd:
+      all_lines = fd.readlines()
+  except Exception as e:
+    prRed(f"FPCHECKER: Error reading file '{file_full_path}': {e}")
+    return []
 
   ret = []
   d = calc_lines_to_highligh(len(all_lines), highligth_set)
