@@ -108,7 +108,7 @@ if __name__ == '__main__':
     exit()
   
   if 'FPC_INSTRUMENT' in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING' in os.environ:
-    prRed("Error: Both FPC_INSTRUMENT and FPC_INSTRUMENT_ERR_TRACKING are set!")
+    prRed("Error: FPC_INSTRUMENT and FPC_INSTRUMENT_ERR_TRACKING are set! Only one instrumentation type can be used at a time.")
     exit()
 
   # Link command
