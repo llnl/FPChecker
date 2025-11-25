@@ -289,7 +289,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
   {
     CUDAAnalysis::Logging::info(
         ("*** WARNING *** Function " + f->getName() +
-         " calls other functions with floating-point values!")
+         " calls functions that return floating-point values!")
             .str()
             .c_str());
   }
@@ -985,20 +985,20 @@ bool CPUFPInstrumentation_error::functionCallsFunctionWithFloatingPointValues(co
         Type *retType = callBase->getType();
         if (retType && (retType->isFloatTy() || retType->isDoubleTy() || retType->isHalfTy() || retType->isFP128Ty()))
         {
-          // const Function *callee = callBase->getCalledFunction();
+          // errs() << "\n----> Function " << f->getName() << " calls function with floating-point return type: " << *callBase << "\n";
           return true;
         }
 
         // Check argument types using range-based for loop (skip FMA intrinsics already above)
-        for (const Value *arg : callBase->args())
-        {
-          Type *argType = arg->getType();
-          if (argType && (argType->isFloatTy() || argType->isDoubleTy() || argType->isHalfTy() || argType->isFP128Ty()))
-          {
-            // const Function *callee = callBase->getCalledFunction();
-            return true;
-          }
-        }
+        /*         for (const Value *arg : callBase->args())
+                {
+                  Type *argType = arg->getType();
+                  if (argType && (argType->isFloatTy() || argType->isDoubleTy() || argType->isHalfTy() || argType->isFP128Ty()))
+                  {
+                    errs() << "\n----> Function " << f->getName() << " calls function with floating-point argument type: " << *callBase << "\n";
+                    return true;
+                  }
+                } */
       }
     }
   }

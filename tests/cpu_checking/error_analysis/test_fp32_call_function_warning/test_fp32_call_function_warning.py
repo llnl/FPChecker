@@ -29,7 +29,7 @@ def test_1():
     found_warning_1 = False
     for line in cmdOutput.decode().splitlines():
         if "#FPCHECKER:" in line:
-            if "*** WARNING ***" in line and "foo" in line and "calls other functions with floating-point values!" in line:
+            if "*** WARNING ***" in line and "foo" in line and "calls functions that return floating-point values!" in line:
                 found_warning_1 = True
     
     assert found_warning_1
