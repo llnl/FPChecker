@@ -2,6 +2,7 @@
 #define SRC_RUNTIME_ERROR_H_
 
 #include "FPC_Hashtable_Error.h"
+#include "FPC_FloatSeries_List.h"
 #include <stdio.h>
 #include <math.h>
 #include <signal.h>
@@ -39,9 +40,14 @@ __attribute__((used)) static char *_FPC_FILE_NAME_;
 int _FPC_PROG_INPUTS;
 char **_FPC_PROG_ARGS;
 
-// Hash table pointers
+// Hash table pointers for address and register errors
 _FPC_ADDRESS_HTABLE_T *_FPC_ADDRESS_HT_;
 _FPC_REGISTER_HTABLE_T *_FPC_REGISTER_HT_;
+
+// Lines of code to save values from
+// Env variable: FPC_SAVE_LINE_ERRORS=3,4
+int *_FPC_LINES_TO_KEEP_;
+FPC_SeriesManager *FPC_DATA_MANAGER;
 
 // Maximum number of warnings to print
 #define MAX_WARNINGS 3
@@ -70,7 +76,7 @@ int _FPC_OPERATION_CLOCK_[MAX_ERROR_ENTRIES];           // Operation clock
 int _FPC_CLOCK_ = 0;                                    // Counter for the order of operations (1, 2, 3, ...)
 int _FPC_ENTRY_COUNT_ = 0;                              // Counter of the number of entries in the above arrays */
 
-// *** Error Calculation *** //
+// Last basic block name
 #define _FPC_BB_NAME_SIZE_ 512                   // max size of a basic block name - for example: "%bb_26"
 char _FPC_LAST_BASIC_BLOCK_[_FPC_BB_NAME_SIZE_]; // Last basic block ID
 
@@ -108,18 +114,75 @@ void _FPC_INIT_HASH_TABLE_()
 #endif
 }
 
+void _FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED()
+{
+  char *env_var = getenv("FPC_SAVE_LINE_ERRORS");
+  if (env_var != NULL)
+  {
+    // Count commas to determine number of lines
+    int count = 1;
+    for (char *p = env_var; *p; p++)
+    {
+      if (*p == ',')
+        count++;
+    }
+
+    _FPC_LINES_TO_KEEP_ = (int *)malloc((count + 1) * sizeof(int));
+    if (_FPC_LINES_TO_KEEP_ == NULL)
+    {
+      fprintf(stderr, "FPCHECKER: ERROR: Failed to allocate memory for line errors.\n");
+      exit(EXIT_FAILURE);
+    }
+
+    // Parse the line numbers
+    char *token = strtok(env_var, ",");
+    int index = 0;
+    while (token != NULL)
+    {
+      _FPC_LINES_TO_KEEP_[index++] = atoi(token);
+      token = strtok(NULL, ",");
+    }
+    // Mark the end of the array with -1
+    _FPC_LINES_TO_KEEP_[index] = -1;
+
+    FPC_DATA_MANAGER = FPC_create_manager();
+    if (FPC_DATA_MANAGER == NULL)
+    {
+      fprintf(stderr, "FPCHECKER: ERROR: Failed to allocate memory for line errors.\n");
+      exit(EXIT_FAILURE);
+    }
+
+    // Print _FPC_LINES_TO_KEEP_ for debugging
+#ifndef FPC_QUIET
+    printf("#FPCHECKER: Saving errors for lines: ");
+    for (int i = 0; i < index; i++)
+    {
+      printf("%d ", _FPC_LINES_TO_KEEP_[i]);
+    }
+    printf("\n");
+#endif
+  }
+  else
+  {
+    _FPC_LINES_TO_KEEP_ = NULL;
+  }
+}
+
 void _FPC_INIT_FPCHECKER()
 {
   _FPC_PROG_INPUTS = 0;
   _FPC_LAST_BASIC_BLOCK_[0] = '\0';
   _FPC_INIT_HASH_TABLE_();
+  _FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED();
 }
 
 void _FPC_INIT_ARGS_FPCHECKER(int argc, char **argv)
 {
   _FPC_PROG_INPUTS = argc;
   _FPC_PROG_ARGS = argv;
+  _FPC_LAST_BASIC_BLOCK_[0] = '\0';
   _FPC_INIT_HASH_TABLE_();
+  _FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED();
 }
 
 // *** Error Calculation *** //
@@ -274,10 +337,20 @@ void _FPC_PRINT_LOCATIONS_()
 #ifndef FPC_QUIET
   printf("#FPCHECKER: Finalizing and writing traces...\n");
 #endif
-  //_FPC_PRINT_HASH_TABLE_(_FPC_HTABLE_);
-  //_FPC_REMOVE_DUPLICATES_();
-  //_FPC_WRITE_AND_PRINT_TO_JSON_(); // *** Error Calculation *** //
+
   _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HT_, _FPC_REGISTER_HT_);
+
+  // Print values of al series being tracked
+  if (FPC_DATA_MANAGER != NULL)
+  {
+    FPC_series_to_json(FPC_DATA_MANAGER);
+  }
+#ifndef FPC_QUIET
+  else
+  {
+    printf("#FPCHECKER: No line error series to print.\n");
+  }
+#endif
 }
 
 /*----------------------------------------------------------------------------*/
@@ -310,6 +383,30 @@ int _FPC_FP32_FIND_BY_ADDRESS_(uintptr_t addr)
   }
   return -1;
 } */
+
+// Check that line is in _FPC_LINES_TO_KEEP_//
+// If so, append in FPC_DATA_MANAGER
+void FPC_APPEND_ERROR_LOG_ENTRY(int line, double relative_error)
+{
+  if (_FPC_LINES_TO_KEEP_ == NULL)
+    return;
+
+  // Check if line is in _FPC_LINES_TO_KEEP_
+  int found = 0;
+  for (int i = 0; _FPC_LINES_TO_KEEP_[i] != -1; i++)
+  {
+    if (_FPC_LINES_TO_KEEP_[i] == line)
+    {
+      found = 1;
+      break;
+    }
+  }
+
+  if (found)
+  {
+    FPC_append_value(FPC_DATA_MANAGER, line, relative_error);
+  }
+}
 
 /**
  * A STORE consumes a register and produces a value at a memory address.
@@ -347,82 +444,13 @@ void _FPC_FP32_STORE_INST_(const char *reg, uintptr_t address, int loc, char *fi
     }
   }
 
-  // Find if this register already has an error
-  /* int reg_id = _FPC_FP32_FIND_BY_REGISTER_(reg);
-  if (reg_id >= 0)
-  {
-    error = _FPC_ERRORS_[reg_id];
-    relative_error = _FPC_RELATIVE_ERRORS_[reg_id];
-
-    // Increment clock
-    _FPC_CLOCK_++;
-    _FPC_OPERATION_CLOCK_[reg_id] = _FPC_CLOCK_;
-  }
-  else
-  {
-    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-    printf("\t Trying to STORE the result for this register: %s\n", reg);
-    printf("\t But we don't have its error!\n");
-    printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-    exit(1);
-    // return;
-  } */
-
   // Update table based on the address
   // If address exists, update it
   // If address does not exist, insert new entry
   _FPC_ADDRESS_HT_UPDATE_(_FPC_ADDRESS_HT_, address, error, relative_error, file_name, loc);
 
-  /*   // Now update or insert based on the *address*
-    int addr_id = _FPC_FP32_FIND_BY_ADDRESS_(address);
-    if (addr_id >= 0)
-    {
-      // Address exists — update it
-      _FPC_ERRORS_[addr_id] = error;
-      _FPC_RELATIVE_ERRORS_[addr_id] = relative_error;
-      strncpy(_FPC_REGISTERS_[addr_id], reg, MAX_NAME_SIZE - 1);
-      _FPC_REGISTERS_[addr_id][MAX_NAME_SIZE - 1] = '\0';
-
-      // Add location logging for existing address
-      strncpy(ERROR_LOG[addr_id].file, file_name, MAX_NAME_SIZE - 1);
-      ERROR_LOG[addr_id].file[MAX_NAME_SIZE - 1] = '\0';
-      ERROR_LOG[addr_id].line = loc;
-
-      // Increment clock
-      _FPC_CLOCK_++;
-      _FPC_OPERATION_CLOCK_[addr_id] = _FPC_CLOCK_;
-    }
-    else if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES)
-    {
-      // Address does not exist — insert new entry
-      _FPC_ADDRESSES_[_FPC_ENTRY_COUNT_] = address;
-      strncpy(_FPC_REGISTERS_[_FPC_ENTRY_COUNT_], reg, MAX_NAME_SIZE - 1);
-      _FPC_REGISTERS_[_FPC_ENTRY_COUNT_][MAX_NAME_SIZE - 1] = '\0';
-      _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = error;
-      _FPC_RELATIVE_ERRORS_[_FPC_ENTRY_COUNT_] = relative_error;
-
-      // CRITICAL: Add location logging for new entry
-      strncpy(ERROR_LOG[_FPC_ENTRY_COUNT_].file, file_name, MAX_NAME_SIZE - 1);
-      ERROR_LOG[_FPC_ENTRY_COUNT_].file[MAX_NAME_SIZE - 1] = '\0';
-      ERROR_LOG[_FPC_ENTRY_COUNT_].line = loc;
-
-      _FPC_ENTRY_COUNT_++;
-
-      // Increment clock
-      _FPC_CLOCK_++;
-      _FPC_OPERATION_CLOCK_[_FPC_ENTRY_COUNT_] = _FPC_CLOCK_;
-    }
-    else
-    {
-      // This should never happen
-      printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-      printf("\t Out of memory!");
-      printf("\t Cannot handle this address: %lu\n", address);
-      printf("\t addr_id: %d\n", addr_id);
-      printf("\t _FPC_ENTRY_COUNT_: %d\n", _FPC_ENTRY_COUNT_);
-      printf("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-      exit(-1);
-    } */
+  // Log location info if line is in _FPC_LINES_TO_KEEP_
+  FPC_APPEND_ERROR_LOG_ENTRY(loc, relative_error);
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   _FPC_HT_PRINT_TABLES_(_FPC_ADDRESS_HT_, _FPC_REGISTER_HT_);
@@ -455,6 +483,9 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address, int loc, char
   {
     // Update register entry with this error
     _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, load_reg, error, relative_error, file_name, loc);
+
+    // Log location info if line is in _FPC_LINES_TO_KEEP_
+    FPC_APPEND_ERROR_LOG_ENTRY(loc, relative_error);
   }
   else
   {
@@ -464,90 +495,6 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, uintptr_t address, int loc, char
     printf("LOAD: No data found at address %lu\n", address);
 #endif
   }
-
-  // ----------- Old method (using arrays) -----------
-
-  /* // Find if the register already exists
-  int reg_id = _FPC_FP32_FIND_BY_REGISTER_(load_reg);
-
-  // Find what's at this memory address
-  int addr_id = _FPC_FP32_FIND_BY_ADDRESS_(address);
-
-  // CRITICAL: Only process if different entries (addr_id != reg_id)
-  if (addr_id >= 0 && addr_id != reg_id)
-  {
-    double error = _FPC_ERRORS_[addr_id];
-    double relative_error = _FPC_RELATIVE_ERRORS_[addr_id];
-
-    // Increment clock
-    _FPC_CLOCK_++;
-    _FPC_OPERATION_CLOCK_[reg_id] = _FPC_CLOCK_;
-
-    if (reg_id >= 0)
-    {
-      // Update existing register
-      uintptr_t old_addr = _FPC_ADDRESSES_[reg_id];
-      double old_error = _FPC_ERRORS_[reg_id];
-
-      _FPC_ADDRESSES_[reg_id] = address;
-      _FPC_ERRORS_[reg_id] = error;
-      _FPC_RELATIVE_ERRORS_[reg_id] = relative_error;
-
-      // Increment clock
-      _FPC_CLOCK_++;
-      _FPC_OPERATION_CLOCK_[reg_id] = _FPC_CLOCK_;
-    }
-    else if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES)
-    {
-      // Create new register entry
-      _FPC_ADDRESSES_[_FPC_ENTRY_COUNT_] = address;
-      strncpy(_FPC_REGISTERS_[_FPC_ENTRY_COUNT_], load_reg, MAX_NAME_SIZE - 1);
-      _FPC_REGISTERS_[_FPC_ENTRY_COUNT_][MAX_NAME_SIZE - 1] = '\0';
-      _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = error;
-      _FPC_RELATIVE_ERRORS_[_FPC_ENTRY_COUNT_] = relative_error;
-
-      // No location info for LOAD-created entries
-      ERROR_LOG[_FPC_ENTRY_COUNT_].file[0] = '\0';
-      ERROR_LOG[_FPC_ENTRY_COUNT_].line = 0;
-
-      _FPC_ENTRY_COUNT_++;
-
-      // Increment clock
-      _FPC_CLOCK_++;
-      _FPC_OPERATION_CLOCK_[_FPC_ENTRY_COUNT_] = _FPC_CLOCK_;
-    }
-  }
-  else if (addr_id >= 0 && addr_id == reg_id)
-  {
-#ifdef FPC_DEBUG_ERROR_ANALYSIS
-    printf("LOAD: Same entry (addr_id=%d == reg_id=%d) - no action needed\n", addr_id, reg_id);
-#endif
-  }
-  else if (addr_id < 0)
-  {
-#ifdef FPC_DEBUG_ERROR_ANALYSIS
-    printf("LOAD: No data found at address %lu\n", address);
-#endif
-
-    // Create register with zero error if needed
-    if (reg_id >= 0)
-    {
-      _FPC_ADDRESSES_[reg_id] = address;
-      _FPC_ERRORS_[reg_id] = 0.0;
-    }
-    else if (_FPC_ENTRY_COUNT_ < MAX_ERROR_ENTRIES)
-    {
-      _FPC_ADDRESSES_[_FPC_ENTRY_COUNT_] = address;
-      strncpy(_FPC_REGISTERS_[_FPC_ENTRY_COUNT_], load_reg, MAX_NAME_SIZE - 1);
-      _FPC_REGISTERS_[_FPC_ENTRY_COUNT_][MAX_NAME_SIZE - 1] = '\0';
-      _FPC_ERRORS_[_FPC_ENTRY_COUNT_] = 0.0;
-
-      ERROR_LOG[_FPC_ENTRY_COUNT_].file[0] = '\0';
-      ERROR_LOG[_FPC_ENTRY_COUNT_].line = 0;
-
-      _FPC_ENTRY_COUNT_++;
-    }
-  } */
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   _FPC_HT_PRINT_TABLES_(_FPC_ADDRESS_HT_, _FPC_REGISTER_HT_);
@@ -844,10 +791,11 @@ void _FPC_FP32_CALCULATE_ERROR_(
   printf("\t >>> Relative Error: %.7e <<< \n", rel_error);
 #endif
 
-  /*   _FPC_FP32_STORE_ERROR_(result_name, err_result, rel_error);
-    _FPC_LOG_LOCATION_(file_name, loc); */
-
+  // Update register error table
   _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_name, err_result, rel_error, file_name, loc);
+
+  // Log location info if line is in _FPC_LINES_TO_KEEP_
+  FPC_APPEND_ERROR_LOG_ENTRY(loc, rel_error);
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   _FPC_HT_PRINT_TABLES_(_FPC_ADDRESS_HT_, _FPC_REGISTER_HT_);

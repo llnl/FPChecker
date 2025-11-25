@@ -430,6 +430,7 @@ Example of JSON output:
   }
 ]
 */
+
 void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FPC_REGISTER_HTABLE_T *register_hashtable)
 {
   // Create directory

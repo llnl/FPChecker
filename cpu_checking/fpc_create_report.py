@@ -461,7 +461,10 @@ def createRootReport():
 
     elif P_FILE_ERROR_TRACKING in templateLines[i]:
       # Only print the first file name as a sample
-      fd.write(list(rounding_errors_per_file_line.keys())[0]+'\n')
+      if not rounding_errors_per_file_line:
+        fd.write('/unknown/path/'+'\n')
+      else:
+        fd.write(list(rounding_errors_per_file_line.keys())[0]+'\n')
 
     else:
         fd.write(templateLines[i])

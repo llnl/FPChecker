@@ -27,6 +27,11 @@ def findRoundingErrorFile(path):
   reports = glob.glob(path+'/rounding_error_*.json')
   return reports[0]
 
+# ------ Error per line reports -------
+def findErrorsPerLineFile(path):
+  reports = glob.glob(path+'/errors_per_line_*.json')
+  return reports[0]
+
 if __name__ == '__main__':
   fileName = sys.argv[1]
   loadReport(fileName)

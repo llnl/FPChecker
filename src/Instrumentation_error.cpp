@@ -129,6 +129,8 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     //  SET_ODR_LIKAGE("_FPC_DEBUG_PRINT_ALL_TRACKED_DATA_")
     //  SET_ODR_LIKAGE("_FPC_IS_FINAL_CHILD_")
     SET_ODR_LIKAGE("_FPC_PRINT_LOCATIONS_")
+    SET_ODR_LIKAGE("_FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED");
+    SET_ODR_LIKAGE("FPC_APPEND_ERROR_LOG_ENTRY");
 
     // Hash table functions
     // SET_ODR_LIKAGE("_FPC_GET_EXECUTION_ID_")
@@ -146,8 +148,14 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     SET_ODR_LIKAGE("_FPC_REGISTER_HT_UPDATE_")
     SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_ADDRESS")
     SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_REGISTER")
-    // SET_ODR_LIKAGE("FPC_WRITE_AND_PRINT_TO_JSON_")
     SET_ODR_LIKAGE("_FPC_HT_PRINT_TABLES_")
+
+    // Series table functions
+    SET_ODR_LIKAGE("FPC_create_manager")
+    SET_ODR_LIKAGE("FPC_append_value")
+    SET_ODR_LIKAGE("FPC_destroy_manager")
+    SET_ODR_LIKAGE("FPC_print_series")
+    SET_ODR_LIKAGE("FPC_series_to_json")
   }
 
   // ---- Globals initializations ---- //
@@ -229,6 +237,16 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   clock = mod->getGlobalVariable("_FPC_CLOCK_", true);
   assert(clock && "Invalid table!");
   clock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *lines_to_keep = nullptr;
+  lines_to_keep = mod->getGlobalVariable("_FPC_LINES_TO_KEEP_", true);
+  assert(lines_to_keep && "Invalid table!");
+  lines_to_keep->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *fpc_data_manager = nullptr;
+  fpc_data_manager = mod->getGlobalVariable("FPC_DATA_MANAGER", true);
+  assert(fpc_data_manager && "Invalid table!");
+  fpc_data_manager->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
   /*  GlobalVariable *fpc_lock = nullptr;
    fpc_lock = mod->getGlobalVariable("fpc_lock", true);

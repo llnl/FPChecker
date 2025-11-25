@@ -173,7 +173,7 @@ install(CODE "execute_process( \
         COMMENT "Creating link: /lib --> /lib64"
 )
 
-install(FILES "src/Runtime_cpu.h" "src/Runtime_error.h" "src/FPC_Hashtable.h" "src/FPC_Annotations.h" "src/FPC_Hashtable_Error.h"
+install(FILES "src/Runtime_cpu.h" "src/Runtime_error.h" "src/FPC_Hashtable.h" "src/FPC_Annotations.h" "src/FPC_Hashtable_Error.h" "src/FPC_FloatSeries_List.h"
         DESTINATION "src"
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ
 )

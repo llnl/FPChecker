@@ -8,6 +8,29 @@ def setup_module(module):
     THIS_DIR = os.path.dirname(os.path.abspath(__file__))
     os.chdir(THIS_DIR)
 
+# Example of the putput we want to test that is correct:
+
+#$ fpchecker-show 
+#========================================
+#         FPChecker Configuration        
+#========================================
+#
+#Installation path: /Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install
+#
+#Add the following to CFLAGS and/or CXXFLAGS:
+#
+#(1) For exceptions checking:
+#-g -include /Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/src/Runtime_cpu.h -fpass-plugin=/Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/lib/libfpchecker_cpu.dylib
+#
+#(2) For rounding error tracking:
+#-g -include /Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/src/Runtime_error.h -fpass-plugin=/Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/lib/libfpchecker_error.dylib
+#
+#Wrappers are located here:
+#/Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/bin/clang-fpchecker
+#/Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/bin/clang++-fpchecker
+#/Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/bin/mpicc-fpchecker
+#/Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/bin/mpicxx-fpchecker
+
 def test_1():
     # --- compile code ---
     cmd = ["fpchecker-show"]
@@ -18,27 +41,45 @@ def test_1():
         exit()
 
     lines = cmdOutput.decode("utf-8").splitlines()
-    pattern = "CFLAGS"
+
+    pattern = "For exceptions checking"
     flags = None
-    for i in range(1, len(lines)):
-        if pattern in lines[i - 1]:
-            #print(">>>", lines[i])
-            flags = lines[i]
-    
-    values = flags.split()
-    header_file = values[2]
+    for i in range(len(lines)):
+        if pattern in lines[i]:
+            flags = lines[i+1].strip()
+            break
+    assert flags is not None
+    expected_flags_part1 = "-g -include "
+    expected_flags_part2 = " -fpass-plugin="
+    assert expected_flags_part1 in flags
+    assert expected_flags_part2 in flags
 
-    header_exists = False
-    # Check if the header file exists
-    if os.path.isfile(header_file):
-        header_exists = True
+    pattern = "For rounding error tracking"
+    flags = None
+    for i in range(len(lines)):
+        if pattern in lines[i]:
+            flags = lines[i+1].strip()
+            break
+    assert flags is not None
+    expected_flags_part1 = "-g -include "
+    expected_flags_part2 = " -fpass-plugin="
+    assert expected_flags_part1 in flags
+    assert expected_flags_part2 in flags
 
-    library_file = values[3].split('=')[1]
-    library_exists = False
-    # Check if the header file exists
-    if os.path.isfile(library_file):
-        library_exists = True
-
-    assert header_exists
-    assert library_exists
+    # Check that after "Wrappers are located here:" we have four lines with the wrappers
+    pattern = "Wrappers are located here:"
+    wrappers = []
+    for i in range(len(lines)):
+        if pattern in lines[i]:
+            wrappers = lines[i+1:i+5]
+            break
+    assert len(wrappers) == 4
+    expected_wrappers = [
+        "clang-fpchecker",
+        "clang++-fpchecker",
+        "mpicc-fpchecker",
+        "mpicxx-fpchecker"
+    ]
+    for wrapper, expected in zip(wrappers, expected_wrappers):
+        assert expected in wrapper
 
