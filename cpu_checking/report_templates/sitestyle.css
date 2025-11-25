@@ -331,3 +331,8 @@ code {
 .report_box_source tbody tr:hover {
     background-color: #E3F3FF; /* A light gray color for hover */
 }
+
+.line_errors_plots {
+    justify-content: center;
+    text-align: center;
+}

@@ -39,6 +39,7 @@ P_FP32_INSTRUCTIONS = '<!-- FP32_INSTRUCTIONS -->'
 P_FP64_INSTRUCTIONS = '<!-- FP64_INSTRUCTIONS -->'
 P_ERROR_LINE = '<!-- ERROR_LINE -->'
 P_FILE_ERROR_TRACKING = '<!-- FILE_ERROR_TRACKING -->'
+P_ERRORS_PER_LINE_PLOTS = '<!-- ERRORS_PER_LINE_PLOTS -->'
 
 # -------------------------------------------------------- #
 # PATHS
@@ -66,6 +67,7 @@ fp32_plot_filename = 'histogram_fp32.svg'
 fp64_exp_usage_per_file = defaultdict(int)
 fp32_exp_usage_per_file = defaultdict(int)
 rounding_errors_per_file_line = defaultdict(lambda: defaultdict(list) ) # ['file'][line] = [1.2e-6, 3.2e-9]
+relative_errors_per_line = defaultdict(list) # [line] = [1.2e-6, 3.2e-9, ...], where line is an integer
 
 def getEventFilePaths(p):
   fileList = []
@@ -93,6 +95,16 @@ def getErrorFilePaths(p):
     for file in files:
       fileName = os.path.split(file)[1]
       if fileName.startswith('rounding_error_') and fileName.endswith(".json"):
+        f = str(os.path.join(root, file))
+        fileList.append(f)
+  return fileList
+
+def getErrorsPerLineFilePaths(p):
+  fileList = []
+  for root, dirs, files in os.walk(p):
+    for file in files:
+      fileName = os.path.split(file)[1]
+      if fileName.startswith('errors_per_line_') and fileName.endswith(".json"):
         f = str(os.path.join(root, file))
         fileList.append(f)
   return fileList
@@ -234,6 +246,14 @@ def loadRoundingErrorTraces(files):
           if relative_error > current_errors[1]:
             current_errors[1] = relative_error
           rounding_errors_per_file_line[file_name][line] = current_errors
+
+def loadErrorsPerLineTraces(files):
+  for f in files:
+      data = loadReport(f)
+      for i in range(len(data)):
+          line            = data[i]['line']
+          errors_list    = data[i]['values'] # list of errors for that line
+          relative_errors_per_line[line].extend(errors_list)
 
 def plot_exp_usage_bars(data_dict, group_size, filename):
     data_points = list(data_dict.keys())
@@ -466,6 +486,39 @@ def createRootReport():
       else:
         fd.write(list(rounding_errors_per_file_line.keys())[0]+'\n')
 
+    elif P_ERRORS_PER_LINE_PLOTS in templateLines[i]:
+      for line in relative_errors_per_line:
+        errors = relative_errors_per_line[line]
+        if len(errors) == 0:
+          continue
+        # Create plot for this line
+        plt.figure(figsize=(8, 4))
+        x_axis = list(range(len(errors)))
+        plt.plot(x_axis, errors, marker='.', linestyle='-', markersize=4)
+
+        # Force scientific notation on the y-axis
+        ax = plt.gca()
+        ax.ticklabel_format(style='sci', axis='y')
+
+        # switch to logarithmic y-axis (values must be > 0)
+        ax.set_yscale('log')
+
+        plt.title(f'Relative Rounding Errors for Line {line}', fontsize=12)
+        plt.xlabel('Index of Value', fontsize=12)
+        plt.ylabel('Relative Error Value', fontsize=12)
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.tight_layout()
+        plot_filename = REPORTS_DIR+f'/relative_errors_line_{line}.svg'
+        plt.savefig(plot_filename, format='svg')
+        plt.close()
+
+        # Write img tag to report
+        fd.write(f'<img src="relative_errors_line_{line}.svg"></img>\n')
+
+        print(f'Created plot for relative errors of line {line}: {plot_filename}')
+        fd.write('<div class="separation_class"></div>\n')
+        fd.write('<div class="separation_class"></div>\n')
+
     else:
         fd.write(templateLines[i])
 
@@ -669,14 +722,17 @@ if __name__ == '__main__':
 
   # Find files
   fileListExpUsage = getExponentUsageFilePaths(reports_path)
-  fileListEErrors = getErrorFilePaths(reports_path)
+  fileListErrors = getErrorFilePaths(reports_path)
+  fileListErrorsPerLine = getErrorsPerLineFilePaths(reports_path)
   print('Trace files found:', len(fileList))
   print('Exponent usage files found:', len(fileListExpUsage))
-  print('Error files found:', len(fileListEErrors))
+  print('Error files found:', len(fileListErrors))
+  print('Errors per line files found:', len(fileListErrorsPerLine))
 
   # Load events
   loadEvents(fileList)
   loadExponentUsageTraces(fileListExpUsage)
-  loadRoundingErrorTraces(fileListEErrors)
+  loadRoundingErrorTraces(fileListErrors)
+  loadErrorsPerLineTraces(fileListErrorsPerLine)
 
   createRootReport()
