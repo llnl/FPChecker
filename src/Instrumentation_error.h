@@ -16,6 +16,7 @@ namespace CPUAnalysis
   {
   private:
     Module *mod;
+    std::string module_filename;
 
     Function *fpc_init;
     Function *fpc_init_args;

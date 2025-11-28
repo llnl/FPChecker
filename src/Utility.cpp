@@ -174,7 +174,10 @@ namespace CUDAAnalysis
     if (DISubprogram *fsp = f->getSubprogram())
     {
       if (DIFile *file = fsp->getFile())
+      {
+        errs() << "\t........ (1) Using DISubprogram file for function " << f->getName() << "\n";
         return file->getDirectory().str() + "/" + file->getFilename().str();
+      }
     }
 
     // Fallback: scan for the first FP instruction but ignore debug locations that come from inlined functions.
@@ -199,7 +202,10 @@ namespace CUDAAnalysis
             if (funcSP && instSP == funcSP)
             {
               if (DIFile *file = instSP->getFile())
+              {
+                errs() << "\t........ (2) Using instruction's DISubprogram file for function " << f->getName() << "\n";
                 return file->getDirectory().str() + "/" + file->getFilename().str();
+              }
             }
             // Otherwise it's likely inlined from another function; skip.
             continue;
@@ -216,13 +222,41 @@ namespace CUDAAnalysis
           if (DIScope *diScope = dyn_cast<DIScope>(scopeNode))
           {
             if (DIFile *file = diScope->getFile())
+            {
+              errs() << "\t........ (3) Using generic DIScope file for function " << f->getName() << "\n";
               return file->getDirectory().str() + "/" + file->getFilename().str();
+            }
           }
         }
       }
     }
 
     return fileName;
+  }
+
+  std::string getFileNameFromModule(const Module *mod)
+  {
+
+    if (!mod)
+      return "UNKNOWN-MODULE";
+
+    if (auto *NMD = mod->getNamedMetadata("llvm.dbg.cu"))
+    {
+      for (unsigned i = 0; i < NMD->getNumOperands(); ++i)
+      {
+        if (MDNode *node = NMD->getOperand(i))
+        {
+          if (auto *cu = dyn_cast<DICompileUnit>(node))
+          {
+            if (DIFile *file = cu->getFile())
+              return file->getDirectory().str() + "/" + file->getFilename().str();
+          }
+        }
+      }
+    }
+
+    // Fallback to module identifier if no debug compile unit/file was found.
+    return mod->getModuleIdentifier();
   }
 
   std::string getFileNameFromInstruction(const Instruction *i)
@@ -272,11 +306,11 @@ namespace CUDAAnalysis
     return lineStr.str().c_str();
   }
 
-  std::string getFileNameFromModule(const Module *mod)
-  {
-    return mod->getModuleIdentifier();
-  }
-
+  /*   std::string getFileNameFromModule(const Module *mod)
+    {
+      return mod->getModuleIdentifier();
+    }
+   */
   bool mayModifyMemory(const Instruction *i)
   {
     return (isa<StoreInst>(i) || isa<AtomicCmpXchgInst>(i) ||

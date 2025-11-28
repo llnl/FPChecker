@@ -265,6 +265,22 @@ code {
     font-family: Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New", monospace;
     color: #1234DF;
 }
+.file_name_box {
+    line-height: 40px;
+    background-color: #FFFFFF;
+    -webkit-box-shadow: 3px 3px 3px #D5D5D5;
+    box-shadow: 3px 3px 3px #D5D5D5;
+    font-family: Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New", monospace;
+    color: #1234DF;
+    padding-left: 10px;
+    text-align: left;
+    /*overflow-x: scroll;
+	white-space: nowrap;*/
+    overflow: hidden;
+    white-space: nowrap; /* Forces text to a single line */
+    text-overflow: ellipsis; /* Adds the '...' */
+    font-size: 10pt;
+}
 .auspices {
     height: 35px;
     line-height: 40px;

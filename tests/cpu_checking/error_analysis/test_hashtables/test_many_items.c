@@ -23,13 +23,13 @@ int main(int argc, char **argv)
         snprintf(reg_name, sizeof(reg_name), "register_%d", i);
         double error = 0.01 * i;
         double rel_error = 0.001 * i;
-        _FPC_REGISTER_HT_UPDATE_(register_table, reg_name, error, rel_error, file_name, line);
+        _FPC_REGISTER_HT_UPDATE_(register_table, reg_name, "myfunction", error, rel_error, file_name, line);
 
         /*------------------------- Address i (STORE) --------------------*/
         uintptr_t addr = 0x1000 + (i * 0x10);
         double error_tmp = -0.0;
         double rel_error_tmp = -0.0;
-        _FPC_FIND_ERRORS_BY_REGISTER(register_table, reg_name, &error_tmp, &rel_error_tmp);
+        _FPC_FIND_ERRORS_BY_REGISTER(register_table, reg_name, "myfunction", &error_tmp, &rel_error_tmp);
         _FPC_ADDRESS_HT_UPDATE_(address_table, addr, error_tmp, rel_error_tmp, file_name, line);
     }
 

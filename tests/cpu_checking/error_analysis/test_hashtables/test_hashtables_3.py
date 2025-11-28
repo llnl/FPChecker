@@ -31,12 +31,12 @@ def test_1():
 
 # Expected output of the test:
 #
-#Address            Register Name                  Error Value   Relative Error    Clock File Name             Line
-#------------------ ------------------------- ---------------- ---------------- -------- -------------------- -------
-#0x0000000000001000 -                                    0.034           0.0024        4 test_json.c              5
-#-                  register_1                            0.01            0.001        1 test_json.c              3
-#-                  register_2                            0.02            0.002        2 test_json.c              4
-#-                  register_3                           0.034           0.0024        3 test_json.c              4
+#Address            Register Name             Function Name                  Error Value   Relative Error    Clock File Name             Line
+#------------------ ------------------------- ------------------------- ---------------- ---------------- -------- -------------------- -------
+#0x0000000000001000 -                         -                                    0.034           0.0024        4 test_json.c              5
+#-                  register_1                myfunction                            0.01            0.001        1 test_json.c              3
+#-                  register_2                myfunction                            0.02            0.002        2 test_json.c              4
+#-                  register_3                myfunction                           0.034           0.0024        3 test_json.c              4
 
     found_separator = False
     found_line_1 = False
@@ -50,14 +50,15 @@ def test_1():
 
         if found_separator:
             data = line.split()
-            if len(data) == 7:
+            if len(data) == 8:
                 address = data[0]
                 register_name = data[1]
-                error_value = float(data[2])
-                relative_error = float(data[3])
-                clock = int(data[4])
-                line_number = int(data[6])
-
+                function_name = data[2]
+                error_value = float(data[3])
+                relative_error = float(data[4])
+                clock = int(data[5])
+                line_number = int(data[7])
+                
                 if register_name == "register_1":
                     assert error_value == 0.01
                     assert relative_error == 0.001

@@ -25,7 +25,7 @@ def test_1():
         exit()
 
     # --- run code ---
-    cmd = ["./main 100"]
+    cmd = ["./main \"0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f\""]
     try:
         cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError as e:
@@ -44,7 +44,7 @@ def test_1():
     for i in range(len(data)):
       print('i', i, data[i])
       if data[i]['file'].endswith('vector_dot_product.cpp'):
-        if data[i]['line'] == 26:
+        if data[i]['line'] == 27:
             rounding_error = data[i]['error']
             break
 

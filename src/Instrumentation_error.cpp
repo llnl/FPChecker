@@ -49,8 +49,6 @@ void confFunction(Function *found, Function **saveHere,
 
 CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     : mod(M),
-      // fp32_check_function(nullptr), fp64_check_function(nullptr),
-      // fpc_init_htable(nullptr),
       fpc_init(nullptr), fpc_init_args(nullptr), fpc_print_locations(nullptr)
 {
 
@@ -111,29 +109,16 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
                    "_FPC_FP32_BRANCH_");
     }
 
-    // Set ODR linkage to all instrumentation functions
-    // SET_ODR_LIKAGE("_FPC_FP32_FIND_ERROR_")
-    // SET_ODR_LIKAGE("_FPC_FP32_STORE_ERROR_")
-    // SET_ODR_LIKAGE("_FPC_FP32_FIND_BY_REGISTER_")
-    // SET_ODR_LIKAGE("_FPC_FP32_FIND_BY_ADDRESS_")
     SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_CALCULATE_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP32_PHI_")
     SET_ODR_LIKAGE("_FPC_FP32_BRANCH_")
-    // SET_ODR_LIKAGE("_FPC_WRITE_AND_PRINT_TO_JSON_")
-    //  SET_ODR_LIKAGE("_FPC_LOG_LOCATION_")
-    //  SET_ODR_LIKAGE("_FPC_REMOVE_DUPLICATES_")
-    //  SET_ODR_LIKAGE("_FPC_USED_REG_")
-    //  SET_ODR_LIKAGE("_FPC_USED_ADDR_")
-    //  SET_ODR_LIKAGE("_FPC_DEBUG_PRINT_ALL_TRACKED_DATA_")
-    //  SET_ODR_LIKAGE("_FPC_IS_FINAL_CHILD_")
     SET_ODR_LIKAGE("_FPC_PRINT_LOCATIONS_")
     SET_ODR_LIKAGE("_FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED");
     SET_ODR_LIKAGE("FPC_APPEND_ERROR_LOG_ENTRY");
 
     // Hash table functions
-    // SET_ODR_LIKAGE("_FPC_GET_EXECUTION_ID_")
     SET_ODR_LIKAGE("_FPC_ADDRESS_HT_CREATE_")
     SET_ODR_LIKAGE("_FPC_REGISTER_HT_CREATE_")
     SET_ODR_LIKAGE("_FPC_HT_HASH_ADDRESS_")
@@ -187,51 +172,10 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   assert(war_count && "Invalid variable!");
   war_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  // GlobalVariable *error_log_count = nullptr;
-  // error_log_count = mod->getGlobalVariable("_FPC_WARNING_COUNT_", true);
-  // assert(error_log_count && "Invalid table!");
-  // error_log_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-
-  //-----
-  /*   GlobalVariable *prog_addresses = nullptr;
-    prog_addresses = mod->getGlobalVariable("_FPC_ADDRESSES_", true);
-    assert(prog_addresses && "Invalid table!");
-    prog_addresses->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-
-    GlobalVariable *prog_registers = nullptr;
-    prog_registers = mod->getGlobalVariable("_FPC_REGISTERS_", true);
-    assert(prog_registers && "Invalid table!");
-    prog_registers->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-
-    GlobalVariable *prog_errors = nullptr;
-    prog_errors = mod->getGlobalVariable("_FPC_ERRORS_", true);
-    assert(prog_errors && "Invalid table!");
-    prog_errors->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-
-    GlobalVariable *prog_entry_count = nullptr;
-    prog_entry_count = mod->getGlobalVariable("_FPC_ENTRY_COUNT_", true);
-    assert(prog_entry_count && "Invalid table!");
-    prog_entry_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-
-    GlobalVariable *prog_error_log_count = nullptr;
-    prog_error_log_count = mod->getGlobalVariable("ERROR_LOG", true);
-    assert(prog_error_log_count && "Invalid table!");
-    prog_error_log_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage); */
-
   GlobalVariable *last_bb = nullptr;
   last_bb = mod->getGlobalVariable("_FPC_LAST_BASIC_BLOCK_", true);
   assert(last_bb && "Invalid table!");
   last_bb->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-
-  /*   GlobalVariable *rel_errors = nullptr;
-    rel_errors = mod->getGlobalVariable("_FPC_RELATIVE_ERRORS_", true);
-    assert(rel_errors && "Invalid table!");
-    rel_errors->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage); */
-
-  /*   GlobalVariable *op_clock = nullptr;
-    op_clock = mod->getGlobalVariable("_FPC_OPERATION_CLOCK_", true);
-    assert(op_clock && "Invalid table!");
-    op_clock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage); */
 
   GlobalVariable *clock = nullptr;
   clock = mod->getGlobalVariable("_FPC_CLOCK_", true);
@@ -248,13 +192,8 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   assert(fpc_data_manager && "Invalid table!");
   fpc_data_manager->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
-  /*  GlobalVariable *fpc_lock = nullptr;
-   fpc_lock = mod->getGlobalVariable("fpc_lock", true);
-   if (fpc_lock)
-   {
-     assert(fpc_lock && "Invalid lock!");
-     fpc_lock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
-   } */
+  // Set module filename
+  module_filename = CUDAAnalysis::getFileNameFromModule(M);
 }
 
 // ********************************************************************
@@ -262,20 +201,23 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
 // ********************************************************************
 void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, long int *insrtrumented_instructions)
 {
-  if (CUDAAnalysis::CodeMatching::isUnwantedFunction(f))
-    return;
+  /*   if (CUDAAnalysis::CodeMatching::isUnwantedFunction(f))
+      return;
 
-  if (functionisAnnotated(f, "_FPC_CALCULATE_ERROR_"))
-  {
-    // Instrument for error calculation
-    CUDAAnalysis::Logging::info(
-        ("Annotated function for error analysis: " + f->getName()).str().c_str());
-  }
-  else
-  {
-    // Not annotated, skip
-    return;
-  }
+    if (functionisAnnotated(f, "_FPC_CALCULATE_ERROR_"))
+    {
+      // Instrument for error calculation
+      CUDAAnalysis::Logging::info(
+          ("Annotated function for error analysis: " + f->getName()).str().c_str());
+    }
+    else
+    {
+      return; // Not annotated, skip
+    } */
+
+  // check name of the function
+  // if (f->getName().str().find("main") != std::string::npos)
+  //  return; // skip main function
 
   // Check that instrumentation functions are initialized
   assert((fpc_fp32_calculate_function != nullptr) && "Function not initialized!");
@@ -302,7 +244,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
   // Instrument first instruction in the function
   int load_counter = 0;
   Instruction *first_inst = nullptr;
-  std::string fileName = CUDAAnalysis::getFileNameFromFunction(f);
+  // std::string fileName = CUDAAnalysis::getFileNameFromFunction(f);
   for (auto bb = f->begin(), end = f->end(); bb != end; ++bb)
   {
     for (auto i = bb->begin(), bend = bb->end(); i != bend; ++i)
@@ -335,10 +277,17 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
 
   // Push file name
   // errs() << "Setting file name: " << fileName << "\n";
-  Constant *c = builder.CreateGlobalStringPtr(fileName);
+  // if (!fName->hasInitializer())
+  //{
+  Constant *c = builder.CreateGlobalStringPtr(module_filename);
   fName->setInitializer(NULL);
   fName->setInitializer(c);
-  // -------------------------------------------------------------------------------
+  //}
+
+  // Constant *c = builder.CreateGlobalStringPtr(module_filename);
+  // fName->setInitializer(NULL);
+  // fName->setInitializer(c);
+  //  -------------------------------------------------------------------------------
 
   for (auto bb = f->begin(), end = f->end(); bb != end; ++bb)
   {
@@ -347,7 +296,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
       Instruction *inst = &(*i);
 
       // ----------------------------------------------------------------------------
-      // Instrumentation of LOAD and STORE instructions
+      // ============= Instrument for STORE instructions ========================
       if (llvm::isa<llvm::StoreInst>(inst))
       {
         // This is a store instruction
@@ -360,6 +309,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
 
           llvm::Value *storeAddr = llvm::cast<StoreInst>(inst)->getPointerOperand(); // ptr %2
           llvm::Value *storeAddrInt = builder.CreatePtrToInt(storeAddr, llvm::Type::getInt64Ty(inst->getContext()), "my_store_addr");
+
           /*------------------------------------------------------------------*
            *  Get the SSA Name being Stored.                                  *
            *------------------------------------------------------------------*/
@@ -367,22 +317,12 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
           llvm::raw_string_ostream rso(reg);
           storedValue->printAsOperand(rso, false);
           rso.flush();
-          // llvm::errs() << "[DEBUG] Creating string for register: '" << reg << "'\n";
-          // llvm::errs() << "[DEBUG] storedValue: " << *storedValue << "\n";
           llvm::Value *regStr = builder.CreateGlobalStringPtr(reg);
-
-          /*------------------------------------------------------------------*
-           *  Get the Line Number from debug information                      *
-           *------------------------------------------------------------------*/
-          // int lineNumber = 0;
-          // if (DILocation *loc = inst->getDebugLoc()) {
-          //   lineNumber = loc->getLine();
-          // }
-          // llvm::Value *lineNum = llvm::ConstantInt::get(llvm::Type::getInt32Ty(inst->getContext()), lineNumber);
 
           std::vector<Value *> args;
           // Push parameters
           args.push_back(regStr);
+          args.push_back(builder.CreateGlobalStringPtr(f->getName()));
           args.push_back(storeAddrInt);
 
           // Push location parameter (line number)
@@ -392,7 +332,6 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
           args.push_back(locId);
           args.push_back(loadInst_filename);
 
-          // llvm::errs() << "[#FPC-STORE] Store register: " << reg << ", address: " << *storeAddr << "\n";
           ArrayRef<Value *> args_ref(args);
           CallInst *callInst = nullptr;
           callInst = builder.CreateCall(fpc_fp32_store_inst, args_ref);
@@ -402,7 +341,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
           setFakeDebugLocation(inst, callInst, f);
         }
       }
-      // This is for load instrustions
+      // ============= Instrument for LOAD instructions =========================
       if (auto *loadInst = llvm::dyn_cast<llvm::LoadInst>(inst))
       {
         if (loadInst->getType()->isFloatTy() || loadInst->getType()->isDoubleTy())
@@ -429,10 +368,9 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
           rso.flush();
           llvm::Value *regStr = builder.CreateGlobalStringPtr(regName);
 
-          // llvm::errs() << "[FPC-LOAD] LOAD from address " << *addr << "into " << regName << "\n";
-
           std::vector<Value *> args;
-          args.push_back(regStr); // const char *load_reg
+          args.push_back(regStr);                                      // const char *load_reg
+          args.push_back(builder.CreateGlobalStringPtr(f->getName())); // const char *function_name
           args.push_back(addrInt);
           int lineNumber = CUDAAnalysis::getLineOfCode(inst);
           ConstantInt *locId =
@@ -440,7 +378,6 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
           args.push_back(locId);
           args.push_back(loadInst_filename);
 
-          // llvm::errs() << "[#FPC-LOAD] Load register: " << regName << ", address: " << *addr << "\n";
           ArrayRef<Value *> args_ref(args);
           CallInst *callInst = nullptr;
           callInst = builder.CreateCall(fpc_fp32_load_inst, args_ref);
@@ -452,16 +389,13 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
       }
       // ----------------------------------------------------------------------------
 
-      // Instrumentation of FP arithmetic operations
+      // ============= Instrument for FP arithmetic operations ===================
       if ((isFPOperationWithError(inst) ||
            (inst->getOpcode() == Instruction::FNeg) ||
            (inst->getOpcode() == Instruction::Select)) &&
           (inst->getOperand(0)->getType()->isFloatTy() ||
            inst->getOperand(1)->getType()->isFloatTy()))
       {
-
-        // errs() << "[#FPC-OP] Floating-point operation: " << *inst << "\n";
-
         DebugLoc loc = inst->getDebugLoc();
 
         // Create builder to add stuff after the instruction
@@ -471,18 +405,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
 
         // Push parameters
         std::vector<Value *> args;
-        // if (!isCmpEqual(inst))
-        //{
         args.push_back(inst);
-        //}
-        // else
-        //{
-        //  CompEqual case
-        //  if (isSingleFPOperation(inst))
-        //    args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0));
-        //  else
-        //    args.push_back(ConstantFP::get(builder.getDoubleTy(), 0.0));
-        //}
 
         // Every arithmetic instruction has at least one operand (except Select, which has a boolean)
         if (inst->getOpcode() == Instruction::Select)
@@ -623,6 +546,8 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
         args.push_back(builder.CreateGlobalStringPtr(op2_name));
         args.push_back(builder.CreateGlobalStringPtr(fma_name));
 
+        args.push_back(builder.CreateGlobalStringPtr(f->getName()));
+
         ArrayRef<Value *> args_ref(args);
 
         CallInst *callInst = nullptr;
@@ -633,8 +558,6 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
         }
         else if (inst->getType()->isDoubleTy())
         {
-          // CUDAAnalysis::Logging::info("Trying to call fp64 calculate function");
-          //  callInst = builder.CreateCall(fpc_fp64_calculate_function, args_ref);
           return; // Do not instrument fp64 for now
         }
 
@@ -688,9 +611,6 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
             combinedStr += incomingValueName + "|" + ostream.str() + ";";
           }
 
-          // llvm::errs() << "PHI Instruction: " << *phiInst << "\n";
-          // llvm::errs() << "  ---> Combined String: " << combinedStr << "\n";
-
           // Create builder to add stuff after the last phi instruction
           BasicBlock::iterator insertPt(phiInst);
           ++insertPt;
@@ -702,6 +622,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
 
           std::vector<Value *> args;
           args.push_back(builder.CreateGlobalStringPtr(combinedStr));
+          args.push_back(builder.CreateGlobalStringPtr(f->getName()));
           ArrayRef<Value *> args_ref(args);
           CallInst *callInst = builder.CreateCall(fpc_fp32_phi_function, args_ref);
           (*insrtrumented_instructions)++;
@@ -957,7 +878,7 @@ bool CPUFPInstrumentation_error::functionisAnnotated(const Function *f, const ch
   return false; // No annotation found for this function
 }
 
-// Check if the function 'f' calls other functions with floating-point arguments or return types
+// Check if the function 'f' calls other functions that return floating-point types
 // Except: fmuladd intrinsic, or FMA functions
 bool CPUFPInstrumentation_error::functionCallsFunctionWithFloatingPointValues(const Function *f)
 {
@@ -988,17 +909,6 @@ bool CPUFPInstrumentation_error::functionCallsFunctionWithFloatingPointValues(co
           // errs() << "\n----> Function " << f->getName() << " calls function with floating-point return type: " << *callBase << "\n";
           return true;
         }
-
-        // Check argument types using range-based for loop (skip FMA intrinsics already above)
-        /*         for (const Value *arg : callBase->args())
-                {
-                  Type *argType = arg->getType();
-                  if (argType && (argType->isFloatTy() || argType->isDoubleTy() || argType->isHalfTy() || argType->isFP128Ty()))
-                  {
-                    errs() << "\n----> Function " << f->getName() << " calls function with floating-point argument type: " << *callBase << "\n";
-                    return true;
-                  }
-                } */
       }
     }
   }

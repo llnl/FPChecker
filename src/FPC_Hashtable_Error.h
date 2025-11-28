@@ -38,6 +38,7 @@ typedef struct _FPC_REGISTER_S_
   uint64_t clock; // clock incremented when item is updated/created
   char *file_name;
   int line;
+  char *function_name;
   struct _FPC_REGISTER_S_ *next;
 } _FPC_REGISTER_T_;
 
@@ -62,30 +63,6 @@ typedef struct _FPC_REGISTER_HTABLE_S
   uint64_t n; // number of items
   struct _FPC_REGISTER_S_ **table;
 } _FPC_REGISTER_HTABLE_T;
-
-/*----------------------------------------------------------------------------*/
-/* Generating  file identifier: hostName+processID                            */
-/*----------------------------------------------------------------------------*/
-/* void _FPC_GET_EXECUTION_ID_(char *executionId)
-{
-  // size_t len=256;
-  //  According to Linux manual:
-  //  Each element of the hostname must be from 1 to 63 characters long
-  //  and the entire hostname, including the dots, can be at most 253
-  //  characters long.
-  executionId[0] = '\0';
-  if (gethostname(executionId, 256) != 0)
-    strcpy(executionId, "node-unknown");
-
-  // Maximum size for PID: we assume 2,000,000,000
-  int pid = (int)getpid();
-  char pidStr[11];
-  // pidStr[0] = '\0';
-  // sprintf(pidStr, "%d", pid);
-  snprintf(pidStr, sizeof(pidStr), "%d", pid);
-  strcat(executionId, "_");
-  strcat(executionId, pidStr);
-} */
 
 /*----------------------------------------------------------------------------*/
 /* Initialization                                                             */
@@ -144,7 +121,12 @@ size_t _FPC_HT_HASH_REGISTER_(_FPC_REGISTER_HTABLE_T *hashtable, _FPC_REGISTER_T
     return 0;
 
   unsigned long hash = 5381;
-  const unsigned char *p = (const unsigned char *)val->register_name;
+
+  // Join the register with the function name: register_name:function_name
+  const char *combined_name = (char *)malloc(strlen(val->register_name) + strlen(val->function_name) + 2);
+  size_t combined_len = strlen(val->register_name) + strlen(val->function_name) + 2;
+  snprintf((char *)combined_name, combined_len, "%s:%s", val->register_name, val->function_name);
+  const unsigned char *p = (const unsigned char *)combined_name;
   int c;
 
   while ((c = *p++))
@@ -200,6 +182,9 @@ _FPC_REGISTER_T_ *_FPC_REGISTER_HT_NEWPAIR_(_FPC_REGISTER_T_ *val)
   newpair->file_name[0] = '\0';
   strcpy(newpair->file_name, val->file_name);
   newpair->line = val->line;
+  newpair->function_name = (char *)malloc((strlen(val->function_name) + 1) * sizeof(char));
+  newpair->function_name[0] = '\0';
+  strcpy(newpair->function_name, val->function_name);
   newpair->next = NULL;
 
   return newpair;
@@ -216,74 +201,128 @@ inline int _FPC_ADDRESS_EQUAL_(_FPC_ADDRESS_T_ *x, _FPC_ADDRESS_T_ *y)
 
 inline int _FPC_REGISTER_EQUAL_(_FPC_REGISTER_T_ *x, _FPC_REGISTER_T_ *y)
 {
-  return strcmp(x->register_name, y->register_name) == 0;
+  // The register and function names must match
+  return (strcmp(x->register_name, y->register_name) == 0 && strcmp(x->function_name, y->function_name) == 0);
 }
 
 /*----------------------------------------------------------------------------*/
 /* Insert a key-value pair into a hash table                                  */
 /*----------------------------------------------------------------------------*/
 
-#define _FPC_HT_SET_MACRO_(prefix, HTABLE_T, ITEM_T, HASHFN, EQUALFN, NEWPAIRFN)                          \
-  void prefix##_HT_SET_(HTABLE_T *hashtable, ITEM_T *newVal)                                              \
-  {                                                                                                       \
-    if (hashtable == NULL)                                                                                \
-      return;                                                                                             \
-                                                                                                          \
-    size_t bin = 0;                                                                                       \
-    ITEM_T *newpair = NULL;                                                                               \
-    ITEM_T *next = NULL;                                                                                  \
-    ITEM_T *last = NULL;                                                                                  \
-                                                                                                          \
-    bin = HASHFN(hashtable, newVal);                                                                      \
-    next = hashtable->table[bin];                                                                         \
-                                                                                                          \
-    while (next != NULL && !EQUALFN(newVal, next))                                                        \
-    {                                                                                                     \
-      last = next;                                                                                        \
-      next = next->next;                                                                                  \
-    }                                                                                                     \
-                                                                                                          \
-    /* There's already a pair */                                                                          \
-    if (next != NULL && EQUALFN(newVal, next))                                                            \
-    {                                                                                                     \
-      next->error = newVal->error;                                                                        \
-      next->relative_error = newVal->relative_error;                                                      \
-      next->clock = newVal->clock;                                                                        \
-      next->file_name = (char *)realloc(next->file_name, (strlen(newVal->file_name) + 1) * sizeof(char)); \
-      next->file_name[0] = '\0';                                                                          \
-      strcpy(next->file_name, newVal->file_name);                                                         \
-      next->line = newVal->line;                                                                          \
-    }                                                                                                     \
-    else                                                                                                  \
-    { /* Nope, couldn't find it */                                                                        \
-      newpair = NEWPAIRFN(newVal);                                                                        \
-      (hashtable->n)++;                                                                                   \
-                                                                                                          \
-      if (next == hashtable->table[bin])                                                                  \
-      {                                                                                                   \
-        /* We're at the start of the linked list in this bin */                                           \
-        newpair->next = next;                                                                             \
-        hashtable->table[bin] = newpair;                                                                  \
-      }                                                                                                   \
-      else if (next == NULL)                                                                              \
-      {                                                                                                   \
-        /* We're at the end of the linked list in this bin */                                             \
-        last->next = newpair;                                                                             \
-      }                                                                                                   \
-      else                                                                                                \
-      {                                                                                                   \
-        /* We're in the middle of the list. */                                                            \
-        newpair->next = next;                                                                             \
-        last->next = newpair;                                                                             \
-      }                                                                                                   \
-    }                                                                                                     \
+/* Set for address items (no function_name field) */
+void _FPC_ADDRESS_HT_SET_(_FPC_ADDRESS_HTABLE_T *hashtable, _FPC_ADDRESS_T_ *newVal)
+{
+  if (hashtable == NULL)
+    return;
+
+  size_t bin = 0;
+  _FPC_ADDRESS_T_ *newpair = NULL;
+  _FPC_ADDRESS_T_ *next = NULL;
+  _FPC_ADDRESS_T_ *last = NULL;
+
+  bin = _FPC_HT_HASH_ADDRESS_(hashtable, newVal);
+  next = hashtable->table[bin];
+
+  while (next != NULL && !_FPC_ADDRESS_EQUAL_(newVal, next))
+  {
+    last = next;
+    next = next->next;
   }
 
-_FPC_HT_SET_MACRO_(_FPC_ADDRESS, _FPC_ADDRESS_HTABLE_T, _FPC_ADDRESS_T_,
-                   _FPC_HT_HASH_ADDRESS_, _FPC_ADDRESS_EQUAL_, _FPC_ADDRESS_HT_NEWPAIR_)
+  /* There's already a pair */
+  if (next != NULL && _FPC_ADDRESS_EQUAL_(newVal, next))
+  {
+    next->error = newVal->error;
+    next->relative_error = newVal->relative_error;
+    next->clock = newVal->clock;
+    next->file_name = (char *)realloc(next->file_name, (strlen(newVal->file_name) + 1) * sizeof(char));
+    next->file_name[0] = '\0';
+    strcpy(next->file_name, newVal->file_name);
+    next->line = newVal->line;
+  }
+  else
+  { /* Nope, couldn't find it */
+    newpair = _FPC_ADDRESS_HT_NEWPAIR_(newVal);
+    (hashtable->n)++;
 
-_FPC_HT_SET_MACRO_(_FPC_REGISTER, _FPC_REGISTER_HTABLE_T, _FPC_REGISTER_T_,
-                   _FPC_HT_HASH_REGISTER_, _FPC_REGISTER_EQUAL_, _FPC_REGISTER_HT_NEWPAIR_)
+    if (next == hashtable->table[bin])
+    {
+      /* We're at the start of the linked list in this bin */
+      newpair->next = next;
+      hashtable->table[bin] = newpair;
+    }
+    else if (next == NULL)
+    {
+      /* We're at the end of the linked list in this bin */
+      last->next = newpair;
+    }
+    else
+    {
+      /* We're in the middle of the list. */
+      newpair->next = next;
+      last->next = newpair;
+    }
+  }
+}
+
+/* Set for register items (has function_name field) */
+void _FPC_REGISTER_HT_SET_(_FPC_REGISTER_HTABLE_T *hashtable, _FPC_REGISTER_T_ *newVal)
+{
+  if (hashtable == NULL)
+    return;
+
+  size_t bin = 0;
+  _FPC_REGISTER_T_ *newpair = NULL;
+  _FPC_REGISTER_T_ *next = NULL;
+  _FPC_REGISTER_T_ *last = NULL;
+
+  bin = _FPC_HT_HASH_REGISTER_(hashtable, newVal);
+  next = hashtable->table[bin];
+
+  while (next != NULL && !_FPC_REGISTER_EQUAL_(newVal, next))
+  {
+    last = next;
+    next = next->next;
+  }
+
+  /* There's already a pair */
+  if (next != NULL && _FPC_REGISTER_EQUAL_(newVal, next))
+  {
+    next->error = newVal->error;
+    next->relative_error = newVal->relative_error;
+    next->clock = newVal->clock;
+    next->file_name = (char *)realloc(next->file_name, (strlen(newVal->file_name) + 1) * sizeof(char));
+    next->file_name[0] = '\0';
+    strcpy(next->file_name, newVal->file_name);
+    next->line = newVal->line;
+    next->function_name = (char *)realloc(next->function_name, (strlen(newVal->function_name) + 1) * sizeof(char));
+    next->function_name[0] = '\0';
+    strcpy(next->function_name, newVal->function_name);
+  }
+  else
+  { /* Nope, couldn't find it */
+    newpair = _FPC_REGISTER_HT_NEWPAIR_(newVal);
+    (hashtable->n)++;
+
+    if (next == hashtable->table[bin])
+    {
+      /* We're at the start of the linked list in this bin */
+      newpair->next = next;
+      hashtable->table[bin] = newpair;
+    }
+    else if (next == NULL)
+    {
+      /* We're at the end of the linked list in this bin */
+      last->next = newpair;
+    }
+    else
+    {
+      /* We're in the middle of the list. */
+      newpair->next = next;
+      last->next = newpair;
+    }
+  }
+}
 
 /*----------------------------------------------------------------------------*/
 /* Table updates                                                              */
@@ -314,6 +353,7 @@ void _FPC_ADDRESS_HT_UPDATE_(
 void _FPC_REGISTER_HT_UPDATE_(
     _FPC_REGISTER_HTABLE_T *hashtable,
     const char *register_name,
+    const char *function_name,
     double error,
     double relative_error,
     const char *file_name,
@@ -328,6 +368,9 @@ void _FPC_REGISTER_HT_UPDATE_(
   temp.file_name[0] = '\0';
   strcpy(temp.file_name, file_name);
   temp.line = line;
+  temp.function_name = (char *)malloc((strlen(function_name) + 1) * sizeof(char));
+  temp.function_name[0] = '\0';
+  strcpy(temp.function_name, function_name);
 
   _FPC_REGISTER_HT_SET_(hashtable, &temp);
 }
@@ -375,6 +418,7 @@ int _FPC_FIND_ERRORS_BY_ADDRESS(_FPC_ADDRESS_HTABLE_T *hashtable,
 // Return 1 if found, 0 otherwise
 int _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
                                  const char *register_name,
+                                 const char *function_name,
                                  double *error,
                                  double *relative_error)
 {
@@ -383,6 +427,7 @@ int _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
   _FPC_REGISTER_T_ *next = NULL;
 
   temp.register_name = (char *)register_name;
+  temp.function_name = (char *)function_name;
 
   bin = _FPC_HT_HASH_REGISTER_(hashtable, &temp);
   next = hashtable->table[bin];
@@ -649,20 +694,10 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
   printf("#FPCHECKER: Successfully wrote %d error entries.\n", entries_written);
 }
 
-/* void _FPC_PRINT_LOCATIONS_()
-{
-#ifndef FPC_QUIET
-  printf("#FPCHECKER: Finalizing and writing traces...\n");
-#endif
-  //_FPC_PRINT_HASH_TABLE_(_FPC_HTABLE_);
-  //_FPC_REMOVE_DUPLICATES_();
-  //_FPC_WRITE_AND_PRINT_TO_JSON_(); // *** Error Calculation *** //
-} */
-
 // Function example output
 //  ============== Print Tables  ==============
-// printf("Address    |  Register Name          |  Error Value         |  Relative Error     | Clock   | File Name          | Line  \n");
-// printf("-----------|-------------------------|----------------------|---------------------|---------|--------------------|-------\n");
+// printf("Address    |  Register Name          |  Function Name          |  Error Value         |  Relative Error     | Clock   | File Name          | Line  \n");
+// printf("-----------|-------------------------|-------------------------|---------------------|---------|--------------------|-------\n");
 // ...
 // ============================================
 void _FPC_HT_PRINT_TABLES_(
@@ -672,6 +707,7 @@ void _FPC_HT_PRINT_TABLES_(
   /* Column widths:
    Address:        18 chars (0x + 16 hex digits)
    Register Name:  25 chars (left-justified, truncated if longer)
+  Function Name:  25 chars (left-justified, truncated if longer)
    Error Value:    16 chars (right-justified)
    Relative Error: 16 chars (right-justified)
    Clock:           8 chars (right-justified)
@@ -680,10 +716,10 @@ void _FPC_HT_PRINT_TABLES_(
   */
 
   /* Header */
-  printf("%-18s %-25s %16s %16s %8s %-20s %5s\n",
-         "Address", "Register Name", "Error Value", "Relative Error", "Clock", "File Name", "Line");
-  printf("%-18s %-25s %16s %16s %8s %-20s %5s\n",
-         "------------------", "-------------------------", "----------------", "----------------", "--------", "--------------------", "-------");
+  printf("%-18s %-25s %-25s %16s %16s %8s %-20s %5s\n",
+         "Address", "Register Name", "Function Name", "Error Value", "Relative Error", "Clock", "File Name", "Line");
+  printf("%-18s %-25s %-25s %16s %16s %8s %-20s %5s\n",
+         "------------------", "-------------------------", "-------------------------", "----------------", "----------------", "--------", "--------------------", "-------");
 
   /* Print address table entries */
   if (address_table != NULL)
@@ -693,10 +729,11 @@ void _FPC_HT_PRINT_TABLES_(
       _FPC_ADDRESS_T_ *cur = address_table->table[i];
       while (cur != NULL)
       {
-        /* Address in hex, register column empty ("-") */
-        printf("0x%016llx %-25.25s %16.6g %16.6g %8llu %-20.20s %5d\n",
+        // Address in hex, register column empty ("-")
+        printf("0x%016llx %-25.25s %-25.25s %16.6g %16.6g %8llu %-20.20s %5d\n",
                (unsigned long long)cur->address_value,
-               "-", /* register name placeholder */
+               "-", // register name placeholder
+               "-", // function name placeholder
                cur->error,
                cur->relative_error,
                (unsigned long long)cur->clock,
@@ -716,14 +753,16 @@ void _FPC_HT_PRINT_TABLES_(
       while (cur != NULL)
       {
         /* No address for register entries */
-        printf("%-18s %-25.25s %16.6g %16.6g %8llu %-20.20s %5d\n",
+        printf("%-18s %-25.25s %-25.25s %16.6g %16.6g %8llu %-20.20s %5d\n",
                "-", /* address placeholder */
                (cur->register_name ? cur->register_name : "(null)"),
+               (cur->function_name ? cur->function_name : "(null)"),
                cur->error,
                cur->relative_error,
                (unsigned long long)cur->clock,
                (cur->file_name ? cur->file_name : "(null)"),
                cur->line);
+
         cur = cur->next;
       }
     }

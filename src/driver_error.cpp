@@ -40,6 +40,9 @@ namespace CPUAnalysis
     CUDAAnalysis::Logging::info(out.c_str());
 #endif
 
+    auto fileName = CUDAAnalysis::getFileNameFromModule(m);
+    // errs() << "\n++++++ Module file name: " << fileName << "\n";
+
     for (auto f = M.begin(), e = M.end(); f != e; ++f)
     {
       // Discard function declarations
