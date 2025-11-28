@@ -441,7 +441,10 @@ void _FPC_FP32_CALCULATE_ERROR_(
   double err_result = r_high - r_low;
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
-  printf("Error Result: %.17e\n", err_result);
+  printf("Result (float):         %.7e\n", x);
+  printf("Result (float->double): %.17e\n", r_low);
+  printf("Result (double):        %.17e\n", r_high);
+  printf("Error Result:           %.17e\n", err_result);
 #endif
 
   // Calculate relative error
