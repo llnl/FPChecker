@@ -108,6 +108,12 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
                    GlobalValue::LinkageTypes::LinkOnceODRLinkage,
                    "_FPC_FP32_BRANCH_");
     }
+    if (f->getName().str().find("_FPC_FP32_MEMCPY_INST_") != std::string::npos)
+    {
+      confFunction(f, &fp32_memcpy_function,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP32_MEMCPY_INST_");
+    }
 
     SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
@@ -115,8 +121,9 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     SET_ODR_LIKAGE("_FPC_FP32_PHI_")
     SET_ODR_LIKAGE("_FPC_FP32_BRANCH_")
     SET_ODR_LIKAGE("_FPC_PRINT_LOCATIONS_")
-    SET_ODR_LIKAGE("_FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED");
-    SET_ODR_LIKAGE("FPC_APPEND_ERROR_LOG_ENTRY");
+    SET_ODR_LIKAGE("_FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED")
+    SET_ODR_LIKAGE("FPC_APPEND_ERROR_LOG_ENTRY")
+    SET_ODR_LIKAGE("_FPC_FP32_MEMCPY_INST_")
 
     // Hash table functions
     SET_ODR_LIKAGE("_FPC_ADDRESS_HT_CREATE_")
@@ -131,6 +138,7 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     SET_ODR_LIKAGE("_FPC_REGISTER_HT_SET_")
     SET_ODR_LIKAGE("_FPC_ADDRESS_HT_UPDATE_")
     SET_ODR_LIKAGE("_FPC_REGISTER_HT_UPDATE_")
+    SET_ODR_LIKAGE("_FPC_REGISTER_RANGE_UPDATE_")
     SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_ADDRESS")
     SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_REGISTER")
     SET_ODR_LIKAGE("_FPC_HT_PRINT_TABLES_")
@@ -217,15 +225,13 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
       return; // Not annotated, skip
     } */
 
-  // check name of the function
-  // if (f->getName().str().find("main") != std::string::npos)
-  //  return; // skip main function
-
   // Check that instrumentation functions are initialized
   assert((fpc_fp32_calculate_function != nullptr) && "Function not initialized!");
   assert((fpc_fp32_load_inst != nullptr) && "Function not initialized!");
   assert((fpc_fp32_store_inst != nullptr) && "Function not initialized!");
   assert((fpc_fp32_phi_function != nullptr) && "Function not initialized!");
+  assert((fpc_fp32_branch_function != nullptr) && "Function not initialized!");
+  assert((fp32_memcpy_function != nullptr) && "Function not initialized!");
 
   // Warning message
   // Check if the function calls other functions with floating-point values
@@ -242,7 +248,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
   CUDAAnalysis::Logging::info("Entering main loop in instrumentFunctionErrorAnalysis...");
 #endif
 
-  // ----- Add Load instruction ---------------------------------------------------
+  // ----- Add Load instruction for file name -----------------------------------------
   // Instrument first instruction in the function
   int load_counter = 0;
   Instruction *first_inst = nullptr;
@@ -278,17 +284,9 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
       builder.CreateAlignedLoad(gvType, fName, MaybeAlign(), loadName);
 
   // Push file name
-  // errs() << "Setting file name: " << fileName << "\n";
-  // if (!fName->hasInitializer())
-  //{
   Constant *c = builder.CreateGlobalStringPtr(module_filename);
   fName->setInitializer(NULL);
   fName->setInitializer(c);
-  //}
-
-  // Constant *c = builder.CreateGlobalStringPtr(module_filename);
-  // fName->setInitializer(NULL);
-  // fName->setInitializer(c);
   //  -------------------------------------------------------------------------------
 
   for (auto bb = f->begin(), end = f->end(); bb != end; ++bb)
@@ -297,7 +295,6 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
     {
       Instruction *inst = &(*i);
 
-      // ----------------------------------------------------------------------------
       // ============= Instrument for STORE instructions ========================
       if (llvm::isa<llvm::StoreInst>(inst))
       {
@@ -389,7 +386,87 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
           setFakeDebugLocation(inst, callInst, f);
         }
       }
-      // ----------------------------------------------------------------------------
+
+      // ============= Instrument memcpy and memmove ========================
+      /*
+      Instrumentation function signature:
+      void _FPC_FP32_MEMCPY_INST_(uintptr_t address_dst, uintptr_t address_src,
+                            long int size, int size_type, int ins_type, int loc, char *file_name)
+      */
+      if (auto *II = llvm::dyn_cast<llvm::IntrinsicInst>(inst))
+      {
+        auto id = II->getIntrinsicID();
+        if (id == llvm::Intrinsic::memcpy ||
+            id == llvm::Intrinsic::memcpy_inline ||
+            id == llvm::Intrinsic::memmove)
+        {
+          errs() << "Instrumenting memcpy/memmove in function " << f->getName() << "\n";
+          errs() << "  Instruction: ";
+          inst->print(errs());
+          errs() << "\n";
+
+          // Insert instrumentation right after the memcpy/memmove intrinsic.
+          BasicBlock::iterator nextInst(inst);
+          ++nextInst;
+          IRBuilder<> builder(&(*nextInst));
+
+          //   call void @llvm.memcpy.p0.p0.i64(ptr align 4 %93, ptr align 4 %50, i64 %71, i1 false), !dbg !6762
+
+          // destination address
+          llvm::Value *addr_dst = II->getArgOperand(0);
+          llvm::Value *addr_dstInt = builder.CreatePtrToInt(
+              addr_dst, llvm::Type::getInt64Ty(inst->getContext()));
+          // source address
+          llvm::Value *addr_src = II->getArgOperand(1);
+          llvm::Value *addr_srcInt = builder.CreatePtrToInt(
+              addr_src, llvm::Type::getInt64Ty(inst->getContext()));
+          // size
+          llvm::Value *size = II->getArgOperand(2);
+          llvm::Value *sizeInt = builder.CreatePtrToInt(
+              size, llvm::Type::getInt64Ty(inst->getContext()));
+
+          std::vector<Value *> args;
+          args.push_back(addr_dstInt); // uintptr_t dest_address
+          args.push_back(addr_srcInt); // uintptr_t src_address
+          args.push_back(sizeInt);     // size_t size
+
+          // Size type of the second parameter of the memcpy/memmove:
+          // void @llvm.memcpy.inline.p0.p0.i32(ptr <dest>, ptr <src>, i32 <len>, i1 <isvolatile>)
+          // type: 0 for i32, 1 for i64
+          int size_type = 0;
+          if (size->getType()->isIntegerTy(64))
+            size_type = 1;
+          ConstantInt *sizeTypeId =
+              ConstantInt::get(mod->getContext(), APInt(32, size_type, true));
+          args.push_back(sizeTypeId);
+
+          // Pass type 0 if the instruction is :
+          // ‘llvm.memcpy’ Intrinsic, or ‘llvm.memcpy.inline’ Intrinsic
+          // Pass type 1 if the instruction is :
+          // ‘llvm.memmove’ Intrinsic
+          int ins_type = 0;
+          if (id == llvm::Intrinsic::memmove)
+            ins_type = 1;
+          ConstantInt *insTypeId =
+              ConstantInt::get(mod->getContext(), APInt(32, ins_type, true));
+          args.push_back(insTypeId);
+
+          // Push location parameter (line number)
+          int lineNumber = CUDAAnalysis::getLineOfCode(inst);
+          ConstantInt *locId =
+              ConstantInt::get(mod->getContext(), APInt(32, lineNumber, true));
+          args.push_back(locId);
+          args.push_back(loadInst_filename);
+
+          ArrayRef<Value *> args_ref(args);
+          CallInst *callInst = nullptr;
+          callInst = builder.CreateCall(fp32_memcpy_function, args_ref);
+          (*insrtrumented_instructions)++;
+
+          assert(callInst && "Invalid call instruction!");
+          setFakeDebugLocation(inst, callInst, f);
+        }
+      }
 
       // ============= Instrument for FP arithmetic operations ===================
       if ((isFPOperationWithError(inst) ||

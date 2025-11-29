@@ -255,7 +255,7 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, const char *function_name, uintp
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   printf("_FPC_FP32_LOAD_INST_:\n");
-  printf("reg=%s, address=%lu\n", load_reg, address);
+  printf("reg=%s, address=0x%016llx, func=%s\n", load_reg, (unsigned long long)address, function_name);
 #endif
 
   double error = 0.0;
@@ -359,6 +359,45 @@ void _FPC_FP32_PHI_(const char *phi_values, const char *function_name)
 
 #ifdef FPDC_DEBUG_CALLSTACK
   printf(".........Exiting _FPC_FP32_PHI_..........\n");
+#endif
+}
+
+// inst_type: types of memcpy/memmove:
+//    type = 0 -> llvm.memcpy
+//    type = 1 -> llvm.memmove
+//
+// size_type:
+//    type = 0 -> i32 (32-bit integer)
+//    type = 1 -> i64 (64-bit integer)
+void _FPC_FP32_MEMCPY_INST_(uintptr_t address_dst, uintptr_t address_src,
+                            long int size, int size_type, int ins_type,
+                            int loc, char *file_name)
+{
+  if (ins_type == 0)
+  {
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
+    printf("_FPC_FP32_MEMCPY_INST_ (memcpy): src=0x%016llx, dst=0x%016llx, size=%zu, size_type=%d\n",
+           (unsigned long long)address_src, (unsigned long long)address_dst, size, size_type);
+#endif
+  }
+  else if (ins_type == 1)
+  {
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
+    printf("_FPC_FP32_MEMCPY_INST_ (memmove): src=0x%016llx, dst=0x%016llx, size=%zu, size_type=%d\n",
+           (unsigned long long)address_src, (unsigned long long)address_dst, size, size_type);
+#endif
+  }
+
+  _FPC_ADDRESS_RANGE_UPDATE_(
+      _FPC_ADDRESS_HT_,
+      address_dst,
+      address_src,
+      size,
+      file_name,
+      loc);
+
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
+  _FPC_HT_PRINT_TABLES_(_FPC_ADDRESS_HT_, _FPC_REGISTER_HT_);
 #endif
 }
 

@@ -453,6 +453,72 @@ int _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
 }
 
 /*----------------------------------------------------------------------------*/
+/* Memcpy                                                                     */
+/* (API used at runtime)                                                      */
+/*----------------------------------------------------------------------------*/
+
+// Updates ranges of addresses coing from a memcpy/memmove instruction
+void _FPC_ADDRESS_RANGE_UPDATE_(
+    _FPC_ADDRESS_HTABLE_T *hashtable,
+    uintptr_t address_dst,
+    uintptr_t address_src,
+    size_t size,
+    const char *file_name,
+    int line)
+{
+  // Create temp buffers to copy and hold the errors
+  double *error_buffer = (double *)malloc(size * sizeof(double));
+  double *relative_error_buffer = (double *)malloc(size * sizeof(double));
+
+  for (size_t offset = 0; offset < size; offset++)
+  {
+    uintptr_t current_address = address_src + offset;
+    double tmp_error = 0.0;
+    double tmp_relative_error = 0.0;
+
+    int found = _FPC_FIND_ERRORS_BY_ADDRESS(hashtable, current_address, &tmp_error, &tmp_relative_error);
+    if (!found)
+    {
+      printf("#FPCHECKER: Trying to update address %lu in memcpy/memmove, but we don't have its error!!\n",
+             current_address);
+    }
+    error_buffer[offset] = tmp_error;
+    relative_error_buffer[offset] = tmp_relative_error;
+  }
+
+  // Update the table with the copied errors
+  for (size_t offset = 0; offset < size; offset++)
+  {
+    uintptr_t dst_address = address_dst + offset;
+    _FPC_ADDRESS_HT_UPDATE_(hashtable, dst_address, error_buffer[offset], relative_error_buffer[offset], file_name, line);
+  }
+
+  /*   for (size_t offset = 0; offset < size; offset++)
+    {
+      uintptr_t current_address = address_src + offset;
+      double error = 0.0;
+      double relative_error = 0.0;
+
+      // Find if this address already has an error
+      int found = _FPC_FIND_ERRORS_BY_ADDRESS(hashtable, current_address, &error, &relative_error);
+      if (!found)
+      {
+        printf("#FPCHECKER: Trying to update address %lu in memcpy/memmove, but we don't have its error!!\n",
+               current_address);
+      }
+
+      // Update table based on the address
+      // If address exists, update it
+      // If address does not exist, insert new entry
+      uintptr_t dst_address = address_dst + offset;
+      _FPC_ADDRESS_HT_UPDATE_(hashtable, dst_address, error, relative_error, file_name, line);
+    } */
+
+  free(error_buffer);
+  free(relative_error_buffer);
+}
+
+/*----------------------------------------------------------------------------*/
 /* Print hash table                                                           */
 /*----------------------------------------------------------------------------*/
 

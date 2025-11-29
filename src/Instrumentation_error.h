@@ -26,6 +26,7 @@ namespace CPUAnalysis
     Function *fpc_fp32_calculate_function;
     Function *fpc_fp32_phi_function;
     Function *fpc_fp32_branch_function;
+    Function *fp32_memcpy_function;
 
     void setFakeDebugLocation(Instruction *old_inst, Instruction *new_inst, Function *f);
     Instruction *firstInstrution();
