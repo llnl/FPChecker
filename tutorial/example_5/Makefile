@@ -5,7 +5,8 @@ CXXFLAGS = -Wno-format -std=c++11 -g -O2 -fno-vectorize -fno-slp-vectorize
 # Source files
 SRC = cg.cpp cg_mixed.cpp cg_FP64.cpp
 OBJ = $(SRC:.cpp=.o)
-EXECUTABLES = cg cg_mixed cg_FP64
+#EXECUTABLES = cg cg_mixed cg_FP64
+EXECUTABLES = cg
 
 # Default target
 all: $(EXECUTABLES)

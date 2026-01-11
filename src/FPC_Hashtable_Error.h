@@ -479,8 +479,8 @@ void _FPC_ADDRESS_RANGE_UPDATE_(
     int found = _FPC_FIND_ERRORS_BY_ADDRESS(hashtable, current_address, &tmp_error, &tmp_relative_error);
     if (!found)
     {
-      printf("#FPCHECKER: Trying to update address %lu in memcpy/memmove, but we don't have its error!!\n",
-             current_address);
+      //printf("#FPCHECKER: Trying to update address %lu in memcpy/memmove, but we don't have its error!!\n",
+      //       current_address);
     }
     error_buffer[offset] = tmp_error;
     relative_error_buffer[offset] = tmp_relative_error;

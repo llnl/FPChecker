@@ -400,10 +400,10 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
             id == llvm::Intrinsic::memcpy_inline ||
             id == llvm::Intrinsic::memmove)
         {
-          errs() << "Instrumenting memcpy/memmove in function " << f->getName() << "\n";
-          errs() << "  Instruction: ";
-          inst->print(errs());
-          errs() << "\n";
+          /*           errs() << "Instrumenting memcpy/memmove in function " << f->getName() << "\n";
+                    errs() << "  Instruction: ";
+                    inst->print(errs());
+                    errs() << "\n"; */
 
           // Insert instrumentation right after the memcpy/memmove intrinsic.
           BasicBlock::iterator nextInst(inst);
