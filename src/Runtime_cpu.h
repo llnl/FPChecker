@@ -706,7 +706,7 @@ void _FPC_FP64_CHECK_(
   // If FPC_EXPONENT_USAGE is not defined (default), we only save items in the table
   // if an event ocurred. If FPC_EXPONENT_USAGE is defined, we save all items
   // (since we want to profile all instructions).
-  if (_FPC_EXPONENT_USAGE_FLAG)
+  if (!_FPC_EXPONENT_USAGE_FLAG)
   {
     if (!_FPC_EVENT_OCURRED(&item))
       return;
