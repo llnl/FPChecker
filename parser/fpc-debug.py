@@ -41,7 +41,7 @@ def report(proc: int, failed: int):
 
 def reportFailed(failed_list: list):
     print('===== FPChcecker Report =====')
-    print('The following commnads failed:\n')
+    print('The following commands failed:\n')
     for l in failed_list:
       print(l)
 
@@ -58,7 +58,7 @@ if __name__ == '__main__':
       removeFiles(fileList)
     if args.failed:
       _, _, failed_list = getCommandsStatus(fileList)
-      reportFailed(failed_list)      
+      reportFailed(failed_list)
 
   else:
     proc, failed, _ = getCommandsStatus(fileList)

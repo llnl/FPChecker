@@ -43,14 +43,14 @@ class Instrument:
     dp = Deprocess(self.preFileName, tmpFname)
     if verbose(): print('Running de-processor...')
     dp.run()
-    if verbose(): 
+    if verbose():
       print('... de-preprocessor done.')
       print('Deprocessed file:', self.deprocessedFile)
       with open(self.deprocessedFile, 'r') as fd:
         i = 1
         for l in fd:
           print("{n:3d}: {line}".format(n=i, line=l[:-1]))
-          i += 1  
+          i += 1
 
     #os.close(tmpFd)
     #if 'FPC_LEAVE_TEMP_FILES' not in os.environ:
@@ -63,7 +63,7 @@ class Instrument:
       self.allTokens.append(token)
     m = Match()
     self.deviceDclLines = m.match_device_function(self.allTokens)
-  
+
   ## This simply uses the entire file as a big code region
   ## Intended to be used to instrument the entire file
   def findAllDeclarations(self):
@@ -75,7 +75,7 @@ class Instrument:
     endLine = self.allTokens[-1:][0].lineNumber()
     startIndex = 0
     endIndex = len(self.allTokens) - 1
-    func_type = FunctionType.host 
+    func_type = FunctionType.host
     self.deviceDclLines  = [(startLine, endLine, startIndex, endIndex, func_type)]
 
   ## Add middle lines, i.e., lines in the middle of begin/end
@@ -98,7 +98,7 @@ class Instrument:
         self.linesOfAssigments[i_line].append((i_abs, 'b'))
         self.linesOfAssigments[j_line].append((j_abs, 'e'))
         self.addMiddleLines(i_line, j_line)
-        if verbose(): print('Lines with assigments:', self.linesOfAssigments)
+        if verbose(): print('Lines with assignments:', self.linesOfAssigments)
         self.functionTypeMap[i_abs] = f_type
 
   ## Adds preamble and end to the operation (i.e., instruments the line)
@@ -136,7 +136,7 @@ class Instrument:
         break
       i += 1
 
-    return i-index, newLine 
+    return i-index, newLine
 
   def produceInstrumentedLines(self):
     currentLine = 1
@@ -228,4 +228,3 @@ if __name__ == '__main__':
   inst.findAssigments()
   inst.produceInstrumentedLines()
   inst.instrument()
-
