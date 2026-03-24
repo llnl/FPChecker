@@ -2,7 +2,7 @@
 CXX = clang++
 CXXFLAGS = -std=c++11 -fno-vectorize -fno-slp-vectorize -O2 -g \
 	-include ../../../build/install/src/Runtime_error.h \
-	-fpass-plugin=../../../build/install/lib/libfpchecker_error.dylib #-DFPC_DEBUG_ERROR_ANALYSIS
+	-fpass-plugin=../../../build/install/lib/libfpchecker_error.dylib -DFPC_CALCULATE_LOCAL_ERRORS_ONLY
 
 # Source file
 SRC = dotprod.cpp

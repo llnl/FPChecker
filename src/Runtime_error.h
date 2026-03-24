@@ -425,9 +425,12 @@ void _FPC_FP32_CALCULATE_ERROR_(
   double err_z = 0.0;
   double err_w = 0.0;
   double _tmp_unused_ = 0.0;
+
+  #ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
   _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name, &err_y, &_tmp_unused_);
   _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, op2_name, function_name, &err_z, &_tmp_unused_);
   _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, fma_name, function_name, &err_w, &_tmp_unused_);
+  #endif
 
   double y_high = (double)y + err_y;
   double z_high = (double)z + err_z;
