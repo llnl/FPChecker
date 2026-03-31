@@ -18,12 +18,24 @@ void parse_input(int *argc, char **argv[], std::vector<float> &values_f, std::ve
         exit(EXIT_FAILURE);
     }
 
-    if (mode != nullptr)
+    if (mode == nullptr)
     {
-        strcpy(mode, (*argv)[2]);
+        exit(EXIT_FAILURE);
+    }
+
+    if (*argc >= 3)
+    {
+        std::strncpy(mode, (*argv)[2], 99);
+        mode[99] = '\0';
     }
     else
     {
+        std::strcpy(mode, "normal");
+    }
+
+    if (std::strcmp(mode, "normal") != 0 && std::strcmp(mode, "scaled") != 0)
+    {
+        std::cerr << "Invalid mode: " << mode << ". Expected 'normal' or 'scaled'." << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -83,6 +95,17 @@ __attribute__((noinline)) void calc_dot_product_scaled_d(const double *a, const 
     {
         res += a[i] * b[i];
         res *= a[0]; // Introduce slight scaling to increase error
+    }
+
+    result = res;
+}
+
+__attribute__((noinline)) void calc_dot_product_d(const double *a, const double *b, size_t n, double &result)
+{
+    double res = 0.0;
+    for (size_t i = 0; i < n; ++i)
+    {
+        res += a[i] * b[i];
     }
 
     result = res;
@@ -155,9 +178,16 @@ int main(int argc, char *argv[])
 
     std::cout << "Final sum (float): " << val_sum_f << std::endl;
 
-    // Compute in double for reference
+    // Compute in double for reference using the same operation mode.
     double result_d = 0.0;
-    calc_dot_product_scaled_d(values_d.data(), values_d.data(), n, result_d);
+    if (std::strcmp(mode, "scaled") == 0)
+    {
+        calc_dot_product_scaled_d(values_d.data(), values_d.data(), n, result_d);
+    }
+    else
+    {
+        calc_dot_product_d(values_d.data(), values_d.data(), n, result_d);
+    }
     std::cout << "Dot product in double (reference): " << result_d << std::endl;
 
     double val_sum_d = 0.0;

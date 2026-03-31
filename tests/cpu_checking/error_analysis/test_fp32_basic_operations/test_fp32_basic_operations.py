@@ -32,15 +32,9 @@ def run_and_get_output():
         print(e.output)
         exit()
 
-def test_1():
-    # --- compile code ---
-    flags = "add"
-    line = 12
-
+def assert_rounding_error_for_operation(flags, line):
     compile_code(flags)
-
-    # --- run code ---
-    cmdOutput = run_and_get_output()
+    run_and_get_output()
 
     error_found = False
     fileName = report.findRoundingErrorFile('.fpc_logs')
@@ -55,64 +49,16 @@ def test_1():
 
     assert error_found, "Rounding error not found in basic_operations.cpp"
 
-def test_2():
-    # --- compile code ---
-    flags = "sub"
-    line = 24
 
-    compile_code(flags)
+def test_basic_operations_all_in_one():
+    # Keep all operation checks in one test to avoid ordering/timing issues
+    # when this folder is executed in parallel with a process-based runner.
+    cases = [
+        ("add", 12),
+        ("sub", 24),
+        ("mul", 36),
+        ("div", 48),
+    ]
 
-    # --- run code ---
-    cmdOutput = run_and_get_output()
-
-    error_found = False
-    fileName = report.findRoundingErrorFile('.fpc_logs')
-    data = report.loadReport(fileName)
-
-    for i in range(len(data)):
-        print('i', i, data[i])
-        if data[i]['file'].endswith('basic_operations.cpp') and data[i]['line'] == line:
-            if abs(data[i]['error']) > 0:
-                error_found = True
-            break
-        
-    assert error_found, "Rounding error not found in basic_operations.cpp"
-
-
-def test_3():
-    flags = "mul"
-    line = 36
-    compile_code(flags)
-    cmdOutput = run_and_get_output()
-
-    error_found = False
-    fileName = report.findRoundingErrorFile('.fpc_logs')
-    data = report.loadReport(fileName)
-
-    for i in range(len(data)):
-        print('i', i, data[i])
-        if data[i]['file'].endswith('basic_operations.cpp') and data[i]['line'] == line:
-            if abs(data[i]['error']) > 0:
-                error_found = True
-            break
-        
-    assert error_found, "Rounding error not found in basic_operations.cpp"
-
-def test_4():
-    flags = "div"
-    line = 48
-    compile_code(flags)
-    cmdOutput = run_and_get_output()
-
-    error_found = False
-    fileName = report.findRoundingErrorFile('.fpc_logs')
-    data = report.loadReport(fileName)
-
-    for i in range(len(data)):
-        print('i', i, data[i])
-        if data[i]['file'].endswith('basic_operations.cpp') and data[i]['line'] == line:
-            if abs(data[i]['error']) > 0:
-                error_found = True
-            break
-        
-    assert error_found, "Rounding error not found in basic_operations.cpp"
+    for flags, line in cases:
+        assert_rounding_error_for_operation(flags, line)

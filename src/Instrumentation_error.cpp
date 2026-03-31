@@ -144,6 +144,7 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     SET_ODR_LIKAGE("_FPC_HT_PRINT_TABLES_")
     SET_ODR_LIKAGE("_FPC_INIT_HASH_TABLE_")
     SET_ODR_LIKAGE("_FPC_WRITE_AND_PRINT_TO_JSON_")
+    SET_ODR_LIKAGE("_FPC_ADDRESS_RANGE_UPDATE_")
 
     // Series table functions
     SET_ODR_LIKAGE("FPC_create_manager")
