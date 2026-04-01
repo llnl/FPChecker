@@ -1,5 +1,5 @@
 
-OP = 	-O2 -fno-vectorize -fno-slp-vectorize -DFPC_DEBUG_ERROR_ANALYSIS
+OP = 	-O2 -fno-vectorize -fno-slp-vectorize #-DFPC_DEBUG_ERROR_ANALYSIS
 CXX = FPC_INSTRUMENT_ERR_TRACKING=1 clang++-fpchecker 
 
 all:
@@ -7,4 +7,4 @@ all:
 	$(CXX) -o main nested_loop.o
 
 clean:
-	rm -rf *.o main __pycache__ .fpc_logs .fpc_log.txt
+	rm -rf *.o main __pycache__ .fpc_logs .fpc_log.txt *.ll

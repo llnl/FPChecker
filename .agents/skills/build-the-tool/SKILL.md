@@ -1,6 +1,6 @@
 ---
 name: build-the-tool
-description: Guide for building the tool when asked by the user
+description: Guide for building the tool when asked by the user or testing a code change that requires a new build of the tool
 ---
 
 To build the tool, follow these steps:

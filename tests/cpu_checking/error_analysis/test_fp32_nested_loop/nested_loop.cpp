@@ -5,7 +5,8 @@
 
 // Function to compute a final float value using a nested loop.
 // The computation is a weighted sum of a 2D matrix.
-FPC_CALCULATE_ERROR void computeNestedFloatValue_f(const std::vector<std::vector<float>> &matrix, const std::vector<float> &weights, float &result)
+__attribute__((noinline))
+void computeNestedFloatValue_f(const std::vector<std::vector<float>> &matrix, const std::vector<float> &weights, float &result)
 {
     float final_value = 0.0f;
 
@@ -89,6 +90,10 @@ int main()
     std::cout << "Final computed double value: " << result_d << std::endl;
     double error = result_d - static_cast<double>(result_f);
     std::cout << "Total error (double): " << error << std::endl;
+
+    // Print relative error
+    double relative_error = (error != 0.0) ? std::abs(error / result_d) : 0.0;
+    std::cout << "Relative error: " << relative_error << std::endl;
 
     return 0;
 }

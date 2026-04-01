@@ -25,7 +25,7 @@ def test_1():
         exit()
 
     # --- run code ---
-    cmd = ["./main 100"]
+    cmd = ["./main"]
     try:
         cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError as e:
@@ -44,7 +44,7 @@ def test_1():
     for i in range(len(data)):
       print('i', i, data[i])
       if data[i]['file'].endswith('nested_loop.cpp'):
-        if data[i]['line'] == 28:
+        if data[i]['line'] == 29:
             rounding_error = data[i]['error']
             break
 
@@ -53,6 +53,5 @@ def test_1():
     diff = abs(fp64_total_error - rounding_error)
     print("Diff =", diff)
 
-    accepted_threshold = 1e-7
-    assert diff < accepted_threshold
+    assert diff == 0.0, f"Expected exact match, got diff={diff}"
 

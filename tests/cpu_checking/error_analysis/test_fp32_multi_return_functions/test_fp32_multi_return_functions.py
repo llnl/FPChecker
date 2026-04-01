@@ -25,17 +25,34 @@ def test_1():
         exit()
 
     # --- run code ---
-    cmd = ["./main"]
+    cmd = ["./main \"0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f\""]
     try:
         cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError as e:
         print(e.output)
         exit()
 
-# #FPCHECKER: Trying to store a register's value (%20), but we don't have its error!!
-    warning_count = 0
+    fp64_total_error = 0.0
     for line in cmdOutput.decode().splitlines():
-        if "Trying to store a register's value" in line and "but we don't have its error" in line:
-            warning_count += 1
-            
-    assert warning_count == 3
+        if "Total Error (normal)" in line:
+            fp64_total_error = float(line.split()[3])
+            break
+
+    rounding_error = 0.0
+    fileName = report.findRoundingErrorFile('.fpc_logs')
+    data = report.loadReport(fileName)
+    for i in range(len(data)):
+      print('i', i, data[i])
+      if data[i]['file'].endswith('main.cpp'):
+        if data[i]['line'] == 28:
+            rounding_error = data[i]['error']
+            break
+
+    print('rounding_error =', rounding_error)
+    print('fp64_total_error =', fp64_total_error)
+    diff = abs(fp64_total_error - rounding_error)
+    print("Diff =", diff)
+
+    accepted_threshold = 1e-14
+    assert diff < accepted_threshold
+

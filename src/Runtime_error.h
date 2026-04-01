@@ -57,6 +57,19 @@ int _FPC_WARNING_COUNT_;
 #define _FPC_BB_NAME_SIZE_ 512                   // max size of a basic block name - for example: "%bb_26"
 char _FPC_LAST_BASIC_BLOCK_[_FPC_BB_NAME_SIZE_]; // Last basic block ID
 
+// Call/return floating-point error propagation stack
+#define _FPC_RET_STACK_MAX_ 8192
+double _FPC_RET_ERR_STACK_[_FPC_RET_STACK_MAX_];
+double _FPC_RET_REL_ERR_STACK_[_FPC_RET_STACK_MAX_];
+char _FPC_RET_FUNC_STACK_[_FPC_RET_STACK_MAX_][_FPC_BB_NAME_SIZE_];
+int _FPC_RET_STACK_TOP_;
+
+// Caller-to-callee argument error propagation buffer
+#define _FPC_ARG_BUF_MAX_ 256
+double _FPC_ARG_ERR_BUF_[_FPC_ARG_BUF_MAX_];
+double _FPC_ARG_REL_ERR_BUF_[_FPC_ARG_BUF_MAX_];
+int _FPC_ARG_BUF_COUNT_;
+
 /*----------------------------------------------------------------------------*/
 /* Initialize                                                                 */
 /*----------------------------------------------------------------------------*/
@@ -134,6 +147,7 @@ void _FPC_INIT_FPCHECKER()
 {
   _FPC_PROG_INPUTS = 0;
   _FPC_LAST_BASIC_BLOCK_[0] = '\0';
+  _FPC_RET_STACK_TOP_ = 0;
   _FPC_INIT_HASH_TABLE_();
   _FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED();
 }
@@ -143,6 +157,7 @@ void _FPC_INIT_ARGS_FPCHECKER(int argc, char **argv)
   _FPC_PROG_INPUTS = argc;
   _FPC_PROG_ARGS = argv;
   _FPC_LAST_BASIC_BLOCK_[0] = '\0';
+  _FPC_RET_STACK_TOP_ = 0;
   _FPC_INIT_HASH_TABLE_();
   _FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED();
 }
@@ -399,6 +414,86 @@ void _FPC_FP32_MEMCPY_INST_(uintptr_t address_dst, uintptr_t address_src,
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   _FPC_HT_PRINT_TABLES_(_FPC_ADDRESS_HT_, _FPC_REGISTER_HT_);
 #endif
+}
+
+// Push argument error from caller's register table into the argument buffer.
+// Called once per FP argument, in order, before each user function call.
+void _FPC_FP32_PUSH_ARG_ERROR_(int arg_index, const char *arg_reg, const char *function_name)
+{
+  double error = 0.0;
+  double relative_error = 0.0;
+  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, arg_reg, function_name, &error, &relative_error);
+
+  if (arg_index >= 0 && arg_index < _FPC_ARG_BUF_MAX_)
+  {
+    _FPC_ARG_ERR_BUF_[arg_index] = error;
+    _FPC_ARG_REL_ERR_BUF_[arg_index] = relative_error;
+    if (arg_index >= _FPC_ARG_BUF_COUNT_)
+      _FPC_ARG_BUF_COUNT_ = arg_index + 1;
+  }
+}
+
+// Pop argument error from the buffer into the callee's parameter register.
+// Called once per FP parameter, in order, at callee function entry.
+void _FPC_FP32_POP_ARG_ERROR_(int param_index, const char *param_reg, const char *function_name)
+{
+  double error = 0.0;
+  double relative_error = 0.0;
+
+  if (param_index >= 0 && param_index < _FPC_ARG_BUF_COUNT_)
+  {
+    error = _FPC_ARG_ERR_BUF_[param_index];
+    relative_error = _FPC_ARG_REL_ERR_BUF_[param_index];
+  }
+
+  _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, param_reg, function_name,
+                           error, relative_error, "", 0);
+}
+
+// Save error of the value being returned by a function.
+void _FPC_FP32_PUSH_RET_ERROR_(const char *ret_reg, const char *function_name)
+{
+  double error = 0.0;
+  double relative_error = 0.0;
+  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, ret_reg, function_name, &error, &relative_error);
+
+  if (_FPC_RET_STACK_TOP_ < _FPC_RET_STACK_MAX_)
+  {
+    _FPC_RET_ERR_STACK_[_FPC_RET_STACK_TOP_] = error;
+    _FPC_RET_REL_ERR_STACK_[_FPC_RET_STACK_TOP_] = relative_error;
+    strncpy(_FPC_RET_FUNC_STACK_[_FPC_RET_STACK_TOP_], function_name, _FPC_BB_NAME_SIZE_ - 1);
+    _FPC_RET_FUNC_STACK_[_FPC_RET_STACK_TOP_][_FPC_BB_NAME_SIZE_ - 1] = '\0';
+    _FPC_RET_STACK_TOP_++;
+  }
+}
+
+// Load most recent returned value error into call result register in caller.
+void _FPC_FP32_POP_RET_ERROR_(const char *result_reg, const char *function_name,
+                              const char *callee_name, int loc, char *file_name)
+{
+  double error = 0.0;
+  double relative_error = 0.0;
+
+  if (_FPC_RET_STACK_TOP_ > 0)
+  {
+    int top = _FPC_RET_STACK_TOP_ - 1;
+    int names_match = 1;
+    if (callee_name != NULL && callee_name[0] != '\0')
+    {
+      names_match = (strcmp(_FPC_RET_FUNC_STACK_[top], callee_name) == 0);
+    }
+
+    if (names_match)
+    {
+      _FPC_RET_STACK_TOP_--;
+      error = _FPC_RET_ERR_STACK_[_FPC_RET_STACK_TOP_];
+      relative_error = _FPC_RET_REL_ERR_STACK_[_FPC_RET_STACK_TOP_];
+    }
+  }
+
+  _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_reg, function_name,
+                           error, relative_error, file_name, loc);
+  FPC_APPEND_ERROR_LOG_ENTRY(loc, relative_error);
 }
 
 /*----------------------------------------------------------------------------*/

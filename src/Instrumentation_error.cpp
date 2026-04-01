@@ -49,7 +49,9 @@ void confFunction(Function *found, Function **saveHere,
 
 CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     : mod(M),
-      fpc_init(nullptr), fpc_init_args(nullptr), fpc_print_locations(nullptr)
+  fpc_init(nullptr), fpc_init_args(nullptr), fpc_print_locations(nullptr),
+  fpc_fp32_push_ret_error(nullptr), fpc_fp32_pop_ret_error(nullptr),
+  fpc_fp32_push_arg_error(nullptr), fpc_fp32_pop_arg_error(nullptr)
 {
 
 #ifdef FPC_DEBUG
@@ -114,6 +116,30 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
                    GlobalValue::LinkageTypes::LinkOnceODRLinkage,
                    "_FPC_FP32_MEMCPY_INST_");
     }
+    if (f->getName().str().find("_FPC_FP32_PUSH_RET_ERROR_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp32_push_ret_error,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP32_PUSH_RET_ERROR_");
+    }
+    if (f->getName().str().find("_FPC_FP32_POP_RET_ERROR_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp32_pop_ret_error,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP32_POP_RET_ERROR_");
+    }
+    if (f->getName().str().find("_FPC_FP32_PUSH_ARG_ERROR_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp32_push_arg_error,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP32_PUSH_ARG_ERROR_");
+    }
+    if (f->getName().str().find("_FPC_FP32_POP_ARG_ERROR_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp32_pop_arg_error,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP32_POP_ARG_ERROR_");
+    }
 
     SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
@@ -124,6 +150,10 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     SET_ODR_LIKAGE("_FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED")
     SET_ODR_LIKAGE("FPC_APPEND_ERROR_LOG_ENTRY")
     SET_ODR_LIKAGE("_FPC_FP32_MEMCPY_INST_")
+    SET_ODR_LIKAGE("_FPC_FP32_PUSH_RET_ERROR_")
+    SET_ODR_LIKAGE("_FPC_FP32_POP_RET_ERROR_")
+    SET_ODR_LIKAGE("_FPC_FP32_PUSH_ARG_ERROR_")
+    SET_ODR_LIKAGE("_FPC_FP32_POP_ARG_ERROR_")
 
     // Hash table functions
     SET_ODR_LIKAGE("_FPC_ADDRESS_HT_CREATE_")
@@ -203,6 +233,41 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   assert(fpc_data_manager && "Invalid table!");
   fpc_data_manager->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
+  GlobalVariable *ret_error_stack = nullptr;
+  ret_error_stack = mod->getGlobalVariable("_FPC_RET_ERR_STACK_", true);
+  assert(ret_error_stack && "Invalid table!");
+  ret_error_stack->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *ret_rel_error_stack = nullptr;
+  ret_rel_error_stack = mod->getGlobalVariable("_FPC_RET_REL_ERR_STACK_", true);
+  assert(ret_rel_error_stack && "Invalid table!");
+  ret_rel_error_stack->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *ret_stack_top = nullptr;
+  ret_stack_top = mod->getGlobalVariable("_FPC_RET_STACK_TOP_", true);
+  assert(ret_stack_top && "Invalid table!");
+  ret_stack_top->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *ret_func_stack = nullptr;
+  ret_func_stack = mod->getGlobalVariable("_FPC_RET_FUNC_STACK_", true);
+  assert(ret_func_stack && "Invalid table!");
+  ret_func_stack->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *arg_err_buf = nullptr;
+  arg_err_buf = mod->getGlobalVariable("_FPC_ARG_ERR_BUF_", true);
+  assert(arg_err_buf && "Invalid table!");
+  arg_err_buf->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *arg_rel_err_buf = nullptr;
+  arg_rel_err_buf = mod->getGlobalVariable("_FPC_ARG_REL_ERR_BUF_", true);
+  assert(arg_rel_err_buf && "Invalid table!");
+  arg_rel_err_buf->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *arg_buf_count = nullptr;
+  arg_buf_count = mod->getGlobalVariable("_FPC_ARG_BUF_COUNT_", true);
+  assert(arg_buf_count && "Invalid variable!");
+  arg_buf_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
   // Set module filename
   module_filename = CUDAAnalysis::getFileNameFromModule(M);
 }
@@ -233,6 +298,10 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
   assert((fpc_fp32_phi_function != nullptr) && "Function not initialized!");
   assert((fpc_fp32_branch_function != nullptr) && "Function not initialized!");
   assert((fp32_memcpy_function != nullptr) && "Function not initialized!");
+  assert((fpc_fp32_push_ret_error != nullptr) && "Function not initialized!");
+  assert((fpc_fp32_pop_ret_error != nullptr) && "Function not initialized!");
+  assert((fpc_fp32_push_arg_error != nullptr) && "Function not initialized!");
+  assert((fpc_fp32_pop_arg_error != nullptr) && "Function not initialized!");
 
   // Warning message
   // Check if the function calls other functions with floating-point values
@@ -289,6 +358,39 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
   fName->setInitializer(NULL);
   fName->setInitializer(c);
   //  -------------------------------------------------------------------------------
+
+  // ============= Pop argument errors into callee parameters ===================
+  {
+    int fpParamIndex = 0;
+    for (auto &arg : f->args())
+    {
+      if (arg.getType()->isFloatTy() || arg.getType()->isDoubleTy())
+      {
+        IRBuilder<> popBuilder(first_inst);
+
+        std::string paramRegName;
+        llvm::raw_string_ostream rso(paramRegName);
+        arg.printAsOperand(rso, false);
+        rso.flush();
+
+        ConstantInt *paramIndexVal =
+            ConstantInt::get(mod->getContext(), APInt(32, fpParamIndex, true));
+
+        std::vector<Value *> popArgs;
+        popArgs.push_back(paramIndexVal);
+        popArgs.push_back(popBuilder.CreateGlobalStringPtr(paramRegName));
+        popArgs.push_back(popBuilder.CreateGlobalStringPtr(f->getName()));
+
+        ArrayRef<Value *> popArgs_ref(popArgs);
+        CallInst *hookCall = popBuilder.CreateCall(fpc_fp32_pop_arg_error, popArgs_ref);
+        (*insrtrumented_instructions)++;
+
+        setFakeDebugLocation(first_inst, hookCall, f);
+
+        fpParamIndex++;
+      }
+    }
+  }
 
   for (auto bb = f->begin(), end = f->end(); bb != end; ++bb)
   {
@@ -469,6 +571,99 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
         }
       }
 
+      // ============= Push argument errors to callee ============================
+      if (auto *callInst = llvm::dyn_cast<llvm::CallInst>(inst))
+      {
+        Function *calledFunc = callInst->getCalledFunction();
+        bool isIntrinsic = calledFunc && calledFunc->isIntrinsic();
+        bool isFPCInternal = calledFunc && calledFunc->getName().str().find("_FPC_") != std::string::npos;
+        if (!isIntrinsic && !isFPCInternal)
+        {
+          int fpArgIndex = 0;
+          for (unsigned argIdx = 0; argIdx < callInst->arg_size(); ++argIdx)
+          {
+            Value *argVal = callInst->getArgOperand(argIdx);
+            if (argVal->getType()->isFloatTy() || argVal->getType()->isDoubleTy())
+            {
+              IRBuilder<> pushBuilder(inst); // insert before the call
+
+              std::string argRegName;
+              llvm::raw_string_ostream rso(argRegName);
+              argVal->printAsOperand(rso, false);
+              rso.flush();
+
+              ConstantInt *argIndexVal =
+                  ConstantInt::get(mod->getContext(), APInt(32, fpArgIndex, true));
+
+              std::vector<Value *> pushArgs;
+              pushArgs.push_back(argIndexVal);
+              pushArgs.push_back(pushBuilder.CreateGlobalStringPtr(argRegName));
+              pushArgs.push_back(pushBuilder.CreateGlobalStringPtr(f->getName()));
+
+              ArrayRef<Value *> pushArgs_ref(pushArgs);
+              CallInst *hookCall = pushBuilder.CreateCall(fpc_fp32_push_arg_error, pushArgs_ref);
+              (*insrtrumented_instructions)++;
+
+              setFakeDebugLocation(inst, hookCall, f);
+
+              fpArgIndex++;
+            }
+          }
+        }
+      }
+
+      // ============= Propagate callee return error to call result =============
+      if (auto *callInst = llvm::dyn_cast<llvm::CallInst>(inst))
+      {
+        if (callInst->getType()->isFloatTy() || callInst->getType()->isDoubleTy())
+        {
+          Function *calledFunction = callInst->getCalledFunction();
+          if (calledFunction && calledFunction->isIntrinsic())
+          {
+            // Intrinsics (e.g. llvm.fmuladd) do not participate in
+            // interprocedural return propagation, but they may still
+            // be FP arithmetic ops that need error calculation below.
+            // Do NOT continue here — just skip the pop hook.
+          }
+          else
+          if (calledFunction && calledFunction->getName().str().find("_FPC_") != std::string::npos)
+          {
+            // Skip internal FPChecker runtime calls.
+          }
+          else
+          {
+            BasicBlock::iterator nextInst(inst);
+            ++nextInst;
+            IRBuilder<> builder(&(*nextInst));
+
+            std::string resultName;
+            llvm::raw_string_ostream rso(resultName);
+            callInst->printAsOperand(rso, false);
+            rso.flush();
+
+            std::vector<Value *> args;
+            args.push_back(builder.CreateGlobalStringPtr(resultName));
+            args.push_back(builder.CreateGlobalStringPtr(f->getName()));
+            std::string calleeName = "";
+            if (calledFunction)
+              calleeName = calledFunction->getName().str();
+            args.push_back(builder.CreateGlobalStringPtr(calleeName));
+            int lineNumber = CUDAAnalysis::getLineOfCode(inst);
+            ConstantInt *locId =
+                ConstantInt::get(mod->getContext(), APInt(32, lineNumber, true));
+            args.push_back(locId);
+            args.push_back(loadInst_filename);
+
+            ArrayRef<Value *> args_ref(args);
+            CallInst *hookCall = builder.CreateCall(fpc_fp32_pop_ret_error, args_ref);
+            (*insrtrumented_instructions)++;
+
+            assert(hookCall && "Invalid call instruction!");
+            setFakeDebugLocation(inst, hookCall, f);
+          }
+        }
+      }
+
       // ============= Instrument for FP arithmetic operations ===================
       if ((isFPOperationWithError(inst) ||
            (inst->getOpcode() == Instruction::FNeg) ||
@@ -643,6 +838,31 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
 
         assert(callInst && "Invalid call instruction!");
         setFakeDebugLocation(inst, callInst, f);
+      }
+
+      // ============= Track return of floating-point values ====================
+      if (auto *retInst = llvm::dyn_cast<llvm::ReturnInst>(inst))
+      {
+        Value *retVal = retInst->getReturnValue();
+        if (retVal && (retVal->getType()->isFloatTy() || retVal->getType()->isDoubleTy()))
+        {
+          IRBuilder<> builder(inst);
+          std::string retRegName;
+          llvm::raw_string_ostream rso(retRegName);
+          retVal->printAsOperand(rso, false);
+          rso.flush();
+
+          std::vector<Value *> args;
+          args.push_back(builder.CreateGlobalStringPtr(retRegName));
+          args.push_back(builder.CreateGlobalStringPtr(f->getName()));
+
+          ArrayRef<Value *> args_ref(args);
+          CallInst *hookCall = builder.CreateCall(fpc_fp32_push_ret_error, args_ref);
+          (*insrtrumented_instructions)++;
+
+          assert(hookCall && "Invalid call instruction!");
+          setFakeDebugLocation(inst, hookCall, f);
+        }
       }
     }
   }

@@ -1,5 +1,6 @@
 import glob
 import json
+import os
 import sys
 
 def loadReport(fileName):
@@ -25,7 +26,7 @@ def findHistogramFile(path):
 # ------ Rounding error reports -------
 def findRoundingErrorFile(path):
   reports = glob.glob(path+'/rounding_error_*.json')
-  return reports[0]
+  return max(reports, key=os.path.getmtime)
 
 # ------ Error per line reports -------
 def findErrorsPerLineFile(path):

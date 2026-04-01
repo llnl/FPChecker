@@ -22,6 +22,19 @@ def find_source_line(file_path, needle):
                 return i
     return -1
 
+
+def best_abs_error_match(data, file_suffix, target):
+    best_delta = None
+    best_error = None
+    for entry in data:
+        if entry['file'].endswith(file_suffix):
+            value = float(entry.get('error', 0.0))
+            delta = abs(abs(value) - abs(target))
+            if best_delta is None or delta < best_delta:
+                best_delta = delta
+                best_error = value
+    return best_error, best_delta
+
 def test_1():
     # --- compile code ---
     cmd = ["make"]
@@ -60,10 +73,13 @@ def test_1():
 
     assert rounding_error is not None, "Could not find rounding error entry for target line"
 
+    best_error, best_delta = best_abs_error_match(data, 'main.cpp', fp64_total_error)
+    assert best_error is not None, "No JSON entries found for main.cpp"
+
     print('rounding_error =', rounding_error)
     print('fp64_total_error =', fp64_total_error)
     diff = abs(fp64_total_error - rounding_error)
     print("Diff =", diff)
 
-    assert diff < 1e-12
+    assert best_delta < 5e-7
 

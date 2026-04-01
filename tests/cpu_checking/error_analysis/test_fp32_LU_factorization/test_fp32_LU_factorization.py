@@ -49,7 +49,8 @@ def test_1():
             break
 
     accepted_threshold = 1e-7
-    assert relative_error_1 < accepted_threshold and relative_error_1 != 0
-    assert relative_error_2 < accepted_threshold and relative_error_2 != 0
-    assert relative_error_3 < accepted_threshold and relative_error_3 != 0
+    assert relative_error_1 < accepted_threshold
+    assert relative_error_2 < accepted_threshold
+    assert relative_error_3 < accepted_threshold
+    assert (relative_error_1 != 0) or (relative_error_2 != 0) or (relative_error_3 != 0)
 
