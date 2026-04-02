@@ -31,6 +31,7 @@ namespace CPUAnalysis
     Function *fpc_fp32_pop_ret_error;
     Function *fpc_fp32_push_arg_error;
     Function *fpc_fp32_pop_arg_error;
+    Function *fpc_fp32_math_error;
 
     void setFakeDebugLocation(Instruction *old_inst, Instruction *new_inst, Function *f);
     Instruction *firstInstrution();
@@ -48,6 +49,7 @@ namespace CPUAnalysis
     static bool isSingleFPOperation(const Instruction *inst);
     static bool isCmpEqual(const Instruction *inst);
     static bool isFMAOperation(const Instruction *inst);
+    static bool isSupportedMathCall(const CallInst *CI, std::string &normalizedName);
     static bool functionisAnnotated(const Function *f, const char *annotation);
     static bool functionCallsFunctionWithFloatingPointValues(const Function *f);
   };

@@ -627,6 +627,122 @@ void _FPC_FP32_CALCULATE_ERROR_(
 }
 
 /*----------------------------------------------------------------------------*/
+/* Math Function Error Analysis.                                              */
+/*----------------------------------------------------------------------------*/
+
+// Re-computes a math function call in fp64, accounting for propagated
+// operand errors, and records the rounding error of the fp32 result.
+// Up to 3 FP operands are supported (arg1=y, arg2=z, arg3=w).
+void _FPC_FP32_MATH_ERROR_(
+    float x, float y, float z, float w,
+    int loc, char *file_name,
+    const char *math_func_name,
+    const char *result_name, const char *op1_name, const char *op2_name,
+    const char *op3_name, const char *function_name)
+{
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
+  printf("_FPC_FP32_MATH_ERROR_\n");
+  printf("func=%s, x=%.7e, y=%.7e, z=%.7e, w=%.7e, result=%s, op1=%s, op2=%s, op3=%s\n",
+         math_func_name, x, y, z, w, result_name, op1_name, op2_name, op3_name);
+  printf("Line: %d, File Name: %s\n", loc, file_name);
+#endif
+
+  double err_y = 0.0;
+  double err_z = 0.0;
+  double err_w = 0.0;
+  double _tmp_unused_ = 0.0;
+
+#ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
+  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name, &err_y, &_tmp_unused_);
+  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, op2_name, function_name, &err_z, &_tmp_unused_);
+  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, op3_name, function_name, &err_w, &_tmp_unused_);
+#endif
+
+  double y_high = (double)y + err_y;
+  double z_high = (double)z + err_z;
+  double w_high = (double)w + err_w;
+
+  double r_high = 0.0;
+
+  // Unary functions
+  if      (strcmp(math_func_name, "sin") == 0)       r_high = sin(y_high);
+  else if (strcmp(math_func_name, "cos") == 0)       r_high = cos(y_high);
+  else if (strcmp(math_func_name, "tan") == 0)       r_high = tan(y_high);
+  else if (strcmp(math_func_name, "asin") == 0)      r_high = asin(y_high);
+  else if (strcmp(math_func_name, "acos") == 0)      r_high = acos(y_high);
+  else if (strcmp(math_func_name, "atan") == 0)      r_high = atan(y_high);
+  else if (strcmp(math_func_name, "sinh") == 0)      r_high = sinh(y_high);
+  else if (strcmp(math_func_name, "cosh") == 0)      r_high = cosh(y_high);
+  else if (strcmp(math_func_name, "tanh") == 0)      r_high = tanh(y_high);
+  else if (strcmp(math_func_name, "asinh") == 0)     r_high = asinh(y_high);
+  else if (strcmp(math_func_name, "acosh") == 0)     r_high = acosh(y_high);
+  else if (strcmp(math_func_name, "atanh") == 0)     r_high = atanh(y_high);
+  else if (strcmp(math_func_name, "exp") == 0)       r_high = exp(y_high);
+  else if (strcmp(math_func_name, "exp2") == 0)      r_high = exp2(y_high);
+  else if (strcmp(math_func_name, "expm1") == 0)     r_high = expm1(y_high);
+  else if (strcmp(math_func_name, "log") == 0)       r_high = log(y_high);
+  else if (strcmp(math_func_name, "log2") == 0)      r_high = log2(y_high);
+  else if (strcmp(math_func_name, "log10") == 0)     r_high = log10(y_high);
+  else if (strcmp(math_func_name, "log1p") == 0)     r_high = log1p(y_high);
+  else if (strcmp(math_func_name, "logb") == 0)      r_high = logb(y_high);
+  else if (strcmp(math_func_name, "sqrt") == 0)      r_high = sqrt(y_high);
+  else if (strcmp(math_func_name, "cbrt") == 0)      r_high = cbrt(y_high);
+  else if (strcmp(math_func_name, "fabs") == 0)      r_high = fabs(y_high);
+  else if (strcmp(math_func_name, "ceil") == 0)      r_high = ceil(y_high);
+  else if (strcmp(math_func_name, "floor") == 0)     r_high = floor(y_high);
+  else if (strcmp(math_func_name, "trunc") == 0)     r_high = trunc(y_high);
+  else if (strcmp(math_func_name, "round") == 0)     r_high = round(y_high);
+  else if (strcmp(math_func_name, "nearbyint") == 0) r_high = nearbyint(y_high);
+  else if (strcmp(math_func_name, "rint") == 0)      r_high = rint(y_high);
+  // Binary functions
+  else if (strcmp(math_func_name, "pow") == 0)       r_high = pow(y_high, z_high);
+  else if (strcmp(math_func_name, "atan2") == 0)     r_high = atan2(y_high, z_high);
+  else if (strcmp(math_func_name, "hypot") == 0)     r_high = hypot(y_high, z_high);
+  else if (strcmp(math_func_name, "fmod") == 0)      r_high = fmod(y_high, z_high);
+  else if (strcmp(math_func_name, "remainder") == 0) r_high = remainder(y_high, z_high);
+  // Ternary functions
+  else if (strcmp(math_func_name, "fma") == 0)       r_high = fma(y_high, z_high, w_high);
+  else
+  {
+    printf("#FPCHECKER_WARNING: Unknown math function '%s'\n", math_func_name);
+    r_high = (double)x; // Assume no error
+  }
+
+  double r_low = (double)x;
+  double err_result = r_high - r_low;
+
+  // Calculate relative error
+  double rel_error = 0.0;
+  double largest_subnormal_d = nextafter(DBL_MIN, 0.0);
+  if (err_result == 0.0)
+  {
+    rel_error = 0.0;
+  }
+  else
+  {
+    if (fabs(r_high) > largest_subnormal_d)
+    {
+      rel_error = fabs(err_result) / fabs(r_high);
+    }
+    else
+    {
+      rel_error = INFINITY;
+    }
+  }
+
+#ifdef FPC_DEBUG_ERROR_ANALYSIS
+  printf("Math Result (float):         %.7e\n", x);
+  printf("Math Result (float->double): %.17e\n", r_low);
+  printf("Math Result (double):        %.17e\n", r_high);
+  printf("Math Error Result:           %.17e\n", err_result);
+  printf("\t >>> Math Relative Error: %.7e <<< \n", rel_error);
+#endif
+
+  _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_name, function_name, err_result, rel_error, file_name, loc);
+  FPC_APPEND_ERROR_LOG_ENTRY(loc, rel_error);
+}
+
+/*----------------------------------------------------------------------------*/
 /* Annotation Macros                                                          */
 /*----------------------------------------------------------------------------*/
 #include "FPC_Annotations.h"

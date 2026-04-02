@@ -51,7 +51,8 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     : mod(M),
   fpc_init(nullptr), fpc_init_args(nullptr), fpc_print_locations(nullptr),
   fpc_fp32_push_ret_error(nullptr), fpc_fp32_pop_ret_error(nullptr),
-  fpc_fp32_push_arg_error(nullptr), fpc_fp32_pop_arg_error(nullptr)
+  fpc_fp32_push_arg_error(nullptr), fpc_fp32_pop_arg_error(nullptr),
+  fpc_fp32_math_error(nullptr)
 {
 
 #ifdef FPC_DEBUG
@@ -140,6 +141,12 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
                    GlobalValue::LinkageTypes::LinkOnceODRLinkage,
                    "_FPC_FP32_POP_ARG_ERROR_");
     }
+    if (f->getName().str().find("_FPC_FP32_MATH_ERROR_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp32_math_error,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP32_MATH_ERROR_");
+    }
 
     SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
@@ -154,6 +161,7 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     SET_ODR_LIKAGE("_FPC_FP32_POP_RET_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP32_PUSH_ARG_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP32_POP_ARG_ERROR_")
+    SET_ODR_LIKAGE("_FPC_FP32_MATH_ERROR_")
 
     // Hash table functions
     SET_ODR_LIKAGE("_FPC_ADDRESS_HT_CREATE_")
@@ -302,6 +310,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
   assert((fpc_fp32_pop_ret_error != nullptr) && "Function not initialized!");
   assert((fpc_fp32_push_arg_error != nullptr) && "Function not initialized!");
   assert((fpc_fp32_pop_arg_error != nullptr) && "Function not initialized!");
+  assert((fpc_fp32_math_error != nullptr) && "Function not initialized!");
 
   // Warning message
   // Check if the function calls other functions with floating-point values
@@ -577,7 +586,9 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
         Function *calledFunc = callInst->getCalledFunction();
         bool isIntrinsic = calledFunc && calledFunc->isIntrinsic();
         bool isFPCInternal = calledFunc && calledFunc->getName().str().find("_FPC_") != std::string::npos;
-        if (!isIntrinsic && !isFPCInternal)
+        std::string _mathTmp;
+        bool isMathCall = isSupportedMathCall(callInst, _mathTmp);
+        if (!isIntrinsic && !isFPCInternal && !isMathCall)
         {
           int fpArgIndex = 0;
           for (unsigned argIdx = 0; argIdx < callInst->arg_size(); ++argIdx)
@@ -632,6 +643,15 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
           }
           else
           {
+            // Skip pop-ret for recognized math calls; MATH_ERROR handles
+            // their error tracking directly.
+            std::string _mathTmp2;
+            if (isSupportedMathCall(callInst, _mathTmp2))
+            {
+              // Skip — math error hook will record the result error.
+            }
+            else
+            {
             BasicBlock::iterator nextInst(inst);
             ++nextInst;
             IRBuilder<> builder(&(*nextInst));
@@ -660,7 +680,83 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
 
             assert(hookCall && "Invalid call instruction!");
             setFakeDebugLocation(inst, hookCall, f);
+            }
           }
+        }
+      }
+
+      // ============= Instrument math function calls ==========================
+      if (auto *callInst = llvm::dyn_cast<llvm::CallInst>(inst))
+      {
+        std::string mathName;
+        if (callInst->getType()->isFloatTy() && isSupportedMathCall(callInst, mathName))
+        {
+          BasicBlock::iterator nextInst(inst);
+          ++nextInst;
+          IRBuilder<> builder(&(*nextInst));
+
+          // Collect the result register name
+          std::string resultRegName;
+          { llvm::raw_string_ostream rso(resultRegName); callInst->printAsOperand(rso, false); rso.flush(); }
+
+          // Collect up to 3 FP operands
+          Value *fpArgs[3] = { nullptr, nullptr, nullptr };
+          std::string fpArgNames[3] = { "", "", "" };
+          int fpCount = 0;
+          for (unsigned ai = 0; ai < callInst->arg_size() && fpCount < 3; ++ai)
+          {
+            Value *argVal = callInst->getArgOperand(ai);
+            if (argVal->getType()->isFloatTy() || argVal->getType()->isDoubleTy())
+            {
+              fpArgs[fpCount] = argVal;
+              llvm::raw_string_ostream rso(fpArgNames[fpCount]);
+              argVal->printAsOperand(rso, false);
+              rso.flush();
+              fpCount++;
+            }
+          }
+
+          // Pad unused operands with 0.0f
+          for (int pi = fpCount; pi < 3; ++pi)
+            fpArgs[pi] = ConstantFP::get(builder.getFloatTy(), 0.0f);
+
+          // If an FP arg is double, cast it to float for the hook signature
+          for (int pi = 0; pi < 3; ++pi)
+          {
+            if (fpArgs[pi] && fpArgs[pi]->getType()->isDoubleTy())
+              fpArgs[pi] = builder.CreateFPTrunc(fpArgs[pi], builder.getFloatTy());
+          }
+
+          int lineNumber = CUDAAnalysis::getLineOfCode(inst);
+          if (lineNumber == -1)
+            goto skip_math;
+
+          {
+            ConstantInt *locId =
+                ConstantInt::get(mod->getContext(), APInt(32, lineNumber, true));
+
+            std::vector<Value *> args;
+            args.push_back(callInst);                                          // result (float x)
+            args.push_back(fpArgs[0]);                                         // arg1 (float y)
+            args.push_back(fpArgs[1]);                                         // arg2 (float z)
+            args.push_back(fpArgs[2]);                                         // arg3 (float w)
+            args.push_back(locId);                                             // loc
+            args.push_back(loadInst_filename);                                 // file_name
+            args.push_back(builder.CreateGlobalStringPtr(mathName));            // math_func_name
+            args.push_back(builder.CreateGlobalStringPtr(resultRegName));       // result_name
+            args.push_back(builder.CreateGlobalStringPtr(fpArgNames[0]));       // op1_name
+            args.push_back(builder.CreateGlobalStringPtr(fpArgNames[1]));       // op2_name
+            args.push_back(builder.CreateGlobalStringPtr(fpArgNames[2]));       // op3_name
+            args.push_back(builder.CreateGlobalStringPtr(f->getName()));        // function_name
+
+            ArrayRef<Value *> args_ref(args);
+            CallInst *hookCall = builder.CreateCall(fpc_fp32_math_error, args_ref);
+            (*insrtrumented_instructions)++;
+
+            assert(hookCall && "Invalid call instruction!");
+            setFakeDebugLocation(inst, hookCall, f);
+          }
+          skip_math:;
         }
       }
 
@@ -1025,6 +1121,104 @@ bool CPUFPInstrumentation_error::isFMAOperation(const Instruction *inst)
     auto id = intrin->getIntrinsicID();
     return id == Intrinsic::fmuladd || id == Intrinsic::fma;
   }
+  return false;
+}
+
+/// Returns true if the call instruction is a supported math function,
+/// and fills normalizedName with the canonical name (e.g. "sin", "pow").
+bool CPUFPInstrumentation_error::isSupportedMathCall(const CallInst *CI, std::string &normalizedName)
+{
+  // Check for LLVM math intrinsics
+  if (auto *intrin = dyn_cast<IntrinsicInst>(CI))
+  {
+    auto id = intrin->getIntrinsicID();
+    // Skip FMA — it is already handled in the arithmetic instrumentation path
+    if (id == Intrinsic::fmuladd || id == Intrinsic::fma)
+      return false;
+
+    switch (id)
+    {
+    case Intrinsic::sin:        normalizedName = "sin"; return true;
+    case Intrinsic::cos:        normalizedName = "cos"; return true;
+    case Intrinsic::tan:        normalizedName = "tan"; return true;
+    case Intrinsic::asin:       normalizedName = "asin"; return true;
+    case Intrinsic::acos:       normalizedName = "acos"; return true;
+    case Intrinsic::atan:       normalizedName = "atan"; return true;
+    case Intrinsic::sinh:       normalizedName = "sinh"; return true;
+    case Intrinsic::cosh:       normalizedName = "cosh"; return true;
+    case Intrinsic::tanh:       normalizedName = "tanh"; return true;
+    case Intrinsic::exp:        normalizedName = "exp"; return true;
+    case Intrinsic::exp2:       normalizedName = "exp2"; return true;
+    case Intrinsic::log:        normalizedName = "log"; return true;
+    case Intrinsic::log2:       normalizedName = "log2"; return true;
+    case Intrinsic::log10:      normalizedName = "log10"; return true;
+    case Intrinsic::sqrt:       normalizedName = "sqrt"; return true;
+    case Intrinsic::fabs:       normalizedName = "fabs"; return true;
+    case Intrinsic::pow:        normalizedName = "pow"; return true;
+    case Intrinsic::ceil:       normalizedName = "ceil"; return true;
+    case Intrinsic::floor:      normalizedName = "floor"; return true;
+    case Intrinsic::trunc:      normalizedName = "trunc"; return true;
+    case Intrinsic::round:      normalizedName = "round"; return true;
+    case Intrinsic::nearbyint:  normalizedName = "nearbyint"; return true;
+    case Intrinsic::rint:       normalizedName = "rint"; return true;
+    default: return false;
+    }
+  }
+
+  // Check for libm function calls (e.g. sinf, sin, cosf, cos, ...)
+  Function *calledFunc = CI->getCalledFunction();
+  if (!calledFunc)
+    return false;
+
+  std::string name = calledFunc->getName().str();
+
+  // Table of recognized libm names -> normalized name
+  static const std::pair<const char *, const char *> libmTable[] = {
+    {"sinf", "sin"}, {"sin", "sin"},
+    {"cosf", "cos"}, {"cos", "cos"},
+    {"tanf", "tan"}, {"tan", "tan"},
+    {"asinf", "asin"}, {"asin", "asin"},
+    {"acosf", "acos"}, {"acos", "acos"},
+    {"atanf", "atan"}, {"atan", "atan"},
+    {"atan2f", "atan2"}, {"atan2", "atan2"},
+    {"sinhf", "sinh"}, {"sinh", "sinh"},
+    {"coshf", "cosh"}, {"cosh", "cosh"},
+    {"tanhf", "tanh"}, {"tanh", "tanh"},
+    {"asinhf", "asinh"}, {"asinh", "asinh"},
+    {"acoshf", "acosh"}, {"acosh", "acosh"},
+    {"atanhf", "atanh"}, {"atanh", "atanh"},
+    {"expf", "exp"}, {"exp", "exp"},
+    {"exp2f", "exp2"}, {"exp2", "exp2"},
+    {"expm1f", "expm1"}, {"expm1", "expm1"},
+    {"logf", "log"}, {"log", "log"},
+    {"log2f", "log2"}, {"log2", "log2"},
+    {"log10f", "log10"}, {"log10", "log10"},
+    {"log1pf", "log1p"}, {"log1p", "log1p"},
+    {"logbf", "logb"}, {"logb", "logb"},
+    {"sqrtf", "sqrt"}, {"sqrt", "sqrt"},
+    {"cbrtf", "cbrt"}, {"cbrt", "cbrt"},
+    {"powf", "pow"}, {"pow", "pow"},
+    {"hypotf", "hypot"}, {"hypot", "hypot"},
+    {"fabsf", "fabs"}, {"fabs", "fabs"},
+    {"ceilf", "ceil"}, {"ceil", "ceil"},
+    {"floorf", "floor"}, {"floor", "floor"},
+    {"truncf", "trunc"}, {"trunc", "trunc"},
+    {"roundf", "round"}, {"round", "round"},
+    {"nearbyintf", "nearbyint"}, {"nearbyint", "nearbyint"},
+    {"rintf", "rint"}, {"rint", "rint"},
+    {"fmodf", "fmod"}, {"fmod", "fmod"},
+    {"remainderf", "remainder"}, {"remainder", "remainder"},
+  };
+
+  for (const auto &entry : libmTable)
+  {
+    if (name == entry.first)
+    {
+      normalizedName = entry.second;
+      return true;
+    }
+  }
+
   return false;
 }
 

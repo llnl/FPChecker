@@ -27,6 +27,13 @@ The main source of the error tracking are in the following files:
 
 Note that global variablea and functions added as instrumentation are marked with ODR linkage to avoid conflicts with the original program.
 
+## How the error is computed:
+
+The main functionality of computing error of arithmetic oprations is in the _FPC_FP32_CALCULATE_ERROR_ function in Runtime_error.h file.
+As you can see in this function, the firdt operands (float x, float y, float z, float w) correspond to the results and operands if the instrumented instructions, so
+if we have an add instrution, x is the result (x =  y + z). Operand w is used for instructions with three operands such as FMA (x = y * z + w). The function computes the error by comparing the result of the instruction in FP32 precision with the result of the same instruction in FP64 precision, and returns the error value.
+The oprand int op, which is an integer, is used to identify the type of the instruction (add, sub, mul, div, etc.) and to compute the error accordingly.
+
 ## Compiling code with the tool:
 
 To compile code with the tool, you need to use the clang++ compiler.
