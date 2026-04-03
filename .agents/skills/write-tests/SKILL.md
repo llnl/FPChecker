@@ -18,3 +18,10 @@ To write new tests in the project follow theese:
 ml python
 pytest tests/cpu_checking/error_analysis/<test_directory>
 ```
+
+## Enssure the clang tool is installed and available:
+
+```bash
+source ~/.bashrc
+conda activate tutorial_env
+```

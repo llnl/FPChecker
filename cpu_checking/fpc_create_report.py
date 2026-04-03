@@ -8,6 +8,7 @@ import os
 import argparse
 import sys
 import json
+from html import escape
 from collections import defaultdict
 import shutil 
 from line_highlighting import createHTMLCode, createHTMLCode_with_errors
@@ -38,6 +39,7 @@ P_FP32_HISTOGRAM = '<!-- FP32_HISTOGRAM -->'
 P_FP32_INSTRUCTIONS = '<!-- FP32_INSTRUCTIONS -->'
 P_FP64_INSTRUCTIONS = '<!-- FP64_INSTRUCTIONS -->'
 P_ERROR_LINE = '<!-- ERROR_LINE -->'
+P_ROUNDING_ERRORS_TABLES = '<!-- ROUNDING_ERRORS_TABLES -->'
 P_FILE_ERROR_TRACKING = '<!-- FILE_ERROR_TRACKING -->'
 P_ERRORS_PER_LINE_PLOTS = '<!-- ERRORS_PER_LINE_PLOTS -->'
 
@@ -476,15 +478,15 @@ def createRootReport():
       fd.write(str(sum(fp32_exp_usage_per_file.values()))+'\n')
 
     # Rounding error report
+    elif P_ROUNDING_ERRORS_TABLES in templateLines[i]:
+      fd.write(createRoundingErrorsTables()+'\n')
+
     elif P_ERROR_LINE in templateLines[i]:
+      # Backward-compatible fallback if older templates are used.
       fd.write(createRoundingErrorsReport()+'\n')
 
     elif P_FILE_ERROR_TRACKING in templateLines[i]:
-      # Only print the first file name as a sample
-      if not rounding_errors_per_file_line:
-        fd.write('/unknown/path/'+'\n')
-      else:
-        fd.write(list(rounding_errors_per_file_line.keys())[0]+'\n')
+      fd.write(createRoundingErrorFileList()+'\n')
 
     elif P_ERRORS_PER_LINE_PLOTS in templateLines[i]:
       for line in relative_errors_per_line:
@@ -596,9 +598,76 @@ def createCodeReport(event_name, file_full_path, id):
       fd.write(templateLines[i])
   fd.close()
 
+def getSortedRoundingErrorFiles():
+  return sorted(rounding_errors_per_file_line.keys())
+
+def getShortDisplayPath(path, max_chars=80):
+  if len(path) <= max_chars:
+    return path
+  return '...'+path[-max_chars:]
+
+def createRoundingErrorFileList():
+  files = getSortedRoundingErrorFiles()
+  if len(files) == 0:
+    return 'No files with rounding errors.'
+
+  entries = []
+  for idx, file_name in enumerate(files):
+    file_label = os.path.split(file_name)[1]
+    n_lines = len(rounding_errors_per_file_line[file_name])
+    # Show compact file names, preserving full path in title tooltip.
+    entries.append(
+      '<a href="#rounding_error_file_'+str(idx)+'" title="'+escape(file_name)+'">'
+      + escape(file_label) + ' (' + str(n_lines) + ')</a>'
+    )
+  return ' | '.join(entries)
+
 def createRoundingErrorsReport():
   report_text = ""
-  for file_name in rounding_errors_per_file_line:
+  files = getSortedRoundingErrorFiles()
+  for idx, file_name in enumerate(files):
+    error_dict = {}
+    relative_error_dict = {}
+    highligth_set = set([])
+
+    report_text += (
+      '<tr id="rounding_error_file_'+str(idx)+'">'
+      '<td class="code_line_class"></td>'
+      '<td colspan="3"><b>File:</b> '+escape(getShortDisplayPath(file_name))+'</td>'
+      '</tr>\n'
+    )
+
+    for line in rounding_errors_per_file_line[file_name]:
+      error = rounding_errors_per_file_line[file_name][line][0]
+      relative_error = rounding_errors_per_file_line[file_name][line][1]
+      error_dict[line] = error
+      relative_error_dict[line] = relative_error
+      highligth_set.add(line)
+    htmlCode = createHTMLCode_with_errors(file_name, highligth_set, error_dict, relative_error_dict)
+    report_text += '\n'.join(htmlCode) + '\n'
+
+    # Spacer between file blocks.
+    report_text += (
+      '<tr><td class="code_line_class"></td>'
+      '<td colspan="3"></td></tr>\n'
+    )
+  return report_text
+
+def createRoundingErrorsTables():
+  files = getSortedRoundingErrorFiles()
+  if len(files) == 0:
+    return (
+      '<table width="600" class="report_box_source">\n'
+      '  <tbody>\n'
+      '  <tr class="rounding_file_header_row">\n'
+      '    <td colspan="4" class="rounding_file_header_cell"><b>File:</b> No files with rounding errors.</td>\n'
+      '  </tr>\n'
+      '  </tbody>\n'
+      '</table>'
+    )
+
+  blocks = []
+  for idx, file_name in enumerate(files):
     error_dict = {}
     relative_error_dict = {}
     highligth_set = set([])
@@ -608,9 +677,32 @@ def createRoundingErrorsReport():
       error_dict[line] = error
       relative_error_dict[line] = relative_error
       highligth_set.add(line)
+
     htmlCode = createHTMLCode_with_errors(file_name, highligth_set, error_dict, relative_error_dict)
-    report_text += '\n'.join(htmlCode) + '\n'
-  return report_text
+
+    block = []
+    block.append('<table width="600" class="report_box_source" id="rounding_error_file_'+str(idx)+'">')
+    block.append('  <tbody>')
+    block.append('  <tr class="rounding_file_header_row">')
+    block.append('    <td colspan="4" class="rounding_file_header_cell"><b>File:</b> '+escape(getShortDisplayPath(file_name))+'</td>')
+    block.append('  </tr>')
+    block.append('  <tr>')
+    block.append('    <th></th>')
+    block.append('    <th></th>')
+    block.append('    <th class="error_table_header">Rounding Error</th>')
+    block.append('    <th class="error_table_header">Relative Error</th>')
+    block.append('  </tr>')
+    block.extend(htmlCode)
+    block.append('  </tbody>')
+    block.append('</table>')
+
+    blocks.append('\n'.join(block))
+    if idx != len(files) - 1:
+      # Reuse existing spacing helper from template styles.
+      blocks.append('<div class="separation_class"></div>')
+      blocks.append('<div class="separation_class"></div>')
+
+  return '\n'.join(blocks)
 
 def removeReportDir():
   if os.path.exists(REPORTS_DIR):
