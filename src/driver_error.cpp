@@ -88,7 +88,7 @@ namespace CPUAnalysis
   {
     PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM)
     {
-      llvm::outs() << "Running ModulePass on module: " << M.getName() << "\n";
+      //llvm::outs() << "Running ModulePass on module: " << M.getName() << "\n";
       analyzeProgramModule(M);
       return PreservedAnalyses::none();
     }

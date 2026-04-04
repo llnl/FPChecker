@@ -1,5 +1,8 @@
-#include <math.h>
+#ifdef WITH_MPI
 #include <mpi.h>
+#endif
+
+#include <math.h>
 #include "_hypre_utilities.h"
 #include "HYPRE_krylov.h"
 #include "HYPRE.h"
@@ -237,7 +240,8 @@ HYPRE_Int main (HYPRE_Int argc, char *argv[])
 
        /* Set some parameters (See Reference Manual for more parameters) */
        HYPRE_PCGSetMaxIter(solver, 1000); /* max iterations */
-       HYPRE_PCGSetTol(solver, 1e-7); /* conv. tolerance */
+       HYPRE_PCGSetTol(solver, 1e-12); /* conv. tolerance */
+       //HYPRE_PCGSetResidualTol(solver, 1e-6); /* force zero residual for convergence */
        HYPRE_PCGSetTwoNorm(solver, 1); /* use the two norm as the stopping criteria */
        HYPRE_PCGSetPrintLevel(solver, 2); /* prints out the iteration info */
        HYPRE_PCGSetLogging(solver, 1); /* needed to get run info later */

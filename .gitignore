@@ -23,3 +23,4 @@ fpc_error_log.json
 *.dSYM/
 *.dSYM
 .venv
+temp/

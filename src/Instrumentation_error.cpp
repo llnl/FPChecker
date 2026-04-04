@@ -314,14 +314,14 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
 
   // Warning message
   // Check if the function calls other functions with floating-point values
-  if (functionCallsFunctionWithFloatingPointValues(f))
+/*   if (functionCallsFunctionWithFloatingPointValues(f))
   {
     CUDAAnalysis::Logging::info(
         ("*** WARNING *** Function " + f->getName() +
          " calls functions that return floating-point values!")
             .str()
             .c_str());
-  }
+  } */
 
 #ifdef FPC_DEBUG
   CUDAAnalysis::Logging::info("Entering main loop in instrumentFunctionErrorAnalysis...");
@@ -580,6 +580,127 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
         }
       }
 
+      // ============= Propagate error through MPI communication calls ==========
+      // MPI calls like MPI_Allreduce, MPI_Reduce, MPI_Bcast copy FP data between
+      // buffers. Without this hook the error associated with the source buffer
+      // is lost because the MPI library writes to the destination buffer outside
+      // of the instrumented store path.
+      if (auto *callInst = llvm::dyn_cast<llvm::CallInst>(inst))
+      {
+        Function *calledFunc = callInst->getCalledFunction();
+        if (calledFunc)
+        {
+          std::string funcName = calledFunc->getName().str();
+
+          // Match *MPI_Allreduce* or *MPI_Reduce* (covers wrappers like hypre_MPI_Allreduce)
+          bool isMPIAllreduce = funcName.find("MPI_Allreduce") != std::string::npos;
+          bool isMPIReduce    = funcName.find("MPI_Reduce") != std::string::npos &&
+                                funcName.find("MPI_Allreduce") == std::string::npos;
+          bool isMPIBcast     = funcName.find("MPI_Bcast") != std::string::npos;
+
+          if (isMPIAllreduce && callInst->arg_size() >= 3)
+          {
+            // MPI_Allreduce(sendbuf, recvbuf, count, ...)
+            BasicBlock::iterator nextInst(inst);
+            ++nextInst;
+            IRBuilder<> builder(&(*nextInst));
+
+            Value *sendbuf = callInst->getArgOperand(0);
+            Value *recvbuf = callInst->getArgOperand(1);
+            Value *count   = callInst->getArgOperand(2);
+
+            Value *dstAddr = builder.CreatePtrToInt(recvbuf, builder.getInt64Ty());
+            Value *srcAddr = builder.CreatePtrToInt(sendbuf, builder.getInt64Ty());
+
+            // Approximate byte size: count * sizeof(float) = count * 4
+            Value *countI64 = builder.CreateZExtOrTrunc(count, builder.getInt64Ty());
+            Value *byteSize = builder.CreateMul(countI64,
+                ConstantInt::get(builder.getInt64Ty(), 4));
+
+            std::vector<Value *> args;
+            args.push_back(dstAddr);
+            args.push_back(srcAddr);
+            args.push_back(byteSize);
+            args.push_back(ConstantInt::get(builder.getInt32Ty(), 1)); // size_type: i64
+            args.push_back(ConstantInt::get(builder.getInt32Ty(), 0)); // ins_type: memcpy-like
+            int lineNumber = CUDAAnalysis::getLineOfCode(inst);
+            args.push_back(ConstantInt::get(builder.getInt32Ty(), lineNumber));
+            args.push_back(loadInst_filename);
+
+            ArrayRef<Value *> args_ref(args);
+            CallInst *hookCall = builder.CreateCall(fp32_memcpy_function, args_ref);
+            (*insrtrumented_instructions)++;
+            setFakeDebugLocation(inst, hookCall, f);
+          }
+          else if (isMPIReduce && callInst->arg_size() >= 3)
+          {
+            // MPI_Reduce(sendbuf, recvbuf, count, ...)
+            // Same layout as Allreduce for the first 3 args
+            BasicBlock::iterator nextInst(inst);
+            ++nextInst;
+            IRBuilder<> builder(&(*nextInst));
+
+            Value *sendbuf = callInst->getArgOperand(0);
+            Value *recvbuf = callInst->getArgOperand(1);
+            Value *count   = callInst->getArgOperand(2);
+
+            Value *dstAddr = builder.CreatePtrToInt(recvbuf, builder.getInt64Ty());
+            Value *srcAddr = builder.CreatePtrToInt(sendbuf, builder.getInt64Ty());
+
+            Value *countI64 = builder.CreateZExtOrTrunc(count, builder.getInt64Ty());
+            Value *byteSize = builder.CreateMul(countI64,
+                ConstantInt::get(builder.getInt64Ty(), 4));
+
+            std::vector<Value *> args;
+            args.push_back(dstAddr);
+            args.push_back(srcAddr);
+            args.push_back(byteSize);
+            args.push_back(ConstantInt::get(builder.getInt32Ty(), 1));
+            args.push_back(ConstantInt::get(builder.getInt32Ty(), 0));
+            int lineNumber = CUDAAnalysis::getLineOfCode(inst);
+            args.push_back(ConstantInt::get(builder.getInt32Ty(), lineNumber));
+            args.push_back(loadInst_filename);
+
+            ArrayRef<Value *> args_ref(args);
+            CallInst *hookCall = builder.CreateCall(fp32_memcpy_function, args_ref);
+            (*insrtrumented_instructions)++;
+            setFakeDebugLocation(inst, hookCall, f);
+          }
+          else if (isMPIBcast && callInst->arg_size() >= 2)
+          {
+            // MPI_Bcast(buffer, count, ...) — in-place, so copy error to itself
+            // (re-associate the error with the same address after the opaque call)
+            BasicBlock::iterator nextInst(inst);
+            ++nextInst;
+            IRBuilder<> builder(&(*nextInst));
+
+            Value *buffer = callInst->getArgOperand(0);
+            Value *count  = callInst->getArgOperand(1);
+
+            Value *addr = builder.CreatePtrToInt(buffer, builder.getInt64Ty());
+
+            Value *countI64 = builder.CreateZExtOrTrunc(count, builder.getInt64Ty());
+            Value *byteSize = builder.CreateMul(countI64,
+                ConstantInt::get(builder.getInt64Ty(), 4));
+
+            std::vector<Value *> args;
+            args.push_back(addr);  // dst = src (in-place)
+            args.push_back(addr);
+            args.push_back(byteSize);
+            args.push_back(ConstantInt::get(builder.getInt32Ty(), 1));
+            args.push_back(ConstantInt::get(builder.getInt32Ty(), 0));
+            int lineNumber = CUDAAnalysis::getLineOfCode(inst);
+            args.push_back(ConstantInt::get(builder.getInt32Ty(), lineNumber));
+            args.push_back(loadInst_filename);
+
+            ArrayRef<Value *> args_ref(args);
+            CallInst *hookCall = builder.CreateCall(fp32_memcpy_function, args_ref);
+            (*insrtrumented_instructions)++;
+            setFakeDebugLocation(inst, hookCall, f);
+          }
+        }
+      }
+
       // ============= Push argument errors to callee ============================
       if (auto *callInst = llvm::dyn_cast<llvm::CallInst>(inst))
       {
@@ -765,7 +886,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
            (inst->getOpcode() == Instruction::FNeg) ||
            (inst->getOpcode() == Instruction::Select)) &&
           (inst->getOperand(0)->getType()->isFloatTy() ||
-           inst->getOperand(1)->getType()->isFloatTy()))
+           (inst->getNumOperands() >= 2 && inst->getOperand(1)->getType()->isFloatTy())))
       {
         DebugLoc loc = inst->getDebugLoc();
 

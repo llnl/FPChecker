@@ -194,12 +194,12 @@ _FPC_REGISTER_T_ *_FPC_REGISTER_HT_NEWPAIR_(_FPC_REGISTER_T_ *val)
 /* Comparison                                                                 */
 /*----------------------------------------------------------------------------*/
 
-inline int _FPC_ADDRESS_EQUAL_(_FPC_ADDRESS_T_ *x, _FPC_ADDRESS_T_ *y)
+static inline int _FPC_ADDRESS_EQUAL_(_FPC_ADDRESS_T_ *x, _FPC_ADDRESS_T_ *y)
 {
   return x->address_value == y->address_value;
 }
 
-inline int _FPC_REGISTER_EQUAL_(_FPC_REGISTER_T_ *x, _FPC_REGISTER_T_ *y)
+static inline int _FPC_REGISTER_EQUAL_(_FPC_REGISTER_T_ *x, _FPC_REGISTER_T_ *y)
 {
   // The register and function names must match
   return (strcmp(x->register_name, y->register_name) == 0 && strcmp(x->function_name, y->function_name) == 0);

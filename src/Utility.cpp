@@ -25,6 +25,18 @@ using namespace llvm;
 namespace CUDAAnalysis
 {
 
+  // Combine directory and filename from debug info.
+  // If filename is already an absolute path, return it directly
+  // (avoids double-prefixing when cmake builds from a separate build directory).
+  static std::string combineDirectoryAndFilename(StringRef dir, StringRef filename)
+  {
+    if (!filename.empty() && filename[0] == '/')
+      return filename.str();
+    if (dir.empty())
+      return filename.str();
+    return dir.str() + "/" + filename.str();
+  }
+
   void printMessage(const char *s)
   {
     // errs() << "[ERR_INJ] " << s << "\n";
@@ -176,7 +188,7 @@ namespace CUDAAnalysis
       if (DIFile *file = fsp->getFile())
       {
         errs() << "\t........ (1) Using DISubprogram file for function " << f->getName() << "\n";
-        return file->getDirectory().str() + "/" + file->getFilename().str();
+        return combineDirectoryAndFilename(file->getDirectory(), file->getFilename());
       }
     }
 
@@ -204,7 +216,7 @@ namespace CUDAAnalysis
               if (DIFile *file = instSP->getFile())
               {
                 errs() << "\t........ (2) Using instruction's DISubprogram file for function " << f->getName() << "\n";
-                return file->getDirectory().str() + "/" + file->getFilename().str();
+                return combineDirectoryAndFilename(file->getDirectory(), file->getFilename());
               }
             }
             // Otherwise it's likely inlined from another function; skip.
@@ -224,7 +236,7 @@ namespace CUDAAnalysis
             if (DIFile *file = diScope->getFile())
             {
               errs() << "\t........ (3) Using generic DIScope file for function " << f->getName() << "\n";
-              return file->getDirectory().str() + "/" + file->getFilename().str();
+              return combineDirectoryAndFilename(file->getDirectory(), file->getFilename());
             }
           }
         }
@@ -249,7 +261,7 @@ namespace CUDAAnalysis
           if (auto *cu = dyn_cast<DICompileUnit>(node))
           {
             if (DIFile *file = cu->getFile())
-              return file->getDirectory().str() + "/" + file->getFilename().str();
+              return combineDirectoryAndFilename(file->getDirectory(), file->getFilename());
           }
         }
       }
@@ -285,7 +297,7 @@ namespace CUDAAnalysis
           // Get the filename (you might want to get the full path)
           StringRef File = file->getFilename();
           StringRef Dir = file->getDirectory();
-          lineStr << Dir.str() << "/" << File.str();
+          lineStr << combineDirectoryAndFilename(Dir, File);
         }
         else
         {

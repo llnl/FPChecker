@@ -27,7 +27,7 @@ int main()
     std::cout << "-g -include " << install_path << "/src/Runtime_cpu.h -fpass-plugin=" << install_path << "/lib/libfpchecker_cpu" << SHARED_LIB_EXTENSION << std::endl;
     std::cout << std::endl;
     std::cout << "(2) For rounding error tracking:" << std::endl;
-    std::cout << "-g -include " << install_path << "/src/Runtime_error.h -fpass-plugin=" << install_path << "/lib/libfpchecker_error" << SHARED_LIB_EXTENSION << std::endl;
+    std::cout << "-g -fno-vectorize -fno-slp-vectorize -include " << install_path << "/src/Runtime_error.h -fpass-plugin=" << install_path << "/lib/libfpchecker_error" << SHARED_LIB_EXTENSION << std::endl;
     std::cout << std::endl;
     std::cout << "Wrappers are located here:" << std::endl;
     std::cout << install_path << "/bin/clang-fpchecker" << std::endl;

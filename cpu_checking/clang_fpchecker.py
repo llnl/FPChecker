@@ -32,7 +32,7 @@ FPCHECKER_RUNTIME_EXCEPTIONS   = FPCHECKER_PATH+'/../src/Runtime_cpu.h'
 FPCHECKER_RUNTIME_ERROR        = FPCHECKER_PATH+'/../src/Runtime_error.h'
 
 LLVM_PASS_EXCEPTIONS           = "-fpass-plugin=" + FPCHECKER_LIB_EXCEPTIONS + " -include " + FPCHECKER_RUNTIME_EXCEPTIONS + ' -g '
-LLVM_PASS_ERROR                = "-fpass-plugin=" + FPCHECKER_LIB_ERROR + " -include " + FPCHECKER_RUNTIME_ERROR + ' -g '
+LLVM_PASS_ERROR                = "-fpass-plugin=" + FPCHECKER_LIB_ERROR + " -include " + FPCHECKER_RUNTIME_ERROR + ' -g -fno-vectorize -fno-slp-vectorize '
 
 # --------------------------------------------------------------------------- #
 # --- Classes --------------------------------------------------------------- #

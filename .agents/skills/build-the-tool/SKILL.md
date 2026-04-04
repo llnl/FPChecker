@@ -14,7 +14,7 @@ source ~/.bashrc
 conda activate tutorial_env
 ```
 
-3. Move to the directory FPChecker/build.
+3. Move to the directory build inside the project root.
 
 4. If the build directory does not exist, create it and configure it like this:
 
@@ -33,5 +33,11 @@ make -j 4
 
 ```bash
 make install
+```
+
+7. After installing, one must add the bin directory of the install directory to the PATH environment variable.
+
+```bash
+export PATH=$PATH:/path/to/install/bin
 ```
 
