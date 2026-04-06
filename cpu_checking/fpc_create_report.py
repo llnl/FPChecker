@@ -343,6 +343,99 @@ def createEventReport_Text(event_name):
   for i in program_inputs[event_name]:
     print(i)
 
+def truncateTextForTable(text, max_chars):
+  clean_text = str(text).replace('\t', '    ').strip()
+  if len(clean_text) <= max_chars:
+    return clean_text
+  if max_chars <= 3:
+    return clean_text[:max_chars]
+  return clean_text[:max_chars - 3] + '...'
+
+def getSourceCodeByLine(file_name, lines):
+  source_by_line = {}
+  try:
+    with open(file_name, 'r') as src_file:
+      source_lines = src_file.readlines()
+
+    for line in lines:
+      source_index = int(line) - 1
+      if source_index >= 0 and source_index < len(source_lines):
+        source_by_line[line] = source_lines[source_index].rstrip('\n').rstrip('\r')
+      else:
+        source_by_line[line] = '(line not found)'
+  except Exception:
+    for line in lines:
+      source_by_line[line] = '(source unavailable)'
+
+  return source_by_line
+
+def createRoundingErrorsReport_Text():
+  files = getSortedRoundingErrorFiles()
+  print("\n===== Rounding Error Report =====")
+  if len(files) == 0:
+    print('No files with rounding errors.')
+    return
+
+  total_lines = 0
+  max_abs_error = 0.0
+  max_relative_error = 0.0
+  for file_name in files:
+    for line in rounding_errors_per_file_line[file_name]:
+      total_lines += 1
+      error = rounding_errors_per_file_line[file_name][line][0]
+      relative_error = rounding_errors_per_file_line[file_name][line][1]
+      if abs(error) > max_abs_error:
+        max_abs_error = abs(error)
+      if relative_error > max_relative_error:
+        max_relative_error = relative_error
+
+  print('Files with rounding errors:', len(files))
+  print('Lines with rounding errors:', total_lines)
+  print('Max abs rounding error:   {:.6e}'.format(max_abs_error))
+  print('Max relative error:       {:.6e}'.format(max_relative_error))
+
+  # Keep table rows compact for remote terminals.
+  line_col_width = 6
+  code_col_width = 56
+  error_col_width = 13
+  rel_error_col_width = 13
+
+  header_row = (
+    '{:<{line_w}} | {:<{code_w}} | {:>{err_w}} | {:>{rel_w}}'.format(
+      'Line', 'Code', 'Error', 'Rel. Error',
+      line_w=line_col_width,
+      code_w=code_col_width,
+      err_w=error_col_width,
+      rel_w=rel_error_col_width
+    )
+  )
+  separator_row = '-' * len(header_row)
+
+  for file_name in files:
+    print("\n--- File: " + file_name)
+    # Keep shell output deterministic and easier to scan.
+    sorted_lines = sorted(rounding_errors_per_file_line[file_name].keys())
+    source_by_line = getSourceCodeByLine(file_name, sorted_lines)
+    print(header_row)
+    print(separator_row)
+
+    for line in sorted_lines:
+      error = rounding_errors_per_file_line[file_name][line][0]
+      relative_error = rounding_errors_per_file_line[file_name][line][1]
+      source_line = truncateTextForTable(source_by_line[line], code_col_width)
+      print(
+        '{:<{line_w}} | {:<{code_w}} | {:>{err_w}.6e} | {:>{rel_w}.6e}'.format(
+          line,
+          source_line,
+          error,
+          relative_error,
+          line_w=line_col_width,
+          code_w=code_col_width,
+          err_w=error_col_width,
+          rel_w=rel_error_col_width
+        )
+      )
+
 #------------------------------------------------------------------------------
 #------------------------- HTML Reports ---------------------------------------
 #------------------------------------------------------------------------------
@@ -776,7 +869,7 @@ if __name__ == '__main__':
   parser.add_argument('-c', '--clean', action='store_true', help='Remove traces. A report cannot be generated without traces.')
   parser.add_argument('-t', '--title', nargs=1, type=str, help='Title of report.')
   parser.add_argument('-q', '--query', nargs=1, type=str, action='store', help='Query file.')
-  parser.add_argument('-s', '--show', action='store', nargs='?', default=0, type=str, help='Show report on screen.')
+  parser.add_argument('-s', '--show', action='store', nargs='?', default=0, type=str, help='Show report on screen (main, event, or rounding_error).')
   parser.add_argument('dir', nargs='?', default=os.getcwd())
   args = parser.parse_args()
 
@@ -784,10 +877,16 @@ if __name__ == '__main__':
     prCyan('Generating FPChecker report...')
     reports_path = args.dir  
     fileList = getEventFilePaths(reports_path)
+    fileListErrors = getErrorFilePaths(reports_path)
     print('Trace files found:', len(fileList))
+    print('Error files found:', len(fileListErrors))
     loadEvents(fileList)
+    loadRoundingErrorTraces(fileListErrors)
     if (args.show == None ):
       createRootReport_Text()
+      createRoundingErrorsReport_Text()
+    elif (args.show in ['rounding_error', 'rounding_errors', 'rounding']):
+      createRoundingErrorsReport_Text()
     else:
       event_name = args.show
       createEventReport_Text(event_name)
