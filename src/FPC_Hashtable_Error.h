@@ -117,20 +117,21 @@ size_t _FPC_HT_HASH_ADDRESS_(_FPC_ADDRESS_HTABLE_T *hashtable, _FPC_ADDRESS_T_ *
 // DBJ2 algorithm for hashing a string (does not modify register_name)
 size_t _FPC_HT_HASH_REGISTER_(_FPC_REGISTER_HTABLE_T *hashtable, _FPC_REGISTER_T_ *val)
 {
-  if (!hashtable || hashtable->size == 0 || !val || !val->register_name)
+  if (!hashtable || hashtable->size == 0 || !val || !val->register_name || !val->function_name)
     return 0;
 
   unsigned long hash = 5381;
 
-  // Join the register with the function name: register_name:function_name
-  const char *combined_name = (char *)malloc(strlen(val->register_name) + strlen(val->function_name) + 2);
-  size_t combined_len = strlen(val->register_name) + strlen(val->function_name) + 2;
-  snprintf((char *)combined_name, combined_len, "%s:%s", val->register_name, val->function_name);
-  const unsigned char *p = (const unsigned char *)combined_name;
+  // Hash register_name and function_name without allocating
+  const unsigned char *p = (const unsigned char *)val->register_name;
   int c;
-
   while ((c = *p++))
     hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+  // separator
+  hash = ((hash << 5) + hash) + ':';
+  p = (const unsigned char *)val->function_name;
+  while ((c = *p++))
+    hash = ((hash << 5) + hash) + c;
 
   return (size_t)(hash % hashtable->size);
 }
@@ -348,6 +349,7 @@ void _FPC_ADDRESS_HT_UPDATE_(
   temp.line = line;
 
   _FPC_ADDRESS_HT_SET_(hashtable, &temp);
+  free(temp.file_name);
 }
 
 void _FPC_REGISTER_HT_UPDATE_(
@@ -373,6 +375,8 @@ void _FPC_REGISTER_HT_UPDATE_(
   strcpy(temp.function_name, function_name);
 
   _FPC_REGISTER_HT_SET_(hashtable, &temp);
+  free(temp.file_name);
+  free(temp.function_name);
 }
 
 /*----------------------------------------------------------------------------*/
