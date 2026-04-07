@@ -3,6 +3,12 @@
 
 #define _BSD_SOURCE
 #define _DEFAULT_SOURCE
+#ifndef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 200809L
+#endif
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -12,6 +18,71 @@
 #include <stdint.h>
 #include <sys/stat.h>
 #include <assert.h>
+#include <fcntl.h>
+#include <errno.h>
+
+/*----------------------------------------------------------------------------*/
+/* Safe string validation                                                     */
+/* Uses pread() on /proc/self/mem to safely copy strings from potentially     */
+/* invalid pointers without risking a segfault. Results are cached per        */
+/* unique pointer value so each pointer is checked at most once.              */
+/*----------------------------------------------------------------------------*/
+#define _FPC_STR_CACHE_SIZE_ 256
+#define _FPC_MAX_STR_LEN_ 512
+
+static int _FPC_MEMFD_ = -2; /* -2 = not yet opened */
+
+static struct {
+  const char *ptr;
+  char safe_copy[_FPC_MAX_STR_LEN_];
+} _FPC_STR_CACHE_[_FPC_STR_CACHE_SIZE_];
+
+static inline void _FPC_INIT_STR_VALIDATOR_(void) {
+  if (_FPC_MEMFD_ == -2) {
+    _FPC_MEMFD_ = open("/proc/self/mem", O_RDONLY);
+    memset(_FPC_STR_CACHE_, 0, sizeof(_FPC_STR_CACHE_));
+  }
+}
+
+/* Safely read a string from ptr. Returns a pointer to a cached safe copy.
+   If the pointer is invalid or unreadable, returns "unknown". */
+static inline const char *_FPC_SAFE_STR_(const char *ptr) {
+  if (ptr == NULL || (uintptr_t)ptr < 4096)
+    return "unknown";
+
+  _FPC_INIT_STR_VALIDATOR_();
+
+  size_t idx = ((uintptr_t)ptr >> 3) % _FPC_STR_CACHE_SIZE_;
+  if (_FPC_STR_CACHE_[idx].ptr == ptr)
+    return _FPC_STR_CACHE_[idx].safe_copy;
+
+  _FPC_STR_CACHE_[idx].ptr = ptr;
+
+  if (_FPC_MEMFD_ < 0) {
+    /* Can't validate via /proc/self/mem; fall back to direct access */
+    strncpy(_FPC_STR_CACHE_[idx].safe_copy, ptr, _FPC_MAX_STR_LEN_ - 1);
+    _FPC_STR_CACHE_[idx].safe_copy[_FPC_MAX_STR_LEN_ - 1] = '\0';
+    return _FPC_STR_CACHE_[idx].safe_copy;
+  }
+
+  int saved_errno = errno;
+  char buf[_FPC_MAX_STR_LEN_];
+  ssize_t n = pread(_FPC_MEMFD_, buf, sizeof(buf) - 1, (off_t)(uintptr_t)ptr);
+  errno = saved_errno;
+
+  if (n <= 0) {
+    strcpy(_FPC_STR_CACHE_[idx].safe_copy, "unknown");
+    return _FPC_STR_CACHE_[idx].safe_copy;
+  }
+
+  buf[n] = '\0';
+  size_t len = strnlen(buf, (size_t)n);
+  if (len >= _FPC_MAX_STR_LEN_)
+    len = _FPC_MAX_STR_LEN_ - 1;
+  memcpy(_FPC_STR_CACHE_[idx].safe_copy, buf, len);
+  _FPC_STR_CACHE_[idx].safe_copy[len] = '\0';
+  return _FPC_STR_CACHE_[idx].safe_copy;
+}
 
 /*----------------------------------------------------------------------------*/
 /* Items                                                                      */
@@ -338,6 +409,7 @@ void _FPC_ADDRESS_HT_UPDATE_(
     const char *file_name,
     int line)
 {
+  file_name = _FPC_SAFE_STR_(file_name);
   _FPC_ADDRESS_T_ temp;
   temp.address_value = address_value;
   temp.error = error;
@@ -361,6 +433,8 @@ void _FPC_REGISTER_HT_UPDATE_(
     const char *file_name,
     int line)
 {
+  file_name = _FPC_SAFE_STR_(file_name);
+  function_name = _FPC_SAFE_STR_(function_name);
   _FPC_REGISTER_T_ temp;
   temp.register_name = (char *)register_name;
   temp.error = error;

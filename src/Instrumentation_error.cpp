@@ -350,22 +350,10 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
 
   // Get global fileName pointer
   // This creates a Load instruction
-  GlobalVariable *fName = nullptr;
-  fName =
-      mod->getGlobalVariable("_ZL15_FPC_FILE_NAME_", true); // C++ binding
-  if (fName == nullptr)
-    fName =
-        mod->getGlobalVariable("_FPC_FILE_NAME_", true); // try C binding
-  assert((fName != nullptr) && "Global filename var not found");
-  Type *gvType = fName->getType();
-  std::string loadName = "my_loaded_" + std::to_string(load_counter++);
-  auto loadInst_filename =
-      builder.CreateAlignedLoad(gvType, fName, MaybeAlign(), loadName);
-
-  // Push file name
-  Constant *c = builder.CreateGlobalStringPtr(module_filename);
-  fName->setInitializer(NULL);
-  fName->setInitializer(c);
+  // Create a constant string for the file name, passed directly to
+  // instrumented calls (avoids loading from a global that can be
+  // corrupted by relocation issues in shared libraries).
+  Constant *loadInst_filename = builder.CreateGlobalStringPtr(module_filename);
   //  -------------------------------------------------------------------------------
 
   // ============= Pop argument errors into callee parameters ===================

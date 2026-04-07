@@ -1,13 +1,16 @@
 # Change this to the location of your PETSc source.
-PETSC_DIR=/Users/lagunaperalt1/projects/fpchecker/FPChecker/temp/petsc-3.25.0
+PETSC_DIR=/usr/workspace/wsa/laguna/fpchecker/FPChecker/temp/petsc-3.25.0
+PETSC_ARCH=arch-single-noftn-fpc-error
+
+FPC_INSTALL=/usr/workspace/wsa/laguna/fpchecker/FPChecker/build/install
 
 .DEFAULT_GOAL := all
 
-FPC_FLAGS := -g -fno-vectorize -fno-slp-vectorize -include /Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/src/Runtime_error.h -fpass-plugin=/Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/lib/libfpchecker_error.dylib
+FPC_FLAGS := -g -fno-vectorize -fno-slp-vectorize -include ${FPC_INSTALL}/src/Runtime_error.h -fpass-plugin=${FPC_INSTALL}/lib/libfpchecker_error.so
 
 include ${PETSC_DIR}/lib/petsc/conf/variables
 include ${PETSC_DIR}/lib/petsc/conf/rules
-CFLAGS += -pedantic -std=c99 -I${PETSC_DIR}/include -I${PETSC_DIR}/arch-single-noftn-fpc-error/include
+CFLAGS += -pedantic -std=c99 -I${PETSC_DIR}/include -I${PETSC_DIR}/${PETSC_ARCH}/include
 
 all: petsc_example
 
@@ -22,6 +25,6 @@ petsc_example: petsc_example.o
 distclean: clean
 
 clean::
-	@rm -f *~ *tmp petsc_example *.o
-	@rm -f *.dat *.dat.info
+	@rm -rf *~ *tmp petsc_example *.o .fpc_logs
+	@rm -rf *.dat *.dat.info
 

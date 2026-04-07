@@ -112,7 +112,7 @@ def getErrorsPerLineFilePaths(p):
   return fileList
 
 def loadReport(fileName):
-  f = open(fileName,'r')
+  f = open(fileName, 'r', encoding='utf-8', errors='replace')
   data = json.load(f)
   f.close()
   return data
@@ -823,7 +823,7 @@ def removeReportDir():
 #]
 def executeQuery(fileName):
   prGreen('Loading: ' + fileName)
-  fd = open(fileName, 'r')
+  fd = open(fileName, 'r', encoding='utf-8', errors='replace')
   data = json.load(fd)
   fd.close()
 
@@ -834,7 +834,7 @@ def executeQuery(fileName):
       fname = os.path.split(file)[1]
       if fname.startswith('fpc_') and fname.endswith(".json"):
         f = str(os.path.join(root, file))
-        with open(f, 'r') as trace_file:
+        with open(f, 'r', encoding='utf-8', errors='replace') as trace_file:
           trace_data = json.load(trace_file)
           for i in trace_data:
             if i["file"].endswith(data[0]["file"]):

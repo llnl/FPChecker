@@ -1,0 +1,2150 @@
+[
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/utils/str.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/pinit.c",
+    "line": 707,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/utils/fhost.c",
+    "line": 87,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/workspace/wsa/laguna/fpchecker/FPChecker/tutorial/other_examples/petsc/petsc_example.c",
+    "line": 42,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/logging/state/logregistry.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/interface/matreg.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/logging/state/logregistry.c",
+    "line": 32,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 20,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 138,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 10,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 44,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 622,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 468,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/logging/state/logregistry.c",
+    "line": 707,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec2.c",
+    "line": 840,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/dll/reg.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/utils/gcreate.c",
+    "line": 707,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/veccreate.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/utils/gcreate.c",
+    "line": 551,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec2.c",
+    "line": 666,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/is/is/impls/general/general.c",
+    "line": 833,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 707,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1874,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1340,
+    "error": 1.70937506371870995e-08,
+    "relative_error": 3.32478047547468859e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/aoptions.c",
+    "line": 774,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec2.c",
+    "line": 526,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/options.c",
+    "line": 296,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/interface/matrix.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/pname.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1883,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1828,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1769,
+    "error": 3.13220615000275870e-08,
+    "relative_error": 6.09222537635161992e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/logging/state/logstate.c",
+    "line": 707,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aijfact.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/utils/mathinf.c",
+    "line": 113,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/utils/gcreate.c",
+    "line": 557,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/info/verboseinfo.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/mpiuni/mpi.c",
+    "line": 76,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec1.c",
+    "line": 439,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1819,
+    "error": -4.77126091968926858e-08,
+    "relative_error": 9.28023072605861406e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1837,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itcl.c",
+    "line": 336,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1778,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 533,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/iterativ.c",
+    "line": 949,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/destroy.c",
+    "line": 396,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/classes/viewer/impls/ascii/filev.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1865,
+    "error": 1.86151027925518520e-08,
+    "relative_error": 3.62068757234167913e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec2.c",
+    "line": 707,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 269,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1787,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "unknown",
+    "line": -1,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 852,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1907,
+    "error": -4.33158193757776644e-08,
+    "relative_error": 8.42504336064198175e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 143,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec2.c",
+    "line": 232,
+    "error": -2.00599564526883229e-14,
+    "relative_error": 4.03426130344373802e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 256,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1309,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/vector.c",
+    "line": 1936,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 260,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec1.c",
+    "line": 27,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 289,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/utils/pdisplay.c",
+    "line": 707,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 568,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2368,
+    "error": -3.76307158486380744e-16,
+    "relative_error": 1.70485101718195170e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2365,
+    "error": -5.97227819511832560e-15,
+    "relative_error": 5.61189960534797146e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2361,
+    "error": -1.04393277562911282e-14,
+    "relative_error": 8.38147099141388840e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2356,
+    "error": -1.51569637298681003e-16,
+    "relative_error": 1.14447140259410634e-09
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/utils/gcreate.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2350,
+    "error": 3.77046156351679699e-15,
+    "relative_error": 3.94917173400484239e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1323,
+    "error": 1.70937506371870995e-08,
+    "relative_error": 3.32478047547468859e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec2.c",
+    "line": 439,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1327,
+    "error": -3.60490153283876680e-08,
+    "relative_error": 2.49469521036558815e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/logging/state/logregistry.c",
+    "line": 34,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1716,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 531,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 534,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 535,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 532,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1361,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1916,
+    "error": 2.16579096878888322e-08,
+    "relative_error": 2.91518566113149168e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1925,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/aoptions.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1742,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1795,
+    "error": -4.77126091968926858e-08,
+    "relative_error": 9.28023072605861406e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1804,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 439,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1341,
+    "error": 4.93559995096148896e-08,
+    "relative_error": 5.73809493459049454e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1717,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/ilu/ilu.c",
+    "line": 135,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1349,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1354,
+    "error": 4.93559995096148896e-08,
+    "relative_error": 5.73809493459049454e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1355,
+    "error": -3.60490153283876680e-08,
+    "relative_error": 2.49469521036558815e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/dvec2.c",
+    "line": 644,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1743,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1797,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1844,
+    "error": 1.86151027925518520e-08,
+    "relative_error": 3.62068757234167913e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/destroy.c",
+    "line": 350,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1851,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1718,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1744,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1888,
+    "error": -4.33158193757776644e-08,
+    "relative_error": 8.42504336064198175e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1843,
+    "error": 1.86151027925518520e-08,
+    "relative_error": 3.62068757234167913e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1799,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1794,
+    "error": -4.77126091968926858e-08,
+    "relative_error": 9.28023072605861406e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/is/is/impls/general/general.c",
+    "line": 707,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1846,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1322,
+    "error": 1.70937506371870995e-08,
+    "relative_error": 3.32478047547468859e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1889,
+    "error": -4.33158193757776644e-08,
+    "relative_error": 8.42504336064198175e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1894,
+    "error": 2.16579096878888322e-08,
+    "relative_error": 2.91518566113149168e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/logging/plog.c",
+    "line": 43,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec2.c",
+    "line": 204,
+    "error": -2.00599564526883229e-14,
+    "relative_error": 4.03426130344373802e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec2.c",
+    "line": 440,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/utils/str.c",
+    "line": 552,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/factor.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/factimpl.c",
+    "line": 152,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 1161,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 1159,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 524,
+    "error": -5.35620823249871592e-08,
+    "relative_error": 6.43851024997713723e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 523,
+    "error": -9.33495414301432902e-09,
+    "relative_error": 7.41096491778667831e-09
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 533,
+    "error": 5.22061149865749030e-09,
+    "relative_error": 5.22061147140270637e-09
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 531,
+    "error": -1.34616670810494554e-07,
+    "relative_error": 1.34616688932145041e-07
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 529,
+    "error": 3.49113160602598782e-09,
+    "relative_error": 3.49113242618881743e-09
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 527,
+    "error": 4.31604552098008298e-08,
+    "relative_error": 4.31604584921033894e-08
+  },
+  {
+    "file": "_fR§‡",
+    "line": -1,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 525,
+    "error": -3.02697262810625034e-08,
+    "relative_error": 3.02697271973188609e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 707,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "VecAXPY",
+    "line": -1,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/vector.c",
+    "line": 1895,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "unknown",
+    "line": 1696,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2367,
+    "error": -7.52614316972761489e-16,
+    "relative_error": 1.70485101718195170e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/logging/state/logregistry.c",
+    "line": 33,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2363,
+    "error": -4.20099733300339454e-15,
+    "relative_error": 2.63166753763825434e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2358,
+    "error": -1.71964905825462689e-14,
+    "relative_error": 9.20441715737486973e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2352,
+    "error": -3.51218720215066172e-15,
+    "relative_error": 1.81850107206325832e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2343,
+    "error": 9.32224170015040292e-15,
+    "relative_error": 6.74493182022646910e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2334,
+    "error": -1.87223327955846297e-15,
+    "relative_error": 4.07433221211787036e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1706,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aijfact.c",
+    "line": 1523,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1712,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/iterativ.c",
+    "line": 1572,
+    "error": 8.71351601983150204e-13,
+    "relative_error": 1.89554407048624223e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 2038,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1720,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 2039,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/iterativ.c",
+    "line": 1570,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 2040,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 325,
+    "error": -2.00599564526883229e-14,
+    "relative_error": 4.03426130344373802e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 2041,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 2042,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 2045,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 232,
+    "error": -2.00599564526883229e-14,
+    "relative_error": 4.03426130344373802e-08
+  },
+  {
+    "file": "%2579",
+    "line": -1,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 2046,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 213,
+    "error": -2.00599564526883229e-14,
+    "relative_error": 4.03426130344373802e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/utils/compressedrow.c",
+    "line": 32,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 2047,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 949,
+    "error": -2.00599564526883229e-14,
+    "relative_error": 4.03426130344373802e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 322,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1312,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2163,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2155,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2354,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itcl.c",
+    "line": 422,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1805,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1806,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1721,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 195,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2172,
+    "error": -5.01086004592989773e-15,
+    "relative_error": 9.06131519837637029e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2156,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2164,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2339,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/aoptions.c",
+    "line": 795,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1714,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/iterativ.c",
+    "line": 141,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2140,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2355,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2346,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2169,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2175,
+    "error": -4.78070752913718495e-15,
+    "relative_error": 4.78530937022314655e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2161,
+    "error": 1.95211785678652249e-15,
+    "relative_error": 1.73551842606748177e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1842,
+    "error": 2.38563044874240404e-08,
+    "relative_error": 3.21109275905817204e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 306,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1829,
+    "error": 1.43506359240319625e-07,
+    "relative_error": 6.82362758955814824e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1735,
+    "error": 3.78336907358445274e-08,
+    "relative_error": 5.09246865847190926e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1936,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1722,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 870,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 514,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2336,
+    "error": -7.64216204013664485e-15,
+    "relative_error": 6.28827573663194224e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/iterativ.c",
+    "line": 1605,
+    "error": 1.52587890625000000e-04,
+    "relative_error": 3.31940703772381636e-09
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2170,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2162,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1852,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1820,
+    "error": 1.07758019174397646e-07,
+    "relative_error": 1.25278749056162634e-07
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1832,
+    "error": 1.43506359240319625e-07,
+    "relative_error": 6.82362758955814824e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 546,
+    "error": 3.49113160602598782e-09,
+    "relative_error": 3.49113242618881743e-09
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2173,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2337,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2152,
+    "error": 1.76426416029388465e-15,
+    "relative_error": 2.14956053035392289e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1753,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1723,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1754,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/iterativ.c",
+    "line": 1601,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1704,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1833,
+    "error": -2.88769175238456910e-08,
+    "relative_error": 1.99836547054253449e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1845,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2324,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2359,
+    "error": 7.57848186493405014e-17,
+    "relative_error": 1.14447140259410634e-09
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2153,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1320,
+    "error": 2.16579096878888322e-08,
+    "relative_error": 2.91518566113149168e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 197,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2171,
+    "error": 5.18054080274042727e-15,
+    "relative_error": 1.79426678227055988e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2179,
+    "error": 1.20383452250521269e-14,
+    "relative_error": 7.53251199384288241e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2347,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/utils/gcreate.c",
+    "line": 305,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1875,
+    "error": 4.47918404589131569e-08,
+    "relative_error": 2.12982072472031276e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1866,
+    "error": 1.24891256447767773e-07,
+    "relative_error": 1.45197712574972676e-07
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1878,
+    "error": 4.47918404589131569e-08,
+    "relative_error": 2.12982072472031276e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 592,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1724,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1715,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/interface/matrix.c",
+    "line": 7272,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1708,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 528,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2167,
+    "error": 1.20383452250521269e-14,
+    "relative_error": 7.53251199384288241e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2154,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2342,
+    "error": -2.23528670176091886e-15,
+    "relative_error": 6.20980477243640506e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itcl.c",
+    "line": 414,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 856,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1879,
+    "error": -3.37884862311454981e-08,
+    "relative_error": 2.33826011242260805e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1737,
+    "error": 3.13220615000275870e-08,
+    "relative_error": 6.09222537635161992e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 259,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2335,
+    "error": 9.32224170015040292e-15,
+    "relative_error": 6.74493182022646910e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 871,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2174,
+    "error": 3.41688698262459855e-15,
+    "relative_error": 3.66837378166308685e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2364,
+    "error": 5.21966387814556411e-15,
+    "relative_error": 8.38147099141388840e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec1.c",
+    "line": 74,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1770,
+    "error": -7.48249103788012349e-08,
+    "relative_error": 8.69909504883945041e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1738,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/utils/mathinf.c",
+    "line": 69,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1751,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1739,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2353,
+    "error": -1.25433718380122360e-14,
+    "relative_error": 4.38340415837175988e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 520,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/iterativ.c",
+    "line": 1594,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 305,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 503,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/factimpl.c",
+    "line": 236,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1740,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/ilu/ilu.c",
+    "line": 55,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2345,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 961,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2168,
+    "error": -5.75013311090992625e-15,
+    "relative_error": 2.78376312100038288e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2160,
+    "error": -3.07556077608238311e-15,
+    "relative_error": 3.34031998145784352e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2344,
+    "error": -7.64216204013664485e-15,
+    "relative_error": 6.28827573663194224e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 327,
+    "error": -2.00599564526883229e-14,
+    "relative_error": 4.03426130344373802e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1752,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1741,
+    "error": 3.13220615000275870e-08,
+    "relative_error": 6.09222537635161992e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itcl.c",
+    "line": 420,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2360,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2338,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/aoptions.c",
+    "line": 796,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1719,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 506,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 452,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/aoptions.c",
+    "line": 782,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1908,
+    "error": 8.81076598346908213e-08,
+    "relative_error": 1.02433368562292379e-07
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2182,
+    "error": -3.84933705318943572e-15,
+    "relative_error": 7.40039194852774205e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1887,
+    "error": -3.91098737839712385e-08,
+    "relative_error": 5.26424501386453575e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 544,
+    "error": -3.02697262810625034e-08,
+    "relative_error": 3.02697271973188609e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/factimpl.c",
+    "line": 233,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 547,
+    "error": -1.34616670810494554e-07,
+    "relative_error": 1.34616688932145041e-07
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2176,
+    "error": -3.84933705318943572e-15,
+    "relative_error": 7.40039194852774205e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itcl.c",
+    "line": 418,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 584,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/utils/compressedrow.c",
+    "line": 42,
+    "error": 4.76837158203125000e-07,
+    "relative_error": 3.97364282712766249e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 216,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 1164,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 583,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 42,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 204,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/factimpl.c",
+    "line": 234,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1779,
+    "error": 3.02430875898096474e-08,
+    "relative_error": 1.43803786172131425e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1711,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 429,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1782,
+    "error": 3.02430875898096474e-08,
+    "relative_error": 1.43803786172131425e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1350,
+    "error": -4.35028488787736478e-08,
+    "relative_error": 2.06853039684880787e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2180,
+    "error": 5.18054080274042727e-15,
+    "relative_error": 1.79426678227055988e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1702,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 262,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/aoptions.c",
+    "line": 783,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1699,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/factimpl.c",
+    "line": 231,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/interface/matrix.c",
+    "line": 7273,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/workspace/wsa/laguna/fpchecker/FPChecker/tutorial/other_examples/petsc/petsc_example.c",
+    "line": 40,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2321,
+    "error": 5.48132979913717501e-15,
+    "relative_error": 3.89352938320773845e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1917,
+    "error": 6.64497501468019891e-08,
+    "relative_error": 4.14512944026746650e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/iterativ.c",
+    "line": 1577,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/workspace/wsa/laguna/fpchecker/FPChecker/tutorial/other_examples/petsc/petsc_example.c",
+    "line": 56,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/ilu/ilu.c",
+    "line": 80,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 172,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2325,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1718,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aijfact.c",
+    "line": 1561,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/factimpl.c",
+    "line": 229,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itcl.c",
+    "line": 419,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2151,
+    "error": 1.96438065716638842e-15,
+    "relative_error": 8.28143724620238180e-09
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1716,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1705,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 291,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1221,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 51,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 193,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1783,
+    "error": -1.80041501707250973e-08,
+    "relative_error": 1.24593879271271289e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/iterativ.c",
+    "line": 1593,
+    "error": 8.71351601983150204e-13,
+    "relative_error": 1.89554407048624223e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/ilu/ilu.c",
+    "line": 52,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 545,
+    "error": 4.31604552098008298e-08,
+    "relative_error": 4.31604584921033894e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 548,
+    "error": 5.22061149865749030e-09,
+    "relative_error": 5.22061147140270637e-09
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2137,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1798,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itcl.c",
+    "line": 416,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 200,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 428,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2323,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1710,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1920,
+    "error": 6.64497501468019891e-08,
+    "relative_error": 4.14512944026746650e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2178,
+    "error": -3.07556077608238311e-15,
+    "relative_error": 3.34031998145784352e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec2.c",
+    "line": 520,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 2303,
+    "error": -2.00599564526883229e-14,
+    "relative_error": 4.03426130344373802e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2181,
+    "error": 3.41688698262459855e-15,
+    "relative_error": 3.66837378166308685e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 222,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1921,
+    "error": -3.72450281727054744e-08,
+    "relative_error": 2.57746273019876417e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/pc/impls/factor/factimpl.c",
+    "line": 227,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 326,
+    "error": -2.00599564526883229e-14,
+    "relative_error": 4.03426130344373802e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 328,
+    "error": -2.00599564526883229e-14,
+    "relative_error": 4.03426130344373802e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 869,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2150,
+    "error": 6.91679617750701317e-15,
+    "relative_error": 1.07850015978858873e-07
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2138,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2159,
+    "error": -1.14179070543800018e-14,
+    "relative_error": 5.87132817247758823e-07
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2333,
+    "error": -4.88037032568363238e-15,
+    "relative_error": 2.06893398329542436e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 310,
+    "error": -2.00599564526883229e-14,
+    "relative_error": 4.03426130344373802e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1698,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 202,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2322,
+    "error": -2.36847575057396115e-15,
+    "relative_error": 1.98682150238166957e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1793,
+    "error": -4.54633531932202573e-08,
+    "relative_error": 6.11943238774493236e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 236,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/aij.c",
+    "line": 47,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/interface/rvector.c",
+    "line": 629,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/bvec2.c",
+    "line": 333,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/vec/vec/impls/seq/dvec2.c",
+    "line": 649,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/sys/objects/options.c",
+    "line": 2256,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2139,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/impls/cg/cg.c",
+    "line": 201,
+    "error": -1.96950272091100942e-07,
+    "relative_error": 4.28446939395448821e-08
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itfunc.c",
+    "line": 1697,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 2141,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/ksp/ksp/interface/itcl.c",
+    "line": 415,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/impls/aij/seq/inode.c",
+    "line": 1796,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/usr/WS1/laguna/fpchecker/FPChecker/temp/petsc-3.25.0/src/mat/utils/compressedrow.c",
+    "line": 45,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  }
+]
