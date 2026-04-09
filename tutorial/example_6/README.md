@@ -43,15 +43,15 @@ Sample output (line numbers refer to `fp32.cpp`):
 Line   | Code                                    |    Rel. Error
 ----------------------------------------------------------------
   49   | disc = b * b - 4.0f * a * c             |  ~3e-08
-  50   | sqrt_d = sqrtf(disc)                     |  ~2e-16
-  51   | numer = -b + sqrt_d                      |  1.0  (total loss!)
-  52   | root_small = numer / (2.0f * a)          |  1.0  (propagated)
-  24   | sum += x[i]                              |  ~7e-04
+  50   | sqrt_d = sqrtf(disc)                    |  ~2e-16
+  51   | numer = -b + sqrt_d                     |  1.0  (total loss!)
+  52   | root_small = numer / (2.0f * a)         |  1.0  (propagated)
+  24   | sum += x[i]                             |  ~7e-04
   25   | sumsq += x[i] * x[i]                    |  ~7e-04
-  29   | mean = sum / n                           |  ~7e-04
-  30   | (sumsq / n) - (mean * mean)              |  ~1e+10  (catastrophic!)
-  40   | wave = amp * sinf(...)                   |  ~1e-05
-  42   | x[i] = trend + wave + jitter             |  ~2e-08
+  29   | mean = sum / n                          |  ~7e-04
+  30   | (sumsq / n) - (mean * mean)             |  ~1e+10  (catastrophic!)
+  40   | wave = amp * sinf(...)                  |  ~1e-05
+  42   | x[i] = trend + wave + jitter            |  ~2e-08
 ```
 
 ### Interpreting the report

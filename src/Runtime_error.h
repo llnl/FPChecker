@@ -238,8 +238,7 @@ void _FPC_FP32_STORE_INST_(const char *reg, const char *function_name, uintptr_t
     if (_FPC_WARNING_COUNT_ < MAX_WARNINGS)
     {
       _FPC_WARNING_COUNT_++;
-      printf("\n");
-      printf("#FPCHECKER: Trying to store a register's value (%s) in function %s, but we don't have its error!!\n",
+      printf("#FPCHECKER: Warning: trying to store a register's value (%s) in function %s, but we don't have its error.\n",
              reg, function_name);
     }
   }
