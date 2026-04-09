@@ -4,15 +4,15 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 
-\title{FPChecker Tutorial Example 6: Mathematical Formulation and Mixed-Precision Algorithmic Changes}
+\title{FPChecker Tutorial Example: Mathematical Formulation and Mixed-Precision Algorithmic Changes}
 \author{}
-\date{\today}
+\date{}
 
 \begin{document}
 \maketitle
 
 \section{Purpose}
-This document describes the mathematics implemented by the three programs in Example 6:
+This document describes the mathematics implemented by the three programs:
 \begin{itemize}
   \item \texttt{fp32.cpp}: baseline FP32 algorithm,
   \item \texttt{mixed.cpp}: report-driven mixed-precision refinement,
@@ -138,16 +138,8 @@ Relative to the FP64 reference:
   \item Mixed should reduce these errors substantially.
 \end{itemize}
 
-In this example setup, the mixed result typically matches the FP64 quadratic small root closely and improves variance by many orders of magnitude compared with FP32.
+In this example setup, the mixed result typically matches the FP64 quadratic small root closely 
+and improves variance by many orders of magnitude compared with FP32.
 
-\section{Build Instructions}
-From the \texttt{tutorial/example\_6} directory:
-\begin{verbatim}
-pdflatex example6_math_formulas.tex
-\end{verbatim}
-If you prefer DVI first:
-\begin{verbatim}
-latex example6_math_formulas.tex
-\end{verbatim}
 
 \end{document}
