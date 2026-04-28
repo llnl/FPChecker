@@ -2,38 +2,24 @@
 
 import subprocess
 import os
+import shutil
 import pytest
 from dynamic import report
 
-def setup_module(module):
-    THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-    os.chdir(THIS_DIR)
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def teardown_module(module):
-    cmd = ["make -f Makefile_0 clean"]
-    cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
-
-@pytest.fixture(scope="function", autouse=True)
-def run_after_each_test():
-    """A fixture that runs after each test function."""
-    print("\nRunning test...")
-    yield
-    # Runs after each test function
-    cmd = ["make -f Makefile_0 clean"]
-    cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
-
-def run_command(cmd):
+def run_command(cmd, cwd):
     try:
-        cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+        cmd_output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, cwd=cwd, shell=True)
     except subprocess.CalledProcessError as e:
         print(e.output)
-        exit()
-    return cmdOutput
+        raise
+    return cmd_output
 
-def foundNaN(line_number):
+def foundNaN(logs_dir, line_number):
     found = False
-    fileName = report.findReportFile('.fpc_logs')
-    data = report.loadReport(fileName)
+    file_name = report.findReportFile(logs_dir)
+    data = report.loadReport(file_name)
     for i in range(len(data)):
       print('i', i, data[i])
       if data[i]['file'].endswith('compute.cpp'):
@@ -44,68 +30,34 @@ def foundNaN(line_number):
 
     return found
 
-def test_0():
-    # --- compile code ---
-    cmd = ["make -f Makefile_0"]
-    output = run_command(cmd).decode("utf-8")
+def prepare_workspace(tmp_path, makefile_name):
+    workspace = tmp_path / makefile_name
+    workspace.mkdir()
 
-    # --- run code ---
-    cmd = ["./main"]
-    output = run_command(cmd).decode("utf-8")
+    shutil.copy2(os.path.join(THIS_DIR, 'main.cpp'), workspace / 'main.cpp')
+    shutil.copy2(os.path.join(THIS_DIR, 'compute.cpp'), workspace / 'compute.cpp')
+    shutil.copy2(os.path.join(THIS_DIR, 'compute.h'), workspace / 'compute.h')
+    shutil.copy2(os.path.join(THIS_DIR, makefile_name), workspace / makefile_name)
+
+    return workspace
+
+@pytest.mark.parametrize(
+    "makefile_name,expect_nan",
+    [
+        ("Makefile_0", False),
+        ("Makefile_1", False),
+        ("Makefile_2", False),
+        ("Makefile_3", True),
+        ("Makefile_4", False),
+        ("Makefile_5", True),
+    ],
+)
+def test_annotations_simple_cases(tmp_path, makefile_name, expect_nan):
+    workspace = prepare_workspace(tmp_path, makefile_name)
+
+    run_command("make -f " + makefile_name, cwd=str(workspace))
+    run_command("./main", cwd=str(workspace))
+
     line_number = 64
-    assert not foundNaN(line_number)
-
-def test_1():
-    # --- compile code ---
-    cmd = ["make -f Makefile_1"]
-    output = run_command(cmd).decode("utf-8")
-
-    # --- run code ---
-    cmd = ["./main"]
-    output = run_command(cmd).decode("utf-8")
-    line_number = 64
-    assert not foundNaN(line_number)
-
-def test_2():
-    # --- compile code ---
-    cmd = ["make -f Makefile_2"]
-    output = run_command(cmd).decode("utf-8")
-
-    # --- run code ---
-    cmd = ["./main"]
-    output = run_command(cmd).decode("utf-8")
-    line_number = 64
-    assert not foundNaN(line_number)
-
-def test_3():
-    # --- compile code ---
-    cmd = ["make -f Makefile_3"]
-    output = run_command(cmd).decode("utf-8")
-
-    # --- run code ---
-    cmd = ["./main"]
-    output = run_command(cmd).decode("utf-8")
-    line_number = 64
-    assert foundNaN(line_number)
-
-def test_4():
-    # --- compile code ---
-    cmd = ["make -f Makefile_4"]
-    output = run_command(cmd).decode("utf-8")
-
-    # --- run code ---
-    cmd = ["./main"]
-    output = run_command(cmd).decode("utf-8")
-    line_number = 64
-    assert not foundNaN(line_number)
-
-def test_5():
-    # --- compile code ---
-    cmd = ["make -f Makefile_5"]
-    output = run_command(cmd).decode("utf-8")
-
-    # --- run code ---
-    cmd = ["./main"]
-    output = run_command(cmd).decode("utf-8")
-    line_number = 64
-    assert foundNaN(line_number)
+    logs_dir = str(workspace / ".fpc_logs")
+    assert foundNaN(logs_dir, line_number) == expect_nan

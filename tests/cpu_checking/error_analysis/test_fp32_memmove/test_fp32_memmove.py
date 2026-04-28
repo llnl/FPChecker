@@ -25,7 +25,7 @@ def test_1():
         exit()
 
     # --- run code ---
-    cmd = ["./memcpy_test \"0.123f,2.123f,3.123f\""]
+    cmd = ["./memmove_test \"0.123f,2.123f,3.123f\""]
     try:
         cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError as e:
@@ -42,11 +42,11 @@ def test_1():
     fileName = report.findRoundingErrorFile('.fpc_logs')
     data = report.loadReport(fileName)
     for i in range(len(data)):
-      print('i', i, data[i])
-      if data[i]['file'].endswith('memcpy_test.cpp'):
-        if data[i]['line'] == 55:
-            rounding_error = data[i]['error']
-            break
+        print('i', i, data[i])
+        if data[i]['file'].endswith('memmove_test.cpp'):
+            if data[i]['line'] == 55:
+                rounding_error = data[i]['error']
+                break
 
     print('rounding_error =', rounding_error)
     print('fp64_total_error =', fp64_total_error)

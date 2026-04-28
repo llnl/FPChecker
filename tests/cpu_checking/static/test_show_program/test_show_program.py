@@ -49,9 +49,11 @@ def test_1():
             flags = lines[i+1].strip()
             break
     assert flags is not None
-    expected_flags_part1 = "-g -include "
+    expected_flags_part1 = "-g"
+    expected_flags_part_include = " -include "
     expected_flags_part2 = " -fpass-plugin="
     assert expected_flags_part1 in flags
+    assert expected_flags_part_include in flags
     assert expected_flags_part2 in flags
 
     pattern = "For rounding error tracking"
@@ -61,9 +63,13 @@ def test_1():
             flags = lines[i+1].strip()
             break
     assert flags is not None
-    expected_flags_part1 = "-g -include "
+    expected_flags_part1 = "-g"
+    expected_flags_part_include = " -include "
+    expected_flags_vectorize = "-fno-vectorize -fno-slp-vectorize"
     expected_flags_part2 = " -fpass-plugin="
     assert expected_flags_part1 in flags
+    assert expected_flags_part_include in flags
+    assert expected_flags_vectorize in flags
     assert expected_flags_part2 in flags
 
     # Check that after "Wrappers are located here:" we have four lines with the wrappers
