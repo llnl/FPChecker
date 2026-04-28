@@ -1,113 +1,80 @@
-# Example 6: Report-driven mixed-precision refinement
+# Example 6: Data-Driven Mixed Precision
 
-This example shows how to use FPChecker's rounding-error report to
-**selectively promote** FP32 code to FP64.  Only the lines flagged with
-high relative error are changed; everything else stays in FP32.
+This example teaches a report-driven mixed-precision workflow:
 
-## Workflow overview
+1. Run a baseline FP32 implementation with FPChecker rounding-error instrumentation.
+2. Use the report to identify numerically unstable lines.
+3. Promote only the sensitive parts to FP64 (mixed precision).
+4. Compare FP32 and mixed-precision against FP64 reference accuracy.
 
-1. Build and run the FP32 program with FPChecker instrumentation.
-2. Read the rounding-error report — identify lines with high relative error.
-3. Construct a mixed-precision version that promotes **only** the flagged regions.
-4. Compare both versions against a full-FP64 reference to verify improvement.
-
-## Files
+## What this example includes
 
 | File | Purpose |
 |------|---------|
-| `fp32.cpp` | All computation in FP32 (instrumented by FPChecker) |
-| `mixed.cpp` | Selective FP64 promotion driven by the FPChecker report |
-| `fp64.cpp` | Full FP64 reference (ground truth) |
-| `compare_accuracy.py` | Runs all three and prints relative errors |
+| `fp32.cpp` | Baseline FP32 implementation instrumented for rounding-error tracking |
+| `mixed.cpp` | Selective FP64 promotion and algorithmic improvements |
+| `fp64.cpp` | FP64 reference implementation |
+| `compare_accuracy.py` | Compares numerical error for FP32 and mixed vs FP64 |
+| `algorithms.tex` | Mathematical rationale for the algorithmic changes |
 
-## Step 1 — Build and run the FP32 version
+## Participant challenge flow
 
-The instrumented build uses `-O0` so the compiler does not constant-fold
-away the floating-point operations we want to measure.
+### Challenge 1: Find unstable FP32 lines
+
+Run the baseline FP32 and inspect rounding errors:
 
 ```bash
 make clean
-make fp32          # compiles with FPC_INSTRUMENT_ERR_TRACKING=1 at -O0
-make run-fp32      # runs:  ./fp32 200000 32 1.0 1.0e8 1.0
+make fp32
+./fp32 200000 32 1.0 1.0e8 1.0
+fpc-create-report -s rounding
 ```
 
-## Step 2 — Read the rounding-error report
+## Questions for participants
 
-```bash
-make report-shell
-```
+- Which lines show the largest relative error?
+- Which error pattern looks like catastrophic cancellation?
+- Which lines appear safe and can likely remain FP32?
 
-Sample output (line numbers refer to `fp32.cpp`):
+### Challenge 2: Propose mixed-precision edits
 
-```
-Line   | Code                                    |    Rel. Error
-----------------------------------------------------------------
-  49   | disc = b * b - 4.0f * a * c             |  ~3e-08
-  50   | sqrt_d = sqrtf(disc)                    |  ~2e-16
-  51   | numer = -b + sqrt_d                     |  1.0  (total loss!)
-  52   | root_small = numer / (2.0f * a)         |  1.0  (propagated)
-  24   | sum += x[i]                             |  ~7e-04
-  25   | sumsq += x[i] * x[i]                    |  ~7e-04
-  29   | mean = sum / n                          |  ~7e-04
-  30   | (sumsq / n) - (mean * mean)             |  ~1e+10  (catastrophic!)
-  40   | wave = amp * sinf(...)                  |  ~1e-05
-  42   | x[i] = trend + wave + jitter            |  ~2e-08
-```
+- Which operations should move to FP64?
+- Should any formulas be rewritten, not only promoted?
 
-### Interpreting the report
+## Mixed-precision script
 
-**High error — must promote to FP64:**
-
-- **Lines 49–52** (quadratic root): The subtraction `-b + sqrt(disc)` at line 51
-  has relative error **1.0** (100% loss of significant digits) because
-  `b ≈ sqrt(disc)`.  The error propagates to line 52.  Promote to FP64 and
-  use Vieta's formula `c / (a * large_root)` to avoid the cancellation.
-
-- **Lines 24–25, 29–30** (variance): The one-pass formula `E[x²] − E[x]²`
-  subtracts two nearly-equal large numbers at line 30, producing relative
-  error ~1e+10.  Promote accumulators to FP64 and switch to a two-pass
-  algorithm.
-
-**Low error — keep as FP32:**
-
-- **Lines 40, 42** (data generation): Relative errors are ≤ 1e-05.  The
-  data array stays `float` since storage precision is the constraint and
-  the report confirms these operations are fine.
-
-## Step 3 — Build the mixed-precision version
-
-`mixed.cpp` applies exactly the promotions identified above.  See the
-comments at the top of that file for a detailed mapping from report lines
-to code changes.
+After discussion, run:
 
 ```bash
 make mixed fp64
-```
-
-## Step 4 — Compare accuracy
-
-```bash
 make compare
 ```
 
-Expected output:
+Discuss:
 
-```
-=== Relative error (fp32 vs fp64) ===
-root_small: 1.000000e+00        # total loss
-variance:   ~1.5e+10            # catastrophic
+- How `mixed.cpp` addresses high-error hotspots from `fp32.cpp`.
+- How `compare_accuracy.py` confirms improvement relative to FP64.
+- How this is data-driven mixed precision, not blanket promotion.
 
-=== Relative error (mixed vs fp64) ===
-root_small: 0.000000e+00        # exact match
-variance:   ~3.5e-02            # dramatically improved
-```
+## Typical report evidence to discuss
 
-## Notes
+High-error hotspots usually include:
 
-- The FP32 build uses `-O0` to prevent the compiler from constant-folding
-  or inlining the floating-point operations.  Mixed and FP64 builds use
-  `-O2` since they are not instrumented.
-- The quadratic coefficients (`a`, `b`, `c`) are passed via command-line
-  arguments so they remain as runtime values even under optimization.
-- Functions use `__attribute__((noinline))` for clear source-line attribution
-  in the FPChecker report.
+- Quadratic cancellation path around lines 49-52 in `fp32.cpp`.
+- One-pass variance formula around lines 24-30 in `fp32.cpp`.
+
+Typical behavior:
+
+- `numer = -b + sqrt(disc)` shows relative error near 1.0.
+- `variance = (sumsq / n) - (mean * mean)` can show extremely large relative error.
+
+Low-error lines (for example data-generation terms) are often safe to keep in FP32.
+
+## Why this works
+
+This example combines:
+
+- Precision promotion at sensitive operations.
+- Algorithmic improvement (numerically stable formulas).
+
+See `algorithms.tex` for the mathematical details.
