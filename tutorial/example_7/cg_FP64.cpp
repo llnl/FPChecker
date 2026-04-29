@@ -120,16 +120,15 @@ inline __attribute__((always_inline)) double norm(const vector<double> &v)
     return my_sqrt(dot_product(v, v));
 }
 
-int loadMatrix(std::vector<double> &A, std::vector<double> &b)
+int loadMatrix(const char *matrix_path, std::vector<double> &A, std::vector<double> &b)
 {
-    const char *s = getenv("CG_MATRIX");
-    if (s == NULL)
+    if (matrix_path == NULL)
     {
-        std::cerr << "CG_MATRIX var not found" << std::endl;
+        std::cerr << "Matrix path not provided" << std::endl;
         exit(-1);
     }
 
-    FILE *file = fopen(s, "r");
+    FILE *file = fopen(matrix_path, "r");
     if (file == NULL)
     {
         std::cerr << "Error opening matrix file" << std::endl;
@@ -277,18 +276,19 @@ void print_vector(const string &name, const vector<double> &v)
 int main(int argc, char **argv)
 {
     // Parse command line arguments for max iterations and tolerance
-    if (argc < 2)
+    if (argc < 3)
     {
-        cout << "Usage: " << argv[0] << " <max_iter> [tolerance]" << endl;
+        cout << "Usage: " << argv[0] << " <matrix.csv> <max_iter> [tolerance]" << endl;
         return 1;
     }
 
-    size_t max_iter = static_cast<size_t>(atoi(argv[1]));
-    double tolerance = (argc > 2) ? atof(argv[2]) : 1e-6;
+    const char *matrix_path = argv[1];
+    size_t max_iter = static_cast<size_t>(atoi(argv[2]));
+    double tolerance = (argc > 3) ? atof(argv[3]) : 1e-6;
     cout << "Max Iterations: " << max_iter << ", Tolerance: " << tolerance << endl;
 
     std::vector<double> A, b;
-    int matrix_size = loadMatrix(A, b);
+    int matrix_size = loadMatrix(matrix_path, A, b);
     // Print A as a matrix
     // cout << "Matrix A:" << endl;
     // for (int i = 0; i < matrix_size; ++i)

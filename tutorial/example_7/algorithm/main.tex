@@ -1,0 +1,38 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\title{CG Example}
+\author{Ignacio Laguna}
+\date{April 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Algorithm}
+
+\begin{algorithm}[th!]
+\caption{Conjugate Gradient (FP32 baseline)}
+\begin{algorithmic}[1]
+\Require SPD matrix $A$, RHS $b$, tolerance $\tau$, max iterations $k_{\max}$
+\State $x_0 \gets 0$, $r_0 \gets b - A x_0$, $p_0 \gets r_0$
+\State $\rho_0 \gets r_0^T r_0$, $b_n \gets \sqrt{b^T b}$
+\For{$k = 0,1,\dots,k_{\max}-1$}
+  \State $q_k \gets A p_k$
+  \State $\alpha_k \gets \rho_k / (p_k^T q_k)$
+  \State $x_{k+1} \gets x_k + \alpha_k p_k$
+  \State $r_{k+1} \gets r_k - \alpha_k q_k$
+  \State $\rho_{k+1} \gets r_{k+1}^T r_{k+1}$
+  \If{$\sqrt{\rho_{k+1}} / b_n < \tau$}
+    \State \Return $x_{k+1}$
+  \EndIf
+  \State $\beta_k \gets \rho_{k+1} / \rho_k$
+  \State $p_{k+1} \gets r_{k+1} + \beta_k p_k$
+\EndFor
+\State \Return $x_{k_{\max}}$
+\end{algorithmic}
+\end{algorithm}
+
+\end{document}
