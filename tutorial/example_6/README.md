@@ -54,9 +54,8 @@ Discuss:
 
 - How `mixed.cpp` addresses high-error hotspots from `fp32.cpp`.
 - How `compare_accuracy.py` confirms improvement relative to FP64.
-- How this is data-driven mixed precision, not blanket promotion.
 
-## Typical report evidence to discuss
+## Report evidence to discuss
 
 High-error hotspots usually include:
 
