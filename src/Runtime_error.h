@@ -70,6 +70,26 @@ double _FPC_ARG_ERR_BUF_[_FPC_ARG_BUF_MAX_];
 double _FPC_ARG_REL_ERR_BUF_[_FPC_ARG_BUF_MAX_];
 int _FPC_ARG_BUF_COUNT_;
 
+// Forward declaration for lazy initialization helper.
+void _FPC_INIT_FPCHECKER();
+void _FPC_PRINT_LOCATIONS_();
+
+static inline void _FPC_ENSURE_RUNTIME_READY_()
+{
+  static int fpc_atexit_registered = 0;
+
+  if (_FPC_ADDRESS_HT_ == NULL || _FPC_REGISTER_HT_ == NULL)
+  {
+    _FPC_INIT_FPCHECKER();
+
+    if (!fpc_atexit_registered)
+    {
+      atexit(_FPC_PRINT_LOCATIONS_);
+      fpc_atexit_registered = 1;
+    }
+  }
+}
+
 /*----------------------------------------------------------------------------*/
 /* Initialize                                                                 */
 /*----------------------------------------------------------------------------*/
@@ -145,6 +165,11 @@ void _FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED()
 
 void _FPC_INIT_FPCHECKER()
 {
+  if (_FPC_ADDRESS_HT_ != NULL && _FPC_REGISTER_HT_ != NULL)
+  {
+    return;
+  }
+
   _FPC_PROG_INPUTS = 0;
   _FPC_LAST_BASIC_BLOCK_[0] = '\0';
   _FPC_RET_STACK_TOP_ = 0;
@@ -154,6 +179,13 @@ void _FPC_INIT_FPCHECKER()
 
 void _FPC_INIT_ARGS_FPCHECKER(int argc, char **argv)
 {
+  if (_FPC_ADDRESS_HT_ != NULL && _FPC_REGISTER_HT_ != NULL)
+  {
+    _FPC_PROG_INPUTS = argc;
+    _FPC_PROG_ARGS = argv;
+    return;
+  }
+
   _FPC_PROG_INPUTS = argc;
   _FPC_PROG_ARGS = argv;
   _FPC_LAST_BASIC_BLOCK_[0] = '\0';
@@ -164,6 +196,20 @@ void _FPC_INIT_ARGS_FPCHECKER(int argc, char **argv)
 
 void _FPC_PRINT_LOCATIONS_()
 {
+  static int fpc_finalized = 0;
+
+  if (fpc_finalized)
+  {
+    return;
+  }
+
+  fpc_finalized = 1;
+
+  if (_FPC_ADDRESS_HT_ == NULL || _FPC_REGISTER_HT_ == NULL)
+  {
+    return;
+  }
+
 #ifndef FPC_QUIET
   printf("#FPCHECKER: Finalizing and writing traces...\n");
 #endif
@@ -219,6 +265,8 @@ void FPC_APPEND_ERROR_LOG_ENTRY(int line, double relative_error)
 // Instrumentation for STORE instructions
 void _FPC_FP32_STORE_INST_(const char *reg, const char *function_name, uintptr_t address, int loc, char *file_name)
 {
+  _FPC_ENSURE_RUNTIME_READY_();
+
 #ifdef FPDC_DEBUG_CALLSTACK
   printf(".........Entering _FPC_FP32_STORE_INST_..........\n");
 #endif
@@ -263,6 +311,8 @@ void _FPC_FP32_STORE_INST_(const char *reg, const char *function_name, uintptr_t
 // Instrumentation for LOAD instructions
 void _FPC_FP32_LOAD_INST_(const char *load_reg, const char *function_name, uintptr_t address, int loc, char *file_name)
 {
+  _FPC_ENSURE_RUNTIME_READY_();
+
 #ifdef FPDC_DEBUG_CALLSTACK
   printf(".........Entering _FPC_FP32_LOAD_INST_..........\n");
 #endif
@@ -322,6 +372,8 @@ void _FPC_FP32_BRANCH_(const char *basic_block_name)
 // It is used to log the values that are being merged
 void _FPC_FP32_PHI_(const char *phi_values, const char *function_name)
 {
+  _FPC_ENSURE_RUNTIME_READY_();
+
 #ifdef FPDC_DEBUG_CALLSTACK
   printf(".........Entering _FPC_FP32_PHI_..........\n");
 #endif
@@ -387,6 +439,8 @@ void _FPC_FP32_MEMCPY_INST_(uintptr_t address_dst, uintptr_t address_src,
                             long int size, int size_type, int ins_type,
                             int loc, char *file_name)
 {
+  _FPC_ENSURE_RUNTIME_READY_();
+
   if (ins_type == 0)
   {
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
@@ -419,6 +473,8 @@ void _FPC_FP32_MEMCPY_INST_(uintptr_t address_dst, uintptr_t address_src,
 // Called once per FP argument, in order, before each user function call.
 void _FPC_FP32_PUSH_ARG_ERROR_(int arg_index, const char *arg_reg, const char *function_name)
 {
+  _FPC_ENSURE_RUNTIME_READY_();
+
   double error = 0.0;
   double relative_error = 0.0;
   _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, arg_reg, function_name, &error, &relative_error);
@@ -436,6 +492,8 @@ void _FPC_FP32_PUSH_ARG_ERROR_(int arg_index, const char *arg_reg, const char *f
 // Called once per FP parameter, in order, at callee function entry.
 void _FPC_FP32_POP_ARG_ERROR_(int param_index, const char *param_reg, const char *function_name)
 {
+  _FPC_ENSURE_RUNTIME_READY_();
+
   double error = 0.0;
   double relative_error = 0.0;
 
@@ -452,6 +510,8 @@ void _FPC_FP32_POP_ARG_ERROR_(int param_index, const char *param_reg, const char
 // Save error of the value being returned by a function.
 void _FPC_FP32_PUSH_RET_ERROR_(const char *ret_reg, const char *function_name)
 {
+  _FPC_ENSURE_RUNTIME_READY_();
+
   double error = 0.0;
   double relative_error = 0.0;
   _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, ret_reg, function_name, &error, &relative_error);
@@ -470,6 +530,8 @@ void _FPC_FP32_PUSH_RET_ERROR_(const char *ret_reg, const char *function_name)
 void _FPC_FP32_POP_RET_ERROR_(const char *result_reg, const char *function_name,
                               const char *callee_name, int loc, char *file_name)
 {
+  _FPC_ENSURE_RUNTIME_READY_();
+
   double error = 0.0;
   double relative_error = 0.0;
 
@@ -505,6 +567,8 @@ void _FPC_FP32_CALCULATE_ERROR_(
     float x, float y, float z, float w, int loc, char *file_name, int op, int cond,
     const char *result_name, const char *op1_name, const char *op2_name, const char *fma_name, const char *function_name)
 {
+  _FPC_ENSURE_RUNTIME_READY_();
+
 #ifdef FPDC_DEBUG_CALLSTACK
   printf(".........Entering _FPC_FP32_CALCULATE_ERROR_..........\n");
 #endif
@@ -639,6 +703,8 @@ void _FPC_FP32_MATH_ERROR_(
     const char *result_name, const char *op1_name, const char *op2_name,
     const char *op3_name, const char *function_name)
 {
+  _FPC_ENSURE_RUNTIME_READY_();
+
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   printf("_FPC_FP32_MATH_ERROR_\n");
   printf("func=%s, x=%.7e, y=%.7e, z=%.7e, w=%.7e, result=%s, op1=%s, op2=%s, op3=%s\n",

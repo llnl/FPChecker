@@ -1,8 +1,18 @@
 #ifndef SRC_FPC_HASHTABLE_H_
 #define SRC_FPC_HASHTABLE_H_
 
+#if defined(__APPLE__)
+#ifndef _DARWIN_C_SOURCE
+#define _DARWIN_C_SOURCE
+#endif
+#else
+#ifndef _BSD_SOURCE
 #define _BSD_SOURCE
+#endif
+#ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
+#endif
+#endif
 #define ERROR_TABLE_SIZE 1000
 #include <stdlib.h>
 #include <stdio.h>

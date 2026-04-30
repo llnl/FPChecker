@@ -1,13 +1,23 @@
 #ifndef SRC_FPC_HASHTABLE_H_
 #define SRC_FPC_HASHTABLE_H_
 
+#if defined(__APPLE__)
+#ifndef _DARWIN_C_SOURCE
+#define _DARWIN_C_SOURCE
+#endif
+#else
+#ifndef _BSD_SOURCE
 #define _BSD_SOURCE
+#endif
+#ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
+#endif
 #ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 200809L
 #endif
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 700
+#endif
 #endif
 
 #include <stdlib.h>
@@ -464,6 +474,13 @@ int _FPC_FIND_ERRORS_BY_ADDRESS(_FPC_ADDRESS_HTABLE_T *hashtable,
                                 double *error,
                                 double *relative_error)
 {
+  if (hashtable == NULL || hashtable->table == NULL || hashtable->size == 0)
+  {
+    *error = 0.0;
+    *relative_error = 0.0;
+    return 0;
+  }
+
   size_t bin = 0;
   _FPC_ADDRESS_T_ temp;
   _FPC_ADDRESS_T_ *next = NULL;
@@ -500,6 +517,13 @@ int _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
                                  double *error,
                                  double *relative_error)
 {
+  if (hashtable == NULL || hashtable->table == NULL || hashtable->size == 0)
+  {
+    *error = 0.0;
+    *relative_error = 0.0;
+    return 0;
+  }
+
   size_t bin = 0;
   _FPC_REGISTER_T_ temp;
   _FPC_REGISTER_T_ *next = NULL;
@@ -544,6 +568,11 @@ void _FPC_ADDRESS_RANGE_UPDATE_(
     const char *file_name,
     int line)
 {
+  if (hashtable == NULL || hashtable->table == NULL || hashtable->size == 0 || size == 0)
+  {
+    return;
+  }
+
   // Create temp buffers to copy and hold the errors
   double *error_buffer = (double *)malloc(size * sizeof(double));
   double *relative_error_buffer = (double *)malloc(size * sizeof(double));

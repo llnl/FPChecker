@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 # Description: This script creates an html report of all the events.
 #              It assumes that event (json) files are created by each 
