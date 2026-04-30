@@ -1,6 +1,7 @@
 # Example 5: Tracking Error Evolution on a Single CG Line
 
-This tutorial example uses FPChecker to track the sequence of relative errors for one specific line in the FP32 Conjugate Gradient solver.
+This tutorial example uses FPChecker to track the sequence of relative errors 
+for one specific line in the FP32 Conjugate Gradient solver.
 
 Focus line:
 
@@ -11,43 +12,23 @@ As CG progresses, this update can become cancellation-prone, and the relative er
 
 ## What this example includes
 
-| File | Purpose |
-|------|---------|
-| `cg.cpp` | FP32 CG baseline (instrumented) |
-| `plot_error_values.py` | Plots per-execution relative error values for selected lines |
-| `generate_cg_matrices.py` | Utility script to regenerate matrix inputs |
-| `matrices/` | Pre-generated 100x100 SPD matrices |
-| `Makefile` | Build and clean targets |
+| File                      | Purpose                                                      |
+|---------------------------|--------------------------------------------------------------|
+| `cg.cpp`                  | FP32 CG baseline (instrumented)                              |
+| `plot_error_values.py`    | Plots per-execution relative error values for selected lines |
+| `generate_cg_matrices.py` | Utility script to regenerate matrix inputs                   |
+| `matrices/`               | Pre-generated 100x100 SPD matrices                           |
+| `Makefile`                | Build and clean targets                                      |
 
-## Environment setup
 
-```bash
-source ~/.bash_profile
-conda activate tutorial_env
-export PATH=/opt/anaconda3/envs/tutorial_env/bin:/Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/bin:$PATH
-```
-
-Quick checks:
-
-```bash
-which clang++
-clang++ --version
-which python3
-python3 -c "import matplotlib; print(matplotlib.__version__)"
-which clang++-fpchecker
-which fpc-create-report
-```
-
-## Challenge flow for participants
-
-### Challenge 1: Run FP32 CG and track only line 90
+## Challenge 1: Run FP32 CG and track only line 90
 
 Use `FPC_SAVE_LINE_ERRORS=90` to save the relative error series for instructions mapped to line 90.
 
 ```bash
 make clean
 FPC_INSTRUMENT_ERR_TRACKING=1 make cg
-CG_MATRIX=matrices/5_matrix_3.998e+04.csv FPC_SAVE_LINE_ERRORS=90 ./cg 500 1e-6
+FPC_SAVE_LINE_ERRORS=90 ./cg matrices/5_matrix_3.998e+04.csv 500 1e-6
 ```
 
 Expected runtime message:
@@ -57,7 +38,7 @@ Expected runtime message:
 #FPCHECKER: Writing errors per line to: .fpc_logs/errors_per_line_<host>_<pid>.json
 ```
 
-### Challenge 2: Plot line-90 error evolution
+## Challenge 2: Plot line-90 error evolution
 
 Plot the JSON created above:
 
@@ -71,7 +52,8 @@ Optional interactive display:
 python3 plot_error_values.py .fpc_logs/errors_per_line_*.json --line 90 --show
 ```
 
-Note: the plot always uses logarithmic y-axis. Zero or negative values are hidden automatically because logarithmic scale requires positive values.
+Note: the plot always uses logarithmic y-axis. Zero or negative values are 
+hidden automatically because logarithmic scale requires positive values.
 
 What to discuss:
 
@@ -85,7 +67,8 @@ What to discuss:
 fpc-create-report -s rounding
 ```
 
-This report gives aggregate line-level relative errors, while `errors_per_line_*.json` gives the per-execution sequence for selected lines.
+This report gives aggregate line-level relative errors, 
+while `errors_per_line_*.json` gives the per-execution sequence for selected lines.
 
 ## Optional: Regenerate matrix inputs
 
