@@ -65,13 +65,13 @@ Line  | Code                                                    | Rel. Error
 ```bash
 make cg_mixed cg_FP64
 
-echo "=== FP32 ==="
+printf "\n=== FP32 ===\n"
 ./cg matrices/5_matrix_3.998e+04.csv 500 1e-6
 
-echo "=== Mixed ==="
+printf "\n=== Mixed ===\n"
 ./cg_mixed matrices/5_matrix_3.998e+04.csv 500 1e-6
 
-echo "=== FP64 ==="
+printf "\n=== FP64 ===\n"
 ./cg_FP64 matrices/5_matrix_3.998e+04.csv 500 1e-6
 ```
 
@@ -109,39 +109,6 @@ Takeaway:
 - Mixed precision significantly improves convergence and residual versus FP32.
 - Most storage remains FP32; only sensitive arithmetic is promoted.
 
-## 20-minute teaching plan
-
-Suggested timing:
-
-1. Minute 0-3: Context slides
-   - CG overview, where FP errors enter (dot products, updates, residual recurrences).
-   - Goal: report-driven mixed precision, not blanket FP64.
-2. Minute 3-8: Hands-on challenge 1
-   - Participants run FP32 and inspect `fpc-create-report -s rounding`.
-3. Minute 8-12: Hands-on challenge 2
-   - Participants propose mixed-precision changes from report evidence.
-4. Minute 12-17: Instructor reveal
-   - Run mixed and FP64 variants.
-   - Compare iterations and residuals.
-   - Map reported hotspots to implemented promotions.
-5. Minute 17-20: Discussion and wrap-up
-   - What remained FP32 and why.
-   - How this pattern generalizes to larger HPC solvers.
-
-## Slide suggestions for this example
-
-Use 4-5 slides max:
-
-1. Problem and objective
-   - “Why FP32 CG can stall on ill-conditioned systems.”
-2. Report evidence
-   - Table or screenshot of top relative-error lines.
-3. Mixed-precision mapping
-   - Before/after list: dot product, alpha/beta, mat-vec accumulation.
-4. Results
-   - Iteration and residual comparison (FP32 vs mixed vs FP64).
-5. Takeaways
-   - Data-driven promotions preserve performance intent while improving robustness.
 
 ## Optional: matrix generation (not part of participant exercise)
 
