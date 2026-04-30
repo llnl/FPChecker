@@ -1,69 +1,109 @@
+#!/usr/bin/env python3
+
+import argparse
 import json
-from sys import argv
+import os
+from typing import List
+
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 
-def plot_errors_from_json(file_path):
-    """
-    Opens a JSON file, loads the data, and plots the 'values' for each 'line' 
-    in the JSON array. The y-axis is shown in scientific notation.
-    """
+
+def load_data(file_path: str):
     if not os.path.exists(file_path):
-        print(f"Error: File not found at {file_path}")
-        return
+        raise FileNotFoundError(f"File not found: {file_path}")
+    with open(file_path, "r") as f:
+        return json.load(f)
+
+
+def extract_line_values(data: List[dict], line: int):
+    for item in data:
+        if item.get("line") == line:
+            return item.get("values", [])
+    raise ValueError(f"Line {line} not found in JSON data")
+
+
+def plot_values(
+    values: List[float],
+    line: int,
+    output: str = None,
+    show: bool = False,
+):
+    x_axis = np.arange(len(values))
+    y_values = np.asarray(values, dtype=float)
+
+    # Always use log scale on y-axis.
+    # Log scale cannot represent non-positive values.
+    non_positive = int(np.count_nonzero(y_values <= 0.0))
+    if non_positive > 0:
+        y_values = y_values.copy()
+        y_values[y_values <= 0.0] = np.nan
+        print(
+            f"Note: {non_positive} non-positive points were hidden for log-scale plotting."
+        )
+
+    plt.figure(figsize=(11, 5.5))
+    plt.plot(x_axis, y_values, linestyle="-", linewidth=1.0)
+
+    ax = plt.gca()
+    ax.set_yscale("log")
+    ax.set_title(f"FPChecker relative error series for line {line}", fontsize=20)
+    ax.set_xlabel("Execution index", fontsize=16)
+    ax.set_ylabel("Relative error", fontsize=16)
+    ax.tick_params(axis="both", which="major", labelsize=13)
+    ax.tick_params(axis="both", which="minor", labelsize=11)
+    ax.grid(True, linestyle="--", alpha=0.6)
+    plt.tight_layout()
+
+    if output:
+        plt.savefig(output, dpi=150)
+        print(f"Saved plot: {output}")
+
+    if show:
+        plt.show()
+    else:
+        plt.close()
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Plot FPChecker errors_per_line JSON values for a selected source line"
+    )
+    parser.add_argument("json_file", help="Path to errors_per_line_*.json")
+    parser.add_argument("--line", type=int, required=True, help="Source line to plot (example: 90)")
+    parser.add_argument(
+        "--output",
+        default=None,
+        help="Output image path (default: line_<line>_errors.png in current directory)",
+    )
+    parser.add_argument(
+        "--show",
+        action="store_true",
+        help="Show interactive window in addition to saving",
+    )
+    args = parser.parse_args()
+
+    output_file = args.output or f"line_{args.line}_errors.png"
 
     try:
-        with open(file_path, 'r') as f:
-            data = json.load(f)
-    except json.JSONDecodeError:
-        print(f"Error: Could not decode JSON from {file_path}")
-        return
-    except Exception as e:
-        print(f"An error occurred while reading the file: {e}")
-        return
+        data = load_data(args.json_file)
+        values = extract_line_values(data, args.line)
+        if not values:
+            raise ValueError(f"No values found for line {args.line}")
 
-    for item in data:
-        try:
-            line_num = item['line']
-            values = item['values']
-            x_axis = np.arange(len(values))
+        print(
+            f"Line {args.line}: points={len(values)}, min={min(values):.6e}, max={max(values):.6e}"
+        )
+        plot_values(
+            values,
+            args.line,
+            output=output_file,
+            show=args.show,
+        )
+    except Exception as exc:
+        print(f"Error: {exc}")
+        raise SystemExit(1)
 
-            plt.figure(figsize=(10, 6))
-            plt.plot(x_axis, values, marker='.', linestyle='-', markersize=4)
-
-            # Force scientific notation on the y-axis
-            ax = plt.gca()
-            ax.ticklabel_format(style='sci', axis='y')
-
-            # Optionally move the offset (10^n) to the right of the axis
-            #ax.yaxis.set_offset_position('right')
-            
-            # switch to logarithmic y-axis (values must be > 0)
-            ax.set_yscale('log')
-
-            # preserve scientific notation for tick labels
-            #ax.yaxis.set_major_formatter(plt.ScalarFormatter())
-            #ax.yaxis.get_major_formatter().set_scientific(True)
-            #ax.yaxis.get_major_formatter().set_powerlimits((0,0))
-            #ax.minorticks_on()
-
-            plt.title(f'Errors for Line {line_num}', fontsize=16)
-            plt.xlabel('Index of Value', fontsize=12)
-            plt.ylabel('Error Value (y-axis)', fontsize=12)
-            plt.grid(True, linestyle='--', alpha=0.7)
-            plt.tight_layout()
-            plt.show()
-
-        except KeyError as e:
-            print(f"Skipping an item: Missing key {e} in object.")
-        except Exception as e:
-            print(f"An error occurred while plotting for line {item.get('line', 'Unknown')}: {e}")
 
 if __name__ == "__main__":
-    if len(argv) != 2:
-        print("Usage: python plot_error_values.py <json_file>")
-        exit(1)
-
-    file_name = argv[1]
-    plot_errors_from_json(file_name)
+    main()
