@@ -1,15 +1,15 @@
-# Example 8: Hypre Build and Test (Participant Workflow)
+# Example 8: Hypre Build and Test
 
-This README is for participants.
-It shows how to download Hypre, build it without FPChecker, build the test, and run one input.
+This example shows how to download Hypre, build it without FPChecker,
+build the test, and run one input.
 
-The FPChecker solution is in `README_solution.md`.
+The FPChecker solution workflow is described in `README_solution.md`.
 
-## Files used
+## Files Used
 
-- `hypre_test.c`: driver program.
-- `Makefile`: builds `hypre_test` against a plain Hypre build.
-- `matrix.csv`, `matrix_med_cond.csv`, `matrix_cond_num_4K.csv`: sample inputs.
+- `hypre_test.c`: Driver program.
+- `Makefile`: Builds `hypre_test` against a plain Hypre build.
+- `matrix.csv`, `matrix_med_cond.csv`, `matrix_cond_num_4K.csv`: Sample inputs.
 
 ## 0) Prerequisites
 
@@ -48,32 +48,55 @@ cmake \
 make -j
 ```
 
-## 3) Build the test
+## 3) Build The Test
 
-Back in `tutorial/example_8`:
-
-```bash
-make HYPRE_SRC_DIR=$(pwd)/hypre-3.1.0/src
-```
-
-## 4) Run a test with an input
+Go back to `tutorial/example_8`:
 
 ```bash
-mpirun -np 1 ./hypre_test $(pwd)/matrix.csv 1
+cd ../../..
+make HYPRE_SRC_DIR=./hypre-3.1.0/src
 ```
+
+## 4) Run a Test with an Input
+
+```bash
+mpirun -np 1 ./hypre_test ./matrix.csv pcg
+```
+
+Solver options: `amg`, `pcg`, `amg_pcg`.
 
 Optional inputs:
 
 ```bash
-mpirun -np 1 ./hypre_test $(pwd)/matrix_med_cond.csv 1
-mpirun -np 1 ./hypre_test $(pwd)/matrix_cond_num_4K.csv 1
+mpirun -np 1 ./hypre_test ./matrix_med_cond.csv pcg
+mpirun -np 1 ./hypre_test ./matrix_cond_num_4K.csv pcg
 ```
 
 ## Challenge
 
-Look at `fpchecker-show` and identify what needs to change to:
+Run `fpchecker-show` and inspect the flags needed to instrument
+the code with FPChecker for rounding error tracking.
 
-1. Build Hypre with FPChecker instrumentation.
-2. Build the test with FPChecker flags.
+Identify what needs to change to:
 
-Then compare your result with `README_solution.md` and `Makefile.solution`.
+1. Build Hypre with FPChecker instrumentation flags.
+2. Build the test with FPChecker instrumentation flags.
+
+Tips:
+
+- To instrument Hypre, pass extra FPChecker flags through
+  `"-DHYPRE_WITH_EXTRA_CFLAGS=... "`.
+
+- To instrument the Hypre test, copy `Makefile` into a new file
+  (for example, `Makefile.new`). Then add a variable with the extra flags,
+  such as:
+  `FPCHECKER_FLAGS ?= ...`
+  Include this variable in the target compilation flags.
+
+- Clean the build: `make -f Makefile.new clean`
+
+- If the Hypre build directory changed, it needs to be modified in HYPRE_BUILD_DIR
+
+## Solution
+
+Compare your result with `README_solution.md` and `Makefile.solution`.

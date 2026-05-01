@@ -19,6 +19,16 @@
 
 #define MAX_LEN 5000
 
+static void print_usage(const char *prog_name)
+{
+    printf("Usage: %s <matrix.csv> <solver>\n", prog_name);
+    printf("\n");
+    printf("Valid solver options:\n");
+    printf("  amg      : AMG\n");
+    printf("  pcg      : PCG\n");
+    printf("  amg_pcg  : PCG with AMG preconditioner\n");
+}
+
 int loadMatrix(HYPRE_IJMatrix *A, HYPRE_IJVector *b, HYPRE_IJVector *x, const char *s) {
 
     // Handle error
@@ -142,15 +152,30 @@ int loadMatrix(HYPRE_IJMatrix *A, HYPRE_IJVector *b, HYPRE_IJVector *x, const ch
 
 HYPRE_Int main (HYPRE_Int argc, char *argv[])
 {
-    if (argc < 3)
+    if (argc != 3)
     {
-        printf("Usage: %s <matrix.csv> <solver_id>\n", argv[0]);
+        print_usage(argv[0]);
         return -1;
     }
 
     const char *matrix_path = argv[1];
-    HYPRE_Int solver_id;
-    solver_id = atoi(argv[2]);
+    const char *solver_name = argv[2];
+    HYPRE_Int solver_id = -1;
+
+    if (strcmp(solver_name, "amg") == 0) {
+        solver_id = 0;
+    }
+    else if (strcmp(solver_name, "pcg") == 0) {
+        solver_id = 1;
+    }
+    else if (strcmp(solver_name, "amg_pcg") == 0) {
+        solver_id = 2;
+    }
+    else {
+        printf("Invalid solver option: %s\n", solver_name);
+        print_usage(argv[0]);
+        return -1;
+    }
 
     HYPRE_Int i;
     HYPRE_Int myid, num_procs;
@@ -197,7 +222,6 @@ HYPRE_Int main (HYPRE_Int argc, char *argv[])
 
     /* Choose a solver and solve the system */
 
-    // This Solver works
     // ------------------------- AMG --------------------------------
     if (solver_id == 0)
     {
@@ -319,359 +343,6 @@ HYPRE_Int main (HYPRE_Int argc, char *argv[])
        HYPRE_ParCSRPCGDestroy(solver);
        HYPRE_BoomerAMGDestroy(precond);
     }
-    /* PCG with Parasails Preconditioner */
-    else if (solver_id == 3)
-    {
-       printf("\n SOLVER : PCG with Parasails preconditioner \n ");
-       HYPRE_Int    num_iterations;
-       HYPRE_Real final_res_norm;
-       HYPRE_Int      sai_max_levels = 1;
-       HYPRE_Real   sai_threshold = 0.1;
-       HYPRE_Real   sai_filter = 0.05;
-       HYPRE_Int      sai_sym = 0;
-
-       /* Create solver */
-       HYPRE_ParCSRPCGCreate(hypre_MPI_COMM_WORLD, &solver);
-
-       /* Set some parameters (See Reference Manual for more parameters) */
-       HYPRE_PCGSetMaxIter(solver, 1000); /* max iterations */
-       HYPRE_PCGSetTol(solver, 1e-7); /* conv. tolerance */
-       HYPRE_PCGSetTwoNorm(solver, 1); /* use the two norm as the stopping criteria */
-       HYPRE_PCGSetPrintLevel(solver, 2); /* print solve info */
-       HYPRE_PCGSetLogging(solver, 1); /* needed to get run info later */
-
-       /* Now set up the ParaSails preconditioner and specify any parameters */
-       HYPRE_ParaSailsCreate(hypre_MPI_COMM_WORLD, &precond);
-
-       /* Set some parameters (See Reference Manual for more parameters) */
-       HYPRE_ParaSailsSetParams(precond, sai_threshold, sai_max_levels);
-       HYPRE_ParaSailsSetFilter(precond, sai_filter);
-       HYPRE_ParaSailsSetSym(precond, sai_sym);
-       HYPRE_ParaSailsSetLogging(precond, 3);
-
-       /* Set the PCG preconditioner */
-       HYPRE_PCGSetPrecond(solver, (HYPRE_PtrToSolverFcn) HYPRE_ParaSailsSolve,
-                           (HYPRE_PtrToSolverFcn) HYPRE_ParaSailsSetup, precond);
-
-       /* Now setup and solve! */
-       HYPRE_ParCSRPCGSetup(solver, parcsr_A, par_b, par_x);
-       HYPRE_ParCSRPCGSolve(solver, parcsr_A, par_b, par_x);
-
-       /* Run info - needed logging turned on */
-       HYPRE_PCGGetNumIterations(solver, &num_iterations);
-       HYPRE_PCGGetFinalRelativeResidualNorm(solver, &final_res_norm);
-
-       if (myid == 0)
-       {
-          hypre_printf("\n");
-          hypre_printf("Iterations = %d\n", num_iterations);
-          hypre_printf("Final Relative Residual Norm = %e\n", final_res_norm);
-          hypre_printf("\n");
-       }
-
-       /* Destory solver and preconditioner */
-       HYPRE_ParCSRPCGDestroy(solver);
-       HYPRE_ParaSailsDestroy(precond);
-    }
-     /* PCG with Euclid Preconditioner */
-    else if (solver_id == 4) {
-        printf("\n SOLVER : PCG with Euclid preconditioner \n ");
-        HYPRE_Int num_iterations;
-        HYPRE_Real final_res_norm;
-
-        /* Create solver */
-        HYPRE_ParCSRPCGCreate(hypre_MPI_COMM_WORLD, &solver);
-
-        /* Set some parameters (See Reference Manual for more parameters) */
-        HYPRE_PCGSetMaxIter(solver, 1000); /* max iterations */
-        HYPRE_PCGSetTol(solver, 1e-7); /* conv. tolerance */
-        HYPRE_PCGSetTwoNorm(solver, 1); /* use the two norm as the stopping criteria */
-        HYPRE_PCGSetPrintLevel(solver, 2); /* print solve info */
-        HYPRE_PCGSetLogging(solver, 1); /* needed to get run info later */
-
-        /* Now set up the Euclid preconditioner and specify any parameters */
-        HYPRE_EuclidCreate(hypre_MPI_COMM_WORLD, &precond);
-
-        /* Set some parameters (See Reference Manual for more parameters) */
-        HYPRE_EuclidSetLevel(precond, 0);
-        HYPRE_EuclidSetBJ(precond, 1);
-
-        /* Set the PCG preconditioner */
-        HYPRE_PCGSetPrecond(solver, (HYPRE_PtrToSolverFcn) HYPRE_EuclidSolve,
-                            (HYPRE_PtrToSolverFcn) HYPRE_EuclidSetup, precond);
-
-        /* Now setup and solve! */
-        HYPRE_ParCSRPCGSetup(solver, parcsr_A, par_b, par_x);
-        HYPRE_ParCSRPCGSolve(solver, parcsr_A, par_b, par_x);
-
-        /* Run info - needed logging turned on */
-        HYPRE_PCGGetNumIterations(solver, &num_iterations);
-        HYPRE_PCGGetFinalRelativeResidualNorm(solver, &final_res_norm);
-
-        if (myid == 0) {
-            hypre_printf("\n");
-            hypre_printf("Iterations = %d\n", num_iterations);
-            hypre_printf("Final Relative Residual Norm = %e\n", final_res_norm);
-            hypre_printf("\n");
-        }
-
-        /* Destroy solver and preconditioner */
-        HYPRE_ParCSRPCGDestroy(solver);
-        HYPRE_EuclidDestroy(precond);
-    }
-
-    /* PCG with ILU Preconditioner */
-    else if (solver_id == 5) {
-        printf("\n PCG with ILU Preconditioner \n");
-        HYPRE_Int num_iterations;
-        HYPRE_Real final_res_norm;
-
-        /* Create solver */
-        HYPRE_ParCSRPCGCreate(hypre_MPI_COMM_WORLD, &solver);
-
-        /* Set some parameters (See Reference Manual for more parameters) */
-        HYPRE_PCGSetMaxIter(solver, 1000); /* max iterations */
-        HYPRE_PCGSetTol(solver, 1e-7); /* conv. tolerance */
-        HYPRE_PCGSetTwoNorm(solver, 1); /* use the two norm as the stopping criteria */
-        HYPRE_PCGSetPrintLevel(solver, 2); /* prints out the iteration info */
-        HYPRE_PCGSetLogging(solver, 1); /* needed to get run info later */
-
-        /* Now set up the ILU preconditioner and specify any parameters */
-        HYPRE_ILUCreate(&precond);
-        HYPRE_ILUSetType(precond, 0); /* set ILU type */
-        HYPRE_ILUSetMaxIter(precond, 1); /* number of iterations per solve */
-        HYPRE_ILUSetTol(precond, 0.0); /* convergence tolerance for preconditioner */
-        HYPRE_ILUSetPrintLevel(precond, 2); /* print ILU info */
-
-        /* Set the PCG preconditioner */
-        HYPRE_PCGSetPrecond(solver, (HYPRE_PtrToSolverFcn) HYPRE_ILUSolve,
-                            (HYPRE_PtrToSolverFcn) HYPRE_ILUSetup, precond);
-
-        /* Now setup and solve! */
-        HYPRE_ParCSRPCGSetup(solver, parcsr_A, par_b, par_x);
-        HYPRE_ParCSRPCGSolve(solver, parcsr_A, par_b, par_x);
-
-        /* Run info - needed logging turned on */
-        HYPRE_PCGGetNumIterations(solver, &num_iterations);
-        HYPRE_PCGGetFinalRelativeResidualNorm(solver, &final_res_norm);
-
-        if (myid == 0) {
-            hypre_printf("\n");
-            hypre_printf("Iterations = %d\n", num_iterations);
-            hypre_printf("Final Relative Residual Norm = %e\n", final_res_norm);
-            hypre_printf("\n");
-        }
-
-        /* Destroy solver and preconditioner */
-        HYPRE_ParCSRPCGDestroy(solver);
-        HYPRE_ILUDestroy(precond);
-    }
-
-    /* Create solver for ILU */
-    else if (solver_id == 6) {
-        printf("\n SOLVER : ILU \n ");
-        HYPRE_Int num_iterations;
-        HYPRE_Real final_res_norm;
-
-        // Create solver
-        HYPRE_ILUCreate(&solver);
-
-        // Set some parameters (See Reference Manual for more parameters)
-        HYPRE_ILUSetType(solver, 0); // 0 for ILU(0), 1 for ILUT
-        HYPRE_ILUSetLevelOfFill(solver, 0); // Level of fill for ILU(k)
-        HYPRE_ILUSetMaxIter(solver, 1000); // max iterations
-        HYPRE_ILUSetTol(solver, 1e-7); // convergence tolerance
-        HYPRE_ILUSetPrintLevel(solver, 2); // print solve info
-
-        // Now setup and solve!
-        HYPRE_ILUSetup(solver, parcsr_A, par_b, par_x);
-        HYPRE_ILUSolve(solver, parcsr_A, par_b, par_x);
-
-        // Run info - needed logging turned on
-        HYPRE_ILUGetNumIterations(solver, &num_iterations);
-        HYPRE_ILUGetFinalRelativeResidualNorm(solver, &final_res_norm);
-
-        if (myid == 0) {
-            hypre_printf("\n");
-            hypre_printf("Iterations = %d\n", num_iterations);
-            hypre_printf("Final Relative Residual Norm = %e\n", final_res_norm);
-            hypre_printf("\n");
-        }
-
-        // Destroy solver
-        HYPRE_ILUDestroy(solver);
-    }
-     /* Create solver for Hybrid */
-     else if (solver_id == 7) {
-        printf("\n SOLVER: Hybrid Solver\n");
-        HYPRE_Int num_iterations;
-        HYPRE_Real final_res_norm;
-
-        // Create solver
-        HYPRE_ParCSRHybridCreate(&solver);
-
-        // Set some parameters (See Reference Manual for more parameters)
-        HYPRE_ParCSRHybridSetDSCGMaxIter(solver, 1000); // max iterations
-        HYPRE_ParCSRHybridSetTol(solver, 1e-7); // convergence tolerance
-        HYPRE_ParCSRHybridSetConvergenceTol(solver, 1e-7); // convergence tolerance
-        HYPRE_ParCSRHybridSetTwoNorm(solver, 1); // use the two norm as the stopping criteria
-        HYPRE_ParCSRHybridSetPrintLevel(solver, 2); // print solve info
-        HYPRE_ParCSRHybridSetLogging(solver, 1); // needed to get run info later
-
-        // Now setup and solve!
-        HYPRE_ParCSRHybridSetup(solver, parcsr_A, par_b, par_x);
-        HYPRE_ParCSRHybridSolve(solver, parcsr_A, par_b, par_x);
-
-        // Run info - needed logging turned on
-        HYPRE_ParCSRHybridGetNumIterations(solver, &num_iterations);
-        HYPRE_ParCSRHybridGetFinalRelativeResidualNorm(solver, &final_res_norm);
-
-        if (myid == 0) {
-            hypre_printf("\n");
-            hypre_printf("Iterations = %d\n", num_iterations);
-            hypre_printf("Final Relative Residual Norm = %e\n", final_res_norm);
-            hypre_printf("\n");
-        }
-
-        // Destroy solver
-        HYPRE_ParCSRHybridDestroy(solver);
-    }
-      /* Create solver for GMRES */
-    else if (solver_id == 8) {
-        printf("\n SOLVER : Gmres \n");
-        HYPRE_Int num_iterations;
-        HYPRE_Real final_res_norm;
-
-        /* Create solver */
-        HYPRE_ParCSRGMRESCreate(hypre_MPI_COMM_WORLD, &solver);
-
-        /* Set some parameters (See Reference Manual for more parameters) */
-        HYPRE_GMRESSetMaxIter(solver, 1000); /* max iterations */
-        HYPRE_GMRESSetTol(solver, 1e-7); /* conv. tolerance */
-        HYPRE_GMRESSetKDim(solver, 30); /* Restart dimension */
-        HYPRE_GMRESSetPrintLevel(solver, 2); /* print solve info */
-        HYPRE_GMRESSetLogging(solver, 1); /* needed to get run info later */
-
-        /* Now setup and solve! */
-        HYPRE_ParCSRGMRESSetup(solver, parcsr_A, par_b, par_x);
-        HYPRE_ParCSRGMRESSolve(solver, parcsr_A, par_b, par_x);
-
-        /* Run info - needed logging turned on */
-        HYPRE_GMRESGetNumIterations(solver, &num_iterations);
-        HYPRE_GMRESGetFinalRelativeResidualNorm(solver, &final_res_norm);
-
-        if (myid == 0) {
-            hypre_printf("\n");
-            hypre_printf("Iterations = %d\n", num_iterations);
-            hypre_printf("Final Relative Residual Norm = %e\n", final_res_norm);
-            hypre_printf("\n");
-        }
-
-        /* Destroy solver */
-        HYPRE_ParCSRGMRESDestroy(solver);
-    }
-    /* GMRES with ILU Preconditioner */
-    else if (solver_id == 9) {
-        printf("\n SOLVER: GMRES with ILU Preconditioner \n");
-        HYPRE_Int num_iterations;
-        HYPRE_Real final_res_norm;
-
-        /* Create solver */
-        HYPRE_ParCSRGMRESCreate(hypre_MPI_COMM_WORLD, &solver);
-
-        /* Set some parameters (See Reference Manual for more parameters) */
-        HYPRE_GMRESSetMaxIter(solver, 1000); /* max iterations */
-        HYPRE_GMRESSetTol(solver, 1e-7); /* conv. tolerance */
-        HYPRE_GMRESSetKDim(solver, 30); /* Restart dimension */
-        HYPRE_GMRESSetPrintLevel(solver, 2); /* print solve info */
-        HYPRE_GMRESSetLogging(solver, 1); /* needed to get run info later */
-
-        /* Create the ILU preconditioner */
-        HYPRE_ILUCreate(&precond);
-
-        /* Set some parameters for ILU (See Reference Manual for more parameters) */
-        HYPRE_ILUSetType(precond, 0); // 0 for ILU(0), 1 for ILUT
-        HYPRE_ILUSetLevelOfFill(precond, 0); // Level of fill for ILU(k)
-
-        /* Set the GMRES preconditioner */
-        HYPRE_GMRESSetPrecond(solver,
-                              (HYPRE_PtrToSolverFcn) HYPRE_ILUSolve,
-                              (HYPRE_PtrToSolverFcn) HYPRE_ILUSetup,
-                              precond);
-
-        /* Now setup and solve! */
-        HYPRE_ParCSRGMRESSetup(solver, parcsr_A, par_b, par_x);
-        HYPRE_ParCSRGMRESSolve(solver, parcsr_A, par_b, par_x);
-
-        /* Run info - needed logging turned on */
-        HYPRE_GMRESGetNumIterations(solver, &num_iterations);
-        HYPRE_GMRESGetFinalRelativeResidualNorm(solver, &final_res_norm);
-
-        if (myid == 0) {
-            hypre_printf("\n");
-            hypre_printf("Iterations = %d\n", num_iterations);
-            hypre_printf("Final Relative Residual Norm = %e\n", final_res_norm);
-            hypre_printf("\n");
-        }
-
-        /* Destroy solver and preconditioner */
-        HYPRE_ParCSRGMRESDestroy(solver);
-        HYPRE_ILUDestroy(precond);
-    }
-    /* GMRES with Hybrid Preconditioner */
-    else if (solver_id == 10){
-        printf("\n SOLVER: GMRES with Hybrid Preconditioner \n");
-        HYPRE_Int num_iterations;
-        HYPRE_Real final_res_norm;
-
-        /* Create solver */
-        HYPRE_ParCSRGMRESCreate(hypre_MPI_COMM_WORLD, &solver);
-
-        /* Set some parameters (See Reference Manual for more parameters) */
-        HYPRE_GMRESSetMaxIter(solver, 1000); /* max iterations */
-        HYPRE_GMRESSetTol(solver, 1e-7); /* conv. tolerance */
-        HYPRE_GMRESSetKDim(solver, 30); /* Restart dimension */
-        HYPRE_GMRESSetPrintLevel(solver, 2); /* print solve info */
-        HYPRE_GMRESSetLogging(solver, 1); /* needed to get run info later */
-
-        /* Create the Hybrid preconditioner */
-        HYPRE_ParCSRHybridCreate(&precond);
-
-        /* Set some parameters for Hybrid (See Reference Manual for more parameters) */
-        HYPRE_ParCSRHybridSetDSCGMaxIter(precond, 1000); // max iterations
-        HYPRE_ParCSRHybridSetTol(precond, 1e-7); // convergence tolerance
-        HYPRE_ParCSRHybridSetConvergenceTol(precond, 1e-7); // convergence tolerance
-
-        /* Set the GMRES preconditioner */
-        HYPRE_GMRESSetPrecond(solver,
-                              (HYPRE_PtrToSolverFcn) HYPRE_ParCSRHybridSolve,
-                              (HYPRE_PtrToSolverFcn) HYPRE_ParCSRHybridSetup,
-                              precond);
-
-        /* Now setup and solve! */
-        HYPRE_ParCSRGMRESSetup(solver, parcsr_A, par_b, par_x);
-        HYPRE_ParCSRGMRESSolve(solver, parcsr_A, par_b, par_x);
-
-        /* Run info - needed logging turned on */
-        HYPRE_GMRESGetNumIterations(solver, &num_iterations);
-        HYPRE_GMRESGetFinalRelativeResidualNorm(solver, &final_res_norm);
-
-        if (myid == 0) {
-            hypre_printf("\n");
-            hypre_printf("Iterations = %d\n", num_iterations);
-            hypre_printf("Final Relative Residual Norm = %e\n", final_res_norm);
-            hypre_printf("\n");
-        }
-
-        /* Destroy solver and preconditioner */
-        HYPRE_ParCSRGMRESDestroy(solver);
-        HYPRE_ParCSRHybridDestroy(precond);
-    }
-    else
-    {
-       if (myid == 0) { hypre_printf("Invalid solver id specified.\n"); }
-    }
-
     if (myid == 0) {
         // Print the solution
         int pid = getpid();

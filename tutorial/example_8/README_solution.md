@@ -1,6 +1,7 @@
 # Example 8: FPChecker Solution
 
-This file shows one command-only solution for building Hypre and the test with FPChecker,
+This file shows the FPChecker solution workflow 
+for building Hypre and the test with FPChecker,
 running a test, and printing reports.
 
 ## Files used
@@ -41,30 +42,33 @@ cmake \
 make -j
 ```
 
-The `HYPRE_WITH_EXTRA_CFLAGS` value follows the style shown by `fpchecker-show` for rounding error tracking.
+The `HYPRE_WITH_EXTRA_CFLAGS` value follows the style shown by `fpchecker-show` 
+for rounding error tracking.
 
 ## 2) Build the test with FPChecker flags
 
 See how FPChecker flags are added in `Makefile.solution`.
 
-From `tutorial/example_8`
+Go back to `tutorial/example_8`
 
 ```bash
 cd ../../..
-make -f Makefile.solution HYPRE_SRC_DIR=$(pwd)/hypre-3.1.0/src
+make -f Makefile.solution HYPRE_SRC_DIR=./hypre-3.1.0/src
 ```
 
 ## 3) Run a FPChecker-instrumented test
 
 ```bash
-mpirun -np 1 ./hypre_test_fpchecker $(pwd)/matrix.csv 1
+mpirun -np 1 ./hypre_test_fpchecker ./matrix.csv pcg
 ```
+
+Solver options: `amg`, `pcg`, `amg_pcg`.
 
 Alternative inputs:
 
 ```bash
-mpirun -np 1 ./hypre_test_fpchecker $(pwd)/matrix_med_cond.csv 1
-mpirun -np 1 ./hypre_test_fpchecker $(pwd)/matrix_cond_num_4K.csv 1
+mpirun -np 1 ./hypre_test_fpchecker ./matrix_med_cond.csv pcg
+mpirun -np 1 ./hypre_test_fpchecker ./matrix_cond_num_4K.csv pcg
 ```
 
 ## 4) Print reports

@@ -8,7 +8,6 @@ TARGET ?= hypre_test_fpchecker
 SRC ?= hypre_test.c
 
 MATRIX ?= matrix.csv
-SOLVER_ID ?= 0
 
 FPCHECKER_FLAGS ?= -g -fno-vectorize -fno-slp-vectorize -include /Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/src/Runtime_error.h -fpass-plugin=/Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/lib/libfpchecker_error.dylib
 

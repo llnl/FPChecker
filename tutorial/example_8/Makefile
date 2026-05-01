@@ -8,7 +8,6 @@ TARGET ?= hypre_test
 SRC ?= hypre_test.c
 
 MATRIX ?= matrix.csv
-SOLVER_ID ?= 0
 
 HYPRE_DIR_INCLUDES ?= $(shell find "$(HYPRE_SRC_DIR)" -mindepth 1 -maxdepth 1 -type d -print | sed 's|^|-I|')
 HYPRE_INCLUDES = -I$(HYPRE_SRC_DIR) -I$(HYPRE_BUILD_DIR) $(HYPRE_DIR_INCLUDES)
