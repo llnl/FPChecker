@@ -8,6 +8,7 @@ import os
 import argparse
 import sys
 import json
+import re
 from html import escape
 from collections import defaultdict
 import shutil 
@@ -111,11 +112,36 @@ def getErrorsPerLineFilePaths(p):
         fileList.append(f)
   return fileList
 
+def sanitizeNonStandardJsonNumbers(raw_data):
+  # Some traces may contain bare inf/nan tokens, which are not valid JSON.
+  pattern = r'(^|[\s,\[\]\{\}:])([+-]?inf|[+-]?nan)(?=$|[\s,\[\]\{\}:])'
+
+  def replace_token(match):
+    prefix = match.group(1)
+    token = match.group(2).lower()
+    if token in ('inf', '+inf'):
+      replacement = 'Infinity'
+    elif token == '-inf':
+      replacement = '-Infinity'
+    else:
+      replacement = 'NaN'
+    return prefix + replacement
+
+  sanitized, replacements = re.subn(pattern, replace_token, raw_data, flags=re.IGNORECASE | re.MULTILINE)
+  return sanitized, replacements
+
 def loadReport(fileName):
-  f = open(fileName, 'r', encoding='utf-8', errors='replace')
-  data = json.load(f)
-  f.close()
-  return data
+  with open(fileName, 'r', encoding='utf-8', errors='replace') as f:
+    raw_data = f.read()
+
+  try:
+    return json.loads(raw_data)
+  except json.JSONDecodeError:
+    sanitized_data, replacements = sanitizeNonStandardJsonNumbers(raw_data)
+    if replacements == 0:
+      raise
+    prCyan('Warning: non-standard JSON numeric literals found in ' + fileName + '; applying tolerant parsing fallback.')
+    return json.loads(sanitized_data)
 
 def loadEvents(files):
   for f in files:
