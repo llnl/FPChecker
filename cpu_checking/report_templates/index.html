@@ -17,7 +17,11 @@
 <!-- REPORT_TITLE -->mpirun -n 4 ./lulesh -i -p 40 40 40
 </div>
 
-<div class="separation_class"></div>
+<div class="mytabs"> <!-- Begin of MYTABS -->
+<input type="radio" id="tabevents" name="mytabs" checked="checked">
+<label for="tabevents">Events</label>
+<div class="tab">
+	
 <div class="hierarchy_class"><a href="#">Main Report</a></div>
 <h2 id="heading">Main Report</h2>
 	
@@ -144,7 +148,7 @@
     <tr>
       <td class="td_class">Code paths:</td>
       <td class="td_class">
-		  <!-- CODE_PATHS -->/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/static/test_full_report_generation, /path/to/long/code/name/in/filesystem
+		  <!-- CODE_PATHS -->/path/to/long/code/name/in/filesystem
 	  </td>
     </tr>
     <tr>
@@ -221,6 +225,58 @@
 <div class="separation_class"></div>
 <div class="separation_class"></div>
 <div class="separation_class"></div>	
+	
+</div> <!-- End of class=tab -->
+	
+<input type="radio" id="taberror" name="mytabs">
+<label for="taberror">Rounding Error</label>
+<div class="tab">
+	
+<div class="hierarchy_class hierarchy_list_class">
+  <div class="file_name_box file_list_box">
+  File:
+  <!-- FILE_ERROR_TRACKING -->/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/error_analysis/long_path/long_path/long_path/vector_dot_product.cpp
+   </div>
+</div>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+	
+<!-- ROUNDING_ERRORS_TABLES -->
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+	
+</div> <!-- End of class=tab -->
+	
+<input type="radio" id="tab_line_errors" name="mytabs">
+<label for="tab_line_errors">Errors Per Line</label>
+<div class="tab">
+	
+<div class="hierarchy_class">
+  <div class="file_name_box">
+  File:
+  <!-- FILE_ERROR_TRACKING -->/path/to/file.c
+   </div>
+</div>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+
+	<div class="line_errors_plots">
+
+	<!-- ERRORS_PER_LINE_PLOTS -->
+	
+	</div>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+	
+</div> <!-- End of class=tab -->
+
+</div> <!-- End of MYTABS -->
+	
 <div class="auspices">
 <img src="llnl_logo.png" class="llnl_logo">
 This work was produced under the auspices of the U.S. Department of

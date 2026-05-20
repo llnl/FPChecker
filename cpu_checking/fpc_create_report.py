@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 # Description: This script creates an html report of all the events.
 #              It assumes that event (json) files are created by each 
@@ -8,9 +8,11 @@ import os
 import argparse
 import sys
 import json
+import re
+from html import escape
 from collections import defaultdict
 import shutil 
-from line_highlighting import createHTMLCode
+from line_highlighting import createHTMLCode, createHTMLCode_with_errors
 from colors import prGreen, prCyan, prRed
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
@@ -37,6 +39,10 @@ P_FP64_HISTOGRAM = '<!-- FP64_HISTOGRAM -->'
 P_FP32_HISTOGRAM = '<!-- FP32_HISTOGRAM -->'
 P_FP32_INSTRUCTIONS = '<!-- FP32_INSTRUCTIONS -->'
 P_FP64_INSTRUCTIONS = '<!-- FP64_INSTRUCTIONS -->'
+P_ERROR_LINE = '<!-- ERROR_LINE -->'
+P_ROUNDING_ERRORS_TABLES = '<!-- ROUNDING_ERRORS_TABLES -->'
+P_FILE_ERROR_TRACKING = '<!-- FILE_ERROR_TRACKING -->'
+P_ERRORS_PER_LINE_PLOTS = '<!-- ERRORS_PER_LINE_PLOTS -->'
 
 # -------------------------------------------------------- #
 # PATHS
@@ -63,6 +69,8 @@ fp64_plot_filename = 'histogram_fp64.svg'
 fp32_plot_filename = 'histogram_fp32.svg'
 fp64_exp_usage_per_file = defaultdict(int)
 fp32_exp_usage_per_file = defaultdict(int)
+rounding_errors_per_file_line = defaultdict(lambda: defaultdict(list) ) # ['file'][line] = [1.2e-6, 3.2e-9]
+relative_errors_per_line = defaultdict(list) # [line] = [1.2e-6, 3.2e-9, ...], where line is an integer
 
 def getEventFilePaths(p):
   fileList = []
@@ -84,11 +92,56 @@ def getExponentUsageFilePaths(p):
         fileList.append(f)
   return fileList
 
+def getErrorFilePaths(p):
+  fileList = []
+  for root, dirs, files in os.walk(p):
+    for file in files:
+      fileName = os.path.split(file)[1]
+      if fileName.startswith('rounding_error_') and fileName.endswith(".json"):
+        f = str(os.path.join(root, file))
+        fileList.append(f)
+  return fileList
+
+def getErrorsPerLineFilePaths(p):
+  fileList = []
+  for root, dirs, files in os.walk(p):
+    for file in files:
+      fileName = os.path.split(file)[1]
+      if fileName.startswith('errors_per_line_') and fileName.endswith(".json"):
+        f = str(os.path.join(root, file))
+        fileList.append(f)
+  return fileList
+
+def sanitizeNonStandardJsonNumbers(raw_data):
+  # Some traces may contain bare inf/nan tokens, which are not valid JSON.
+  pattern = r'(^|[\s,\[\]\{\}:])([+-]?inf|[+-]?nan)(?=$|[\s,\[\]\{\}:])'
+
+  def replace_token(match):
+    prefix = match.group(1)
+    token = match.group(2).lower()
+    if token in ('inf', '+inf'):
+      replacement = 'Infinity'
+    elif token == '-inf':
+      replacement = '-Infinity'
+    else:
+      replacement = 'NaN'
+    return prefix + replacement
+
+  sanitized, replacements = re.subn(pattern, replace_token, raw_data, flags=re.IGNORECASE | re.MULTILINE)
+  return sanitized, replacements
+
 def loadReport(fileName):
-  f = open(fileName,'r')
-  data = json.load(f)
-  f.close()
-  return data
+  with open(fileName, 'r', encoding='utf-8', errors='replace') as f:
+    raw_data = f.read()
+
+  try:
+    return json.loads(raw_data)
+  except json.JSONDecodeError:
+    sanitized_data, replacements = sanitizeNonStandardJsonNumbers(raw_data)
+    if replacements == 0:
+      raise
+    prCyan('Warning: non-standard JSON numeric literals found in ' + fileName + '; applying tolerant parsing fallback.')
+    return json.loads(sanitized_data)
 
 def loadEvents(files):
   for f in files:
@@ -205,6 +258,31 @@ def loadExponentUsageTraces(files):
                 fp64_bin_values[exp_base10] += value
                 fp64_exp_usage_per_file[file_name] += value
 
+def loadRoundingErrorTraces(files):
+  for f in files:
+      data = loadReport(f)
+      for i in range(len(data)):
+          file_name       = data[i]['file']
+          line            = data[i]['line']
+          error           = data[i]['error']
+          relative_error  = data[i]['relative_error']
+          if not rounding_errors_per_file_line[file_name][line]:
+            rounding_errors_per_file_line[file_name][line] = [0.0, 0.0]
+          current_errors = [rounding_errors_per_file_line[file_name][line][0], rounding_errors_per_file_line[file_name][line][1]]
+          if abs(error) > current_errors[0]:
+            current_errors[0] = error
+          if relative_error > current_errors[1]:
+            current_errors[1] = relative_error
+          rounding_errors_per_file_line[file_name][line] = current_errors
+
+def loadErrorsPerLineTraces(files):
+  for f in files:
+      data = loadReport(f)
+      for i in range(len(data)):
+          line            = data[i]['line']
+          errors_list    = data[i]['values'] # list of errors for that line
+          relative_errors_per_line[line].extend(errors_list)
+
 def plot_exp_usage_bars(data_dict, group_size, filename):
     data_points = list(data_dict.keys())
     counts = list(data_dict.values())
@@ -290,6 +368,99 @@ def createEventReport_Text(event_name):
   print("\n===== Inputs =====")
   for i in program_inputs[event_name]:
     print(i)
+
+def truncateTextForTable(text, max_chars):
+  clean_text = str(text).replace('\t', '    ').strip()
+  if len(clean_text) <= max_chars:
+    return clean_text
+  if max_chars <= 3:
+    return clean_text[:max_chars]
+  return clean_text[:max_chars - 3] + '...'
+
+def getSourceCodeByLine(file_name, lines):
+  source_by_line = {}
+  try:
+    with open(file_name, 'r') as src_file:
+      source_lines = src_file.readlines()
+
+    for line in lines:
+      source_index = int(line) - 1
+      if source_index >= 0 and source_index < len(source_lines):
+        source_by_line[line] = source_lines[source_index].rstrip('\n').rstrip('\r')
+      else:
+        source_by_line[line] = '(line not found)'
+  except Exception:
+    for line in lines:
+      source_by_line[line] = '(source unavailable)'
+
+  return source_by_line
+
+def createRoundingErrorsReport_Text():
+  files = getSortedRoundingErrorFiles()
+  print("\n===== Rounding Error Report =====")
+  if len(files) == 0:
+    print('No files with rounding errors.')
+    return
+
+  total_lines = 0
+  max_abs_error = 0.0
+  max_relative_error = 0.0
+  for file_name in files:
+    for line in rounding_errors_per_file_line[file_name]:
+      total_lines += 1
+      error = rounding_errors_per_file_line[file_name][line][0]
+      relative_error = rounding_errors_per_file_line[file_name][line][1]
+      if abs(error) > max_abs_error:
+        max_abs_error = abs(error)
+      if relative_error > max_relative_error:
+        max_relative_error = relative_error
+
+  print('Files with rounding errors:', len(files))
+  print('Lines with rounding errors:', total_lines)
+  print('Max abs rounding error:   {:.6e}'.format(max_abs_error))
+  print('Max relative error:       {:.6e}'.format(max_relative_error))
+
+  # Keep table rows compact for remote terminals.
+  line_col_width = 6
+  code_col_width = 56
+  error_col_width = 13
+  rel_error_col_width = 13
+
+  header_row = (
+    '{:<{line_w}} | {:<{code_w}} | {:>{err_w}} | {:>{rel_w}}'.format(
+      'Line', 'Code', 'Error', 'Rel. Error',
+      line_w=line_col_width,
+      code_w=code_col_width,
+      err_w=error_col_width,
+      rel_w=rel_error_col_width
+    )
+  )
+  separator_row = '-' * len(header_row)
+
+  for file_name in files:
+    print("\n--- File: " + file_name)
+    # Keep shell output deterministic and easier to scan.
+    sorted_lines = sorted(rounding_errors_per_file_line[file_name].keys())
+    source_by_line = getSourceCodeByLine(file_name, sorted_lines)
+    print(header_row)
+    print(separator_row)
+
+    for line in sorted_lines:
+      error = rounding_errors_per_file_line[file_name][line][0]
+      relative_error = rounding_errors_per_file_line[file_name][line][1]
+      source_line = truncateTextForTable(source_by_line[line], code_col_width)
+      print(
+        '{:<{line_w}} | {:<{code_w}} | {:>{err_w}.6e} | {:>{rel_w}.6e}'.format(
+          line,
+          source_line,
+          error,
+          relative_error,
+          line_w=line_col_width,
+          code_w=code_col_width,
+          err_w=error_col_width,
+          rel_w=rel_error_col_width
+        )
+      )
 
 #------------------------------------------------------------------------------
 #------------------------- HTML Reports ---------------------------------------
@@ -425,6 +596,50 @@ def createRootReport():
     elif P_FP32_INSTRUCTIONS in templateLines[i]:
       fd.write(str(sum(fp32_exp_usage_per_file.values()))+'\n')
 
+    # Rounding error report
+    elif P_ROUNDING_ERRORS_TABLES in templateLines[i]:
+      fd.write(createRoundingErrorsTables()+'\n')
+
+    elif P_ERROR_LINE in templateLines[i]:
+      # Backward-compatible fallback if older templates are used.
+      fd.write(createRoundingErrorsReport()+'\n')
+
+    elif P_FILE_ERROR_TRACKING in templateLines[i]:
+      fd.write(createRoundingErrorFileList()+'\n')
+
+    elif P_ERRORS_PER_LINE_PLOTS in templateLines[i]:
+      for line in relative_errors_per_line:
+        errors = relative_errors_per_line[line]
+        if len(errors) == 0:
+          continue
+        # Create plot for this line
+        plt.figure(figsize=(8, 4))
+        x_axis = list(range(len(errors)))
+        plt.plot(x_axis, errors, marker='.', linestyle='-', markersize=4)
+
+        # Force scientific notation on the y-axis
+        ax = plt.gca()
+        ax.ticklabel_format(style='sci', axis='y')
+
+        # switch to logarithmic y-axis (values must be > 0)
+        ax.set_yscale('log')
+
+        plt.title(f'Relative Rounding Errors for Line {line}', fontsize=12)
+        plt.xlabel('Index of Value', fontsize=12)
+        plt.ylabel('Relative Error Value', fontsize=12)
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.tight_layout()
+        plot_filename = REPORTS_DIR+f'/relative_errors_line_{line}.svg'
+        plt.savefig(plot_filename, format='svg')
+        plt.close()
+
+        # Write img tag to report
+        fd.write(f'<img src="relative_errors_line_{line}.svg"></img>\n')
+
+        print(f'Created plot for relative errors of line {line}: {plot_filename}')
+        fd.write('<div class="separation_class"></div>\n')
+        fd.write('<div class="separation_class"></div>\n')
+
     else:
         fd.write(templateLines[i])
 
@@ -502,6 +717,112 @@ def createCodeReport(event_name, file_full_path, id):
       fd.write(templateLines[i])
   fd.close()
 
+def getSortedRoundingErrorFiles():
+  return sorted(rounding_errors_per_file_line.keys())
+
+def getShortDisplayPath(path, max_chars=80):
+  if len(path) <= max_chars:
+    return path
+  return '...'+path[-max_chars:]
+
+def createRoundingErrorFileList():
+  files = getSortedRoundingErrorFiles()
+  if len(files) == 0:
+    return 'No files with rounding errors.'
+
+  entries = []
+  for idx, file_name in enumerate(files):
+    file_label = os.path.split(file_name)[1]
+    n_lines = len(rounding_errors_per_file_line[file_name])
+    # Show compact file names, preserving full path in title tooltip.
+    entries.append(
+      '<a href="#rounding_error_file_'+str(idx)+'" title="'+escape(file_name)+'">'
+      + escape(file_label) + ' (' + str(n_lines) + ')</a>'
+    )
+  return ' | '.join(entries)
+
+def createRoundingErrorsReport():
+  report_text = ""
+  files = getSortedRoundingErrorFiles()
+  for idx, file_name in enumerate(files):
+    error_dict = {}
+    relative_error_dict = {}
+    highligth_set = set([])
+
+    report_text += (
+      '<tr id="rounding_error_file_'+str(idx)+'">'
+      '<td class="code_line_class"></td>'
+      '<td colspan="3"><b>File:</b> '+escape(getShortDisplayPath(file_name))+'</td>'
+      '</tr>\n'
+    )
+
+    for line in rounding_errors_per_file_line[file_name]:
+      error = rounding_errors_per_file_line[file_name][line][0]
+      relative_error = rounding_errors_per_file_line[file_name][line][1]
+      error_dict[line] = error
+      relative_error_dict[line] = relative_error
+      highligth_set.add(line)
+    htmlCode = createHTMLCode_with_errors(file_name, highligth_set, error_dict, relative_error_dict)
+    report_text += '\n'.join(htmlCode) + '\n'
+
+    # Spacer between file blocks.
+    report_text += (
+      '<tr><td class="code_line_class"></td>'
+      '<td colspan="3"></td></tr>\n'
+    )
+  return report_text
+
+def createRoundingErrorsTables():
+  files = getSortedRoundingErrorFiles()
+  if len(files) == 0:
+    return (
+      '<table width="600" class="report_box_source">\n'
+      '  <tbody>\n'
+      '  <tr class="rounding_file_header_row">\n'
+      '    <td colspan="4" class="rounding_file_header_cell"><b>File:</b> No files with rounding errors.</td>\n'
+      '  </tr>\n'
+      '  </tbody>\n'
+      '</table>'
+    )
+
+  blocks = []
+  for idx, file_name in enumerate(files):
+    error_dict = {}
+    relative_error_dict = {}
+    highligth_set = set([])
+    for line in rounding_errors_per_file_line[file_name]:
+      error = rounding_errors_per_file_line[file_name][line][0]
+      relative_error = rounding_errors_per_file_line[file_name][line][1]
+      error_dict[line] = error
+      relative_error_dict[line] = relative_error
+      highligth_set.add(line)
+
+    htmlCode = createHTMLCode_with_errors(file_name, highligth_set, error_dict, relative_error_dict)
+
+    block = []
+    block.append('<table width="600" class="report_box_source" id="rounding_error_file_'+str(idx)+'">')
+    block.append('  <tbody>')
+    block.append('  <tr class="rounding_file_header_row">')
+    block.append('    <td colspan="4" class="rounding_file_header_cell"><b>File:</b> '+escape(getShortDisplayPath(file_name))+'</td>')
+    block.append('  </tr>')
+    block.append('  <tr>')
+    block.append('    <th></th>')
+    block.append('    <th></th>')
+    block.append('    <th class="error_table_header">Rounding Error</th>')
+    block.append('    <th class="error_table_header">Relative Error</th>')
+    block.append('  </tr>')
+    block.extend(htmlCode)
+    block.append('  </tbody>')
+    block.append('</table>')
+
+    blocks.append('\n'.join(block))
+    if idx != len(files) - 1:
+      # Reuse existing spacing helper from template styles.
+      blocks.append('<div class="separation_class"></div>')
+      blocks.append('<div class="separation_class"></div>')
+
+  return '\n'.join(blocks)
+
 def removeReportDir():
   if os.path.exists(REPORTS_DIR):
     prRed('Removing report dir...')
@@ -528,7 +849,7 @@ def removeReportDir():
 #]
 def executeQuery(fileName):
   prGreen('Loading: ' + fileName)
-  fd = open(fileName, 'r')
+  fd = open(fileName, 'r', encoding='utf-8', errors='replace')
   data = json.load(fd)
   fd.close()
 
@@ -539,7 +860,7 @@ def executeQuery(fileName):
       fname = os.path.split(file)[1]
       if fname.startswith('fpc_') and fname.endswith(".json"):
         f = str(os.path.join(root, file))
-        with open(f, 'r') as trace_file:
+        with open(f, 'r', encoding='utf-8', errors='replace') as trace_file:
           trace_data = json.load(trace_file)
           for i in trace_data:
             if i["file"].endswith(data[0]["file"]):
@@ -574,7 +895,7 @@ if __name__ == '__main__':
   parser.add_argument('-c', '--clean', action='store_true', help='Remove traces. A report cannot be generated without traces.')
   parser.add_argument('-t', '--title', nargs=1, type=str, help='Title of report.')
   parser.add_argument('-q', '--query', nargs=1, type=str, action='store', help='Query file.')
-  parser.add_argument('-s', '--show', action='store', nargs='?', default=0, type=str, help='Show report on screen.')
+  parser.add_argument('-s', '--show', action='store', nargs='?', default=0, type=str, help='Show report on screen (main, event, or rounding_error).')
   parser.add_argument('dir', nargs='?', default=os.getcwd())
   args = parser.parse_args()
 
@@ -582,10 +903,16 @@ if __name__ == '__main__':
     prCyan('Generating FPChecker report...')
     reports_path = args.dir  
     fileList = getEventFilePaths(reports_path)
+    fileListErrors = getErrorFilePaths(reports_path)
     print('Trace files found:', len(fileList))
+    print('Error files found:', len(fileListErrors))
     loadEvents(fileList)
+    loadRoundingErrorTraces(fileListErrors)
     if (args.show == None ):
       createRootReport_Text()
+      createRoundingErrorsReport_Text()
+    elif (args.show in ['rounding_error', 'rounding_errors', 'rounding']):
+      createRoundingErrorsReport_Text()
     else:
       event_name = args.show
       createEventReport_Text(event_name)
@@ -609,9 +936,20 @@ if __name__ == '__main__':
   reports_path = args.dir  
   prCyan('Generating FPChecker report...')
   fileList = getEventFilePaths(reports_path)
+
+  # Find files
   fileListExpUsage = getExponentUsageFilePaths(reports_path)
+  fileListErrors = getErrorFilePaths(reports_path)
+  fileListErrorsPerLine = getErrorsPerLineFilePaths(reports_path)
   print('Trace files found:', len(fileList))
   print('Exponent usage files found:', len(fileListExpUsage))
+  print('Error files found:', len(fileListErrors))
+  print('Errors per line files found:', len(fileListErrorsPerLine))
+
+  # Load events
   loadEvents(fileList)
   loadExponentUsageTraces(fileListExpUsage)
+  loadRoundingErrorTraces(fileListErrors)
+  loadErrorsPerLineTraces(fileListErrorsPerLine)
+
   createRootReport()

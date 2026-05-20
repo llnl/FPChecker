@@ -15,12 +15,20 @@ from fpc_logging import logMessage, verbose
 
 # Main installation path
 FPCHECKER_PATH      = str(pathlib.Path(__file__).parent.absolute())
+
+# Library and runtime depends on the analysis type
 if platform.system() == 'Darwin':
-  FPCHECKER_LIB       = FPCHECKER_PATH+'/../lib/libfpchecker_cpu.dylib'
+  FPCHECKER_LIB_EXCEPTIONS  = FPCHECKER_PATH+'/../lib/libfpchecker_cpu.dylib'
+  FPCHECKER_LIB_ERROR       = FPCHECKER_PATH+'/../lib/libfpchecker_error.dylib'
 else:
-  FPCHECKER_LIB       = FPCHECKER_PATH+'/../lib/libfpchecker_cpu.so'
-FPCHECKER_RUNTIME   = FPCHECKER_PATH+'/../src/Runtime_cpu.h'
-LLVM_PASS           = "-fpass-plugin=" + FPCHECKER_LIB + " -include " + FPCHECKER_RUNTIME + ' -g '
+  FPCHECKER_LIB_EXCEPTIONS  = FPCHECKER_PATH+'/../lib/libfpchecker_cpu.so'
+  FPCHECKER_LIB_ERROR       = FPCHECKER_PATH+'/../lib/libfpchecker_error.so'
+
+FPCHECKER_RUNTIME_EXCEPTIONS   = FPCHECKER_PATH+'/../src/Runtime_cpu.h'
+FPCHECKER_RUNTIME_ERROR        = FPCHECKER_PATH+'/../src/Runtime_error.h'
+
+LLVM_PASS_EXCEPTIONS           = "-fpass-plugin=" + FPCHECKER_LIB_EXCEPTIONS + " -include " + FPCHECKER_RUNTIME_EXCEPTIONS + ' -g '
+LLVM_PASS_ERROR                = "-fpass-plugin=" + FPCHECKER_LIB_ERROR + " -include " + FPCHECKER_RUNTIME_ERROR + ' -g -fno-vectorize -fno-slp-vectorize '
 
 # --------------------------------------------------------------------------- #
 # --- Global variables ------------------------------------------------------ #
@@ -102,6 +110,11 @@ class Command:
     return False
 
   def instrumentIR(self):
+    if 'FPC_INSTRUMENT_ERR_TRACKING' in os.environ:
+      LLVM_PASS = LLVM_PASS_ERROR
+    else:
+      LLVM_PASS = LLVM_PASS_EXCEPTIONS
+
     new_cmd = [self.name] + self.mpi_params + LLVM_PASS.split() + self.parameters
     for p in self.parameters:
       if '-fopenmp' in p:
@@ -125,8 +138,12 @@ if __name__ == '__main__':
   params = os.environ['FPC_COMPILER_PARAMS']
   cmd = Command(compiler_name, params.split())
 
-  if 'FPC_INSTRUMENT' not in os.environ:
+  if 'FPC_INSTRUMENT' not in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING' not in os.environ:
     cmd.executeOriginalCommand()
+    exit()
+
+  if 'FPC_INSTRUMENT' in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING' in os.environ:
+    prRed("Error: FPC_INSTRUMENT and FPC_INSTRUMENT_ERR_TRACKING are set! Only one instrumentation type can be used at a time.")
     exit()
 
   # Link command

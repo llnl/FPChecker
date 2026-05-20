@@ -1,3 +1,12 @@
+## Release 0.6
+- Added FP32 rounding-error tracking (shadow-value style), including improved accumulation across operations and files.
+- Added line-granularity reporting for accumulated rounding error, including per-line visualizations in reports.
+- Reports high-error hotspots that can help guide mixed-precision and lower-precision tuning decisions.
+- Improved reporting outputs: better HTML layout, shell-friendly rounding-error tables, and support for multi-file rounding sections.
+- Expanded error-analysis coverage for math functions, floating-point return values/calls, and MPI-related paths.
+- Added substantial regression tests for FP32 error analysis and report generation.
+- Fixed multiple bugs and memory leaks in analysis and reporting components.
+
 ## Release 0.5
 - Improved histrograms of exponent usage (added to main report). Merged branches.
 - Support for CUDA has been dropped

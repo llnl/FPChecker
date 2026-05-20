@@ -19,3 +19,8 @@ main
 .vscode/
 *.ipynb_checkpoints/
 *.virtual_documents/*
+fpc_error_log.json
+*.dSYM/
+*.dSYM
+.venv
+temp/

@@ -19,7 +19,7 @@ def teardown_module(module):
     cmd = ["make clean"]
     cmdutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
 
-def test_1():
+def test_exponent_usage_basic():
     # --- compile code ---
     cmd = ["make"]
     try:
@@ -52,7 +52,6 @@ def test_1():
             assert line_data['fp64']['-1023'] == 1
             assert line_data['fp64']['1024'] == 15
 
-def test_2():
     # --- compile code ---
     cmd = ["make"]
     try:
@@ -81,7 +80,6 @@ def test_2():
             assert file_data['fp64']['0'] == 1
             assert file_data['fp64']['1024'] == 22
 
-def test_3():
     # --- compile code ---
     cmd = ["make"]
     try:

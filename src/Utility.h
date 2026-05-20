@@ -22,79 +22,92 @@
 
 using namespace llvm;
 
-namespace CUDAAnalysis {
+namespace CUDAAnalysis
+{
 
-void printMessage(const char *s);
+  void printMessage(const char *s);
 
-std::string inst2str(const Instruction *i);
+  std::string inst2str(const Instruction *i);
 
-// std::string getInstructionInformation(const Instruction *i);
+  // std::string getInstructionInformation(const Instruction *i);
 
-int getLineOfCode(const Instruction *i);
+  int getLineOfCode(const Instruction *i);
 
-std::string getFileNameFromInstruction(const Instruction *i);
+  std::string getFileNameFromInstruction(const Instruction *i);
 
-std::string getFileNameFromModule(const Module *mod);
+  std::string getFileNameFromFunction(const Function *f);
 
-void stop();
+  std::string getFileNameFromModule(const Module *mod);
 
-template <typename T> std::string NumberToString(T Number) {
-  std::ostringstream ss;
-  ss << Number;
-  return ss.str();
-}
+  void stop();
 
-/// Get the intersection of two sets.
-/// FIXME: this is a very sub-optimal implementation.
-template <class T>
-std::set<T> set_intersection(const std::set<T> &x, const std::set<T> &y) {
-  std::set<T> ret;
-  typename std::set<T>::const_iterator it;
-  for (it = x.begin(); it != x.end(); ++it) {
-    if (y.find(*it) != y.end())
+  template <typename T>
+  std::string NumberToString(T Number)
+  {
+    std::ostringstream ss;
+    ss << Number;
+    return ss.str();
+  }
+
+  /// Get the intersection of two sets.
+  /// FIXME: this is a very sub-optimal implementation.
+  template <class T>
+  std::set<T> set_intersection(const std::set<T> &x, const std::set<T> &y)
+  {
+    std::set<T> ret;
+    typename std::set<T>::const_iterator it;
+    for (it = x.begin(); it != x.end(); ++it)
+    {
+      if (y.find(*it) != y.end())
+        ret.insert(*it);
+    }
+    return ret;
+  }
+
+  /// Get the union of two sets.
+  /// FIXME: this is a very sub-optimal implementation.
+  template <class T>
+  std::set<T> set_union(const std::set<T> &x, const std::set<T> &y)
+  {
+    std::set<T> ret(x);
+    typename std::set<T>::const_iterator it;
+    for (it = y.begin(); it != y.end(); ++it)
+    {
       ret.insert(*it);
+    }
+    return ret;
   }
-  return ret;
-}
 
-/// Get the union of two sets.
-/// FIXME: this is a very sub-optimal implementation.
-template <class T>
-std::set<T> set_union(const std::set<T> &x, const std::set<T> &y) {
-  std::set<T> ret(x);
-  typename std::set<T>::const_iterator it;
-  for (it = y.begin(); it != y.end(); ++it) {
-    ret.insert(*it);
-  }
-  return ret;
-}
-
-/// Check if two sets are equal.
-/// FIXME: this is a very sub-optimal implementation.
-template <class T> bool set_equal(const std::set<T> &x, const std::set<T> &y) {
-  if (x.size() != y.size())
-    return false;
-
-  typename std::set<T>::const_iterator it;
-  for (it = x.begin(); it != x.end(); ++it) {
-    if (y.find(*it) == y.end())
+  /// Check if two sets are equal.
+  /// FIXME: this is a very sub-optimal implementation.
+  template <class T>
+  bool set_equal(const std::set<T> &x, const std::set<T> &y)
+  {
+    if (x.size() != y.size())
       return false;
+
+    typename std::set<T>::const_iterator it;
+    for (it = x.begin(); it != x.end(); ++it)
+    {
+      if (y.find(*it) == y.end())
+        return false;
+    }
+    for (it = y.begin(); it != y.end(); ++it)
+    {
+      if (x.find(*it) == x.end())
+        return false;
+    }
+
+    return true;
   }
-  for (it = y.begin(); it != y.end(); ++it) {
-    if (x.find(*it) == x.end())
-      return false;
-  }
 
-  return true;
-}
+  bool mayModifyMemory(const Instruction *i);
 
-bool mayModifyMemory(const Instruction *i);
+  /// Tokenize a string
+  void tokenize(const std::string &str, std::vector<std::string> &tokens,
+                const std::string &delimiters);
 
-/// Tokenize a string
-void tokenize(const std::string &str, std::vector<std::string> &tokens,
-              const std::string &delimiters);
-
-bool isFunctionUnwanted(const std::string &str);
+  bool isFunctionUnwanted(const std::string &str);
 
 } // namespace CUDAAnalysis
 

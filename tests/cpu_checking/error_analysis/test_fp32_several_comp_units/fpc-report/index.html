@@ -1,0 +1,385 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FPChecker Report</title>
+<link href="sitestyle.css" rel="stylesheet" type="text/css">	
+	
+</head>
+<body class="body_class">
+<header>
+<div class="header_class">&nbsp;&nbsp;<img src="icons_4/logo_fpchecker.png" alt=""/></div>
+</header>
+
+<div class="separation_class"></div>
+<div class="report_title">
+<b>Report Title:</b>
+
+</div>
+
+<div class="mytabs"> <!-- Begin of MYTABS -->
+<input type="radio" id="tabevents" name="mytabs" checked="checked">
+<label for="tabevents">Events</label>
+<div class="tab">
+	
+<div class="hierarchy_class"><a href="#">Main Report</a></div>
+<h2 id="heading">Main Report</h2>
+	
+<table width="150" border="0" class="report_box_top">
+<tbody>
+	<tr class="tr_class">
+	<th></th> <th> </th> <th class="th_class"> Events</th>
+	</tr>
+	<tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/infinity.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Infinity (+)
+  		<span class="tooltiptext">Detected when operations produce positive infinity, such as 1.0 / 0.0. 
+			Infinities propagate through calculations: for example, 2 + ∞ = ∞.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+	 <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/infinity.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Infinity (-)
+		  <span class="tooltiptext">Detected when operations produce negative infinity.</span></div>
+		</td>
+      <td>
+0
+	  </td>
+    </tr>
+	<tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/nan.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">NaN
+		  <span class="tooltiptext">NaN (not a number) are the result of invalid operations, such as 0/0 or sqrt(-1).</span></div>
+	   </td>
+       <td>
+0
+	   </td>
+    </tr>	  
+</tbody>
+</table>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+		
+<table width="150" border="0" class="report_box">
+  <tbody>
+
+	
+    <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/div_zero.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Division by zero
+		  <span class="tooltiptext">Occurs when a finite nonzero number is divided by zero; typically produces infinity.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+	<tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/underflow.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Underflow (subnormal)
+		  <span class="tooltiptext">Detected when an operation produces a subnormal number 
+			  because the result was not representable as a normal number.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+    <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/comparison.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Comparison
+		  <span class="tooltiptext">Occurs when two floating-point numbers are compared for equality. 
+			  Often comparing if two floating-point numbers are equal is not good practice.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+	<tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/cancellation.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Cancellation
+		  <span class="tooltiptext">Occurs when two nearly equal numbers are subtracted. 
+			  By default, this event is detected when at least ten decimal digits are lost due to a subtraction.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+    <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/warning.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Latent Infinity (+)
+		  <span class="tooltiptext">Detected when an operation produces a normal number that is large, 
+			  and it is in close proximity to positive infinity.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+    <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/warning.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Latent Infinity (-)
+		  <span class="tooltiptext">Detected when an operation produces a normal number that is large, 
+			  and it is in close proximity to negative infinity.</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+    <tr class="tr_class">
+      <td class="icon_class"><img src="icons_4/warning.svg" alt="" width="50"/></td>
+      <td class="td_text"><div class="tooltip">Latent underflow
+		  <span class="tooltiptext">Detected when an operation produces a normal number that is small 
+			  and it is in close proximity to becoming an underflow (subnormal number).</span></div>
+	  </td>
+      <td>
+0
+	  </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+	
+<table width="200" border="0" class="report_box_stats">
+  <tbody>
+    <tr>
+      <td class="td_class">Code paths:</td>
+      <td class="td_class">
+Not found
+	  </td>
+    </tr>
+    <tr>
+      <td class="td_class">Files affected:</td>
+      <td class="td_class">
+0
+	  </td>
+    </tr>
+    <tr>
+      <td class="td_class">Lines affected:</td>
+      <td class="td_class">
+0
+	  </td>
+    </tr>
+  </tbody>
+</table>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<h2 id="heading">Exponent Usage Report</h2>
+	
+<div class="separation_class"></div>
+<h3 id="heading">FP64 Distribution</h3>
+	
+<table width="200" border="0" class="report_box_numbers">
+  <tbody>
+    <tr>
+      	<td>Smallest number: 4.940...x10<span class="superscript">-324</span></td>
+		<td>Largest number: 1.797...x10<span class="superscript">308</span></td>
+  </tbody>
+</table>
+	
+<div class="plot-container">
+<img src="default_fp64_plot.svg"
+	   alt="Histogram" class="histogram-svg">
+</div>
+	
+<div class="separation_class"></div>
+<h3 id="heading">FP32 Distribution</h3>
+<table width="200" border="0" class="report_box_numbers">
+  <tbody>
+    <tr>
+      	<td>Smallest number: 1.401...x10<span class="superscript">-45</span></td>
+		<td>Largest number: 3.402...x10<span class="superscript">+38</span></td>
+  </tbody>
+</table>
+<div class="plot-container">
+<img src="default_fp32_plot.svg"
+	   alt="Histogram" class="histogram-svg">
+</div>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+	
+<h4 id="heading">Instrumented Instructions</h4>
+<table width="200" border="0" class="report_box_stats_short">
+  <tbody>
+    <tr>
+      <td class="td_class_short">FP32:</td>
+      <td class="td_class">
+0
+	  </td>
+    </tr>
+    <tr>
+      <td class="td_class_short">FP64:</td>
+      <td class="td_class">
+0
+	  </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<div class="separation_class"></div>	
+	
+</div> <!-- End of class=tab -->
+	
+<input type="radio" id="taberror" name="mytabs">
+<label for="taberror">Rounding Error</label>
+<div class="tab">
+	
+<div class="hierarchy_class hierarchy_list_class">
+  <div class="file_name_box file_list_box">
+  File:
+<a href="#rounding_error_file_0" title="/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/error_analysis/test_fp32_several_comp_units/dot_product.cpp">dot_product.cpp (2)</a> | <a href="#rounding_error_file_1" title="/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/error_analysis/test_fp32_several_comp_units/main.cpp">main.cpp (6)</a> | <a href="#rounding_error_file_2" title="/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/error_analysis/test_fp32_several_comp_units/vector_addition.cpp">vector_addition.cpp (2)</a> | <a href="#rounding_error_file_3" title="/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/error_analysis/test_fp32_several_comp_units/vector_scaling.cpp">vector_scaling.cpp (2)</a>
+   </div>
+</div>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+	
+<table width="600" class="report_box_source" id="rounding_error_file_0">
+  <tbody>
+  <tr class="rounding_file_header_row">
+    <td colspan="4" class="rounding_file_header_cell"><b>File:</b> ...r/tests/cpu_checking/error_analysis/test_fp32_several_comp_units/dot_product.cpp</td>
+  </tr>
+  <tr>
+    <th></th>
+    <th></th>
+    <th class="error_table_header">Rounding Error</th>
+    <th class="error_table_header">Relative Error</th>
+  </tr>
+<tr><td class="code_line_class">9</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">10</td><td><code>    {</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">11</td><td><span class="highlightme_error"><code>        result += vec1[i] * vec2[i];</code></span></td><td class="error_table_header">5.3821341e+01</td><td class="error_table_header">6.0913846e-08</td></tr>
+<tr><td class="code_line_class">12</td><td><code>    }</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">13</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">19</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">20</td><td><code>    {</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">21</td><td><span class="highlightme_error"><code>        result += vec1[i] * vec2[i];</code></span></td><td class="error_table_header">0.0000000e+00</td><td class="error_table_header">0.0000000e+00</td></tr>
+<tr><td class="code_line_class">22</td><td><code>    }</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">23</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+  </tbody>
+</table>
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<table width="600" class="report_box_source" id="rounding_error_file_1">
+  <tbody>
+  <tr class="rounding_file_header_row">
+    <td colspan="4" class="rounding_file_header_cell"><b>File:</b> ...PChecker/tests/cpu_checking/error_analysis/test_fp32_several_comp_units/main.cpp</td>
+  </tr>
+  <tr>
+    <th></th>
+    <th></th>
+    <th class="error_table_header">Rounding Error</th>
+    <th class="error_table_header">Relative Error</th>
+  </tr>
+<tr><td class="code_line_class">47</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">48</td><td><code>            values_f.push_back(std::stof(item));</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">49</td><td><span class="highlightme_error"><code>            printf("Converted to float: %f\n", values_f.back());</code></span></td><td class="error_table_header">0.0000000e+00</td><td class="error_table_header">0.0000000e+00</td></tr>
+<tr><td class="code_line_class">50</td><td><span class="highlightme_error"><code>            values_d.push_back(static_cast<double>(values_f.back()));</code></span></td><td class="error_table_header">0.0000000e+00</td><td class="error_table_header">0.0000000e+00</td></tr>
+<tr><td class="code_line_class">51</td><td><code>        }</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">52</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">61</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">62</td><td><code>    {</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">63</td><td><span class="highlightme_error"><code>        std::cout << val << std::endl;</code></span></td><td class="error_table_header">0.0000000e+00</td><td class="error_table_header">0.0000000e+00</td></tr>
+<tr><td class="code_line_class">64</td><td><code>    }</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">65</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+  </tbody>
+</table>
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<table width="600" class="report_box_source" id="rounding_error_file_2">
+  <tbody>
+  <tr class="rounding_file_header_row">
+    <td colspan="4" class="rounding_file_header_cell"><b>File:</b> ...sts/cpu_checking/error_analysis/test_fp32_several_comp_units/vector_addition.cpp</td>
+  </tr>
+  <tr>
+    <th></th>
+    <th></th>
+    <th class="error_table_header">Rounding Error</th>
+    <th class="error_table_header">Relative Error</th>
+  </tr>
+<tr><td class="code_line_class">8</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">9</td><td><code>    {</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">10</td><td><span class="highlightme_error"><code>        result[i] = vec1[i] + vec2[i];</code></span></td><td class="error_table_header">0.0000000e+00</td><td class="error_table_header">0.0000000e+00</td></tr>
+<tr><td class="code_line_class">11</td><td><code>    }</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">12</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">17</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">18</td><td><code>    {</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">19</td><td><span class="highlightme_error"><code>        result[i] = vec1[i] + vec2[i];</code></span></td><td class="error_table_header">0.0000000e+00</td><td class="error_table_header">0.0000000e+00</td></tr>
+<tr><td class="code_line_class">20</td><td><code>    }</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">21</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+  </tbody>
+</table>
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+<table width="600" class="report_box_source" id="rounding_error_file_3">
+  <tbody>
+  <tr class="rounding_file_header_row">
+    <td colspan="4" class="rounding_file_header_cell"><b>File:</b> ...ests/cpu_checking/error_analysis/test_fp32_several_comp_units/vector_scaling.cpp</td>
+  </tr>
+  <tr>
+    <th></th>
+    <th></th>
+    <th class="error_table_header">Rounding Error</th>
+    <th class="error_table_header">Relative Error</th>
+  </tr>
+<tr><td class="code_line_class">8</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">9</td><td><code>    {</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">10</td><td><span class="highlightme_error"><code>        result[i] = vec[i] * scalar;</code></span></td><td class="error_table_header">6.8763178e-04</td><td class="error_table_header">2.3135081e-08</td></tr>
+<tr><td class="code_line_class">11</td><td><code>    }</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">12</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">18</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">19</td><td><code>        double scalar_d = static_cast<double>(scalar);</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">20</td><td><span class="highlightme_error"><code>        result[i] = vec[i] * scalar_d;</code></span></td><td class="error_table_header">0.0000000e+00</td><td class="error_table_header">0.0000000e+00</td></tr>
+<tr><td class="code_line_class">21</td><td><code>    }</code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+<tr><td class="code_line_class">22</td><td><code> ... </code></td><td class="error_table_header"></td><td class="error_table_header"></td></tr>
+  </tbody>
+</table>
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+	
+</div> <!-- End of class=tab -->
+	
+<input type="radio" id="tab_line_errors" name="mytabs">
+<label for="tab_line_errors">Errors Per Line</label>
+<div class="tab">
+	
+<div class="hierarchy_class">
+  <div class="file_name_box">
+  File:
+<a href="#rounding_error_file_0" title="/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/error_analysis/test_fp32_several_comp_units/dot_product.cpp">dot_product.cpp (2)</a> | <a href="#rounding_error_file_1" title="/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/error_analysis/test_fp32_several_comp_units/main.cpp">main.cpp (6)</a> | <a href="#rounding_error_file_2" title="/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/error_analysis/test_fp32_several_comp_units/vector_addition.cpp">vector_addition.cpp (2)</a> | <a href="#rounding_error_file_3" title="/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/error_analysis/test_fp32_several_comp_units/vector_scaling.cpp">vector_scaling.cpp (2)</a>
+   </div>
+</div>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+
+	<div class="line_errors_plots">
+
+	
+	</div>
+	
+<div class="separation_class"></div>
+<div class="separation_class"></div>
+	
+</div> <!-- End of class=tab -->
+
+</div> <!-- End of MYTABS -->
+	
+<div class="auspices">
+<img src="llnl_logo.png" class="llnl_logo">
+This work was produced under the auspices of the U.S. Department of
+Energy by Lawrence Livermore National Laboratory under Contract
+DE-AC52-07NA27344.
+</div>
+	
+</body>
+</html>

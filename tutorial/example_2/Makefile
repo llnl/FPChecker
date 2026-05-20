@@ -20,6 +20,6 @@ $(EXECUTABLE_NAME): $(OBJ)
 
 # Clean target
 clean:
-	rm -rf $(OBJ) $(EXECUTABLE_NAME) fpc-report .fpc_logs
+	rm -rf $(OBJ) $(EXECUTABLE_NAME) fpc-report .fpc_logs .fpc_log.txt
 
 .PHONY: all clean

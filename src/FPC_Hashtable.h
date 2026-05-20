@@ -1,9 +1,19 @@
 #ifndef SRC_FPC_HASHTABLE_H_
 #define SRC_FPC_HASHTABLE_H_
 
+#if defined(__APPLE__)
+#ifndef _DARWIN_C_SOURCE
+#define _DARWIN_C_SOURCE
+#endif
+#else
+#ifndef _BSD_SOURCE
 #define _BSD_SOURCE
+#endif
+#ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
-
+#endif
+#endif
+#define ERROR_TABLE_SIZE 1000
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
@@ -38,6 +48,23 @@ typedef struct _FPC_ITEM_S_
   uint64_t fp64_exponent_count[FPC_HISTOGRAM_LEN];
   struct _FPC_ITEM_S_ *next;
 } _FPC_ITEM_T_;
+
+typedef struct _FPC_ERROR_ITEM_S_ {
+  char *file_name;
+  uint64_t line;
+  double error;
+  struct _FPC_ERROR_ITEM_S_ *next;
+} _FPC_ERROR_ITEM_T_;
+
+#define FPC_ERROR_HTABLE_SIZE 1000
+
+typedef struct _FPC_ERROR_HTABLE_S {
+  uint64_t size;
+  struct _FPC_ERROR_ITEM_S_ **table;
+} _FPC_ERROR_HTABLE_T_;
+
+static _FPC_ERROR_HTABLE_T_ *_FPC_ERROR_HTABLE_ = NULL;
+
 
 // typedef struct _FPC_ITEM_S_ _FPC_ITEM_T_;
 

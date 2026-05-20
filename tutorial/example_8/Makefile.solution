@@ -1,0 +1,28 @@
+HYPRE_SRC_DIR ?= $(abspath hypre-3.1.0/src)
+HYPRE_BUILD_DIR ?= $(HYPRE_SRC_DIR)/build-fpchecker
+HYPRE_LIB ?= $(HYPRE_BUILD_DIR)/lib/libHYPRE.a
+
+MPICC ?= mpicc
+OMPI_CC ?= clang
+TARGET ?= hypre_test_fpchecker
+SRC ?= hypre_test.c
+
+MATRIX ?= matrix.csv
+
+FPCHECKER_FLAGS ?= -g -fno-vectorize -fno-slp-vectorize -include /Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/src/Runtime_error.h -fpass-plugin=/Users/lagunaperalt1/projects/fpchecker/FPChecker/build/install/lib/libfpchecker_error.dylib
+
+HYPRE_DIR_INCLUDES ?= $(shell find "$(HYPRE_SRC_DIR)" -mindepth 1 -maxdepth 1 -type d -print | sed 's|^|-I|')
+HYPRE_INCLUDES = -I$(HYPRE_SRC_DIR) -I$(HYPRE_BUILD_DIR) $(HYPRE_DIR_INCLUDES)
+
+COMMON_FLAGS = -O0 -DWITH_MPI
+
+.PHONY: all clean
+
+all: $(TARGET)
+
+$(TARGET): $(SRC) $(HYPRE_LIB) Makefile.solution
+	OMPI_CC=$(OMPI_CC) $(MPICC) $(COMMON_FLAGS) $(FPCHECKER_FLAGS) $(HYPRE_INCLUDES) $(SRC) -o $(TARGET) $(HYPRE_LIB) -lm
+
+clean:
+	rm -f $(TARGET)
+	rm -rf .fpc_logs fpc-report *.dSYM

@@ -1,0 +1,14 @@
+[
+  {
+    "file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/error_analysis/test_file_not_readable/simple_sum.cpp",
+    "line": 19,
+    "error": 2.98023223876953125e-07,
+    "relative_error": 9.93410706781915562e-07
+  },
+  {
+    "file": "/path/does/not/exist/file.cpp",
+    "line": 15,
+    "error": 2.98023223876953125e-05,
+    "relative_error": 9.93410706781915562e-07
+  }
+]

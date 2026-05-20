@@ -1,0 +1,145 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\title{FPChecker Tutorial Example: Mathematical Formulation and Mixed-Precision Algorithmic Changes}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Purpose}
+This document describes the mathematics implemented by the three programs:
+\begin{itemize}
+  \item \texttt{fp32.cpp}: baseline FP32 algorithm,
+  \item \texttt{mixed.cpp}: report-driven mixed-precision refinement,
+  \item \texttt{fp64.cpp}: FP64 reference.
+\end{itemize}
+
+The goal is to show how high-relative-error lines in FP32 motivate both precision promotion and algorithmic changes.
+
+\section{Input and Generated Data}
+Given inputs
+\[
+N,\quad A,\quad a,\ b,\ c,
+\]
+the synthetic data sequence is
+\[
+x_i = T + A\sin(0.01 i) + 0.25(i \bmod 9), \quad i=0,\dots,N-1,
+\]
+with trend constant
+\[
+T = 10^8.
+\]
+
+In the code, \(A\) is \texttt{amp}. In \texttt{fp32.cpp} and \texttt{mixed.cpp}, the stored array uses \texttt{float}; in \texttt{fp64.cpp}, it uses \texttt{double}.
+
+\section{Quantity 1: Small Root of a Quadratic}
+The quadratic equation is
+\[
+a r^2 + b r + c = 0.
+\]
+
+\subsection{FP32 baseline (unstable form)}
+The FP32 program computes
+\[
+\Delta = b^2 - 4ac,
+\]
+\[
+r_{\text{small}}^{(\mathrm{fp32})} = \frac{-b + \sqrt{\Delta}}{2a}.
+\]
+
+When \(b \gg c\) and \(a\approx 1\), we get \(\sqrt{\Delta} \approx b\), so
+\[
+-b + \sqrt{\Delta}
+\]
+subtracts nearly equal numbers. This is catastrophic cancellation, often driving the computed numerator to zero in FP32.
+
+\subsection{Mixed and FP64 (stable form via Vieta)}
+The mixed and FP64 programs compute the large root first:
+\[
+r_{\text{large}} = \frac{-b - \sqrt{\Delta}}{2a},
+\]
+and then use Vieta's product relation \(r_{\text{small}}r_{\text{large}} = c/a\):
+\[
+r_{\text{small}} = \frac{c}{a\,r_{\text{large}}}.
+\]
+
+This avoids the unstable subtraction \((-b + \sqrt{\Delta})\) and is numerically much more robust.
+
+\section{Quantity 2: Variance of the Generated Data}
+
+\subsection{FP32 baseline (one-pass formula)}
+Define
+\[
+S_1 = \sum_{i=0}^{N-1} x_i,
+\qquad
+S_2 = \sum_{i=0}^{N-1} x_i^2,
+\qquad
+\mu = \frac{S_1}{N}.
+\]
+The FP32 baseline returns
+\[
+\sigma^2_{\text{one-pass}} = \frac{S_2}{N} - \mu^2.
+\]
+
+For large-magnitude data (here dominated by \(10^8\)), both terms are large and close, so subtracting them causes severe cancellation.
+
+\subsection{Mixed and FP64 (two-pass formula)}
+First pass:
+\[
+\mu = \frac{1}{N}\sum_{i=0}^{N-1} x_i.
+\]
+Second pass:
+\[
+\sigma^2_{\text{two-pass}} = \frac{1}{N}\sum_{i=0}^{N-1}(x_i-\mu)^2.
+\]
+
+This form is better conditioned for the centered residuals and avoids subtracting two large nearly equal moments.
+
+\section{Algorithmic and Precision Changes from FP32 to Mixed}
+The mixed version is not only a type cast; it combines selective precision promotion with algorithm replacement.
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Component & FP32 baseline & Mixed version \\
+\midrule
+Data storage \(x_i\) & FP32 (float) & FP32 (float, unchanged) \\
+Quadratic root & Unstable \((-b+\sqrt{\Delta})/(2a)\) in FP32 & Stable Vieta form in FP64 \\
+Variance & One-pass \(E[x^2]-E[x]^2\) in FP32 & Two-pass centered sum in FP64 \\
+Accumulators & FP32 & FP64 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Why These Specific Changes}
+FPChecker rounding-error reports in this example identify large relative errors at:
+\begin{itemize}
+  \item the quadratic cancellation numerator \((-b+\sqrt{\Delta})\), and
+  \item the one-pass variance subtraction \((S_2/N - \mu^2)\).
+\end{itemize}
+
+Hence mixed precision targets exactly those hotspots:
+\begin{enumerate}
+  \item Promote sensitive arithmetic to FP64.
+  \item Replace unstable formulas with numerically stable equivalents.
+\end{enumerate}
+
+Low-error operations (for example, data generation terms) remain FP32 to preserve the mixed-precision character.
+
+\section{Expected Accuracy Behavior}
+Relative to the FP64 reference:
+\begin{itemize}
+  \item FP32 often has very large relative error for \(r_{\text{small}}\) and for variance.
+  \item Mixed should reduce these errors substantially.
+\end{itemize}
+
+In this example setup, the mixed result typically matches the FP64 quadratic small root closely 
+and improves variance by many orders of magnitude compared with FP32.
+
+
+\end{document}
