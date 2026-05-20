@@ -25,7 +25,7 @@ def run_command(cmd):
         ret = e.returncode
     return ret
 
-def test_1():
+def test_conditional_operations():
     # --- compile code ---
     cmd = ["make -f Makefile.1"]
     run_command(cmd)
@@ -33,7 +33,6 @@ def test_1():
     cmd = ["FPC_TRAP_INFINITY_NEG=1 FPC_TRAP_DIVISION_ZERO=1 ./main"]
     assert run_command(cmd) == 0
 
-def test_2():
     # --- compile code ---
     cmd = ["make -f Makefile.2"]
     run_command(cmd)
