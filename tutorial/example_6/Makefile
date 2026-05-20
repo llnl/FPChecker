@@ -1,4 +1,4 @@
-CXX ?= g++
+CXX := clang++
 CXXFLAGS ?= -std=c++11 -O2 -g -Wall
 
 # FPChecker wrappers (should be in your PATH)
