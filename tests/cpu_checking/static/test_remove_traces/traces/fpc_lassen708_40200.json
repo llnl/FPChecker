@@ -1,0 +1,44 @@
+[
+  {
+	"file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/static/test_full_report_generation/main.cpp",
+	"line": 7,
+	"infinity_pos": 2,
+	"infinity_neg": 0,
+	"nan": 1,
+	"division_zero": 0,
+	"cancellation": 0,
+	"comparison": 0,
+	"underflow": 7,
+	"latent_infinity_pos": 0,
+	"latent_infinity_neg": 0,
+	"latent_underflow": 10
+  },
+  {
+	"file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/static/test_full_report_generation/src/compute.cpp",
+	"line": 17,
+	"infinity_pos": 0,
+	"infinity_neg": 0,
+	"nan": 0,
+	"division_zero": 12,
+	"cancellation": 0,
+	"comparison": 0,
+	"underflow": 1,
+	"latent_infinity_pos": 0,
+	"latent_infinity_neg": 0,
+	"latent_underflow": 0
+  },
+  {
+	"file": "/Users/lagunaperalt1/projects/fpchecker/FPChecker/tests/cpu_checking/static/test_full_report_generation/src/compute.cpp",
+	"line": 10,
+	"infinity_pos": 0,
+	"infinity_neg": 0,
+	"nan": 4,
+	"division_zero": 12,
+	"cancellation": 0,
+	"comparison": 0,
+	"underflow": 1,
+	"latent_infinity_pos": 0,
+	"latent_infinity_neg": 0,
+	"latent_underflow": 0
+  }
+]
