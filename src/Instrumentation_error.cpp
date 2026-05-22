@@ -1531,7 +1531,7 @@ Instruction *CPUFPInstrumentation_error::firstInstrution()
 
     // Function *F = &(*f);
     BasicBlock *bb = &(f->getEntryBlock());
-    inst = bb->getFirstNonPHIOrDbgOrLifetime();
+    inst = CUDAAnalysis::toInstructionPtr(bb->getFirstNonPHIOrDbgOrLifetime());
     break;
   }
 
@@ -1543,7 +1543,7 @@ void CPUFPInstrumentation_error::instrumentMainFunction(Function *f)
 {
   /// ----------------- BEGIN --------------------------
   BasicBlock *bb = &(*(f->begin()));
-  Instruction *inst = bb->getFirstNonPHIOrDbg();
+  Instruction *inst = CUDAAnalysis::toInstructionPtr(bb->getFirstNonPHIOrDbg());
   IRBuilder<> builder(inst);
   std::vector<Value *> args;
 

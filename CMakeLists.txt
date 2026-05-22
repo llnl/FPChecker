@@ -92,6 +92,7 @@ add_library(fpchecker_common OBJECT
         src/Logging.cpp
         src/Utility.cpp
 )
+set_target_properties(fpchecker_common PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 # Library for exception catching in CPU
 add_library(fpchecker_cpu SHARED

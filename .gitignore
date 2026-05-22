@@ -24,3 +24,5 @@ fpc_error_log.json
 *.dSYM
 .venv
 temp/
+.codex
+slirp.out

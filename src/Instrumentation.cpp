@@ -363,7 +363,7 @@ Instruction* FPInstrumentation::firstInstrution()
 
 		//Function *F = &(*f);
 		BasicBlock *bb = &(f->getEntryBlock());
-		inst = bb->getFirstNonPHIOrDbgOrLifetime();
+		inst = toInstructionPtr(bb->getFirstNonPHIOrDbgOrLifetime());
 		break;
 	}
 
@@ -411,7 +411,7 @@ void FPInstrumentation::generateCodeForInterruption()
 void FPInstrumentation::instrumentMainFunction(Function *f)
 {
 	BasicBlock *bb = &(*(f->begin()));
-	Instruction *inst = bb->getFirstNonPHIOrDbg();
+	Instruction *inst = toInstructionPtr(bb->getFirstNonPHIOrDbg());
 	IRBuilder<> builder(inst);
 	std::vector<Value *> args;
 	CallInst *callInst = nullptr;
@@ -586,7 +586,7 @@ void FPInstrumentation::instrumentErrorArray()
 #endif
 
 	auto bb = _fpc_interrupt_->begin();
-	Instruction *inst = &(*(bb->getFirstNonPHIOrDbg()));
+	Instruction *inst = toInstructionPtr(bb->getFirstNonPHIOrDbg());
 	IRBuilder<> builder(inst);
 
 	auto arg = _fpc_interrupt_->arg_begin();
@@ -630,7 +630,7 @@ void FPInstrumentation::instrumentErrorArray()
 	GlobalVariable *newWarningsGv = generateIntArrayGlobalVariable(arrType);
 
 	auto bbTmp = _fpc_warning_->begin();
-	Instruction *firstInst = &(*(bbTmp->getFirstNonPHIOrDbg()));
+	Instruction *firstInst = toInstructionPtr(bbTmp->getFirstNonPHIOrDbg());
 	IRBuilder<> builderTmp(firstInst);
 
 	auto argTmp = _fpc_warning_->arg_begin();

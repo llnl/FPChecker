@@ -16,6 +16,7 @@
 #include "llvm/Pass.h"
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
+#include "llvm/Config/llvm-config.h"
 #include "llvm/Support/Casting.h"
 #include "llvm/Support/raw_ostream.h"
 
@@ -101,7 +102,11 @@ namespace CPUAnalysis
     const auto callback = [](PassBuilder &PB)
     {
       PB.registerOptimizerLastEPCallback(
+#if LLVM_VERSION_MAJOR >= 20
+          [&](ModulePassManager &MPM, OptimizationLevel opt, ThinOrFullLTOPhase)
+#else
           [&](ModulePassManager &MPM, OptimizationLevel opt)
+#endif
           {
 #ifdef FPC_DEBUG
             std::string fname =
@@ -110,7 +115,6 @@ namespace CPUAnalysis
 #endif
             // MPM.addPass(createModuleToFunctionPassAdaptor(CPUKernelAnalysis()));
             MPM.addPass(CPUKernelAnalysis());
-            return true;
           });
     };
 

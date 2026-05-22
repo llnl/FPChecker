@@ -18,6 +18,7 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 using namespace llvm;
@@ -47,6 +48,17 @@ namespace CUDAAnalysis
     std::ostringstream ss;
     ss << Number;
     return ss.str();
+  }
+
+  // LLVM 20 returns iterators from some BasicBlock instruction lookup APIs;
+  // older LLVM versions returned Instruction pointers.
+  template <typename T>
+  Instruction *toInstructionPtr(T &&instOrIt)
+  {
+    if constexpr (std::is_pointer_v<std::remove_reference_t<T>>)
+      return instOrIt;
+    else
+      return &*instOrIt;
   }
 
   /// Get the intersection of two sets.
