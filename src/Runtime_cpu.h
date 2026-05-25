@@ -39,6 +39,9 @@ pthread_mutex_t fpc_lock;
 int _FPC_PROG_INPUTS;
 char **_FPC_PROG_ARGS;
 
+/** Exponent usage flag **/
+int _FPC_EXPONENT_USAGE_FLAG;
+
 /*----------------------------------------------------------------------------*/
 /* Initialize                                                                 */
 /*----------------------------------------------------------------------------*/
@@ -62,6 +65,7 @@ void _FPC_INIT_HASH_TABLE_()
 void _FPC_INIT_FPCHECKER()
 {
   _FPC_PROG_INPUTS = 0;
+  _FPC_EXPONENT_USAGE_FLAG = 0;
   _FPC_INIT_HASH_TABLE_();
 }
 
@@ -69,6 +73,7 @@ void _FPC_INIT_ARGS_FPCHECKER(int argc, char **argv)
 {
   _FPC_PROG_INPUTS = argc;
   _FPC_PROG_ARGS = argv;
+  _FPC_EXPONENT_USAGE_FLAG = getenv("FPC_EXPONENT_USAGE") != NULL;
   _FPC_INIT_HASH_TABLE_();
 }
 
@@ -620,7 +625,7 @@ void _FPC_FP32_CHECK_(
   item.latent_infinity_neg = (uint64_t)_FPC_FP32_IS_LATENT_INFINITY_NEG(x);
   item.latent_underflow = (uint64_t)_FPC_FP32_IS_LATENT_SUBNORMAL(x);
 
-  if (getenv("FPC_EXPONENT_USAGE") != NULL)
+  if (_FPC_EXPONENT_USAGE_FLAG)
   {
     // Set exponent usage to zero
     for (int i = 0; i < FPC_HISTOGRAM_LEN; ++i)
@@ -635,7 +640,7 @@ void _FPC_FP32_CHECK_(
   // If FPC_EXPONENT_USAGE is not defined (default), we only save items in the table
   // if an event ocurred. If FPC_EXPONENT_USAGE is defined, we save all items
   // (since we want to profile all instructions).
-  if (getenv("FPC_EXPONENT_USAGE") == NULL)
+  if (!_FPC_EXPONENT_USAGE_FLAG)
   {
     if (!_FPC_EVENT_OCURRED(&item))
       return;
@@ -686,7 +691,7 @@ void _FPC_FP64_CHECK_(
   item.latent_infinity_neg = (uint64_t)_FPC_FP64_IS_LATENT_INFINITY_NEG(x);
   item.latent_underflow = (uint64_t)_FPC_FP64_IS_LATENT_SUBNORMAL(x);
 
-  if (getenv("FPC_EXPONENT_USAGE") != NULL)
+  if (_FPC_EXPONENT_USAGE_FLAG)
   {
     // Set exponent usage to zero
     for (int i = 0; i < FPC_HISTOGRAM_LEN; ++i)
@@ -701,7 +706,7 @@ void _FPC_FP64_CHECK_(
   // If FPC_EXPONENT_USAGE is not defined (default), we only save items in the table
   // if an event ocurred. If FPC_EXPONENT_USAGE is defined, we save all items
   // (since we want to profile all instructions).
-  if (getenv("FPC_EXPONENT_USAGE") == NULL)
+  if (!_FPC_EXPONENT_USAGE_FLAG)
   {
     if (!_FPC_EVENT_OCURRED(&item))
       return;

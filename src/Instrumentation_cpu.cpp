@@ -161,6 +161,11 @@ CPUFPInstrumentation::CPUFPInstrumentation(Module *M)
   assert(prog_args && "Invalid table!");
   prog_args->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
+  GlobalVariable *exponent_usage_flag = nullptr;
+  exponent_usage_flag = mod->getGlobalVariable("_FPC_EXPONENT_USAGE_FLAG", true);
+  assert(exponent_usage_flag && "Invalid table!");
+  exponent_usage_flag->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
   GlobalVariable *fpc_lock = nullptr;
   fpc_lock = mod->getGlobalVariable("fpc_lock", true);
   if (fpc_lock)
