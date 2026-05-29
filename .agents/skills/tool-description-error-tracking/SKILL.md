@@ -1,81 +1,67 @@
 ---
 name: tool-description-error-tracking
-description: Guide for understanding the tool's functionality and usage in error tracking
+description: "Compile C/C++ code with FPChecker's LLVM plugin for floating-point rounding error tracking, run instrumented programs, and interpret JSON error reports. Use when the user asks about error tracking, rounding errors, FP32 vs FP64 comparison, fpchecker instrumentation, compiling with fpchecker, or reading error reports in .fpc_logs/."
 ---
 
-## How the tool works
+## Workflow
 
-The tool uses LLVM to instrument program instructions such as:
-(1) the arithmetic operations (+, -, *, /)
-(2) the load and store instructions
-(3) Branch instructions and PHI nodes
-
-Each instruction is instrumented with a call to a function that computes the error of the instruction. 
-
-The error is computed by comparing the result of the instruction in FP32 precision with the result of the same instruction in FP64 precision. 
-
-The tool also tracks the source code location of each instruction, which allows us to identify the specific lines of code that are causing errors.
-
-## Source of the error tracking:
-
-The main source of the error tracking are in the following files:
-
-- driver_error.cpp
-- FPC_Hashtable_Error.h
-- Instrumentation_error.cpp
-- Runtime_error.h
-
-Note that global variablea and functions added as instrumentation are marked with ODR linkage to avoid conflicts with the original program.
-
-## How the error is computed:
-
-The main functionality of computing error of arithmetic oprations is in the _FPC_FP32_CALCULATE_ERROR_ function in Runtime_error.h file.
-As you can see in this function, the firdt operands (float x, float y, float z, float w) correspond to the results and operands if the instrumented instructions, so
-if we have an add instrution, x is the result (x =  y + z). Operand w is used for instructions with three operands such as FMA (x = y * z + w). The function computes the error by comparing the result of the instruction in FP32 precision with the result of the same instruction in FP64 precision, and returns the error value.
-The oprand int op, which is an integer, is used to identify the type of the instruction (add, sub, mul, div, etc.) and to compute the error accordingly.
-
-## Compiling code with the tool:
-
-To compile code with the tool, you need to use the clang++ compiler.
-Users can either use the clang++-fpchecker wrapper or directly use clang++ with the appropriate flags to incude the header files of the runtime and the tool's LLVM plugin.
-
-To know where the wrappers and the header files are located, you can run this command:
+### 1. Ensure FPChecker is in PATH
 
 ```bash
-$ fpchecker-show
+export PATH=$PROJECT_ROOT/build/install/bin:$PATH
+fpchecker-show
 ```
 
-This will show a message like this:
+`fpchecker-show` prints the installation path, compiler flags, and available wrappers.
 
-```
-========================================
-         FPChecker Configuration        
-========================================
+### 2. Compile with error tracking
 
-Installation path: /usr/workspace/wsa/laguna/fpchecker/FPChecker/build/install
-
-Add the following to CFLAGS and/or CXXFLAGS:
-
-(1) For exceptions checking:
--g -include /usr/workspace/wsa/laguna/fpchecker/FPChecker/build/install/src/Runtime_cpu.h -fpass-plugin=/usr/workspace/wsa/laguna/fpchecker/FPChecker/build/install/lib/libfpchecker_cpu.so
-
-(2) For rounding error tracking:
--g -include /usr/workspace/wsa/laguna/fpchecker/FPChecker/build/install/src/Runtime_error.h -fpass-plugin=/usr/workspace/wsa/laguna/fpchecker/FPChecker/build/install/lib/libfpchecker_error.so
-
-Wrappers are located here:
-/usr/workspace/wsa/laguna/fpchecker/FPChecker/build/install/bin/clang-fpchecker
-/usr/workspace/wsa/laguna/fpchecker/FPChecker/build/install/bin/clang++-fpchecker
-/usr/workspace/wsa/laguna/fpchecker/FPChecker/build/install/bin/mpicc-fpchecker
-/usr/workspace/wsa/laguna/fpchecker/FPChecker/build/install/bin/mpicxx-fpchecker
-```
-
-If the command is not in the PATH, you can add it by running this command:
+Use the wrapper for convenience:
 
 ```bash
-export PATH=/usr/workspace/wsa/laguna/fpchecker/FPChecker/build/install/bin:$PATH
+clang++-fpchecker -o program program.cpp
 ```
 
-## Reading the error reports:
+Or pass flags directly (paths shown by `fpchecker-show`):
 
-The error reports are generated in JSON files stored in .fpc_logs directory. 
-Each file corresponds to a specific run of the instrumented program and contains detailed information about the errors detected, including the source code location, the type of error, and the values involved in the computation.
+```bash
+clang++ -g \
+  -include $INSTALL_PATH/src/Runtime_error.h \
+  -fpass-plugin=$INSTALL_PATH/lib/libfpchecker_error.so \
+  -o program program.cpp
+```
+
+For exception checking instead of rounding error tracking, swap to `Runtime_cpu.h` and `libfpchecker_cpu.so`.
+
+MPI wrappers are also available: `mpicc-fpchecker`, `mpicxx-fpchecker`.
+
+### 3. Run the instrumented program
+
+```bash
+./program
+```
+
+Error reports are written to `.fpc_logs/` in the working directory as JSON files (one per run).
+
+### 4. Read the error reports
+
+```bash
+ls .fpc_logs/
+```
+
+Each JSON file contains the source code location, error type, and values involved in the computation for every detected floating-point issue.
+
+## How error tracking works
+
+FPChecker's LLVM plugin instruments arithmetic operations (+, -, *, /), load/store instructions, and branch/PHI nodes. Each instrumented instruction calls a runtime function that computes rounding error by comparing FP32 results against FP64 equivalents.
+
+The core computation is `_FPC_FP32_CALCULATE_ERROR_` in `Runtime_error.h`: operands `(float x, float y, float z, float w)` are the result and operands of the instruction (for add: `x = y + z`; `w` is used for three-operand instructions like FMA: `x = y * z + w`). The `int op` parameter identifies the operation type (add, sub, mul, div, etc.).
+
+Global variables and instrumentation functions use ODR linkage to avoid conflicts with the original program.
+
+## Key source files
+
+- `Runtime_error.h` — runtime error computation (`_FPC_FP32_CALCULATE_ERROR_`)
+- `driver_error.cpp` — driver for error tracking mode
+- `Instrumentation_error.cpp` — LLVM pass that instruments instructions
+- `FPC_Hashtable_Error.h` — hash table for tracking error locations by source line
