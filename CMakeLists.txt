@@ -107,6 +107,15 @@ add_library(fpchecker_error SHARED
         $<TARGET_OBJECTS:fpchecker_common>
 )
 
+####New plugin for error analysis in CPU (with FP64 support) - Shaila
+# Library for FP64 error analysis in CPU
+add_library(fpchecker_error_fp64 SHARED
+        src/Instrumentation_error_FP64.cpp
+        src/driver_error_fp64.cpp
+        $<TARGET_OBJECTS:fpchecker_common>
+)
+###########
+
 # !!! We no longer builld this plugin !!!
 #add_library(fpchecker_plugin SHARED
 #	plugin/instrumentation_plugin.cpp
@@ -173,7 +182,21 @@ install(CODE "execute_process( \
         COMMENT "Creating link: /lib --> /lib64"
 )
 
-install(FILES "src/Runtime_cpu.h" "src/Runtime_error.h" "src/FPC_Hashtable.h" "src/FPC_Annotations.h" "src/FPC_Hashtable_Error.h" "src/FPC_FloatSeries_List.h"
+# install(FILES "src/Runtime_cpu.h" "src/Runtime_error.h" "src/FPC_Hashtable.h" "src/FPC_Annotations.h" "src/FPC_Hashtable_Error.h" "src/FPC_FloatSeries_List.h"
+#         DESTINATION "src"
+#         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ
+# )
+
+####Chaned the install for both FP32 and FP64 headers to a common header file - Shaila
+install(FILES
+        "src/Runtime_cpu.h"
+        "src/Runtime_error.h"
+        "src/Runtime_error_FP64.h"
+        "src/FPC_Hashtable.h"
+        "src/FPC_Annotations.h"
+        "src/FPC_Hashtable_Error.h"
+        "src/FPC_Hashtable_Error_FP64.h"
+        "src/FPC_FloatSeries_List.h"
         DESTINATION "src"
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ
 )
