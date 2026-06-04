@@ -651,7 +651,6 @@ void _FPC_FP64_CALCULATE_ERROR_(
   printf("Error Result:           %.17Le\n", err_result);
 #endif
 
-printf("Error result (high - low): %.17Le\n", err_result);
   // Calculate relative error
   long double rel_error = 0.0;
   long double largest_subnormal_d = nextafterl(LDBL_MIN, 0.0L);
