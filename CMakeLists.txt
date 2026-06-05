@@ -146,6 +146,10 @@ set_target_properties(fpchecker_error PROPERTIES
     VERSION ${PROJECT_VERSION}
 )
 
+set_target_properties(fpchecker_error_fp64 PROPERTIES
+    VERSION ${PROJECT_VERSION}
+)
+
 # Set extension of shared library
 if(APPLE)
         set(LIB_EXTENSION ".dylib")
@@ -164,12 +168,12 @@ set(CMAKE_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS
 )
 
 if(APPLE)
-install(TARGETS fpchecker_cpu fpchecker_error
+install(TARGETS fpchecker_cpu fpchecker_error fpchecker_error_fp64
         LIBRARY DESTINATION "lib64"
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )
 else()
-install(TARGETS fpchecker_intercept_lib fpchecker_cpu fpchecker_error
+install(TARGETS fpchecker_intercept_lib fpchecker_cpu fpchecker_error fpchecker_error_fp64
         LIBRARY DESTINATION "lib64"
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )
