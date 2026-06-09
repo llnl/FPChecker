@@ -184,16 +184,20 @@ CPUFPInstrumentation_error_fp64::CPUFPInstrumentation_error_fp64(Module *M)
     SET_ODR_LIKAGE("_FPC_ADDRESS_EQUAL_FP64_")
     SET_ODR_LIKAGE("_FPC_REGISTER_EQUAL_FP64_")
     // SET_ODR_LIKAGE("_FPC_ADDRESS_HT_SET_")
+    SET_ODR_LIKAGE("_FPC_ADDRESS_HT_SET_FP64_")
     // SET_ODR_LIKAGE("_FPC_REGISTER_HT_SET_")
+    SET_ODR_LIKAGE("_FPC_REGISTER_HT_SET_FP64_")
     // SET_ODR_LIKAGE("_FPC_ADDRESS_HT_UPDATE_")
+    SET_ODR_LIKAGE("_FPC_ADDRESS_HT_UPDATE_FP64_")
     // SET_ODR_LIKAGE("_FPC_REGISTER_HT_UPDATE_")
+    SET_ODR_LIKAGE("_FPC_REGISTER_HT_UPDATE_FP64_")
     // SET_ODR_LIKAGE("_FPC_REGISTER_RANGE_UPDATE_")
-    SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_ADDRESS_FP64_")
-    SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_REGISTER_FP64_")
+    SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_ADDRESS_FP64")
+    SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_REGISTER_FP64")
     SET_ODR_LIKAGE("_FPC_HT_PRINT_TABLES_FP64_")
     SET_ODR_LIKAGE("_FPC_INIT_HASH_TABLE_FP64")
-    SET_ODR_LIKAGE("_FPC_WRITE_AND_PRINT_TO_JSON_FP64")
-    SET_ODR_LIKAGE("_FPC_ADDRESS_RANGE_UPDATE_FP64")
+    SET_ODR_LIKAGE("_FPC_WRITE_AND_PRINT_TO_JSON_FP64_")
+    SET_ODR_LIKAGE("_FPC_ADDRESS_RANGE_UPDATE_FP64_")
 
     // Series table functions
     SET_ODR_LIKAGE("FPC_create_manager")
@@ -340,7 +344,7 @@ void CPUFPInstrumentation_error_fp64::instrumentFunctionErrorAnalysis(Function *
 
   // ----- Add Load instruction for file name -----------------------------------------
   // Instrument first instruction in the function
-  int load_counter = 0;
+  // int load_counter = 0;
   Instruction *first_inst = nullptr;
   // std::string fileName = CUDAAnalysis::getFileNameFromFunction(f);
   for (auto bb = f->begin(), end = f->end(); bb != end; ++bb)
@@ -926,7 +930,7 @@ void CPUFPInstrumentation_error_fp64::instrumentFunctionErrorAnalysis(Function *
         if (inst->getNumOperands() >= 3) // For FMA operation
           args.push_back(inst->getOperand(2));
         else
-          args.push_back(ConstantFP::get(builder.getFloatTy(), 0.0f));
+          args.push_back(ConstantFP::get(builder.getDoubleTy(), 0.0));
 
         // Push location parameter (line number)
         int lineNumber = CUDAAnalysis::getLineOfCode(inst);

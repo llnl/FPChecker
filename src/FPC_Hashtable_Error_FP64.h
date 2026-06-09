@@ -412,7 +412,7 @@ void _FPC_REGISTER_HT_SET_FP64_(_FPC_REGISTER_HTABLE_FP64_T *hashtable, _FPC_REG
 /* (API used at runtime)                                                      */
 /*----------------------------------------------------------------------------*/
 
-void _FPC_ADDRESS_HT_FP64_UPDATE_(
+void _FPC_ADDRESS_HT_UPDATE_FP64_(
     _FPC_ADDRESS_HTABLE_FP64_T *hashtable,
     uintptr_t address_value,
     long double error,
@@ -435,7 +435,7 @@ void _FPC_ADDRESS_HT_FP64_UPDATE_(
   free(temp.file_name);
 }
 
-void _FPC_REGISTER_HT_FP64_UPDATE_(
+void _FPC_REGISTER_HT_UPDATE_FP64_(
     _FPC_REGISTER_HTABLE_FP64_T *hashtable,
     const char *register_name,
     const char *function_name,
@@ -561,7 +561,7 @@ int _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HTABLE_FP64_T *hashtable,
 /*----------------------------------------------------------------------------*/
 
 // Updates ranges of addresses coing from a memcpy/memmove instruction
-void _FPC_ADDRESS_RANGE_UPDATE_FP64(
+void _FPC_ADDRESS_RANGE_UPDATE_FP64_(
     _FPC_ADDRESS_HTABLE_FP64_T *hashtable,
     uintptr_t address_dst,
     uintptr_t address_src,
@@ -598,7 +598,7 @@ void _FPC_ADDRESS_RANGE_UPDATE_FP64(
   for (size_t offset = 0; offset < size; offset++)
   {
     uintptr_t dst_address = address_dst + offset;
-    _FPC_ADDRESS_HT_FP64_UPDATE_(hashtable, dst_address, error_buffer[offset], relative_error_buffer[offset], file_name, line);
+    _FPC_ADDRESS_HT_UPDATE_FP64_(hashtable, dst_address, error_buffer[offset], relative_error_buffer[offset], file_name, line);
   }
 
   /*   for (size_t offset = 0; offset < size; offset++)
@@ -650,7 +650,7 @@ Example of JSON output:
 ]
 */
 
-void _FPC_WRITE_AND_PRINT_TO_JSON_FP64(_FPC_ADDRESS_HTABLE_FP64_T *address_hashtable, _FPC_REGISTER_HTABLE_FP64_T *register_hashtable)
+void _FPC_WRITE_AND_PRINT_TO_JSON_FP64_(_FPC_ADDRESS_HTABLE_FP64_T *address_hashtable, _FPC_REGISTER_HTABLE_FP64_T *register_hashtable)
 {
   // Create directory
   struct stat st;
@@ -705,8 +705,8 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_FP64(_FPC_ADDRESS_HTABLE_FP64_T *address_hasht
   {
     char *file;
     int line;
-    double error;
-    double relative_error;
+    long double error;
+    long double relative_error;
     uint64_t clock;
   } ErrorEntry;
 
@@ -734,8 +734,8 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_FP64(_FPC_ADDRESS_HTABLE_FP64_T *address_hasht
       _FPC_ADDRESS_FP64_T_ *cur = address_hashtable->table[i];
       while (cur != NULL)
       {
-        double err = cur->error;
-        double rel_err = cur->relative_error;
+        long double err = cur->error;
+        long double rel_err = cur->relative_error;
         int line = cur->line;
         char *file = cur->file_name;
         uint64_t clock = cur->clock;
@@ -789,8 +789,8 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_FP64(_FPC_ADDRESS_HTABLE_FP64_T *address_hasht
       _FPC_REGISTER_FP64_T_ *cur = register_hashtable->table[i];
       while (cur != NULL)
       {
-        double err = cur->error;
-        double rel_err = cur->relative_error;
+        long double err = cur->error;
+        long double rel_err = cur->relative_error;
         int line = cur->line;
         char *file = cur->file_name;
         uint64_t clock = cur->clock;
@@ -851,8 +851,8 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_FP64(_FPC_ADDRESS_HTABLE_FP64_T *address_hasht
       fprintf(fp, "  {\n");
       fprintf(fp, "    \"file\": \"%s\",\n", ERRORS_LOG[i].file);
       fprintf(fp, "    \"line\": %d,\n", ERRORS_LOG[i].line);
-      fprintf(fp, "    \"error\": %.17e,\n", ERRORS_LOG[i].error);
-      fprintf(fp, "    \"relative_error\": %.17e\n", ERRORS_LOG[i].relative_error);
+      fprintf(fp, "    \"error\": %.21Le,\n", ERRORS_LOG[i].error);
+      fprintf(fp, "    \"relative_error\": %.21Le\n", ERRORS_LOG[i].relative_error);
       fprintf(fp, "  },\n");
       entries_written++;
     }
@@ -927,7 +927,7 @@ void _FPC_HT_PRINT_TABLES_FP64_(
       while (cur != NULL)
       {
         /* No address for register entries */
-        printf("%-18s %-25.25s %-25.25s %16.6g %16.6g %8llu %-20.20s %5d\n",
+        printf("%-18s %-25.25s %-25.25s %16.6Lg %16.6Lg %8llu %-20.20s %5d\n",
                "-", /* address placeholder */
                (cur->register_name ? cur->register_name : "(null)"),
                (cur->function_name ? cur->function_name : "(null)"),

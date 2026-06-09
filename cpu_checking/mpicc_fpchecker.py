@@ -23,12 +23,17 @@ if platform.system() == 'Darwin':
 else:
   FPCHECKER_LIB_EXCEPTIONS  = FPCHECKER_PATH+'/../lib/libfpchecker_cpu.so'
   FPCHECKER_LIB_ERROR       = FPCHECKER_PATH+'/../lib/libfpchecker_error.so'
+  FPCHECKER_LIB_ERROR_FP64  = FPCHECKER_PATH+'/../lib/libfpchecker_error_fp64.so'
 
 FPCHECKER_RUNTIME_EXCEPTIONS   = FPCHECKER_PATH+'/../src/Runtime_cpu.h'
 FPCHECKER_RUNTIME_ERROR        = FPCHECKER_PATH+'/../src/Runtime_error.h'
+FPCHECKER_RUNTIME_ERROR_FP64   = FPCHECKER_PATH+'/../src/Runtime_error_FP64.h'
 
 LLVM_PASS_EXCEPTIONS           = "-fpass-plugin=" + FPCHECKER_LIB_EXCEPTIONS + " -include " + FPCHECKER_RUNTIME_EXCEPTIONS + ' -g '
 LLVM_PASS_ERROR                = "-fpass-plugin=" + FPCHECKER_LIB_ERROR + " -include " + FPCHECKER_RUNTIME_ERROR + ' -g -fno-vectorize -fno-slp-vectorize '
+
+if platform.system() != 'Darwin':
+  LLVM_PASS_ERROR_FP64  = "-fpass-plugin=" + FPCHECKER_LIB_ERROR_FP64 + " -include " + FPCHECKER_RUNTIME_ERROR_FP64 + ' -g -fno-vectorize -fno-slp-vectorize '
 
 # --------------------------------------------------------------------------- #
 # --- Global variables ------------------------------------------------------ #
@@ -112,6 +117,8 @@ class Command:
   def instrumentIR(self):
     if 'FPC_INSTRUMENT_ERR_TRACKING' in os.environ:
       LLVM_PASS = LLVM_PASS_ERROR
+    elif 'FPC_INSTRUMENT_ERR_TRACKING_FP64' in os.environ:
+      LLVM_PASS = LLVM_PASS_ERROR_FP64
     else:
       LLVM_PASS = LLVM_PASS_EXCEPTIONS
 
@@ -138,12 +145,24 @@ if __name__ == '__main__':
   params = os.environ['FPC_COMPILER_PARAMS']
   cmd = Command(compiler_name, params.split())
 
-  if 'FPC_INSTRUMENT' not in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING' not in os.environ:
+  if ('FPC_INSTRUMENT' not in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING' not in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING_FP64' not in os.environ):
     cmd.executeOriginalCommand()
     exit()
 
+  # if 'FPC_INSTRUMENT' not in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING' not in os.environ:
+  #   cmd.executeOriginalCommand()
+  #   exit()
+
   if 'FPC_INSTRUMENT' in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING' in os.environ:
     prRed("Error: FPC_INSTRUMENT and FPC_INSTRUMENT_ERR_TRACKING are set! Only one instrumentation type can be used at a time.")
+    exit()
+
+  if 'FPC_INSTRUMENT' in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING_FP64' in os.environ:
+    prRed("Error: FPC_INSTRUMENT and FPC_INSTRUMENT_ERR_TRACKING_FP64 are set! Only one instrumentation type can be used at a time.")
+    exit()
+
+  if 'FPC_INSTRUMENT_ERR_TRACKING' in os.environ and 'FPC_INSTRUMENT_ERR_TRACKING_FP64' in os.environ:
+    prRed("Error: FPC_INSTRUMENT_ERR_TRACKING and FPC_INSTRUMENT_ERR_TRACKING_FP64 are set! Only one instrumentation type can be used at a time.")
     exit()
 
   # Link command

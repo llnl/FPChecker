@@ -214,7 +214,7 @@ void _FPC_PRINT_LOCATIONS_FP64()
   printf("#FPCHECKER: Finalizing and writing traces...\n");
 #endif
 
-  _FPC_WRITE_AND_PRINT_TO_JSON_FP64(_FPC_ADDRESS_HT_FP64_, _FPC_REGISTER_HT_FP64_);
+  _FPC_WRITE_AND_PRINT_TO_JSON_FP64_(_FPC_ADDRESS_HT_FP64_, _FPC_REGISTER_HT_FP64_);
 
   // Print values of al series being tracked
   if (FPC_DATA_MANAGER != NULL)
@@ -253,7 +253,7 @@ void FPC_APPEND_ERROR_LOG_ENTRY_FP64(int line, long double relative_error)
 
   if (found)
   {
-    FPC_append_value(FPC_DATA_MANAGER, line, double(relative_error)); // Cast it to double becasue FPC_append_value function definition takes double.
+    FPC_append_value(FPC_DATA_MANAGER, line, double(relative_error)); // Cast it to double becasue FPC_append_value function definition takes double in FPC_FloatSeries_List.h
   }
 }
 
@@ -272,7 +272,7 @@ void _FPC_FP64_STORE_INST_(const char *reg, const char *function_name, uintptr_t
 #endif
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
-  printf("_FPC_FP32_STORE_INST_:\n");
+  printf("_FPC_FP64_STORE_INST_:\n");
   printf("reg=%s, address=%lu\n", reg, address);
 #endif
 
@@ -294,7 +294,7 @@ void _FPC_FP64_STORE_INST_(const char *reg, const char *function_name, uintptr_t
   // Update table based on the address
   // If address exists, update it
   // If address does not exist, insert new entry
-  _FPC_REGISTER_HT_FP64_UPDATE_(_FPC_REGISTER_HT_FP64_, reg, function_name, error, relative_error, file_name, loc);
+  _FPC_ADDRESS_HT_UPDATE_FP64_(_FPC_ADDRESS_HT_FP64_, address, error, relative_error, file_name, loc);
 
   // Log location info if line is in _FPC_LINES_TO_KEEP_
   FPC_APPEND_ERROR_LOG_ENTRY_FP64(loc, relative_error);
@@ -330,7 +330,7 @@ void _FPC_FP64_LOAD_INST_(const char *load_reg, const char *function_name, uintp
   if (found)
   {
     // Update register entry with this error
-    _FPC_REGISTER_HT_FP64_UPDATE_(_FPC_REGISTER_HT_FP64_, load_reg, function_name, error, relative_error, file_name, loc);
+    _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, load_reg, function_name, error, relative_error, file_name, loc);
 
     // Log location info if line is in _FPC_LINES_TO_KEEP_
     FPC_APPEND_ERROR_LOG_ENTRY_FP64(loc, relative_error);
@@ -338,7 +338,7 @@ void _FPC_FP64_LOAD_INST_(const char *load_reg, const char *function_name, uintp
   else
   {
     // No error found at this address, create register with zero error
-    _FPC_REGISTER_HT_FP64_UPDATE_(_FPC_REGISTER_HT_FP64_, load_reg, function_name, 0.0L, 0.0L, file_name, loc);
+    _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, load_reg, function_name, 0.0L, 0.0L, file_name, loc);
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("LOAD: No data found at address %lu\n", address);
@@ -350,7 +350,7 @@ void _FPC_FP64_LOAD_INST_(const char *load_reg, const char *function_name, uintp
 #endif
 
 #ifdef FPDC_DEBUG_CALLSTACK
-  printf(".........Exiting _FPC_FP64_STORE_INST_..........\n");
+  printf(".........Exiting _FPC_FP64_LOAD_INST_..........\n");
 #endif
 }
 
@@ -409,12 +409,12 @@ void _FPC_FP64_PHI_(const char *phi_values, const char *function_name)
             int found = _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, first_substr, function_name, &old_error, &old_relative_error);
             if (found)
             {
-              _FPC_REGISTER_HT_FP64_UPDATE_(_FPC_REGISTER_HT_FP64_, register_name, function_name, old_error, old_relative_error, "", 0);
+              _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, register_name, function_name, old_error, old_relative_error, "", 0);
             }
             else
             {
               // We don't have its error - create with zero error
-              _FPC_REGISTER_HT_FP64_UPDATE_(_FPC_REGISTER_HT_FP64_, register_name, function_name, 0.0L, 0.0L, "", 0);
+              _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, register_name, function_name, 0.0L, 0.0L, "", 0);
               // exit(1);
             }
           }
@@ -425,7 +425,7 @@ void _FPC_FP64_PHI_(const char *phi_values, const char *function_name)
   }
 
 #ifdef FPDC_DEBUG_CALLSTACK
-  printf(".........Exiting _FPC_FP32_PHI_..........\n");
+  printf(".........Exiting _FPC_FP64_PHI_..........\n");
 #endif
 }
 
@@ -452,12 +452,12 @@ void _FPC_FP64_MEMCPY_INST_(uintptr_t address_dst, uintptr_t address_src,
   else if (ins_type == 1)
   {
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
-    printf("_FPC_FP64_MEMCPY_INST_ (memmove): src=0x%016llx, dst=0x%016llx, size=%zu, size_type=%d\n",
+    printf("_FPC_FP64_MEMCPY_INST_ (memmove): src=0x%016llx, dst=0x%016llx, size=%ld, size_type=%d\n",
            (unsigned long long)address_src, (unsigned long long)address_dst, size, size_type);
 #endif
   }
 
-  _FPC_ADDRESS_RANGE_UPDATE_FP64(
+  _FPC_ADDRESS_RANGE_UPDATE_FP64_(
       _FPC_ADDRESS_HT_FP64_,
       address_dst,
       address_src,
@@ -504,7 +504,7 @@ void _FPC_FP64_POP_ARG_ERROR_(int param_index, const char *param_reg, const char
     relative_error = _FPC_ARG_REL_ERR_BUF_FP64_[param_index];
   }
 
-  _FPC_REGISTER_HT_FP64_UPDATE_(_FPC_REGISTER_HT_FP64_, param_reg, function_name,
+  _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, param_reg, function_name,
                            error, relative_error, "", 0);
 }
 
@@ -553,7 +553,7 @@ void _FPC_FP64_POP_RET_ERROR_(const char *result_reg, const char *function_name,
     }
   }
 
-  _FPC_REGISTER_HT_FP64_UPDATE_(_FPC_REGISTER_HT_FP64_, result_reg, function_name,
+  _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, result_reg, function_name,
                            error, relative_error, file_name, loc);
   FPC_APPEND_ERROR_LOG_ENTRY_FP64(loc, relative_error);
 }
@@ -597,7 +597,7 @@ void _FPC_FP64_CALCULATE_ERROR_(
   long double z_high = (long double)z + err_z;
   long double w_high = (long double)w + err_w;
 
-  long double r_high = 0.0;
+  long double r_high = 0.0L;
   switch (op)
   {
   case 0:
@@ -646,25 +646,25 @@ void _FPC_FP64_CALCULATE_ERROR_(
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   printf("Result (double):         %.17e\n", x);
-  printf("Result (double-> long double): %.17Le\n", r_low);
-  printf("Result (double):        %.17e\n", r_high);
-  printf("Error Result:           %.17Le\n", err_result);
+  printf("Result (double-> long double): %.21Le\n", r_low);
+  printf("Result (long double):        %.21Le\n", r_high);     //r_high is not in double precision, so changed it to long double in the print statement
+  printf("Error Result:           %.21Le\n", err_result);
 #endif
 
   // Calculate relative error
-  long double rel_error = 0.0;
+  long double rel_error = 0.0L;
   long double largest_subnormal_d = nextafterl(LDBL_MIN, 0.0L);
   if (err_result == 0.0)
   {
-    rel_error = 0.0;
+    rel_error = 0.0L;
   }
   else
   {
     // Only compute relative error if r_high is not zero and
     // is larger than the largest subnormal
-    if (fabs(r_high) > largest_subnormal_d)
+    if (fabsl(r_high) > largest_subnormal_d)
     {
-      rel_error = fabs(err_result) / fabs(r_high);
+      rel_error = fabsl(err_result) / fabsl(r_high);
     }
     else
     {
@@ -673,11 +673,11 @@ void _FPC_FP64_CALCULATE_ERROR_(
   }
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
-  printf("\t >>> Relative Error: %.7e <<< \n", rel_error);
+  printf("\t >>> Relative Error: %.21Le <<< \n", rel_error);
 #endif
 
   // Update register error table
-  _FPC_REGISTER_HT_FP64_UPDATE_(_FPC_REGISTER_HT_FP64_, result_name, function_name, err_result, rel_error, file_name, loc);
+  _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, result_name, function_name, err_result, rel_error, file_name, loc);
 
   // Log location info if line is in _FPC_LINES_TO_KEEP_
   FPC_APPEND_ERROR_LOG_ENTRY_FP64(loc, rel_error);
@@ -689,7 +689,7 @@ void _FPC_FP64_CALCULATE_ERROR_(
   // fflush(stdout);
 
 #ifdef FPDC_DEBUG_CALLSTACK
-  printf(".........Exiting _FPC_FP32_CALCULATE_ERROR_..........\n");
+  printf(".........Exiting _FPC_FP64_CALCULATE_ERROR_..........\n");
 #endif
 }
 
@@ -698,7 +698,7 @@ void _FPC_FP64_CALCULATE_ERROR_(
 /*----------------------------------------------------------------------------*/
 
 // Re-computes a math function call in fp64, accounting for propagated
-// operand errors, and records the rounding error of the fp32 result.
+// operand errors, and records the rounding error of the fp64 result.
 // Up to 3 FP operands are supported (arg1=y, arg2=z, arg3=w).
 void _FPC_FP64_MATH_ERROR_(
     double x, double y, double z, double w,
@@ -731,7 +731,7 @@ void _FPC_FP64_MATH_ERROR_(
   long double z_high = (long double)z + err_z;
   long double w_high = (long double)w + err_w;
 
-  long double r_high = 0.0;
+  long double r_high = 0.0L;
 
   // Unary functions
   if      (strcmp(math_func_name, "sin") == 0)       r_high = sinl(y_high);
@@ -770,7 +770,7 @@ void _FPC_FP64_MATH_ERROR_(
   else if (strcmp(math_func_name, "fmod") == 0)      r_high = fmodl(y_high, z_high);
   else if (strcmp(math_func_name, "remainder") == 0) r_high = remainderl(y_high, z_high);
   // Ternary functions
-  else if (strcmp(math_func_name, "fma") == 0)       r_high = fma(y_high, z_high, w_high);
+  else if (strcmp(math_func_name, "fma") == 0)       r_high = fmal(y_high, z_high, w_high);
   else
   {
     printf("#FPCHECKER_WARNING: Unknown math function '%s'\n", math_func_name);
@@ -801,13 +801,13 @@ void _FPC_FP64_MATH_ERROR_(
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
   printf("Math Result (double):         %.17e\n", x);
-  printf("Math Result (double-> long double): %.17Le\n", r_low);
-  printf("Math Result (double):        %.17e\n", r_high);
-  printf("Math Error Result:           %.17L\n", err_result);
-  printf("\t >>> Math Relative Error: %.17Le <<< \n", rel_error);
+  printf("Math Result (double-> long double): %.21Le\n", r_low);
+  printf("Math Result (long double):        %.21Le\n", r_high);
+  printf("Math Error Result:           %.21Le\n", err_result);
+  printf("\t >>> Math Relative Error: %.21Le <<< \n", rel_error);
 #endif
 
-  _FPC_REGISTER_HT_FP64_UPDATE_(_FPC_REGISTER_HT_FP64_, result_name, function_name, err_result, rel_error, file_name, loc);
+  _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, result_name, function_name, err_result, rel_error, file_name, loc);
   FPC_APPEND_ERROR_LOG_ENTRY_FP64(loc, rel_error);
 }
 
