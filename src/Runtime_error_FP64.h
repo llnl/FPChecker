@@ -253,7 +253,7 @@ void FPC_APPEND_ERROR_LOG_ENTRY_FP64(int line, long double relative_error)
 
   if (found)
   {
-    FPC_append_value(FPC_DATA_MANAGER, line, double(relative_error)); // Cast it to double becasue FPC_append_value function definition takes double in FPC_FloatSeries_List.h
+    FPC_append_value(FPC_DATA_MANAGER, line, (double)(relative_error)); // Cast it to double becasue FPC_append_value function definition takes double in FPC_FloatSeries_List.h
   }
 }
 
