@@ -47,22 +47,95 @@ void init_array(int m, int n,
   }
 }
 
+static
+void init_array_double(int m, int n,
+		double *alpha,
+		double *beta,
+		double POLYBENCH_2D(C,M,N,m,n),
+		double POLYBENCH_2D(A,M,M,m,m),
+		double POLYBENCH_2D(B,M,N,m,n))
+{
+  int i, j;
+
+  *alpha = 1.5;
+  *beta = 1.2;
+  for (i = 0; i < m; i++)
+    for (j = 0; j < n; j++) {
+      C[i][j] = (double) ((i+j) % 100) / m;
+      B[i][j] = (double) ((n+i-j) % 100) / m;
+    }
+  for (i = 0; i < m; i++) {
+    for (j = 0; j <=i; j++)
+      A[i][j] = (double) ((i+j) % 100) / m;
+    for (j = i+1; j < m; j++)
+      A[i][j] = -999;
+  }
+}
+
 
 /* DCE code. Must scan the entire live-out data.
    Can be used also to check the correctness of the output. */
 static
 void print_array(int m, int n,
-		 DATA_TYPE POLYBENCH_2D(C,M,N,m,n))
+		 DATA_TYPE POLYBENCH_2D(C,M,N,m,n),
+		 double POLYBENCH_2D(C_double,M,N,m,n))
 {
   int i, j;
 
+  DATA_TYPE max_value = 0;
+  DATA_TYPE sum = 0;
+  DATA_TYPE norm = 0;
+
+  double max_value_double = 0;
+  double sum_double = 0;
+  double norm_double = 0;
+
   POLYBENCH_DUMP_START;
   POLYBENCH_DUMP_BEGIN("C");
-  for (i = 0; i < m; i++)
+  for (i = 0; i < m; i++){
     for (j = 0; j < n; j++) {
-	if ((i * m + j) % 20 == 0) fprintf (POLYBENCH_DUMP_TARGET, "\n");
-	fprintf (POLYBENCH_DUMP_TARGET, DATA_PRINTF_MODIFIER, C[i][j]);
+      DATA_TYPE value = C[i][j];
+      double value_double = C_double[i][j];
+
+      if (value < 0)
+	        value = -value;
+
+      if (value_double < 0.0)
+	        value_double = -value_double;
+
+      if (value > max_value)
+	        max_value = value;
+      if (value_double > max_value_double)
+	        max_value_double = value_double;
+      }
     }
+  if (max_value != 0) {
+    for (i = 0; i < m; i++) {
+      for (j = 0; j < n; j++) {
+        DATA_TYPE scaled = C[i][j] / max_value;
+        sum += scaled * scaled;
+      }
+    }
+    norm = SQRT_FUN(sum);
+  }
+
+  if (max_value_double != 0) {
+    for (i = 0; i < m; i++) {
+      for (j = 0; j < n; j++) {
+	        double scaled = C_double[i][j] / max_value_double;
+	          sum_double += scaled * scaled;
+      }
+    }
+    norm_double = sqrt(sum_double);
+  }
+
+  double norm_error = norm_double - (double)norm;
+  fprintf (POLYBENCH_DUMP_TARGET, "Max value in C: %.7e\n", max_value);
+  fprintf (POLYBENCH_DUMP_TARGET, "Norm of C: %.7e\n", norm);
+  fprintf (POLYBENCH_DUMP_TARGET, "Max value in C_double: %.17e\n", max_value_double);
+  fprintf (POLYBENCH_DUMP_TARGET, "Norm of C_double: %.17e\n", norm_double);
+  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+
   POLYBENCH_DUMP_END("C");
   POLYBENCH_DUMP_FINISH;
 }
@@ -104,6 +177,32 @@ void kernel_symm(int m, int n,
 
 }
 
+static
+void kernel_symm_double(int m, int n,
+		 double alpha,
+		 double beta,
+		 double POLYBENCH_2D(C,M,N,m,n),
+		 double POLYBENCH_2D(A,M,M,m,m),
+		 double POLYBENCH_2D(B,M,N,m,n))
+{
+  int i, j, k;
+  double temp2;
+
+#pragma scop
+   for (i = 0; i < _PB_M; i++)
+      for (j = 0; j < _PB_N; j++ )
+      {
+        temp2 = 0;
+        for (k = 0; k < i; k++) {
+           C[k][j] += alpha*B[i][j] * A[i][k];
+           temp2 += B[k][j] * A[i][k];
+        }
+        C[i][j] = beta * C[i][j] + alpha*B[i][j] * A[i][i] + alpha * temp2;
+     }
+#pragma endscop
+
+}
+
 
 int main(int argc, char** argv)
 {
@@ -114,15 +213,27 @@ int main(int argc, char** argv)
   /* Variable declaration/allocation. */
   DATA_TYPE alpha;
   DATA_TYPE beta;
+  double alpha_double;
+  double beta_double;
+
   POLYBENCH_2D_ARRAY_DECL(C,DATA_TYPE,M,N,m,n);
   POLYBENCH_2D_ARRAY_DECL(A,DATA_TYPE,M,M,m,m);
   POLYBENCH_2D_ARRAY_DECL(B,DATA_TYPE,M,N,m,n);
+
+  POLYBENCH_2D_ARRAY_DECL(C_double,double,M,N,m,n);
+  POLYBENCH_2D_ARRAY_DECL(A_double,double,M,M,m,m);
+  POLYBENCH_2D_ARRAY_DECL(B_double,double,M,N,m,n);
 
   /* Initialize array(s). */
   init_array (m, n, &alpha, &beta,
 	      POLYBENCH_ARRAY(C),
 	      POLYBENCH_ARRAY(A),
 	      POLYBENCH_ARRAY(B));
+
+  init_array_double (m, n, &alpha_double, &beta_double,
+	      POLYBENCH_ARRAY(C_double),
+	      POLYBENCH_ARRAY(A_double),
+	      POLYBENCH_ARRAY(B_double));
 
   /* Start timer. */
   polybench_start_instruments;
@@ -134,18 +245,27 @@ int main(int argc, char** argv)
 	       POLYBENCH_ARRAY(A),
 	       POLYBENCH_ARRAY(B));
 
+  kernel_symm_double (m, n,
+	       alpha_double, beta_double,
+	       POLYBENCH_ARRAY(C_double),
+	       POLYBENCH_ARRAY(A_double),
+	       POLYBENCH_ARRAY(B_double));
+
   /* Stop and print timer. */
   polybench_stop_instruments;
   polybench_print_instruments;
 
   /* Prevent dead-code elimination. All live-out data must be printed
      by the function call in argument. */
-  polybench_prevent_dce(print_array(m, n, POLYBENCH_ARRAY(C)));
+  polybench_prevent_dce(print_array(m, n, POLYBENCH_ARRAY(C), POLYBENCH_ARRAY(C_double)));
 
   /* Be clean. */
   POLYBENCH_FREE_ARRAY(C);
   POLYBENCH_FREE_ARRAY(A);
   POLYBENCH_FREE_ARRAY(B);
+  POLYBENCH_FREE_ARRAY(C_double);
+  POLYBENCH_FREE_ARRAY(A_double);
+  POLYBENCH_FREE_ARRAY(B_double);
 
   return 0;
 }
