@@ -1,0 +1,152 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 33,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 45,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 146,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 183,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 180,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 143,
+    "error": -1.45098713751734554e-04,
+    "relative_error": 3.73702824481882893e-04
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 148,
+    "error": -1.54327522656594329e-04,
+    "relative_error": 3.79031437407525182e-04
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 185,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 138,
+    "error": -3.10006946810581496e-03,
+    "relative_error": 2.10617351491810883e-04
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 175,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 132,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 89,
+    "error": 2.42315076874888291e-03,
+    "relative_error": 1.27648073832984927e-04
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 130,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 88,
+    "error": -6.56058257554326119e-05,
+    "relative_error": 6.59252678856755189e-05
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 96,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 71,
+    "error": -1.54327522656594329e-04,
+    "relative_error": 3.79031437407525182e-04
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 140,
+    "error": -1.54327522656594329e-04,
+    "relative_error": 3.79031437407525182e-04
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 91,
+    "error": 2.78055736452564872e-04,
+    "relative_error": 6.38188205667929447e-05
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 167,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 135,
+    "error": 4.22884112983723526e-03,
+    "relative_error": 1.35374773440310721e-04
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 72,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 74,
+    "error": 1.54327522656594329e-04,
+    "relative_error": 3.79031437407525182e-04
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 80,
+    "error": 1.28113042499877761e-04,
+    "relative_error": 3.13123523873058381e-04
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 169,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/durbin/durbin.c",
+    "line": 177,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  }
+]

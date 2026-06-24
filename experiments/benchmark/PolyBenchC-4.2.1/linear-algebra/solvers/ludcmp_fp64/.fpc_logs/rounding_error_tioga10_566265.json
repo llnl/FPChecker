@@ -1,0 +1,134 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 39,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 202,
+    "error": -1.598601893221252012722e-15,
+    "relative_error": 1.598601893221252083500e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 195,
+    "error": -1.367551634001012983433e-15,
+    "relative_error": 2.735103268002025847303e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 62,
+    "error": -9.679756995950583586819e-16,
+    "relative_error": 6.524121148119522214316e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 210,
+    "error": 1.219185342959949736041e-16,
+    "relative_error": 1.438868666289949690207e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 217,
+    "error": 5.837344496661955872696e-16,
+    "relative_error": 1.459459504033305769537e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 209,
+    "error": 1.219185342959949736041e-16,
+    "relative_error": 1.438868666289949690207e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 193,
+    "error": -1.482985284052829033641e-15,
+    "relative_error": 2.965970568105658199169e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 45,
+    "error": -2.222614453595284089715e-17,
+    "relative_error": 8.890457814381136366565e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 216,
+    "error": 5.837344496661955872696e-16,
+    "relative_error": 1.459459504033305769537e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 135,
+    "error": -2.505726745885561435045e-16,
+    "relative_error": 2.957230187976309320168e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 200,
+    "error": -1.598601893221252012722e-15,
+    "relative_error": 1.598601893221252083500e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 149,
+    "error": -6.223320470066795451203e-17,
+    "relative_error": 6.214402911408258241970e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 148,
+    "error": 5.875359335334728871914e-17,
+    "relative_error": 2.773378412348538500436e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 151,
+    "error": 6.657001339060997224806e-17,
+    "relative_error": 6.652230133593162020887e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 65,
+    "error": -9.679756995950583586819e-16,
+    "relative_error": 6.524121148119522214316e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 198,
+    "error": -9.679756995950583586819e-16,
+    "relative_error": 6.524121148119522214316e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 132,
+    "error": 2.505726745885561435045e-16,
+    "relative_error": 2.957230187976309320168e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 214,
+    "error": -1.778091562876227271772e-16,
+    "relative_error": 4.431380842059133387862e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 207,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 191,
+    "error": -2.133709875451472726127e-15,
+    "relative_error": 1.536770560757306487703e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/ludcmp_fp64/ludcmp.c",
+    "line": 140,
+    "error": 5.837344496661955872696e-16,
+    "relative_error": 1.459459504033305769537e-16
+  }
+]

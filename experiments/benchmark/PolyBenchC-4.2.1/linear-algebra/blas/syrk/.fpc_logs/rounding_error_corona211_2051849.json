@@ -1,0 +1,98 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 38,
+    "error": -5.96046445533460201e-09,
+    "relative_error": 1.49011611383365050e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 156,
+    "error": 2.24510828417123776e-06,
+    "relative_error": 1.65121962465569551e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 41,
+    "error": -5.96046448309017762e-09,
+    "relative_error": 3.97364298872678530e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 57,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 178,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 60,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 88,
+    "error": -2.24510828417123776e-06,
+    "relative_error": 1.65121962465569551e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 153,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 103,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 175,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 104,
+    "error": -5.26526384589942609e-05,
+    "relative_error": 4.11920511263700838e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 113,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 86,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 107,
+    "error": -2.07193492229862386e-06,
+    "relative_error": 1.83262138455613690e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 94,
+    "error": 2.24510828417123776e-06,
+    "relative_error": 1.65121962465569551e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syrk/syrk.c",
+    "line": 85,
+    "error": 2.24510828417123776e-06,
+    "relative_error": 1.65121962465569551e-07
+  }
+]

@@ -39,7 +39,28 @@ void init_array(int n,
       y_1[i] = (DATA_TYPE) ((i + 3) % n) / n;
       y_2[i] = (DATA_TYPE) ((i + 4) % n) / n;
       for (j = 0; j < n; j++)
-	A[i][j] = (DATA_TYPE) (i*j % n) / n;
+	        A[i][j] = (DATA_TYPE) (i*j % n) / n;
+    }
+}
+
+static
+void init_array_double(int n,
+		double POLYBENCH_1D(x1,N,n),
+		double POLYBENCH_1D(x2,N,n),
+		double POLYBENCH_1D(y_1,N,n),
+		double POLYBENCH_1D(y_2,N,n),
+		double POLYBENCH_2D(A,N,N,n,n))
+{
+  int i, j;
+
+  for (i = 0; i < n; i++)
+    {
+      x1[i] = (double) (i % n) / n;
+      x2[i] = (double) ((i + 1) % n) / n;
+      y_1[i] = (double) ((i + 3) % n) / n;
+      y_2[i] = (double) ((i + 4) % n) / n;
+      for (j = 0; j < n; j++)
+	      A[i][j] = (double) (i*j % n) / n;
     }
 }
 
@@ -49,24 +70,105 @@ void init_array(int n,
 static
 void print_array(int n,
 		 DATA_TYPE POLYBENCH_1D(x1,N,n),
-		 DATA_TYPE POLYBENCH_1D(x2,N,n))
+		 DATA_TYPE POLYBENCH_1D(x2,N,n),
+		 double POLYBENCH_1D(x1_double,N,n),
+		 double POLYBENCH_1D(x2_double,N,n))
 
 {
   int i;
 
+  DATA_TYPE max_value_x1 = 0;
+  DATA_TYPE sum_x1 = 0;
+  DATA_TYPE norm_x1 = 0;
+  DATA_TYPE max_value_x2 = 0;
+  DATA_TYPE sum_x2 = 0;
+  DATA_TYPE norm_x2 = 0;
+
+  double max_value_x1_double = 0;
+  double sum_x1_double = 0;
+  double norm_x1_double = 0;
+  double max_value_x2_double = 0;
+  double sum_x2_double = 0;
+  double norm_x2_double = 0;
+
   POLYBENCH_DUMP_START;
   POLYBENCH_DUMP_BEGIN("x1");
   for (i = 0; i < n; i++) {
-    if (i % 20 == 0) fprintf (POLYBENCH_DUMP_TARGET, "\n");
-    fprintf (POLYBENCH_DUMP_TARGET, DATA_PRINTF_MODIFIER, x1[i]);
+    DATA_TYPE value_x1 = x1[i];
+    DATA_TYPE value_x2 = x2[i];
+    double value_x1_double = x1_double[i];
+    double value_x2_double = x2_double[i];
+
+    if (value_x1 < 0)
+      value_x1 = -value_x1;
+    if (value_x2 < 0)
+      value_x2 = -value_x2;
+    if (value_x1_double < 0.0)
+      value_x1_double = -value_x1_double;
+    if (value_x2_double < 0.0)
+      value_x2_double = -value_x2_double;
+
+    if (value_x1 > max_value_x1)
+      max_value_x1 = value_x1;
+    if (value_x2 > max_value_x2)
+      max_value_x2 = value_x2;
+    if (value_x1_double > max_value_x1_double)
+      max_value_x1_double = value_x1_double;
+    if (value_x2_double > max_value_x2_double)
+      max_value_x2_double = value_x2_double;
   }
+
+  if (max_value_x1 != 0) {
+    for (i = 0; i < n; i++) {
+      DATA_TYPE scaled = x1[i] / max_value_x1;
+      sum_x1 += scaled * scaled;
+    }
+    norm_x1 = SQRT_FUN(sum_x1);
+  }
+
+  if (max_value_x2 != 0) {
+    for (i = 0; i < n; i++) {
+      DATA_TYPE scaled = x2[i] / max_value_x2;
+      sum_x2 += scaled * scaled;
+    }
+    norm_x2 = SQRT_FUN(sum_x2);
+  }
+
+  if (max_value_x1_double != 0) {
+    for (i = 0; i < n; i++) {
+      double scaled = x1_double[i] / max_value_x1_double;
+      sum_x1_double += scaled * scaled;
+    }
+    norm_x1_double = sqrt(sum_x1_double);
+  }
+
+  if (max_value_x2_double != 0) {
+    for (i = 0; i < n; i++) {
+      double scaled = x2_double[i] / max_value_x2_double;
+      sum_x2_double += scaled * scaled;
+    }
+    norm_x2_double = sqrt(sum_x2_double);
+  }
+
+  fprintf (POLYBENCH_DUMP_TARGET, "Max value in x1: %.7e\n", max_value_x1);
+  fprintf (POLYBENCH_DUMP_TARGET, "Norm of x1: %.7e\n", norm_x1);
+  fprintf (POLYBENCH_DUMP_TARGET, "Max value in x1_double: %.17e\n", max_value_x1_double);
+  fprintf (POLYBENCH_DUMP_TARGET, "Norm of x1_double: %.17e\n", norm_x1_double);
+
+  double norm_error_x1 = norm_x1_double - (double)norm_x1;
+  fprintf (POLYBENCH_DUMP_TARGET, "Norm error x1: %.17e\n", norm_error_x1);
+
   POLYBENCH_DUMP_END("x1");
 
   POLYBENCH_DUMP_BEGIN("x2");
-  for (i = 0; i < n; i++) {
-    if (i % 20 == 0) fprintf (POLYBENCH_DUMP_TARGET, "\n");
-    fprintf (POLYBENCH_DUMP_TARGET, DATA_PRINTF_MODIFIER, x2[i]);
-  }
+  fprintf (POLYBENCH_DUMP_TARGET, "Max value in x2: %.7e\n", max_value_x2);
+  fprintf (POLYBENCH_DUMP_TARGET, "Norm of x2: %.7e\n", norm_x2);
+  fprintf (POLYBENCH_DUMP_TARGET, "Max value in x2_double: %.17e\n", max_value_x2_double);
+  fprintf (POLYBENCH_DUMP_TARGET, "Norm of x2_double: %.17e\n", norm_x2_double);
+
+  double norm_error_x2 = norm_x2_double - (double)norm_x2;
+  fprintf (POLYBENCH_DUMP_TARGET, "Norm error x2: %.17e\n", norm_error_x2);
+
   POLYBENCH_DUMP_END("x2");
   POLYBENCH_DUMP_FINISH;
 }
@@ -95,6 +197,27 @@ void kernel_mvt(int n,
 
 }
 
+static
+void kernel_mvt_double(int n,
+		double POLYBENCH_1D(x1,N,n),
+		double POLYBENCH_1D(x2,N,n),
+		double POLYBENCH_1D(y_1,N,n),
+		double POLYBENCH_1D(y_2,N,n),
+		double POLYBENCH_2D(A,N,N,n,n))
+{
+  int i, j;
+
+#pragma scop
+  for (i = 0; i < _PB_N; i++)
+    for (j = 0; j < _PB_N; j++)
+      x1[i] = x1[i] + A[i][j] * y_1[j];
+  for (i = 0; i < _PB_N; i++)
+    for (j = 0; j < _PB_N; j++)
+      x2[i] = x2[i] + A[j][i] * y_2[j];
+#pragma endscop
+
+}
+
 
 int main(int argc, char** argv)
 {
@@ -108,6 +231,11 @@ int main(int argc, char** argv)
   POLYBENCH_1D_ARRAY_DECL(y_1, DATA_TYPE, N, n);
   POLYBENCH_1D_ARRAY_DECL(y_2, DATA_TYPE, N, n);
 
+  POLYBENCH_2D_ARRAY_DECL(A_double, double, N, N, n, n);
+  POLYBENCH_1D_ARRAY_DECL(x1_double, double, N, n);
+  POLYBENCH_1D_ARRAY_DECL(x2_double, double, N, n);
+  POLYBENCH_1D_ARRAY_DECL(y_1_double, double, N, n);
+  POLYBENCH_1D_ARRAY_DECL(y_2_double, double, N, n);
 
   /* Initialize array(s). */
   init_array (n,
@@ -116,6 +244,13 @@ int main(int argc, char** argv)
 	      POLYBENCH_ARRAY(y_1),
 	      POLYBENCH_ARRAY(y_2),
 	      POLYBENCH_ARRAY(A));
+
+  init_array_double (n,
+	      POLYBENCH_ARRAY(x1_double),
+	      POLYBENCH_ARRAY(x2_double),
+	      POLYBENCH_ARRAY(y_1_double),
+	      POLYBENCH_ARRAY(y_2_double),
+	      POLYBENCH_ARRAY(A_double));
 
   /* Start timer. */
   polybench_start_instruments;
@@ -128,13 +263,21 @@ int main(int argc, char** argv)
 	      POLYBENCH_ARRAY(y_2),
 	      POLYBENCH_ARRAY(A));
 
+  kernel_mvt_double (n,
+	      POLYBENCH_ARRAY(x1_double),
+	      POLYBENCH_ARRAY(x2_double),
+	      POLYBENCH_ARRAY(y_1_double),
+	      POLYBENCH_ARRAY(y_2_double),
+	      POLYBENCH_ARRAY(A_double));
+
   /* Stop and print timer. */
   polybench_stop_instruments;
   polybench_print_instruments;
 
   /* Prevent dead-code elimination. All live-out data must be printed
      by the function call in argument. */
-  polybench_prevent_dce(print_array(n, POLYBENCH_ARRAY(x1), POLYBENCH_ARRAY(x2)));
+  polybench_prevent_dce(print_array(n, POLYBENCH_ARRAY(x1), POLYBENCH_ARRAY(x2),
+				    POLYBENCH_ARRAY(x1_double), POLYBENCH_ARRAY(x2_double)));
 
   /* Be clean. */
   POLYBENCH_FREE_ARRAY(A);
@@ -142,6 +285,11 @@ int main(int argc, char** argv)
   POLYBENCH_FREE_ARRAY(x2);
   POLYBENCH_FREE_ARRAY(y_1);
   POLYBENCH_FREE_ARRAY(y_2);
+  POLYBENCH_FREE_ARRAY(A_double);
+  POLYBENCH_FREE_ARRAY(x1_double);
+  POLYBENCH_FREE_ARRAY(x2_double);
+  POLYBENCH_FREE_ARRAY(y_1_double);
+  POLYBENCH_FREE_ARRAY(y_2_double);
 
   return 0;
 }

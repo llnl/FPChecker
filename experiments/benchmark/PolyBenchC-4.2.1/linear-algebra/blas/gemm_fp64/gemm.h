@@ -57,7 +57,7 @@
 
 
 /* Default data type */
-# if !defined(DATA_TYPE_IS_INT) && !defined(DATA_TYPE_IS_FLOAT) && !defined(DATA_TYPE_IS_DOUBLE)
+# if !defined(DATA_TYPE_IS_INT) && !defined(DATA_TYPE_IS_FLOAT) && !defined(DATA_TYPE_IS_DOUBLE) && !defined(DATA_TYPE_IS_LONG_DOUBLE)
 #  define DATA_TYPE_IS_DOUBLE
 // # define DATA_TYPE_IS_FLOAT
 # endif

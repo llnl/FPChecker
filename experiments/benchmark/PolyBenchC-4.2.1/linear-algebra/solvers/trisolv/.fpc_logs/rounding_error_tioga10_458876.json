@@ -1,0 +1,110 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 36,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 38,
+    "error": 4.76837156426768161e-08,
+    "relative_error": 2.32603490939886915e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 53,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 55,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 141,
+    "error": -2.06398181118450097e-06,
+    "relative_error": 1.08135081449875081e-05
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 161,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 140,
+    "error": -4.22073190015082034e-06,
+    "relative_error": 1.07868503001869094e-05
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 106,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 81,
+    "error": -2.06398181118450097e-06,
+    "relative_error": 1.08135081449875081e-05
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 98,
+    "error": -4.22073190015082034e-06,
+    "relative_error": 1.07868503001869094e-05
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 101,
+    "error": -2.60488718595297541e-07,
+    "relative_error": 6.18655818469660399e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 99,
+    "error": -1.15691361912695356e-06,
+    "relative_error": 6.52561276064349422e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 160,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 158,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 82,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 84,
+    "error": 2.06398181118450097e-06,
+    "relative_error": 1.08135081449875081e-05
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 138,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 90,
+    "error": -1.16301745456404149e-08,
+    "relative_error": 2.38418578185628498e-08
+  }
+]
