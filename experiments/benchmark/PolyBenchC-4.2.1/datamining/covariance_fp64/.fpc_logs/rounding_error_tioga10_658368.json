@@ -1,0 +1,80 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 129,
+    "error": 2.031361190368841107556e-15,
+    "relative_error": 1.359094703233633237895e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 124,
+    "error": -1.523087211907636628894e-15,
+    "relative_error": 1.019030870571417577336e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 138,
+    "error": -1.102590241330858589208e-14,
+    "relative_error": 1.347472797735679532954e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 137,
+    "error": -1.102590241330858589208e-14,
+    "relative_error": 1.347472797735679532954e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 136,
+    "error": -4.269917752708352054469e-13,
+    "relative_error": 1.683308351396958438809e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 123,
+    "error": -4.873879078104437212460e-14,
+    "relative_error": 1.019030870571417577336e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 82,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 73,
+    "error": -1.102590241330858589208e-14,
+    "relative_error": 1.347472797735679532954e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 83,
+    "error": 4.366645933728818818054e-14,
+    "relative_error": 4.832107264495662044526e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 68,
+    "error": 1.102590241330858589208e-14,
+    "relative_error": 1.347472797735679532954e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 31,
+    "error": 5.082739784612044786627e-16,
+    "relative_error": 1.700319163311078303700e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 65,
+    "error": -1.102590241330858589208e-14,
+    "relative_error": 1.347472797735679532954e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/covariance_fp64/covariance.c",
+    "line": 85,
+    "error": 2.193557835372672570884e-15,
+    "relative_error": 2.307508891755668548460e-16
+  }
+]

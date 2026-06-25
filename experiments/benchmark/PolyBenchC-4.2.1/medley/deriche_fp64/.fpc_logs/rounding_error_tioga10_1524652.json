@@ -1,0 +1,104 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 31,
+    "error": 1.260385025514398904534e-17,
+    "relative_error": 4.971072017759155765835e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 180,
+    "error": 1.697665784534431454578e-18,
+    "relative_error": 4.982048417636865410724e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 193,
+    "error": -1.328401771178919221761e-17,
+    "relative_error": 1.078707853224601161081e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 203,
+    "error": 1.697665784534431454578e-18,
+    "relative_error": 4.982048417636865410724e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 90,
+    "error": 1.255980454188676542771e-17,
+    "relative_error": 4.003270929420130349605e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 181,
+    "error": -4.714585384417435687254e-18,
+    "relative_error": 1.509247397007407827060e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 173,
+    "error": -4.714585384417435687254e-18,
+    "relative_error": 1.509247397007407827060e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 91,
+    "error": -4.277134202368415571982e-14,
+    "relative_error": 2.002817680074108701373e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 163,
+    "error": -2.481806535455099993470e-18,
+    "relative_error": 9.673343399440308840117e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 151,
+    "error": 1.260385025514398904534e-17,
+    "relative_error": 4.971072017759155765835e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 150,
+    "error": -4.714585384417435687254e-18,
+    "relative_error": 1.509247397007407827060e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 94,
+    "error": -9.853229343548264296260e-16,
+    "relative_error": 6.742529592182573173365e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 70,
+    "error": 1.697665784534431454578e-18,
+    "relative_error": 4.982048417636865410724e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 79,
+    "error": 2.237522233466959775683e-17,
+    "relative_error": 2.060112823948651314909e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 195,
+    "error": -5.938717399789350537276e-17,
+    "relative_error": 5.904925871481168588745e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 165,
+    "error": 1.428436362249652091805e-17,
+    "relative_error": 4.747328819921443776807e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche_fp64/deriche.c",
+    "line": 73,
+    "error": -1.697665784534431454578e-18,
+    "relative_error": 4.982048417636865410724e-16
+  }
+]

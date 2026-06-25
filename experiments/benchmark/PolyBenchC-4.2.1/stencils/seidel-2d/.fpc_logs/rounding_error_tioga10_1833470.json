@@ -1,0 +1,98 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 28,
+    "error": -1.52587890767108547e-06,
+    "relative_error": 3.81231457256985744e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 114,
+    "error": 7.62939450282829057e-07,
+    "relative_error": 2.00509710981032627e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 39,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 131,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 77,
+    "error": -8.07268858977749915e-05,
+    "relative_error": 4.20608243114704816e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 115,
+    "error": -3.05175780113131623e-06,
+    "relative_error": 1.35453075949015353e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 116,
+    "error": 7.62939450282829057e-07,
+    "relative_error": 2.00509710981032627e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 132,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 85,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 59,
+    "error": -1.52587890767108547e-06,
+    "relative_error": 3.81231457256985744e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 60,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 76,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 133,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 79,
+    "error": -3.29348237571025493e-06,
+    "relative_error": 2.37730625947345143e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 62,
+    "error": 1.52587890767108547e-06,
+    "relative_error": 3.81231457256985744e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d/seidel-2d.c",
+    "line": 67,
+    "error": -1.52587890767108547e-06,
+    "relative_error": 3.81231457256985744e-08
+  }
+]

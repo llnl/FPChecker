@@ -1,0 +1,104 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 28,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 158,
+    "error": 1.929879867024197892533e-16,
+    "relative_error": 1.930608971214386108836e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 153,
+    "error": 1.206174916890123682833e-16,
+    "relative_error": 1.652657261264884534518e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 154,
+    "error": 6.354779983480662863826e-16,
+    "relative_error": 2.352220837086435246904e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 145,
+    "error": 3.501973017128179321844e-17,
+    "relative_error": 3.502863274233423488378e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 151,
+    "error": 8.879615792656281314521e-17,
+    "relative_error": 4.673481996134884902348e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 62,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 77,
+    "error": 1.481315070606115114060e-13,
+    "relative_error": 1.365999891098487859642e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 76,
+    "error": -6.548581121812446781405e-17,
+    "relative_error": 1.276973318753427122422e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 140,
+    "error": -5.285350065595273427732e-16,
+    "relative_error": 2.641443540619997532751e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 137,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 67,
+    "error": 4.445228907190568179431e-17,
+    "relative_error": 2.279604567790034963714e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 139,
+    "error": 1.393199791643873197700e-17,
+    "relative_error": 1.741703259232356590669e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 79,
+    "error": 6.663072871226916049636e-15,
+    "relative_error": 6.398470540141252091772e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 135,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 149,
+    "error": 8.879615792656281314521e-17,
+    "relative_error": 4.673481996134884902348e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/adi_fp64/adi.c",
+    "line": 59,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 33,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 154,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 163,
+    "error": -1.465841337200401994778e-15,
+    "relative_error": 5.257647489512725036572e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 160,
+    "error": 2.844946500601963634836e-14,
+    "relative_error": 1.497340263474717700315e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 157,
+    "error": -2.794986464493831590516e-14,
+    "relative_error": 7.692623296772013555972e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 35,
+    "error": 1.420738526825005010323e-15,
+    "relative_error": 4.673481996134884902348e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 88,
+    "error": -1.420738526825005010323e-15,
+    "relative_error": 4.673481996134884902348e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 34,
+    "error": 4.735795089416683367745e-16,
+    "relative_error": 2.412119739940585756152e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 80,
+    "error": 1.420738526825005010323e-15,
+    "relative_error": 4.673481996134884902348e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 110,
+    "error": -3.633378320433422459246e-15,
+    "relative_error": 3.561518581493205082958e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 105,
+    "error": -6.705587148915503892255e-16,
+    "relative_error": 7.614919242727600251542e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 164,
+    "error": -2.398255205537935808024e-15,
+    "relative_error": 1.579746827623180377924e-13
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 103,
+    "error": 7.370948469642701894600e-16,
+    "relative_error": 1.600676275564952654811e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 106,
+    "error": -5.283967707825354409579e-14,
+    "relative_error": 5.103645560382202130840e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 93,
+    "error": -3.198830089701232282096e-15,
+    "relative_error": 7.752779613501803816461e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 104,
+    "error": -4.920369667260615642590e-14,
+    "relative_error": 4.752811737867024785274e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 107,
+    "error": 4.580754178751256233681e-17,
+    "relative_error": 6.217232904557921762754e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/fdtd-2d_fp64/fdtd-2d.c",
+    "line": 108,
+    "error": -5.975081540654514355992e-14,
+    "relative_error": 5.741072408694249417073e-16
+  }
+]

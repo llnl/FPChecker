@@ -1,0 +1,110 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 35,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 209,
+    "error": -2.419977487515339264960e-15,
+    "relative_error": 1.516276134346289423016e+03
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 200,
+    "error": -9.771116957529593594263e-15,
+    "relative_error": 1.153650880093034374441e+03
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 202,
+    "error": -5.917940193646135374136e-02,
+    "relative_error": 3.140561883294430977091e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 207,
+    "error": 6.638598324475821351691e-16,
+    "relative_error": 2.422438325628125704025e+02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 153,
+    "error": 2.973566601283117449839e-10,
+    "relative_error": 4.516667451171002861009e-12
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 152,
+    "error": -8.766772197414284418376e-02,
+    "relative_error": 3.140561883294432239644e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 199,
+    "error": -9.564024413555848522791e-29,
+    "relative_error": 1.333217654899614359692e+06
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 138,
+    "error": 5.917940193646135374136e-02,
+    "relative_error": 3.140561883294430977091e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 110,
+    "error": 6.977925182116706537272e-16,
+    "relative_error": 1.245886849264497396634e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 93,
+    "error": 9.771116957529593594263e-15,
+    "relative_error": 1.153650880093034366114e+03
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 107,
+    "error": -3.799805518806451110550e-17,
+    "relative_error": 1.153650880093034209906e+03
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 135,
+    "error": -5.917940193646135374136e-02,
+    "relative_error": 3.140561883294430977091e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 98,
+    "error": -1.604272270583351200912e-14,
+    "relative_error": 6.238716263377929531443e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 108,
+    "error": 7.173081573164097335393e-15,
+    "relative_error": 2.286706130049299453415e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 155,
+    "error": 1.832425964437556231701e-11,
+    "relative_error": 2.258378131307069489801e-12
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 90,
+    "error": -9.771116957529593594263e-15,
+    "relative_error": 1.153650880093034374441e+03
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/gramschmidt_fp64/gramschmidt.c",
+    "line": 143,
+    "error": 2.797241605012601439739e-17,
+    "relative_error": 4.143803271044229022551e-17
+  }
+]

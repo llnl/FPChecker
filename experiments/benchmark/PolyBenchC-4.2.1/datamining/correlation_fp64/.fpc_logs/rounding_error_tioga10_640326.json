@@ -1,0 +1,104 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 143,
+    "error": 1.226774758167348267079e-16,
+    "relative_error": 4.133855734179800432647e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 126,
+    "error": -1.523087211907636628894e-15,
+    "relative_error": 5.002515182805140834078e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 136,
+    "error": -2.223915496202266695036e-15,
+    "relative_error": 1.226214448231783256716e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 154,
+    "error": -1.367721040590463843500e-16,
+    "relative_error": 1.367721040590464030556e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 153,
+    "error": -1.367721040590463843500e-16,
+    "relative_error": 1.367721040590464030556e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 133,
+    "error": -1.075584066256851656362e-12,
+    "relative_error": 1.021858301962351492342e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 125,
+    "error": -4.873879078104437212460e-14,
+    "relative_error": 5.002515182805140834078e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 31,
+    "error": 4.059252933785728600924e-15,
+    "relative_error": 6.666221826744891544276e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 82,
+    "error": 5.805902633659876244110e-16,
+    "relative_error": 5.805902633659875451590e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 73,
+    "error": -5.805902633659876244110e-16,
+    "relative_error": 5.805902633659877036630e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 142,
+    "error": 5.582340145693365229818e-15,
+    "relative_error": 1.833495883629492392173e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 83,
+    "error": 1.214028877427608676953e-13,
+    "relative_error": 1.548506221208684521697e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 68,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 65,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 134,
+    "error": -3.361200207052661426133e-14,
+    "relative_error": 1.021858301962351492342e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 135,
+    "error": -2.223915496202266695036e-15,
+    "relative_error": 1.226214448231783256716e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/datamining/correlation_fp64/correlation.c",
+    "line": 85,
+    "error": 3.689756833402668689814e-15,
+    "relative_error": 1.317770297643810239897e-16
+  }
+]

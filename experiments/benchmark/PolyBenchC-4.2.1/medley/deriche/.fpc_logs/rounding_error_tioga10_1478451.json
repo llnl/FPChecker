@@ -1,0 +1,176 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 32,
+    "error": -5.52890266902750227e-09,
+    "relative_error": 2.18064899142222779e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 47,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 186,
+    "error": 9.41911448143484265e-10,
+    "relative_error": 2.76417715159952808e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 199,
+    "error": 3.68820680593517913e-10,
+    "relative_error": 2.99495055192178803e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 209,
+    "error": 9.41911448143484265e-10,
+    "relative_error": 2.76417715159952808e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 274,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 287,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 297,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 169,
+    "error": 4.94773048920205127e-10,
+    "relative_error": 1.92847806648257011e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 92,
+    "error": 2.80084251500056780e-04,
+    "relative_error": 1.31152711631437031e-06
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 201,
+    "error": 5.40698655293603281e-09,
+    "relative_error": 5.37622097641073951e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 171,
+    "error": 1.69987152132122787e-09,
+    "relative_error": 5.64942847759960815e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 72,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 156,
+    "error": 2.11193715293767070e-10,
+    "relative_error": 6.76079772052153390e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 267,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 179,
+    "error": 2.11193715293767070e-10,
+    "relative_error": 6.76079772052153390e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 101,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 157,
+    "error": -5.52890266902750227e-09,
+    "relative_error": 2.18064899142222779e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 289,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 91,
+    "error": 4.54628987234251269e-09,
+    "relative_error": 1.44906972153051329e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 187,
+    "error": 2.11193715293767070e-10,
+    "relative_error": 6.76079772052153390e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 259,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 80,
+    "error": 9.10818273580638049e-09,
+    "relative_error": 8.38600995589739690e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 74,
+    "error": -9.41911448143484265e-10,
+    "relative_error": 2.76417715159952808e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 275,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 71,
+    "error": 9.41911448143484265e-10,
+    "relative_error": 2.76417715159952808e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 245,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 95,
+    "error": 9.56774990790165702e-06,
+    "relative_error": 6.54717737312839362e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/medley/deriche/deriche.c",
+    "line": 244,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  }
+]
