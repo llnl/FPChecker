@@ -29,6 +29,7 @@
 #include <iomanip>
 #include <chrono>
 #include <cstring>
+#include "cg_matrix.hpp"
 
 using namespace std;
 
@@ -77,31 +78,6 @@ double dot_product(const vector<float> &v1, const vector<float> &v2)
     for (size_t i = 0; i < v1.size(); ++i)
     {
         result += static_cast<double>(v1[i]) * static_cast<double>(v2[i]);
-    }
-    return result;
-}
-
-// Matrix-Vector Multiplication — FP64 row accumulation (report line 75: rel err 1.04)
-// Matrix and output stay float; inner product per row computed in double.
-inline __attribute__((always_inline))
-vector<float>
-mat_vec_mult(const vector<float> &A, const vector<float> &v, size_t n)
-{
-    if (A.size() != n * n)
-    {
-        std::cout << "Matrix size does not match vector size." << std::endl;
-        exit(1);
-    }
-
-    vector<float> result(n, 0.0f);
-    for (size_t i = 0; i < n; ++i)
-    {
-        double acc = 0.0;
-        for (size_t j = 0; j < n; ++j)
-        {
-            acc += static_cast<double>(A[i * n + j]) * static_cast<double>(v[j]);
-        }
-        result[i] = static_cast<float>(acc);
     }
     return result;
 }
@@ -168,59 +144,6 @@ inline __attribute__((always_inline)) double norm(const vector<float> &v)
     return my_sqrt(dot_product(v, v));
 }
 
-int loadMatrix(const char *matrix_path, std::vector<float> &A, std::vector<float> &b)
-{
-    if (matrix_path == NULL)
-    {
-        std::cerr << "Matrix path not provided" << std::endl;
-        exit(-1);
-    }
-
-    FILE *file = fopen(matrix_path, "r");
-    if (file == NULL)
-    {
-        std::cerr << "Error opening matrix file" << std::endl;
-        exit(-1);
-    }
-
-    char line_buf[300000];
-    int cols = -1;
-    while (fgets(line_buf, sizeof(line_buf), file))
-    {
-        std::vector<float> row;
-        char *token = strtok(line_buf, ",");
-        while (token)
-        {
-            row.push_back(atof(token));
-            token = strtok(NULL, ",");
-        }
-        if (cols == -1)
-            cols = row.size();
-        else if ((int)row.size() != cols)
-        {
-            cout << "Rows: " << row.size() << ", Cols: " << cols << endl;
-            std::cerr << "Non-rectangular matrix detected" << std::endl;
-            fclose(file);
-            exit(-1);
-        }
-        for (size_t i = 0; i < row.size(); ++i)
-        {
-            A.push_back(row[i]);
-        }
-    }
-    fclose(file);
-
-    int n = cols;
-    A.resize(n * n);
-    b.resize(n);
-    for (int i = 0; i < n; ++i)
-    {
-        b[i] = 1.0;
-    }
-
-    return cols;
-}
-
 // --- Conjugate Gradient Algorithm (Mixed Precision) ---
 //
 // Compared to the pure-FP32 version in cg.cpp, the changes are:
@@ -235,7 +158,7 @@ int loadMatrix(const char *matrix_path, std::vector<float> &A, std::vector<float
 __attribute__((noinline))
 vector<double>
 conjugate_gradient(
-    const vector<float> &A,
+    const MatrixData<float> &A,
     const vector<float> &b,
     size_t max_iter = 1000,
     double tolerance = 1e-6)
@@ -245,7 +168,7 @@ conjugate_gradient(
     vector<float> x_f(n, 0.0f); // FP32 copy for mat-vec with FP32 matrix
 
     // Initial Residual: r0 = b - A * x0
-    vector<float> Ax0 = mat_vec_mult(A, x_f, n);
+    vector<float> Ax0 = mat_vec_mult<float, double>(A, x_f);
     vector<float> r = vec_add_mult(b, Ax0, 1.0, true); // b - 1.0 * Ax0
 
     // Initial Search Direction: p0 = r0
@@ -272,7 +195,7 @@ conjugate_gradient(
         auto iter_start = std::chrono::high_resolution_clock::now();
 
         // Compute A * p_k  (FP64 row accumulation, FP32 result)
-        vector<float> Ap = mat_vec_mult(A, p, n);
+        vector<float> Ap = mat_vec_mult<float, double>(A, p);
 
         // Step size in FP64: fixes report line 230 (rel err 2.4e5)
         double alpha = rs_old / dot_product(p, Ap);
@@ -289,6 +212,8 @@ conjugate_gradient(
         double relative_residual = my_sqrt(rs_new) / relative_b;
         if (relative_residual < tolerance)
         {
+            auto iter_end = std::chrono::high_resolution_clock::now();
+            total_iter_time += iter_end - iter_start;
             cout << "Converged in " << k + 1 << " iterations. Residual Norm: " << my_sqrt(rs_new) << endl;
             cout << "Average time per iteration: " << (total_iter_time.count() / (k + 1)) << " seconds" << endl;
             return x;
@@ -337,7 +262,8 @@ int main(int argc, char **argv)
     double tolerance = (argc > 3) ? atof(argv[3]) : 1e-6;
     cout << "Max Iterations: " << max_iter << ", Tolerance: " << tolerance << endl;
 
-    std::vector<float> A, b;
+    MatrixData<float> A;
+    std::vector<float> b;
     int matrix_size = loadMatrix(matrix_path, A, b);
     cout << scientific << setprecision(6);
 
@@ -353,7 +279,7 @@ int main(int argc, char **argv)
     for (int i = 0; i < matrix_size; ++i)
         x_f[i] = static_cast<float>(x_solution[i]);
 
-    vector<float> Ax = mat_vec_mult(A, x_f, matrix_size);
+    vector<float> Ax = mat_vec_mult<float, double>(A, x_f);
     vector<float> residual = vec_add_mult(b, Ax, 1.0, true);
 
     cout << "\nFinal Residual Norm (||Ax - b||): " << norm(residual) << endl;

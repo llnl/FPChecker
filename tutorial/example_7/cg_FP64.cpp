@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <chrono>
 #include <cstring>
+#include "cg_matrix.hpp"
 
 using namespace std;
 
@@ -55,30 +56,6 @@ inline __attribute__((always_inline)) double dot_product(const vector<double> &v
     return result;
 }
 
-// Matrix-Vector Multiplication (A * v)
-// A is stored as a flattened array (row-major order).
-inline __attribute__((always_inline))
-vector<double>
-mat_vec_mult(const vector<double> &A, const vector<double> &v, size_t n)
-{
-    if (A.size() != n * n)
-    {
-        std::cout << "Matrix size does not match vector size." << std::endl;
-        exit(1);
-    }
-
-    vector<double> result(n, 0.0);
-    for (size_t i = 0; i < n; ++i)
-    {
-        for (size_t j = 0; j < n; ++j)
-        {
-            // A[i][j] is stored at index i * n + j
-            result[i] += A[i * n + j] * v[j];
-        }
-    }
-    return result;
-}
-
 // Vector Addition/Subtraction (v1 - alpha * v2 or v1 + alpha * v2)
 inline __attribute__((always_inline)) vector<double>
 vec_add_mult(const vector<double> &v1, const vector<double> &v2, double alpha, bool subtract = false)
@@ -120,61 +97,6 @@ inline __attribute__((always_inline)) double norm(const vector<double> &v)
     return my_sqrt(dot_product(v, v));
 }
 
-int loadMatrix(const char *matrix_path, std::vector<double> &A, std::vector<double> &b)
-{
-    if (matrix_path == NULL)
-    {
-        std::cerr << "Matrix path not provided" << std::endl;
-        exit(-1);
-    }
-
-    FILE *file = fopen(matrix_path, "r");
-    if (file == NULL)
-    {
-        std::cerr << "Error opening matrix file" << std::endl;
-        exit(-1);
-    }
-
-    // std::vector<std::vector<double>> temp_matrix;
-    char line_buf[300000];
-    int cols = -1;
-    while (fgets(line_buf, sizeof(line_buf), file))
-    {
-        std::vector<double> row;
-        char *token = strtok(line_buf, ",");
-        while (token)
-        {
-            row.push_back(atof(token));
-            token = strtok(NULL, ",");
-        }
-        if (cols == -1)
-            cols = row.size();
-        else if (row.size() != cols)
-        {
-            std::cerr << "Non-rectangular matrix detected" << std::endl;
-            fclose(file);
-            exit(-1);
-        }
-        // Push the content of row into A
-        for (size_t i = 0; i < row.size(); ++i)
-        {
-            A.push_back(row[i]);
-        }
-    }
-    fclose(file);
-
-    int n = cols;
-    A.resize(n * n);
-    b.resize(n);
-    double sum = 0.0;
-    for (int i = 0; i < n; ++i)
-    {
-        b[i] = 1.0;
-    }
-
-    return cols;
-}
-
 // --- Conjugate Gradient Algorithm ---
 /**
  * Solves the linear system Ax = b using the Conjugate Gradient method.
@@ -187,7 +109,7 @@ int loadMatrix(const char *matrix_path, std::vector<double> &A, std::vector<doub
 __attribute__((noinline)) __attribute__((annotate("_FPC_CALCULATE_ERROR_")))
 vector<double>
 conjugate_gradient(
-    const vector<double> &A,
+    const MatrixData<double> &A,
     const vector<double> &b,
     size_t max_iter = 1000,
     double tolerance = 1e-6)
@@ -196,7 +118,7 @@ conjugate_gradient(
     vector<double> x(n, 0.0); // Start with an initial guess of 0
 
     // Initial Residual: r0 = b - A * x0
-    vector<double> Ax0 = mat_vec_mult(A, x, n);
+    vector<double> Ax0 = mat_vec_mult<double, double>(A, x);
     vector<double> r = vec_add_mult(b, Ax0, 1.0, true); // b - 1.0 * Ax0
 
     // Initial Search Direction: p0 = r0
@@ -223,7 +145,7 @@ conjugate_gradient(
         auto iter_start = std::chrono::high_resolution_clock::now();
 
         // Compute A * p_k
-        vector<double> Ap = mat_vec_mult(A, p, n);
+        vector<double> Ap = mat_vec_mult<double, double>(A, p);
 
         // Step size: alpha_k = (r_k^T * r_k) / (p_k^T * A * p_k)
         double alpha = rs_old / dot_product(p, Ap);
@@ -239,6 +161,8 @@ conjugate_gradient(
         double relative_residual = my_sqrt(rs_new) / relative_b;
         if (relative_residual < tolerance)
         {
+            auto iter_end = std::chrono::high_resolution_clock::now();
+            total_iter_time += iter_end - iter_start;
             cout << "Converged in " << k + 1 << " iterations. Residual Norm: " << my_sqrt(rs_new) << endl;
             cout << "Average time per iteration: " << (total_iter_time.count() / (k + 1)) << " seconds" << endl;
             return x;
@@ -287,7 +211,8 @@ int main(int argc, char **argv)
     double tolerance = (argc > 3) ? atof(argv[3]) : 1e-6;
     cout << "Max Iterations: " << max_iter << ", Tolerance: " << tolerance << endl;
 
-    std::vector<double> A, b;
+    MatrixData<double> A;
+    std::vector<double> b;
     int matrix_size = loadMatrix(matrix_path, A, b);
     // Print A as a matrix
     // cout << "Matrix A:" << endl;
@@ -315,7 +240,7 @@ int main(int argc, char **argv)
     // print_vector("x", x_solution);
 
     // Verify the solution (A*x - b should be close to zero)
-    vector<double> Ax = mat_vec_mult(A, x_solution, matrix_size);
+    vector<double> Ax = mat_vec_mult<double, double>(A, x_solution);
     vector<double> residual = vec_add_mult(b, Ax, 1.0, true);
 
     cout << "\nFinal Residual Norm (||Ax - b||): " << norm(residual) << endl;

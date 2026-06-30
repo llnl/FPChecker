@@ -9,7 +9,8 @@ all: $(EXECUTABLES)
 
 # FP32 with rounding-error instrumentation (the version we analyze)
 cg.o: cg.cpp
-	FPC_INSTRUMENT_ERR_TRACKING=1 $(CXX) $(CXXFLAGS) -c $< -o $@
+	#FPC_INSTRUMENT_ERR_TRACKING=1 $(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 cg: cg.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
