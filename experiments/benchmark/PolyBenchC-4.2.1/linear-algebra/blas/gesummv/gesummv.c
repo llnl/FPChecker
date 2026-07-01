@@ -32,40 +32,44 @@ void init_array(int n,
 {
   int i, j;
 
-  *alpha = 1.5;
-  *beta = 1.2;
+  *alpha = 1.5f;
+  *beta = 1.2f;
   for (i = 0; i < n; i++)
     {
       x[i] = (DATA_TYPE)( i % n) / n;
       for (j = 0; j < n; j++) {
-	A[i][j] = (DATA_TYPE) ((i*j+1) % n) / n;
-	B[i][j] = (DATA_TYPE) ((i*j+2) % n) / n;
+	    A[i][j] = (DATA_TYPE) ((i*j+1) % n) / n;
+	    B[i][j] = (DATA_TYPE) ((i*j+2) % n) / n;
       }
     }
 }
 
-static
-void init_array_double(int n,
-		double *alpha,
-		double *beta,
-		double POLYBENCH_2D(A,N,N,n,n),
-		double POLYBENCH_2D(B,N,N,n,n),
-		double POLYBENCH_1D(x,N,n))
+static void init_array_double(int n,
+                              double *alpha,
+                              double *beta,
+                              DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
+                              DATA_TYPE POLYBENCH_2D(B, N, N, n, n),
+                              DATA_TYPE POLYBENCH_1D(x, N, n),
+                              double POLYBENCH_2D(A_double, N, N, n, n),
+                              double POLYBENCH_2D(B_double, N, N, n, n),
+                              double POLYBENCH_1D(x_double, N, n))
 {
   int i, j;
 
+  // Convert input to double precision
   *alpha = 1.5;
   *beta = 1.2;
-  for (i = 0; i < n; i++)
-    {
-      x[i] = (double)( i % n) / n;
-      for (j = 0; j < n; j++) {
-	A[i][j] = (double) ((i*j+1) % n) / n;
-	B[i][j] = (double) ((i*j+2) % n) / n;
-      }
-    }
-}
 
+  for (i = 0; i < n; i++)
+  {
+    x_double[i] = (double)x[i];
+    for (j = 0; j < n; j++)
+    {
+      A_double[i][j] = (double)A[i][j];
+      B_double[i][j] = (double)B[i][j];
+    }
+  }
+}
 
 /* DCE code. Must scan the entire live-out data.
    Can be used also to check the correctness of the output. */
@@ -221,6 +225,9 @@ int main(int argc, char** argv)
 	      POLYBENCH_ARRAY(x));
 
   init_array_double (n, &alpha_double, &beta_double,
+        POLYBENCH_ARRAY(A),
+        POLYBENCH_ARRAY(B),
+        POLYBENCH_ARRAY(x),
 	      POLYBENCH_ARRAY(A_double),
 	      POLYBENCH_ARRAY(B_double),
 	      POLYBENCH_ARRAY(x_double));

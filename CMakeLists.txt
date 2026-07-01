@@ -132,6 +132,7 @@ endif()
 if(APPLE)
 	TARGET_LINK_LIBRARIES(fpchecker_cpu "-undefined dynamic_lookup")
         TARGET_LINK_LIBRARIES(fpchecker_error "-undefined dynamic_lookup")
+        TARGET_LINK_LIBRARIES(fpchecker_error_fp64 "-undefined dynamic_lookup")
 endif()
 
 if(NOT APPLE)

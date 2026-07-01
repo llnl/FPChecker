@@ -23,6 +23,7 @@ namespace CPUAnalysis
     Function *fpc_print_locations;
     Function *fpc_fp32_store_inst;
     Function *fpc_fp32_load_inst;
+    Function *fpc_fp32_cmp_function;
     Function *fpc_fp32_calculate_function;
     Function *fpc_fp32_phi_function;
     Function *fpc_fp32_branch_function;

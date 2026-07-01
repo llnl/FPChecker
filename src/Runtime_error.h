@@ -59,6 +59,7 @@ char _FPC_LAST_BASIC_BLOCK_[_FPC_BB_NAME_SIZE_]; // Last basic block ID
 
 // Call/return floating-point error propagation stack
 #define _FPC_RET_STACK_MAX_ 8192
+static double _FPC_RET_SHADOW_STACK_[_FPC_RET_STACK_MAX_];
 double _FPC_RET_ERR_STACK_[_FPC_RET_STACK_MAX_];
 double _FPC_RET_REL_ERR_STACK_[_FPC_RET_STACK_MAX_];
 char _FPC_RET_FUNC_STACK_[_FPC_RET_STACK_MAX_][_FPC_BB_NAME_SIZE_];
@@ -66,6 +67,7 @@ int _FPC_RET_STACK_TOP_;
 
 // Caller-to-callee argument error propagation buffer
 #define _FPC_ARG_BUF_MAX_ 256
+static double _FPC_ARG_SHADOW_BUF_[_FPC_ARG_BUF_MAX_];
 double _FPC_ARG_ERR_BUF_[_FPC_ARG_BUF_MAX_];
 double _FPC_ARG_REL_ERR_BUF_[_FPC_ARG_BUF_MAX_];
 int _FPC_ARG_BUF_COUNT_;
@@ -88,6 +90,16 @@ static inline void _FPC_ENSURE_RUNTIME_READY_()
       fpc_atexit_registered = 1;
     }
   }
+}
+
+static inline double _FPC_READ_FP32_VALUE_FROM_ADDRESS_(uintptr_t address)
+{
+  if (address < 4096)
+    return 0.0;
+
+  float value = 0.0f;
+  memcpy(&value, (const void *)address, sizeof(value));
+  return (double)value;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -276,11 +288,14 @@ void _FPC_FP32_STORE_INST_(const char *reg, const char *function_name, uintptr_t
   printf("reg=%s, address=%lu\n", reg, address);
 #endif
 
+  double shadow_value = 0.0;
   double error = 0.0;
   double relative_error = 0.0;
 
   // Find if this register already has an error
-  int found = _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, reg, function_name, &error, &relative_error);
+  int found = _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, reg, function_name,
+                                          &shadow_value, &error,
+                                          &relative_error);
   if (!found)
   {
     if (_FPC_WARNING_COUNT_ < MAX_WARNINGS)
@@ -289,12 +304,17 @@ void _FPC_FP32_STORE_INST_(const char *reg, const char *function_name, uintptr_t
       printf("#FPCHECKER: Warning: trying to store a register's value (%s) in function %s, but we don't have its error.\n",
              reg, function_name);
     }
+
+    shadow_value = _FPC_READ_FP32_VALUE_FROM_ADDRESS_(address);
+    error = 0.0;
+    relative_error = 0.0;
   }
 
   // Update table based on the address
   // If address exists, update it
   // If address does not exist, insert new entry
-  _FPC_ADDRESS_HT_UPDATE_(_FPC_ADDRESS_HT_, address, error, relative_error, file_name, loc);
+  _FPC_ADDRESS_HT_UPDATE_(_FPC_ADDRESS_HT_, address, shadow_value, error,
+                          relative_error, file_name, loc);
 
   // Log location info if line is in _FPC_LINES_TO_KEEP_
   FPC_APPEND_ERROR_LOG_ENTRY(loc, relative_error);
@@ -322,15 +342,20 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, const char *function_name, uintp
   printf("reg=%s, address=0x%016llx, func=%s\n", load_reg, (unsigned long long)address, function_name);
 #endif
 
+  double shadow_value = 0.0;
   double error = 0.0;
   double relative_error = 0.0;
 
   // Find what's at this memory address
-  int found = _FPC_FIND_ERRORS_BY_ADDRESS(_FPC_ADDRESS_HT_, address, &error, &relative_error);
+  int found = _FPC_FIND_VALUE_BY_ADDRESS(_FPC_ADDRESS_HT_, address,
+                                         &shadow_value, &error,
+                                         &relative_error);
   if (found)
   {
     // Update register entry with this error
-    _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, load_reg, function_name, error, relative_error, file_name, loc);
+    _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, load_reg, function_name,
+                             shadow_value, error, relative_error, file_name,
+                             loc);
 
     // Log location info if line is in _FPC_LINES_TO_KEEP_
     FPC_APPEND_ERROR_LOG_ENTRY(loc, relative_error);
@@ -338,7 +363,9 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, const char *function_name, uintp
   else
   {
     // No error found at this address, create register with zero error
-    _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, load_reg, function_name, 0.0, 0.0, file_name, loc);
+    shadow_value = _FPC_READ_FP32_VALUE_FROM_ADDRESS_(address);
+    _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, load_reg, function_name,
+                 shadow_value, 0.0, 0.0, file_name, loc);
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("LOAD: No data found at address %lu\n", address);
 #endif
@@ -366,6 +393,58 @@ void _FPC_FP32_BRANCH_(const char *basic_block_name)
 #ifdef FPDC_DEBUG_CALLSTACK
   printf(".........Exiting _FPC_FP32_BRANCH_..........\n");
 #endif
+}
+
+void _FPC_FP32_CMP_(int low_cond, float y, float z, int predicate, int loc,
+                    char *file_name, const char *result_name,
+                    const char *op1_name, const char *op2_name,
+                    const char *function_name)
+{
+  _FPC_ENSURE_RUNTIME_READY_();
+
+  double shadow_y = (double)y;
+  double shadow_z = (double)z;
+  double _tmp_error_ = 0.0;
+  double _tmp_relative_error_ = 0.0;
+
+#ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
+  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name,
+                              &shadow_y, &_tmp_error_,
+                              &_tmp_relative_error_);
+  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op2_name, function_name,
+                              &shadow_z, &_tmp_error_,
+                              &_tmp_relative_error_);
+#endif
+
+  int shadow_cond = low_cond;
+  switch (predicate)
+  {
+  case 0:
+    shadow_cond = (shadow_y == shadow_z);
+    break;
+  case 1:
+    shadow_cond = (shadow_y != shadow_z);
+    break;
+  case 2:
+    shadow_cond = (shadow_y < shadow_z);
+    break;
+  case 3:
+    shadow_cond = (shadow_y <= shadow_z);
+    break;
+  case 4:
+    shadow_cond = (shadow_y > shadow_z);
+    break;
+  case 5:
+    shadow_cond = (shadow_y >= shadow_z);
+    break;
+  default:
+    shadow_cond = low_cond;
+    break;
+  }
+
+  _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_name, function_name,
+                           shadow_cond ? 1.0 : 0.0, 0.0, 0.0, file_name,
+                           loc);
 }
 
 // This function is called for PHI nodes in SSA form
@@ -403,17 +482,26 @@ void _FPC_FP32_PHI_(const char *phi_values, const char *function_name)
         {
           if (strcmp(pipe_pos + 1, _FPC_LAST_BASIC_BLOCK_) == 0)
           {
+            double old_shadow = 0.0;
             double old_error = 0.0;
             double old_relative_error = 0.0;
-            int found = _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, first_substr, function_name, &old_error, &old_relative_error);
+            int found = _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_,
+                                                    first_substr,
+                                                    function_name,
+                                                    &old_shadow,
+                                                    &old_error,
+                                                    &old_relative_error);
             if (found)
             {
-              _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, register_name, function_name, old_error, old_relative_error, "", 0);
+              _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, register_name,
+                                       function_name, old_shadow, old_error,
+                                       old_relative_error, "", 0);
             }
             else
             {
               // We don't have its error - create with zero error
-              _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, register_name, function_name, 0.0, 0.0, "", 0);
+              _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, register_name,
+                                       function_name, 0.0, 0.0, 0.0, "", 0);
               // exit(1);
             }
           }
@@ -475,12 +563,15 @@ void _FPC_FP32_PUSH_ARG_ERROR_(int arg_index, const char *arg_reg, const char *f
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
+  double shadow_value = 0.0;
   double error = 0.0;
   double relative_error = 0.0;
-  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, arg_reg, function_name, &error, &relative_error);
+  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, arg_reg, function_name,
+                              &shadow_value, &error, &relative_error);
 
   if (arg_index >= 0 && arg_index < _FPC_ARG_BUF_MAX_)
   {
+    _FPC_ARG_SHADOW_BUF_[arg_index] = shadow_value;
     _FPC_ARG_ERR_BUF_[arg_index] = error;
     _FPC_ARG_REL_ERR_BUF_[arg_index] = relative_error;
     if (arg_index >= _FPC_ARG_BUF_COUNT_)
@@ -494,17 +585,19 @@ void _FPC_FP32_POP_ARG_ERROR_(int param_index, const char *param_reg, const char
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
+  double shadow_value = 0.0;
   double error = 0.0;
   double relative_error = 0.0;
 
   if (param_index >= 0 && param_index < _FPC_ARG_BUF_COUNT_)
   {
+    shadow_value = _FPC_ARG_SHADOW_BUF_[param_index];
     error = _FPC_ARG_ERR_BUF_[param_index];
     relative_error = _FPC_ARG_REL_ERR_BUF_[param_index];
   }
 
   _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, param_reg, function_name,
-                           error, relative_error, "", 0);
+                           shadow_value, error, relative_error, "", 0);
 }
 
 // Save error of the value being returned by a function.
@@ -512,12 +605,15 @@ void _FPC_FP32_PUSH_RET_ERROR_(const char *ret_reg, const char *function_name)
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
+  double shadow_value = 0.0;
   double error = 0.0;
   double relative_error = 0.0;
-  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, ret_reg, function_name, &error, &relative_error);
+  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, ret_reg, function_name,
+                              &shadow_value, &error, &relative_error);
 
   if (_FPC_RET_STACK_TOP_ < _FPC_RET_STACK_MAX_)
   {
+    _FPC_RET_SHADOW_STACK_[_FPC_RET_STACK_TOP_] = shadow_value;
     _FPC_RET_ERR_STACK_[_FPC_RET_STACK_TOP_] = error;
     _FPC_RET_REL_ERR_STACK_[_FPC_RET_STACK_TOP_] = relative_error;
     strncpy(_FPC_RET_FUNC_STACK_[_FPC_RET_STACK_TOP_], function_name, _FPC_BB_NAME_SIZE_ - 1);
@@ -532,6 +628,7 @@ void _FPC_FP32_POP_RET_ERROR_(const char *result_reg, const char *function_name,
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
+  double shadow_value = 0.0;
   double error = 0.0;
   double relative_error = 0.0;
 
@@ -547,13 +644,14 @@ void _FPC_FP32_POP_RET_ERROR_(const char *result_reg, const char *function_name,
     if (names_match)
     {
       _FPC_RET_STACK_TOP_--;
+      shadow_value = _FPC_RET_SHADOW_STACK_[_FPC_RET_STACK_TOP_];
       error = _FPC_RET_ERR_STACK_[_FPC_RET_STACK_TOP_];
       relative_error = _FPC_RET_REL_ERR_STACK_[_FPC_RET_STACK_TOP_];
     }
   }
 
   _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_reg, function_name,
-                           error, relative_error, file_name, loc);
+                           shadow_value, error, relative_error, file_name, loc);
   FPC_APPEND_ERROR_LOG_ENTRY(loc, relative_error);
 }
 
@@ -579,59 +677,77 @@ void _FPC_FP32_CALCULATE_ERROR_(
   printf("Line: %d, File Name: %s\n", loc, file_name);
 #endif
 
-  double err_y = 0.0;
-  double err_z = 0.0;
-  double err_w = 0.0;
-  double _tmp_unused_ = 0.0;
+  double shadow_y = (double)y;
+  double shadow_z = (double)z;
+  double shadow_w = (double)w;
+  double _tmp_error_ = 0.0;
+  double _tmp_relative_error_ = 0.0;
 
   #ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
-  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name, &err_y, &_tmp_unused_);
-  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, op2_name, function_name, &err_z, &_tmp_unused_);
-  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, fma_name, function_name, &err_w, &_tmp_unused_);
+  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name,
+                              &shadow_y, &_tmp_error_,
+                              &_tmp_relative_error_);
+  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op2_name, function_name,
+                              &shadow_z, &_tmp_error_,
+                              &_tmp_relative_error_);
+  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, fma_name, function_name,
+                              &shadow_w, &_tmp_error_,
+                              &_tmp_relative_error_);
   #endif
-
-  double y_high = (double)y + err_y;
-  double z_high = (double)z + err_z;
-  double w_high = (double)w + err_w;
 
   double r_high = 0.0;
   switch (op)
   {
   case 0:
-    r_high = y_high + z_high;
+    r_high = shadow_y + shadow_z;
     break;
   case 1:
-    r_high = y_high - z_high;
+    r_high = shadow_y - shadow_z;
     break;
   case 2:
-    r_high = y_high * z_high;
+    r_high = shadow_y * shadow_z;
     break;
   case 3:
-    if (z_high != 0.0)
+    if (shadow_z != 0.0)
     {
-      r_high = y_high / z_high;
+      r_high = shadow_y / shadow_z;
     }
     else
     {
-      printf("#FPCHECKER_ERROR: Division by zero\n");
+      if ((double)z == 0.0)
+      {
+        printf("#FPCHECKER_ERROR: Division by zero at %s:%d (low-precision denominator is zero)\n",
+               file_name, loc);
+      }
+      else
+      {
+        printf("#FPCHECKER_ERROR: Shadow denominator canceled to zero at %s:%d (low-precision denominator=%.17e, shadow denominator=%.17e)\n",
+               file_name, loc, (double)z, shadow_z);
+      }
       r_high = 0.0;
     }
     break;
   case 5:
-    r_high = fmod(y_high, z_high);
+    r_high = fmod(shadow_y, shadow_z);
     break;
   case 6:
-    r_high = fma(y_high, z_high, w_high);
+    r_high = fma(shadow_y, shadow_z, shadow_w);
     break;
   case 7:
-    r_high = -y_high; // Negation operation
+    r_high = -shadow_y; // Negation operation
     break;
   case 8: // Select instruction
+  {
+    double shadow_cond = (double)cond;
+    _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name,
+                                &shadow_cond, &_tmp_error_,
+                                &_tmp_relative_error_);
     if (cond == 1)
-      r_high = z_high;
+      r_high = (shadow_cond != 0.0) ? shadow_z : shadow_w;
     else
-      r_high = w_high;
+      r_high = (shadow_cond != 0.0) ? shadow_z : shadow_w;
     break;
+  }
   default:
     printf("#FPCHECKER_ERROR: Unknown operation %d\n", op);
   }
@@ -673,7 +789,8 @@ void _FPC_FP32_CALCULATE_ERROR_(
 #endif
 
   // Update register error table
-  _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_name, function_name, err_result, rel_error, file_name, loc);
+  _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_name, function_name,
+                           r_high, err_result, rel_error, file_name, loc);
 
   // Log location info if line is in _FPC_LINES_TO_KEEP_
   FPC_APPEND_ERROR_LOG_ENTRY(loc, rel_error);
@@ -712,61 +829,64 @@ void _FPC_FP32_MATH_ERROR_(
   printf("Line: %d, File Name: %s\n", loc, file_name);
 #endif
 
-  double err_y = 0.0;
-  double err_z = 0.0;
-  double err_w = 0.0;
-  double _tmp_unused_ = 0.0;
+  double shadow_y = (double)y;
+  double shadow_z = (double)z;
+  double shadow_w = (double)w;
+  double _tmp_error_ = 0.0;
+  double _tmp_relative_error_ = 0.0;
 
 #ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
-  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name, &err_y, &_tmp_unused_);
-  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, op2_name, function_name, &err_z, &_tmp_unused_);
-  _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HT_, op3_name, function_name, &err_w, &_tmp_unused_);
+  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name,
+                              &shadow_y, &_tmp_error_,
+                              &_tmp_relative_error_);
+  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op2_name, function_name,
+                              &shadow_z, &_tmp_error_,
+                              &_tmp_relative_error_);
+  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op3_name, function_name,
+                              &shadow_w, &_tmp_error_,
+                              &_tmp_relative_error_);
 #endif
-
-  double y_high = (double)y + err_y;
-  double z_high = (double)z + err_z;
-  double w_high = (double)w + err_w;
 
   double r_high = 0.0;
 
   // Unary functions
-  if      (strcmp(math_func_name, "sin") == 0)       r_high = sin(y_high);
-  else if (strcmp(math_func_name, "cos") == 0)       r_high = cos(y_high);
-  else if (strcmp(math_func_name, "tan") == 0)       r_high = tan(y_high);
-  else if (strcmp(math_func_name, "asin") == 0)      r_high = asin(y_high);
-  else if (strcmp(math_func_name, "acos") == 0)      r_high = acos(y_high);
-  else if (strcmp(math_func_name, "atan") == 0)      r_high = atan(y_high);
-  else if (strcmp(math_func_name, "sinh") == 0)      r_high = sinh(y_high);
-  else if (strcmp(math_func_name, "cosh") == 0)      r_high = cosh(y_high);
-  else if (strcmp(math_func_name, "tanh") == 0)      r_high = tanh(y_high);
-  else if (strcmp(math_func_name, "asinh") == 0)     r_high = asinh(y_high);
-  else if (strcmp(math_func_name, "acosh") == 0)     r_high = acosh(y_high);
-  else if (strcmp(math_func_name, "atanh") == 0)     r_high = atanh(y_high);
-  else if (strcmp(math_func_name, "exp") == 0)       r_high = exp(y_high);
-  else if (strcmp(math_func_name, "exp2") == 0)      r_high = exp2(y_high);
-  else if (strcmp(math_func_name, "expm1") == 0)     r_high = expm1(y_high);
-  else if (strcmp(math_func_name, "log") == 0)       r_high = log(y_high);
-  else if (strcmp(math_func_name, "log2") == 0)      r_high = log2(y_high);
-  else if (strcmp(math_func_name, "log10") == 0)     r_high = log10(y_high);
-  else if (strcmp(math_func_name, "log1p") == 0)     r_high = log1p(y_high);
-  else if (strcmp(math_func_name, "logb") == 0)      r_high = logb(y_high);
-  else if (strcmp(math_func_name, "sqrt") == 0)      r_high = sqrt(y_high);
-  else if (strcmp(math_func_name, "cbrt") == 0)      r_high = cbrt(y_high);
-  else if (strcmp(math_func_name, "fabs") == 0)      r_high = fabs(y_high);
-  else if (strcmp(math_func_name, "ceil") == 0)      r_high = ceil(y_high);
-  else if (strcmp(math_func_name, "floor") == 0)     r_high = floor(y_high);
-  else if (strcmp(math_func_name, "trunc") == 0)     r_high = trunc(y_high);
-  else if (strcmp(math_func_name, "round") == 0)     r_high = round(y_high);
-  else if (strcmp(math_func_name, "nearbyint") == 0) r_high = nearbyint(y_high);
-  else if (strcmp(math_func_name, "rint") == 0)      r_high = rint(y_high);
+  if      (strcmp(math_func_name, "sin") == 0)       r_high = sin(shadow_y);
+  else if (strcmp(math_func_name, "cos") == 0)       r_high = cos(shadow_y);
+  else if (strcmp(math_func_name, "tan") == 0)       r_high = tan(shadow_y);
+  else if (strcmp(math_func_name, "asin") == 0)      r_high = asin(shadow_y);
+  else if (strcmp(math_func_name, "acos") == 0)      r_high = acos(shadow_y);
+  else if (strcmp(math_func_name, "atan") == 0)      r_high = atan(shadow_y);
+  else if (strcmp(math_func_name, "sinh") == 0)      r_high = sinh(shadow_y);
+  else if (strcmp(math_func_name, "cosh") == 0)      r_high = cosh(shadow_y);
+  else if (strcmp(math_func_name, "tanh") == 0)      r_high = tanh(shadow_y);
+  else if (strcmp(math_func_name, "asinh") == 0)     r_high = asinh(shadow_y);
+  else if (strcmp(math_func_name, "acosh") == 0)     r_high = acosh(shadow_y);
+  else if (strcmp(math_func_name, "atanh") == 0)     r_high = atanh(shadow_y);
+  else if (strcmp(math_func_name, "exp") == 0)       r_high = exp(shadow_y);
+  else if (strcmp(math_func_name, "exp2") == 0)      r_high = exp2(shadow_y);
+  else if (strcmp(math_func_name, "expm1") == 0)     r_high = expm1(shadow_y);
+  else if (strcmp(math_func_name, "log") == 0)       r_high = log(shadow_y);
+  else if (strcmp(math_func_name, "log2") == 0)      r_high = log2(shadow_y);
+  else if (strcmp(math_func_name, "log10") == 0)     r_high = log10(shadow_y);
+  else if (strcmp(math_func_name, "log1p") == 0)     r_high = log1p(shadow_y);
+  else if (strcmp(math_func_name, "logb") == 0)      r_high = logb(shadow_y);
+  else if (strcmp(math_func_name, "sqrt") == 0)      r_high = sqrt(shadow_y);
+  else if (strcmp(math_func_name, "cbrt") == 0)      r_high = cbrt(shadow_y);
+  else if (strcmp(math_func_name, "fabs") == 0)      r_high = fabs(shadow_y);
+  else if (strcmp(math_func_name, "ceil") == 0)      r_high = ceil(shadow_y);
+  else if (strcmp(math_func_name, "floor") == 0)     r_high = floor(shadow_y);
+  else if (strcmp(math_func_name, "trunc") == 0)     r_high = trunc(shadow_y);
+  else if (strcmp(math_func_name, "round") == 0)     r_high = round(shadow_y);
+  else if (strcmp(math_func_name, "nearbyint") == 0) r_high = nearbyint(shadow_y);
+  else if (strcmp(math_func_name, "rint") == 0)      r_high = rint(shadow_y);
   // Binary functions
-  else if (strcmp(math_func_name, "pow") == 0)       r_high = pow(y_high, z_high);
-  else if (strcmp(math_func_name, "atan2") == 0)     r_high = atan2(y_high, z_high);
-  else if (strcmp(math_func_name, "hypot") == 0)     r_high = hypot(y_high, z_high);
-  else if (strcmp(math_func_name, "fmod") == 0)      r_high = fmod(y_high, z_high);
-  else if (strcmp(math_func_name, "remainder") == 0) r_high = remainder(y_high, z_high);
+  else if (strcmp(math_func_name, "pow") == 0)       r_high = pow(shadow_y, shadow_z);
+  else if (strcmp(math_func_name, "atan2") == 0)     r_high = atan2(shadow_y, shadow_z);
+  else if (strcmp(math_func_name, "hypot") == 0)     r_high = hypot(shadow_y, shadow_z);
+  else if (strcmp(math_func_name, "fmod") == 0)      r_high = fmod(shadow_y, shadow_z);
+  else if (strcmp(math_func_name, "remainder") == 0) r_high = remainder(shadow_y, shadow_z);
   // Ternary functions
-  else if (strcmp(math_func_name, "fma") == 0)       r_high = fma(y_high, z_high, w_high);
+  else if (strcmp(math_func_name, "fma") == 0)       r_high = fma(shadow_y, shadow_z, shadow_w);
   else
   {
     printf("#FPCHECKER_WARNING: Unknown math function '%s'\n", math_func_name);
@@ -803,7 +923,8 @@ void _FPC_FP32_MATH_ERROR_(
   printf("\t >>> Math Relative Error: %.7e <<< \n", rel_error);
 #endif
 
-  _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_name, function_name, err_result, rel_error, file_name, loc);
+  _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_name, function_name,
+                           r_high, err_result, rel_error, file_name, loc);
   FPC_APPEND_ERROR_LOG_ENTRY(loc, rel_error);
 }
 

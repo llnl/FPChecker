@@ -103,6 +103,7 @@ uintptr_t _FPC_CLOCK_ = 0;
 typedef struct _FPC_ADDRESS_S_
 {
   uintptr_t address_value;
+  double shadow_value;
   double error;
   double relative_error;
   uint64_t clock; // clock incremented when item is updated/created
@@ -114,6 +115,7 @@ typedef struct _FPC_ADDRESS_S_
 typedef struct _FPC_REGISTER_S_
 {
   char *register_name;
+  double shadow_value;
   double error;
   double relative_error;
   uint64_t clock; // clock incremented when item is updated/created
@@ -232,6 +234,7 @@ _FPC_ADDRESS_T_ *_FPC_ADDRESS_HT_NEWPAIR_(_FPC_ADDRESS_T_ *val)
   }
 
   newpair->address_value = val->address_value;
+  newpair->shadow_value = val->shadow_value;
   newpair->error = val->error;
   newpair->relative_error = val->relative_error;
   newpair->clock = val->clock;
@@ -257,6 +260,7 @@ _FPC_REGISTER_T_ *_FPC_REGISTER_HT_NEWPAIR_(_FPC_REGISTER_T_ *val)
   newpair->register_name = (char *)malloc((strlen(val->register_name) + 1) * sizeof(char));
   newpair->register_name[0] = '\0';
   strcpy(newpair->register_name, val->register_name);
+  newpair->shadow_value = val->shadow_value;
   newpair->error = val->error;
   newpair->relative_error = val->relative_error;
   newpair->clock = val->clock;
@@ -314,6 +318,7 @@ void _FPC_ADDRESS_HT_SET_(_FPC_ADDRESS_HTABLE_T *hashtable, _FPC_ADDRESS_T_ *new
   /* There's already a pair */
   if (next != NULL && _FPC_ADDRESS_EQUAL_(newVal, next))
   {
+    next->shadow_value = newVal->shadow_value;
     next->error = newVal->error;
     next->relative_error = newVal->relative_error;
     next->clock = newVal->clock;
@@ -370,6 +375,7 @@ void _FPC_REGISTER_HT_SET_(_FPC_REGISTER_HTABLE_T *hashtable, _FPC_REGISTER_T_ *
   /* There's already a pair */
   if (next != NULL && _FPC_REGISTER_EQUAL_(newVal, next))
   {
+    next->shadow_value = newVal->shadow_value;
     next->error = newVal->error;
     next->relative_error = newVal->relative_error;
     next->clock = newVal->clock;
@@ -414,6 +420,7 @@ void _FPC_REGISTER_HT_SET_(_FPC_REGISTER_HTABLE_T *hashtable, _FPC_REGISTER_T_ *
 void _FPC_ADDRESS_HT_UPDATE_(
     _FPC_ADDRESS_HTABLE_T *hashtable,
     uintptr_t address_value,
+  double shadow_value,
     double error,
     double relative_error,
     const char *file_name,
@@ -422,6 +429,7 @@ void _FPC_ADDRESS_HT_UPDATE_(
   file_name = _FPC_SAFE_STR_(file_name);
   _FPC_ADDRESS_T_ temp;
   temp.address_value = address_value;
+  temp.shadow_value = shadow_value;
   temp.error = error;
   temp.relative_error = relative_error;
   temp.clock = ++_FPC_CLOCK_;
@@ -438,6 +446,7 @@ void _FPC_REGISTER_HT_UPDATE_(
     _FPC_REGISTER_HTABLE_T *hashtable,
     const char *register_name,
     const char *function_name,
+  double shadow_value,
     double error,
     double relative_error,
     const char *file_name,
@@ -447,6 +456,7 @@ void _FPC_REGISTER_HT_UPDATE_(
   function_name = _FPC_SAFE_STR_(function_name);
   _FPC_REGISTER_T_ temp;
   temp.register_name = (char *)register_name;
+  temp.shadow_value = shadow_value;
   temp.error = error;
   temp.relative_error = relative_error;
   temp.clock = ++_FPC_CLOCK_;
@@ -469,10 +479,11 @@ void _FPC_REGISTER_HT_UPDATE_(
 /*----------------------------------------------------------------------------*/
 
 // Return 1 if found, 0 otherwise
-int _FPC_FIND_ERRORS_BY_ADDRESS(_FPC_ADDRESS_HTABLE_T *hashtable,
-                                uintptr_t address_value,
-                                double *error,
-                                double *relative_error)
+static inline int _FPC_FIND_VALUE_BY_ADDRESS(_FPC_ADDRESS_HTABLE_T *hashtable,
+                                             uintptr_t address_value,
+                                             double *shadow_value,
+                                             double *error,
+                                             double *relative_error)
 {
   if (hashtable == NULL || hashtable->table == NULL || hashtable->size == 0)
   {
@@ -497,6 +508,7 @@ int _FPC_FIND_ERRORS_BY_ADDRESS(_FPC_ADDRESS_HTABLE_T *hashtable,
 
   if (next != NULL && _FPC_ADDRESS_EQUAL_(&temp, next))
   {
+    *shadow_value = next->shadow_value;
     *error = next->error;
     *relative_error = next->relative_error;
     return 1;
@@ -511,11 +523,12 @@ int _FPC_FIND_ERRORS_BY_ADDRESS(_FPC_ADDRESS_HTABLE_T *hashtable,
 }
 
 // Return 1 if found, 0 otherwise
-int _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
-                                 const char *register_name,
-                                 const char *function_name,
-                                 double *error,
-                                 double *relative_error)
+static inline int _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
+                                              const char *register_name,
+                                              const char *function_name,
+                                              double *shadow_value,
+                                              double *error,
+                                              double *relative_error)
 {
   if (hashtable == NULL || hashtable->table == NULL || hashtable->size == 0)
   {
@@ -541,6 +554,7 @@ int _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
 
   if (next != NULL && _FPC_REGISTER_EQUAL_(&temp, next))
   {
+    *shadow_value = next->shadow_value;
     *error = next->error;
     *relative_error = next->relative_error;
     return 1;
@@ -552,6 +566,27 @@ int _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
     return 0;
   }
   return 0;
+}
+
+int _FPC_FIND_ERRORS_BY_ADDRESS(_FPC_ADDRESS_HTABLE_T *hashtable,
+                                uintptr_t address_value,
+                                double *error,
+                                double *relative_error)
+{
+  double shadow_value = 0.0;
+  return _FPC_FIND_VALUE_BY_ADDRESS(hashtable, address_value, &shadow_value,
+                                    error, relative_error);
+}
+
+int _FPC_FIND_ERRORS_BY_REGISTER(_FPC_REGISTER_HTABLE_T *hashtable,
+                                 const char *register_name,
+                                 const char *function_name,
+                                 double *error,
+                                 double *relative_error)
+{
+  double shadow_value = 0.0;
+  return _FPC_FIND_VALUE_BY_REGISTER(hashtable, register_name, function_name,
+                                     &shadow_value, error, relative_error);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -574,21 +609,26 @@ void _FPC_ADDRESS_RANGE_UPDATE_(
   }
 
   // Create temp buffers to copy and hold the errors
+  double *shadow_buffer = (double *)malloc(size * sizeof(double));
   double *error_buffer = (double *)malloc(size * sizeof(double));
   double *relative_error_buffer = (double *)malloc(size * sizeof(double));
 
   for (size_t offset = 0; offset < size; offset++)
   {
     uintptr_t current_address = address_src + offset;
+    double tmp_shadow_value = 0.0;
     double tmp_error = 0.0;
     double tmp_relative_error = 0.0;
 
-    int found = _FPC_FIND_ERRORS_BY_ADDRESS(hashtable, current_address, &tmp_error, &tmp_relative_error);
+    int found = _FPC_FIND_VALUE_BY_ADDRESS(hashtable, current_address,
+                                           &tmp_shadow_value, &tmp_error,
+                                           &tmp_relative_error);
     if (!found)
     {
       //printf("#FPCHECKER: Trying to update address %lu in memcpy/memmove, but we don't have its error!!\n",
       //       current_address);
     }
+    shadow_buffer[offset] = tmp_shadow_value;
     error_buffer[offset] = tmp_error;
     relative_error_buffer[offset] = tmp_relative_error;
   }
@@ -597,7 +637,9 @@ void _FPC_ADDRESS_RANGE_UPDATE_(
   for (size_t offset = 0; offset < size; offset++)
   {
     uintptr_t dst_address = address_dst + offset;
-    _FPC_ADDRESS_HT_UPDATE_(hashtable, dst_address, error_buffer[offset], relative_error_buffer[offset], file_name, line);
+    _FPC_ADDRESS_HT_UPDATE_(hashtable, dst_address, shadow_buffer[offset],
+                            error_buffer[offset],
+                            relative_error_buffer[offset], file_name, line);
   }
 
   /*   for (size_t offset = 0; offset < size; offset++)
@@ -621,6 +663,7 @@ void _FPC_ADDRESS_RANGE_UPDATE_(
       _FPC_ADDRESS_HT_UPDATE_(hashtable, dst_address, error, relative_error, file_name, line);
     } */
 
+  free(shadow_buffer);
   free(error_buffer);
   free(relative_error_buffer);
 }

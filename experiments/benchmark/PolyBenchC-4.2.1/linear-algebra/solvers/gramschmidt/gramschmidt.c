@@ -41,21 +41,24 @@ void init_array(int m, int n,
 }
 
 static
-void init_array_double(int m, int n,
-		double POLYBENCH_2D(A,M,N,m,n),
-		double POLYBENCH_2D(R,N,N,n,n),
-		double POLYBENCH_2D(Q,M,N,m,n))
+void copy_array_to_double(int m, int n,
+		DATA_TYPE POLYBENCH_2D(A,M,N,m,n),
+		DATA_TYPE POLYBENCH_2D(R,N,N,n,n),
+		DATA_TYPE POLYBENCH_2D(Q,M,N,m,n),
+		double POLYBENCH_2D(A_double,M,N,m,n),
+		double POLYBENCH_2D(R_double,N,N,n,n),
+		double POLYBENCH_2D(Q_double,M,N,m,n))
 {
   int i, j;
 
   for (i = 0; i < m; i++)
     for (j = 0; j < n; j++) {
-      A[i][j] = (((double) ((i*j) % m) / m )*100) + 10;
-      Q[i][j] = 0.0;
+      A_double[i][j] = (double)A[i][j];
+      Q_double[i][j] = (double)Q[i][j];
     }
   for (i = 0; i < n; i++)
     for (j = 0; j < n; j++)
-      R[i][j] = 0.0;
+      R_double[i][j] = (double)R[i][j];
 }
 
 
@@ -81,9 +84,13 @@ void print_array(int m, int n,
   double max_value_R_double = 0;
   double sum_R_double = 0;
   double norm_R_double = 0;
+  double sum_R_same_output = 0;
+  double norm_R_same_output = 0;
   double max_value_Q_double = 0;
   double sum_Q_double = 0;
   double norm_Q_double = 0;
+  double sum_Q_same_output = 0;
+  double norm_Q_same_output = 0;
 
   POLYBENCH_DUMP_START;
   POLYBENCH_DUMP_BEGIN("R");
@@ -123,6 +130,16 @@ void print_array(int m, int n,
     norm_R_double = sqrt(sum_R_double);
   }
 
+  if (max_value_R != 0) {
+    for (i = 0; i < n; i++) {
+      for (j = 0; j < n; j++) {
+        double scaled = (double)R[i][j] / (double)max_value_R;
+        sum_R_same_output += scaled * scaled;
+      }
+    }
+    norm_R_same_output = sqrt(sum_R_same_output);
+  }
+
   fprintf (POLYBENCH_DUMP_TARGET, "Max value in R: %.7e\n", max_value_R);
   fprintf (POLYBENCH_DUMP_TARGET, "Norm of R: %.7e\n", norm_R);
   fprintf (POLYBENCH_DUMP_TARGET, "Max value in R_double: %.17e\n", max_value_R_double);
@@ -130,6 +147,8 @@ void print_array(int m, int n,
 
   double norm_error_R = norm_R_double - (double)norm_R;
   fprintf (POLYBENCH_DUMP_TARGET, "Norm error R: %.17e\n", norm_error_R);
+  fprintf (POLYBENCH_DUMP_TARGET, "Norm error R (same FP32 outputs): %.17e\n",
+           norm_R_same_output - (double)norm_R);
 
   POLYBENCH_DUMP_END("R");
 
@@ -170,6 +189,16 @@ void print_array(int m, int n,
     norm_Q_double = sqrt(sum_Q_double);
   }
 
+  if (max_value_Q != 0) {
+    for (i = 0; i < m; i++) {
+      for (j = 0; j < n; j++) {
+        double scaled = (double)Q[i][j] / (double)max_value_Q;
+        sum_Q_same_output += scaled * scaled;
+      }
+    }
+    norm_Q_same_output = sqrt(sum_Q_same_output);
+  }
+
   fprintf (POLYBENCH_DUMP_TARGET, "Max value in Q: %.7e\n", max_value_Q);
   fprintf (POLYBENCH_DUMP_TARGET, "Norm of Q: %.7e\n", norm_Q);
   fprintf (POLYBENCH_DUMP_TARGET, "Max value in Q_double: %.17e\n", max_value_Q_double);
@@ -177,6 +206,8 @@ void print_array(int m, int n,
 
   double norm_error_Q = norm_Q_double - (double)norm_Q;
   fprintf (POLYBENCH_DUMP_TARGET, "Norm error Q: %.17e\n", norm_error_Q);
+  fprintf (POLYBENCH_DUMP_TARGET, "Norm error Q (same FP32 outputs): %.17e\n",
+           norm_Q_same_output - (double)norm_Q);
 
   POLYBENCH_DUMP_END("Q");
   POLYBENCH_DUMP_FINISH;
@@ -272,10 +303,13 @@ int main(int argc, char** argv)
 	      POLYBENCH_ARRAY(A),
 	      POLYBENCH_ARRAY(R),
 	      POLYBENCH_ARRAY(Q));
-  init_array_double (m, n,
-	      POLYBENCH_ARRAY(A_double),
-	      POLYBENCH_ARRAY(R_double),
-	      POLYBENCH_ARRAY(Q_double));
+  copy_array_to_double (m, n,
+        POLYBENCH_ARRAY(A),
+        POLYBENCH_ARRAY(R),
+        POLYBENCH_ARRAY(Q),
+        POLYBENCH_ARRAY(A_double),
+        POLYBENCH_ARRAY(R_double),
+        POLYBENCH_ARRAY(Q_double));
 
   /* Start timer. */
   polybench_start_instruments;

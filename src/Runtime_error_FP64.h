@@ -616,7 +616,16 @@ void _FPC_FP64_CALCULATE_ERROR_(
     }
     else
     {
-      printf("#FPCHECKER_ERROR: Division by zero\n");
+      if ((long double)z == 0.0L)
+      {
+        printf("#FPCHECKER_ERROR: Division by zero at %s:%d (low-precision denominator is zero)\n",
+               file_name, loc);
+      }
+      else
+      {
+        printf("#FPCHECKER_ERROR: Shadow denominator canceled to zero at %s:%d (low-precision denominator=%.21Le, propagated_error=%.21Le)\n",
+               file_name, loc, (long double)z, err_z);
+      }
       r_high = 0.0;
     }
     break;
