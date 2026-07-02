@@ -132,6 +132,29 @@ static inline double _FPC_READ_FP32_VALUE_FROM_ADDRESS_(uintptr_t address)
   return (double)value;
 }
 
+static inline int _FPC_TRY_PARSE_FP_LITERAL_(const char *text, double *value)
+{
+  if (text == NULL || text[0] == '\0')
+    return 0;
+
+  char *endptr = NULL;
+  double parsed = strtod(text, &endptr);
+  if (endptr == text)
+    return 0;
+
+  while (*endptr == ' ' || *endptr == '\t' || *endptr == '\n' ||
+         *endptr == '\r' || *endptr == '\f' || *endptr == '\v')
+  {
+    ++endptr;
+  }
+
+  if (*endptr != '\0')
+    return 0;
+
+  *value = parsed;
+  return 1;
+}
+
 /*----------------------------------------------------------------------------*/
 /* Initialize                                                                 */
 /*----------------------------------------------------------------------------*/
@@ -549,9 +572,19 @@ void _FPC_FP32_PHI_(const char *phi_values, const char *function_name)
             }
             else
             {
-              // We don't have its error - create with zero error
-              _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, register_name,
-                                       function_name, 0.0, 0.0, 0.0, "", 0);
+              double literal_shadow = 0.0;
+              if (_FPC_TRY_PARSE_FP_LITERAL_(first_substr, &literal_shadow))
+              {
+                _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, register_name,
+                                         function_name, literal_shadow, 0.0,
+                                         0.0, "", 0);
+              }
+              else
+              {
+                // We don't have its error - create with zero error
+                _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, register_name,
+                                         function_name, 0.0, 0.0, 0.0, "", 0);
+              }
               // exit(1);
             }
           }
