@@ -89,7 +89,7 @@ char _FPC_LAST_BASIC_BLOCK_[_FPC_BB_NAME_SIZE_]; // Last basic block ID
 
 // Call/return floating-point error propagation stack
 #define _FPC_RET_STACK_MAX_ 8192
-static double _FPC_RET_SHADOW_STACK_[_FPC_RET_STACK_MAX_];
+double _FPC_RET_SHADOW_STACK_[_FPC_RET_STACK_MAX_];
 double _FPC_RET_ERR_STACK_[_FPC_RET_STACK_MAX_];
 double _FPC_RET_REL_ERR_STACK_[_FPC_RET_STACK_MAX_];
 char _FPC_RET_FUNC_STACK_[_FPC_RET_STACK_MAX_][_FPC_BB_NAME_SIZE_];
@@ -97,7 +97,7 @@ int _FPC_RET_STACK_TOP_;
 
 // Caller-to-callee argument error propagation buffer
 #define _FPC_ARG_BUF_MAX_ 256
-static double _FPC_ARG_SHADOW_BUF_[_FPC_ARG_BUF_MAX_];
+double _FPC_ARG_SHADOW_BUF_[_FPC_ARG_BUF_MAX_];
 double _FPC_ARG_ERR_BUF_[_FPC_ARG_BUF_MAX_];
 double _FPC_ARG_REL_ERR_BUF_[_FPC_ARG_BUF_MAX_];
 int _FPC_ARG_BUF_COUNT_;

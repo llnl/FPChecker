@@ -50,7 +50,7 @@ namespace CPUAnalysis
     static bool isSingleFPOperation(const Instruction *inst);
     static bool isCmpEqual(const Instruction *inst);
     static bool isFMAOperation(const Instruction *inst);
-    static bool isSupportedMathCall(const CallInst *CI, std::string &normalizedName);
+    static bool isSupportedMathCall(const CallBase *CI, std::string &normalizedName);
     static bool functionisAnnotated(const Function *f, const char *annotation);
     static bool functionCallsFunctionWithFloatingPointValues(const Function *f);
   };

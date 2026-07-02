@@ -254,6 +254,11 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   assert(ret_error_stack && "Invalid table!");
   ret_error_stack->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
+  GlobalVariable *ret_shadow_stack = nullptr;
+  ret_shadow_stack = mod->getGlobalVariable("_FPC_RET_SHADOW_STACK_", true);
+  assert(ret_shadow_stack && "Invalid table!");
+  ret_shadow_stack->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
   GlobalVariable *ret_rel_error_stack = nullptr;
   ret_rel_error_stack = mod->getGlobalVariable("_FPC_RET_REL_ERR_STACK_", true);
   assert(ret_rel_error_stack && "Invalid table!");
@@ -273,6 +278,11 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   arg_err_buf = mod->getGlobalVariable("_FPC_ARG_ERR_BUF_", true);
   assert(arg_err_buf && "Invalid table!");
   arg_err_buf->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *arg_shadow_buf = nullptr;
+  arg_shadow_buf = mod->getGlobalVariable("_FPC_ARG_SHADOW_BUF_", true);
+  assert(arg_shadow_buf && "Invalid table!");
+  arg_shadow_buf->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
   GlobalVariable *arg_rel_err_buf = nullptr;
   arg_rel_err_buf = mod->getGlobalVariable("_FPC_ARG_REL_ERR_BUF_", true);
@@ -784,7 +794,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
       }
 
       // ============= Push argument errors to callee ============================
-      if (auto *callInst = llvm::dyn_cast<llvm::CallInst>(inst))
+      if (auto *callInst = llvm::dyn_cast<llvm::CallBase>(inst))
       {
         Function *calledFunc = callInst->getCalledFunction();
         bool isIntrinsic = calledFunc && calledFunc->isIntrinsic();
@@ -832,7 +842,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
       }
 
       // ============= Propagate callee return error to call result =============
-      if (auto *callInst = llvm::dyn_cast<llvm::CallInst>(inst))
+      if (auto *callInst = llvm::dyn_cast<llvm::CallBase>(inst))
       {
         if (callInst->getType()->isFloatTy() || callInst->getType()->isDoubleTy())
         {
@@ -860,9 +870,18 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
             }
             else
             {
-            BasicBlock::iterator nextInst(inst);
-            ++nextInst;
-            IRBuilder<> builder(&(*nextInst));
+            IRBuilder<> builder(inst->getContext());
+            if (auto *invokeInst = llvm::dyn_cast<llvm::InvokeInst>(callInst))
+            {
+              BasicBlock *normalDest = invokeInst->getNormalDest();
+              builder.SetInsertPoint(&*normalDest->getFirstInsertionPt());
+            }
+            else
+            {
+              BasicBlock::iterator nextInst(inst);
+              ++nextInst;
+              builder.SetInsertPoint(&(*nextInst));
+            }
 
             std::string resultName;
             llvm::raw_string_ostream rso(resultName);
@@ -980,7 +999,24 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
         // Create builder to add stuff after the instruction
         BasicBlock::iterator nextInst(inst);
         nextInst++;
-        IRBuilder<> builder(&(*nextInst));
+        if (inst->getOpcode() == Instruction::Select)
+        {
+          while (nextInst != bb->end())
+          {
+            auto *nextCall = llvm::dyn_cast<llvm::CallBase>(&*nextInst);
+            Function *nextCalled = nextCall ? nextCall->getCalledFunction() : nullptr;
+            if (!nextCalled ||
+                nextCalled->getName().str().find("_FPC_") == std::string::npos)
+              break;
+            ++nextInst;
+          }
+        }
+
+        IRBuilder<> builder(inst->getContext());
+        if (nextInst != bb->end())
+          builder.SetInsertPoint(&(*nextInst));
+        else
+          builder.SetInsertPoint(&*bb);
 
         // Push parameters
         std::vector<Value *> args;
@@ -1040,39 +1076,7 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
             ConstantInt::get(mod->getContext(), APInt(32, operationType, true));
         args.push_back(opType);
 
-        // Check if instruction is selected based on a condition
-        Instruction *select_inst = nullptr;
-        Value *condition = nullptr;  // condition value
-        Value *cond_instr = nullptr; // condition instruction
-        int inverse;                 // inverse the semantics of the condition?
-        if (selectedBasedOnCondition(inst, f, &select_inst, &condition,
-                                     &inverse))
-        {
-          // Set insertion point after the select instruction
-          assert(select_inst && "Invalid select instruction");
-          BasicBlock::iterator nextOne(select_inst);
-          nextOne++;
-          builder.SetInsertPoint(&(*nextOne));
-          // Inverse semantics of condition if needed
-          if (inverse)
-          {
-            // Add XOR to negate the condition
-            auto neg_inst = builder.CreateXor(condition, 1, "my");
-            cond_instr =
-                builder.CreateZExt(neg_inst, builder.getInt32Ty(), "my");
-            assert(cond_instr && "Invalid extension instruction");
-            args.push_back(cond_instr);
-          }
-          else
-          {
-            // Add extension of condition (from i1 to i32 integer)
-            cond_instr =
-                builder.CreateZExt(condition, builder.getInt32Ty(), "my");
-            assert(cond_instr && "Invalid extension instruction");
-            args.push_back(cond_instr);
-          }
-        }
-        else if (inst->getOpcode() == Instruction::Select)
+        if (inst->getOpcode() == Instruction::Select)
         {
           // Handle Select instruction
           Value *condVal = inst->getOperand(0);
@@ -1334,7 +1338,7 @@ bool CPUFPInstrumentation_error::isFMAOperation(const Instruction *inst)
 
 /// Returns true if the call instruction is a supported math function,
 /// and fills normalizedName with the canonical name (e.g. "sin", "pow").
-bool CPUFPInstrumentation_error::isSupportedMathCall(const CallInst *CI, std::string &normalizedName)
+bool CPUFPInstrumentation_error::isSupportedMathCall(const CallBase *CI, std::string &normalizedName)
 {
   // Check for LLVM math intrinsics
   if (auto *intrin = dyn_cast<IntrinsicInst>(CI))

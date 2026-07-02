@@ -17,8 +17,6 @@ def teardown_module(module):
     cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
 
 def test_1():
-    pytest.skip("Current shadow-value mode does not yet model FP-dependent control-flow divergence in LU pivoting")
-
     # --- compile code ---
     cmd = ["make"]
     try:
@@ -56,4 +54,3 @@ def test_1():
     assert relative_error_2 < accepted_threshold
     assert relative_error_3 < accepted_threshold
     assert (relative_error_1 != 0) or (relative_error_2 != 0) or (relative_error_3 != 0)
-
