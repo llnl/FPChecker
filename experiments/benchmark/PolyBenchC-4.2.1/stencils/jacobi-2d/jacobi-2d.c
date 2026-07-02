@@ -29,11 +29,12 @@ void init_array (int n,
 {
   int i, j;
 
-  for (i = 0; i < n; i++)
+  for (i = 0; i < n; i++){
     for (j = 0; j < n; j++) {
-      A[i][j] = ((DATA_TYPE) i*(j+2) + 2) / n;
-      B[i][j] = ((DATA_TYPE) i*(j+3) + 3) / n;
+      A[i][j] = ((DATA_TYPE) i*(j+2) + 2.0f) / n;
+      B[i][j] = ((DATA_TYPE) i*(j+3) + 3.0f) / n;
     }
+  }
 }
 
 static
@@ -43,11 +44,12 @@ void init_array_double (int n,
 {
   int i, j;
 
-  for (i = 0; i < n; i++)
+  for (i = 0; i < n; i++){
     for (j = 0; j < n; j++) {
       A[i][j] = ((double) i*(j+2) + 2.0) / n;
       B[i][j] = ((double) i*(j+3) + 3.0) / n;
     }
+  }
 }
 
 static
@@ -65,7 +67,7 @@ void print_array(int n,
 
   POLYBENCH_DUMP_START;
   POLYBENCH_DUMP_BEGIN("A");
-  for (i = 0; i < n; i++)
+  for (i = 0; i < n; i++){
     for (j = 0; j < n; j++) {
       DATA_TYPE value = A[i][j];
       double value_double = A_double[i][j];
@@ -80,7 +82,7 @@ void print_array(int n,
       if (value_double > max_value_double)
         max_value_double = value_double;
     }
-
+  }
   if (max_value != 0) {
     for (i = 0; i < n; i++)
       for (j = 0; j < n; j++) {
@@ -123,11 +125,11 @@ void kernel_jacobi_2d(int tsteps, int n,
 
 #pragma scop
   for (t = 0; t < _PB_TSTEPS; t++) {
-    for (i = 1; i < _PB_N - 1; i++)
-      for (j = 1; j < _PB_N - 1; j++)
+    for (i = 1; i < _PB_N - 1.0f; i++)
+      for (j = 1; j < _PB_N - 1.0f; j++)
         B[i][j] = SCALAR_VAL(0.2) * (A[i][j] + A[i][j-1] + A[i][1+j] + A[1+i][j] + A[i-1][j]);
-    for (i = 1; i < _PB_N - 1; i++)
-      for (j = 1; j < _PB_N - 1; j++)
+    for (i = 1; i < _PB_N - 1.0f; i++)
+      for (j = 1; j < _PB_N - 1.0f; j++)
         A[i][j] = SCALAR_VAL(0.2) * (B[i][j] + B[i][j-1] + B[i][1+j] + B[1+i][j] + B[i-1][j]);
   }
 #pragma endscop
