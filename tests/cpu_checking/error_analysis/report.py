@@ -1,4 +1,5 @@
 import glob
+import ctypes
 import json
 import os
 import sys
@@ -32,6 +33,23 @@ def findRoundingErrorFile(path):
 def findErrorsPerLineFile(path):
   reports = glob.glob(path+'/errors_per_line_*.json')
   return reports[0]
+
+def has_extended_fp64_reference():
+  return ctypes.sizeof(ctypes.c_longdouble) > ctypes.sizeof(ctypes.c_double)
+
+def mpi_runtime_broken(output):
+  if isinstance(output, bytes):
+    text = output.decode(errors='ignore')
+  else:
+    text = str(output)
+
+  markers = (
+    'PMIx_Finalize',
+    'Signal: Segmentation fault',
+    'exited on\nsignal 11',
+    'exited on signal 11',
+  )
+  return any(marker in text for marker in markers)
 
 if __name__ == '__main__':
   fileName = sys.argv[1]

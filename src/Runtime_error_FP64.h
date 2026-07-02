@@ -11,6 +11,36 @@
 #include <float.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <stdarg.h>
+
+#if defined(FPC_DEBUG_ERROR_ANALYSIS) || defined(FPDC_DEBUG_CALLSTACK)
+static inline int _FPC_DEBUG_OUTPUT_ENABLED_(void)
+{
+  static int initialized = 0;
+  static int enabled = 0;
+  if (!initialized)
+  {
+    enabled = (getenv("FPC_ENABLE_DEBUG_OUTPUT") != NULL);
+    initialized = 1;
+  }
+  return enabled;
+}
+
+static inline int _FPC_RUNTIME_DEBUG_PRINTF_(const char *format, ...)
+{
+  if (!_FPC_DEBUG_OUTPUT_ENABLED_())
+    return 0;
+
+  va_list args;
+  va_start(args, format);
+  int written = vfprintf(stderr, format, args);
+  va_end(args);
+  return written;
+}
+
+#define _FPC_DEBUG_STDERR_REDIRECT_
+#define printf(...) _FPC_RUNTIME_DEBUG_PRINTF_(__VA_ARGS__)
+#endif
 
 #define FPC_MAX(a, b) (((a) > (b)) ? (a) : (b))
 
@@ -824,5 +854,10 @@ void _FPC_FP64_MATH_ERROR_(
 /* Annotation Macros                                                          */
 /*----------------------------------------------------------------------------*/
 #include "FPC_Annotations.h"
+
+#ifdef _FPC_DEBUG_STDERR_REDIRECT_
+#undef printf
+#undef _FPC_DEBUG_STDERR_REDIRECT_
+#endif
 
 #endif /* SRC_RUNTIME_ERROR_FP64_H_ */

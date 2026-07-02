@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import pytest
 import subprocess
 import os
 import sys
@@ -29,6 +30,9 @@ def best_abs_error_match(data, file_suffix, target):
     return best_error, best_delta
 
 def test_1():
+    if not report.has_extended_fp64_reference():
+        pytest.skip("Platform long double does not provide extra precision over double")
+
     # --- compile code ---
     cmd = ["make"]
     try:

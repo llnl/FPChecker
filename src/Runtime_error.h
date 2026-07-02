@@ -11,6 +11,36 @@
 #include <float.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <stdarg.h>
+
+#if defined(FPC_DEBUG_ERROR_ANALYSIS) || defined(FPDC_DEBUG_CALLSTACK)
+static inline int _FPC_DEBUG_OUTPUT_ENABLED_(void)
+{
+  static int initialized = 0;
+  static int enabled = 0;
+  if (!initialized)
+  {
+    enabled = (getenv("FPC_ENABLE_DEBUG_OUTPUT") != NULL);
+    initialized = 1;
+  }
+  return enabled;
+}
+
+static inline int _FPC_RUNTIME_DEBUG_PRINTF_(const char *format, ...)
+{
+  if (!_FPC_DEBUG_OUTPUT_ENABLED_())
+    return 0;
+
+  va_list args;
+  va_start(args, format);
+  int written = vfprintf(stderr, format, args);
+  va_end(args);
+  return written;
+}
+
+#define _FPC_DEBUG_STDERR_REDIRECT_
+#define printf(...) _FPC_RUNTIME_DEBUG_PRINTF_(__VA_ARGS__)
+#endif
 
 #define FPC_MAX(a, b) (((a) > (b)) ? (a) : (b))
 
@@ -352,6 +382,26 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, const char *function_name, uintp
                                          &relative_error);
   if (found)
   {
+    double current_value = _FPC_READ_FP32_VALUE_FROM_ADDRESS_(address);
+    double reconciliation_error = (shadow_value - current_value) - error;
+    double reconciliation_scale = fmax(1.0,
+                                       fmax(fabs(shadow_value),
+                                            fmax(fabs(current_value),
+                                                 fabs(error))));
+
+    if (fabs(reconciliation_error) > (32.0 * FLT_EPSILON * reconciliation_scale))
+    {
+      // The address appears to have been reused or mutated outside the
+      // instrumented shadow path. Fall back to the actual memory value.
+      shadow_value = current_value;
+      error = 0.0;
+      relative_error = 0.0;
+    }
+    else if (shadow_value == 0.0 && error == 0.0 && relative_error == 0.0)
+    {
+      shadow_value = current_value;
+    }
+
     // Update register entry with this error
     _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, load_reg, function_name,
                              shadow_value, error, relative_error, file_name,
@@ -559,11 +609,13 @@ void _FPC_FP32_MEMCPY_INST_(uintptr_t address_dst, uintptr_t address_src,
 
 // Push argument error from caller's register table into the argument buffer.
 // Called once per FP argument, in order, before each user function call.
-void _FPC_FP32_PUSH_ARG_ERROR_(int arg_index, const char *arg_reg, const char *function_name)
+void _FPC_FP32_PUSH_ARG_ERROR_(int arg_index, double arg_value,
+                               const char *arg_reg,
+                               const char *function_name)
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
-  double shadow_value = 0.0;
+  double shadow_value = arg_value;
   double error = 0.0;
   double relative_error = 0.0;
   _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, arg_reg, function_name,
@@ -932,5 +984,10 @@ void _FPC_FP32_MATH_ERROR_(
 /* Annotation Macros                                                          */
 /*----------------------------------------------------------------------------*/
 #include "FPC_Annotations.h"
+
+#ifdef _FPC_DEBUG_STDERR_REDIRECT_
+#undef printf
+#undef _FPC_DEBUG_STDERR_REDIRECT_
+#endif
 
 #endif /* SRC_RUNTIME_ERROR_H_ */

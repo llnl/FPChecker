@@ -809,8 +809,13 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
               ConstantInt *argIndexVal =
                   ConstantInt::get(mod->getContext(), APInt(32, fpArgIndex, true));
 
+              Value *argShadowValue = argVal;
+              if (argShadowValue->getType()->isFloatTy())
+                argShadowValue = pushBuilder.CreateFPExt(argShadowValue, pushBuilder.getDoubleTy());
+
               std::vector<Value *> pushArgs;
               pushArgs.push_back(argIndexVal);
+              pushArgs.push_back(argShadowValue);
               pushArgs.push_back(pushBuilder.CreateGlobalStringPtr(argRegName));
               pushArgs.push_back(pushBuilder.CreateGlobalStringPtr(f->getName()));
 

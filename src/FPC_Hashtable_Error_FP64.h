@@ -30,6 +30,7 @@
 #include <assert.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <math.h>
 
 /*----------------------------------------------------------------------------*/
 /* Safe string validation                                                     */
@@ -626,6 +627,22 @@ void _FPC_ADDRESS_RANGE_UPDATE_FP64_(
   free(relative_error_buffer);
 }
 
+static inline void _FPC_JSON_WRITE_LONG_DOUBLE_(FILE *fp, long double value)
+{
+  if (isnan(value))
+  {
+    fputs("0.0", fp);
+  }
+  else if (isinf(value))
+  {
+    fputs(signbit(value) ? "-1e9999" : "1e9999", fp);
+  }
+  else
+  {
+    fprintf(fp, "%.21Le", value);
+  }
+}
+
 /*----------------------------------------------------------------------------*/
 /* Print hash table                                                           */
 /*----------------------------------------------------------------------------*/
@@ -851,8 +868,12 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_FP64_(_FPC_ADDRESS_HTABLE_FP64_T *address_hash
       fprintf(fp, "  {\n");
       fprintf(fp, "    \"file\": \"%s\",\n", ERRORS_LOG[i].file);
       fprintf(fp, "    \"line\": %d,\n", ERRORS_LOG[i].line);
-      fprintf(fp, "    \"error\": %.21Le,\n", ERRORS_LOG[i].error);
-      fprintf(fp, "    \"relative_error\": %.21Le\n", ERRORS_LOG[i].relative_error);
+      fprintf(fp, "    \"error\": ");
+      _FPC_JSON_WRITE_LONG_DOUBLE_(fp, ERRORS_LOG[i].error);
+      fprintf(fp, ",\n");
+      fprintf(fp, "    \"relative_error\": ");
+      _FPC_JSON_WRITE_LONG_DOUBLE_(fp, ERRORS_LOG[i].relative_error);
+      fprintf(fp, "\n");
       fprintf(fp, "  },\n");
       entries_written++;
     }
@@ -878,6 +899,12 @@ void _FPC_HT_PRINT_TABLES_FP64_(
     _FPC_ADDRESS_HTABLE_FP64_T *address_table,
     _FPC_REGISTER_HTABLE_FP64_T *register_table)
 {
+  const char *debug_env = getenv("FPC_ENABLE_DEBUG_OUTPUT");
+  if (debug_env == NULL)
+    return;
+
+  FILE *out = stderr;
+
   /* Column widths:
    Address:        18 chars (0x + 16 hex digits)
    Register Name:  25 chars (left-justified, truncated if longer)
@@ -890,9 +917,9 @@ void _FPC_HT_PRINT_TABLES_FP64_(
   */
 
   /* Header */
-  printf("%-18s %-25s %-25s %16s %16s %8s %-20s %5s\n",
+    fprintf(out, "%-18s %-25s %-25s %16s %16s %8s %-20s %5s\n",
          "Address", "Register Name", "Function Name", "Error Value", "Relative Error", "Clock", "File Name", "Line");
-  printf("%-18s %-25s %-25s %16s %16s %8s %-20s %5s\n",
+    fprintf(out, "%-18s %-25s %-25s %16s %16s %8s %-20s %5s\n",
          "------------------", "-------------------------", "-------------------------", "----------------", "----------------", "--------", "--------------------", "-------");
 
   /* Print address table entries */
@@ -904,7 +931,7 @@ void _FPC_HT_PRINT_TABLES_FP64_(
       while (cur != NULL)
       {
         // Address in hex, register column empty ("-")
-        printf("0x%016llx %-25.25s %-25.25s %16.6Lg %16.6Lg %8llu %-20.20s %5d\n",
+        fprintf(out, "0x%016llx %-25.25s %-25.25s %16.6Lg %16.6Lg %8llu %-20.20s %5d\n",
                (unsigned long long)cur->address_value,
                "-", // register name placeholder
                "-", // function name placeholder
@@ -927,7 +954,7 @@ void _FPC_HT_PRINT_TABLES_FP64_(
       while (cur != NULL)
       {
         /* No address for register entries */
-        printf("%-18s %-25.25s %-25.25s %16.6Lg %16.6Lg %8llu %-20.20s %5d\n",
+        fprintf(out, "%-18s %-25.25s %-25.25s %16.6Lg %16.6Lg %8llu %-20.20s %5d\n",
                "-", /* address placeholder */
                (cur->register_name ? cur->register_name : "(null)"),
                (cur->function_name ? cur->function_name : "(null)"),

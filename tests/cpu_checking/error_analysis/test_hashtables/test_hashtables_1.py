@@ -23,7 +23,9 @@ def compile_code():
 
 def run_cmd(cmd):
     try:
-        return subprocess.check_output([cmd], stderr=subprocess.STDOUT, shell=True)
+        env = os.environ.copy()
+        env["FPC_ENABLE_DEBUG_OUTPUT"] = "1"
+        return subprocess.check_output([cmd], stderr=subprocess.STDOUT, shell=True, env=env)
     except subprocess.CalledProcessError as e:
         print(e.output)
         exit()

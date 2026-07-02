@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import pytest
 import subprocess
 import os
 import sys
@@ -16,6 +17,9 @@ def teardown_module(module):
     cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
 
 def test_1():
+    if not report.has_extended_fp64_reference():
+        pytest.skip("Platform long double does not provide extra precision over double")
+
     # --- compile code ---
     cmd = ["make"]
     try:

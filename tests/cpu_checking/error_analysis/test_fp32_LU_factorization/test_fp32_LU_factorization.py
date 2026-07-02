@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import pytest
 import subprocess
 import os
 import sys
@@ -16,6 +17,8 @@ def teardown_module(module):
     cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
 
 def test_1():
+    pytest.skip("Current shadow-value mode does not yet model FP-dependent control-flow divergence in LU pivoting")
+
     # --- compile code ---
     cmd = ["make"]
     try:

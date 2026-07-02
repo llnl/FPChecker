@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import pytest
 import subprocess
 import os
 import sys
@@ -51,6 +52,9 @@ def assert_rounding_error_for_operation(flags, line):
 
 
 def test_basic_operations_all_in_one():
+    if not report.has_extended_fp64_reference():
+        pytest.skip("Platform long double does not provide extra precision over double")
+
     # Keep all operation checks in one test to avoid ordering/timing issues
     # when this folder is executed in parallel with a process-based runner.
     cases = [

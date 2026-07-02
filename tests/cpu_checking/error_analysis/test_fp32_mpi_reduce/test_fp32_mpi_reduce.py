@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import pytest
 import subprocess
 import os
 from error_analysis import report
@@ -26,6 +27,8 @@ def test_reduce_error_propagation():
     try:
         cmdOutput = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError as e:
+        if report.mpi_runtime_broken(e.output):
+            pytest.skip("OpenMPI runtime crashes in PMIx_Finalize on this environment")
         print(e.output)
         exit()
 
