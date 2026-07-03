@@ -56,17 +56,17 @@ static void init_array_double(int n,
 {
   int i, j;
 
-  // Convert input to double precision
-  *alpha = 1.5;
-  *beta = 1.2;
+  // Match FPChecker's shadow reference for the low-precision initialization.
+  *alpha = (double)((DATA_TYPE)1.5f);
+  *beta = (double)((DATA_TYPE)1.2f);
 
   for (i = 0; i < n; i++)
   {
-    x_double[i] = (double)x[i];
+    x_double[i] = (double)(i % n) / (double)n;
     for (j = 0; j < n; j++)
     {
-      A_double[i][j] = (double)A[i][j];
-      B_double[i][j] = (double)B[i][j];
+      A_double[i][j] = (double)((i * j + 1) % n) / (double)n;
+      B_double[i][j] = (double)((i * j + 2) % n) / (double)n;
     }
   }
 }
