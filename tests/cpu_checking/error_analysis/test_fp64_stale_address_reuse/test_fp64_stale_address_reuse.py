@@ -1,0 +1,76 @@
+#!/usr/bin/env python
+
+import os
+import re
+import subprocess
+
+import pytest
+
+from error_analysis import report
+
+
+def setup_module(module):
+    this_dir = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(this_dir)
+
+
+def teardown_module(module):
+    subprocess.check_output(["make clean"], stderr=subprocess.STDOUT, shell=True)
+
+
+def run_shell(cmd):
+    return subprocess.check_output([cmd], stderr=subprocess.STDOUT, shell=True).decode()
+
+
+def parse_difference(output):
+    match = re.search(r"Difference:\s*([+-]?[0-9.]+(?:[eE][+-]?[0-9]+)?)", output)
+    assert match is not None, output
+    return float(match.group(1))
+
+
+def find_source_line(path, marker):
+    with open(path, "r") as fh:
+        for line_no, line in enumerate(fh, start=1):
+            if marker in line:
+                return line_no
+    raise AssertionError(f"marker not found: {marker}")
+
+
+def errors_for_line(data, file_suffix, line_no):
+    return [
+        float(entry.get("error", 0.0))
+        for entry in data
+        if entry["file"].endswith(file_suffix) and entry["line"] == line_no
+    ]
+
+
+def max_abs_error(data, file_suffix):
+    values = [
+        abs(float(entry.get("error", 0.0)))
+        for entry in data
+        if entry["file"].endswith(file_suffix)
+    ]
+    assert values, f"no JSON entries for {file_suffix}"
+    return max(values)
+
+
+def test_fp64_stale_address_reuse_falls_back_to_actual_memory_value():
+    if not report.has_extended_fp64_reference():
+        pytest.skip("Platform long double does not provide extra precision over double")
+
+    run_shell("make")
+    output = run_shell("./main")
+    expected_error = parse_difference(output)
+    assert abs(expected_error) > 0.0
+
+    data = report.loadReport(report.findRoundingErrorFile(".fpc_logs"))
+    result_line = find_source_line("main.cpp", "FINAL_RESULT")
+    line_errors = errors_for_line(data, "main.cpp", result_line)
+    assert line_errors, "no FPChecker entry found for final expression"
+
+    best_delta = min(abs(value - expected_error) for value in line_errors)
+    assert best_delta < 5e-15
+
+    # A stale shadow value from the earlier a*b store would create an O(1)
+    # error after the uninstrumented overwrite. The reconciled path stays tiny.
+    assert max_abs_error(data, "main.cpp") < 1e-9

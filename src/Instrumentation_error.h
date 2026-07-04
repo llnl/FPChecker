@@ -73,6 +73,7 @@ namespace CPUAnalysisFP64
 
     Function *fpc_fp64_store_inst;
     Function *fpc_fp64_load_inst;
+    Function *fpc_fp64_cmp_function;
     Function *fpc_fp64_calculate_function;
     Function *fpc_fp64_phi_function;
     Function *fpc_fp64_branch_function;

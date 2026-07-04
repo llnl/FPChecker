@@ -55,6 +55,7 @@ CPUFPInstrumentation_error_fp64::CPUFPInstrumentation_error_fp64(Module *M)
       fpc_print_locations_fp64(nullptr),
       fpc_fp64_store_inst(nullptr),
       fpc_fp64_load_inst(nullptr),
+      fpc_fp64_cmp_function(nullptr),
       fpc_fp64_calculate_function(nullptr),
       fpc_fp64_phi_function(nullptr),
       fpc_fp64_branch_function(nullptr),
@@ -103,6 +104,12 @@ CPUFPInstrumentation_error_fp64::CPUFPInstrumentation_error_fp64(Module *M)
       confFunction(f, &fpc_fp64_load_inst,
                    GlobalValue::LinkageTypes::LinkOnceODRLinkage,
                    "_FPC_FP64_LOAD_INST_");
+    }
+    if (f->getName().str().find("_FPC_FP64_CMP_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp64_cmp_function,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP64_CMP_");
     }
     if (f->getName().str().find("_FPC_FP64_CALCULATE_ERROR_") != std::string::npos)
     {
@@ -161,6 +168,7 @@ CPUFPInstrumentation_error_fp64::CPUFPInstrumentation_error_fp64(Module *M)
 
     SET_ODR_LIKAGE("_FPC_FP64_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP64_LOAD_INST_")
+    SET_ODR_LIKAGE("_FPC_FP64_CMP_")
     SET_ODR_LIKAGE("_FPC_FP64_CALCULATE_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP64_PHI_")
     SET_ODR_LIKAGE("_FPC_FP64_BRANCH_")
@@ -328,6 +336,7 @@ void CPUFPInstrumentation_error_fp64::instrumentFunctionErrorAnalysis(Function *
   assert((fpc_fp64_calculate_function != nullptr) && "Function not initialized!");
   assert((fpc_fp64_load_inst != nullptr) && "Function not initialized!");
   assert((fpc_fp64_store_inst != nullptr) && "Function not initialized!");
+  assert((fpc_fp64_cmp_function != nullptr) && "Function not initialized!");
   assert((fpc_fp64_phi_function != nullptr) && "Function not initialized!");
   assert((fpc_fp64_branch_function != nullptr) && "Function not initialized!");
   assert((fpc_fp64_memcpy_function != nullptr) && "Function not initialized!");
@@ -714,6 +723,91 @@ void CPUFPInstrumentation_error_fp64::instrumentFunctionErrorAnalysis(Function *
             CallInst *hookCall = builder.CreateCall(fpc_fp64_memcpy_function, args_ref);
             (*insrtrumented_instructions)++;
             setFakeDebugLocation(inst, hookCall, f);
+          }
+        }
+      }
+
+      // ============= Instrument floating-point compare instructions ==========
+      if (auto *cmpInst = llvm::dyn_cast<llvm::FCmpInst>(inst))
+      {
+        if (cmpInst->getOperand(0)->getType()->isDoubleTy() &&
+            cmpInst->getOperand(1)->getType()->isDoubleTy())
+        {
+          int predicateCode = -1;
+          switch (cmpInst->getPredicate())
+          {
+          case llvm::CmpInst::Predicate::FCMP_OEQ:
+          case llvm::CmpInst::Predicate::FCMP_UEQ:
+            predicateCode = 0;
+            break;
+          case llvm::CmpInst::Predicate::FCMP_ONE:
+          case llvm::CmpInst::Predicate::FCMP_UNE:
+            predicateCode = 1;
+            break;
+          case llvm::CmpInst::Predicate::FCMP_OLT:
+          case llvm::CmpInst::Predicate::FCMP_ULT:
+            predicateCode = 2;
+            break;
+          case llvm::CmpInst::Predicate::FCMP_OLE:
+          case llvm::CmpInst::Predicate::FCMP_ULE:
+            predicateCode = 3;
+            break;
+          case llvm::CmpInst::Predicate::FCMP_OGT:
+          case llvm::CmpInst::Predicate::FCMP_UGT:
+            predicateCode = 4;
+            break;
+          case llvm::CmpInst::Predicate::FCMP_OGE:
+          case llvm::CmpInst::Predicate::FCMP_UGE:
+            predicateCode = 5;
+            break;
+          default:
+            predicateCode = -1;
+            break;
+          }
+
+          if (predicateCode >= 0)
+          {
+            BasicBlock::iterator nextInst(inst);
+            ++nextInst;
+            IRBuilder<> builder(&(*nextInst));
+
+            int lineNumber = CUDAAnalysis::getLineOfCode(inst);
+            if (lineNumber != -1)
+            {
+              std::string resultName;
+              llvm::raw_string_ostream resultStream(resultName);
+              cmpInst->printAsOperand(resultStream, false);
+              resultStream.flush();
+
+              std::string lhsName;
+              llvm::raw_string_ostream lhsStream(lhsName);
+              cmpInst->getOperand(0)->printAsOperand(lhsStream, false);
+              lhsStream.flush();
+
+              std::string rhsName;
+              llvm::raw_string_ostream rhsStream(rhsName);
+              cmpInst->getOperand(1)->printAsOperand(rhsStream, false);
+              rhsStream.flush();
+
+              std::vector<Value *> args;
+              args.push_back(builder.CreateZExt(cmpInst, builder.getInt32Ty(), "cmp_cond"));
+              args.push_back(cmpInst->getOperand(0));
+              args.push_back(cmpInst->getOperand(1));
+              args.push_back(ConstantInt::get(builder.getInt32Ty(), predicateCode));
+              args.push_back(ConstantInt::get(builder.getInt32Ty(), lineNumber));
+              args.push_back(loadInst_filename);
+              args.push_back(builder.CreateGlobalStringPtr(resultName));
+              args.push_back(builder.CreateGlobalStringPtr(lhsName));
+              args.push_back(builder.CreateGlobalStringPtr(rhsName));
+              args.push_back(builder.CreateGlobalStringPtr(f->getName()));
+
+              ArrayRef<Value *> args_ref(args);
+              CallInst *hookCall = builder.CreateCall(fpc_fp64_cmp_function, args_ref);
+              (*insrtrumented_instructions)++;
+
+              assert(hookCall && "Invalid call instruction!");
+              setFakeDebugLocation(inst, hookCall, f);
+            }
           }
         }
       }

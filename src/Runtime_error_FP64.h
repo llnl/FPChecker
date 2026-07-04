@@ -515,6 +515,58 @@ void _FPC_FP64_BRANCH_(const char *basic_block_name)
 #endif
 }
 
+void _FPC_FP64_CMP_(int low_cond, double y, double z, int predicate, int loc,
+                    char *file_name, const char *result_name,
+                    const char *op1_name, const char *op2_name,
+                    const char *function_name)
+{
+  _FPC_ENSURE_RUNTIME_READY_();
+
+  long double shadow_y = (long double)y;
+  long double shadow_z = (long double)z;
+  long double _tmp_error_ = 0.0L;
+  long double _tmp_relative_error_ = 0.0L;
+
+#ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
+  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op1_name,
+                                   function_name, &shadow_y, &_tmp_error_,
+                                   &_tmp_relative_error_);
+  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op2_name,
+                                   function_name, &shadow_z, &_tmp_error_,
+                                   &_tmp_relative_error_);
+#endif
+
+  int shadow_cond = low_cond;
+  switch (predicate)
+  {
+  case 0:
+    shadow_cond = (shadow_y == shadow_z);
+    break;
+  case 1:
+    shadow_cond = (shadow_y != shadow_z);
+    break;
+  case 2:
+    shadow_cond = (shadow_y < shadow_z);
+    break;
+  case 3:
+    shadow_cond = (shadow_y <= shadow_z);
+    break;
+  case 4:
+    shadow_cond = (shadow_y > shadow_z);
+    break;
+  case 5:
+    shadow_cond = (shadow_y >= shadow_z);
+    break;
+  default:
+    shadow_cond = low_cond;
+    break;
+  }
+
+  _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, result_name,
+                                function_name, shadow_cond ? 1.0L : 0.0L,
+                                0.0L, 0.0L, file_name, loc);
+}
+
 // This function is called for PHI nodes in SSA form
 // It is used to log the values that are being merged
 void _FPC_FP64_PHI_(const char *phi_values, const char *function_name)
