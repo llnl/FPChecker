@@ -53,7 +53,7 @@ def test_rounding_error_shell_table_truncation_and_format_multifile():
     out = _run_cmd(["fpc-create-report -s rounding_error"]).decode("utf-8")
 
     # Header with table columns separated by pipes.
-    assert re.search(r"^Line\s+\|\s+Code\s+\|\s+Error\s+\|\s+Rel\. Error\s*$", out, re.MULTILINE)
+    assert re.search(r"^Line\s+\|\s+Code\s+\|\s+Error\s+\|\s+Rel\. Error\s+\|\s+Max Rel\. Error\s*$", out, re.MULTILINE)
 
     # Must contain at least one table section per expected file.
     file_headers = re.findall(r"^--- File:\s+(.+)$", out, re.MULTILINE)
@@ -61,9 +61,10 @@ def test_rounding_error_shell_table_truncation_and_format_multifile():
     for expected in EXPECTED_FILES:
         assert any(os.path.basename(header.strip()) == expected for header in file_headers)
 
-    # Row format must match: line | code | sci-error | sci-relative-error
+    # Row format must match:
+    # line | code | sci-error | sci-relative-error | sci-max-relative-error
     row_pattern = re.compile(
-        r"^\s*\d+\s+\|\s+[^|]+\|\s+[-+]?\d\.\d{6}e[-+]\d{2}\s+\|\s+[-+]?\d\.\d{6}e[-+]\d{2}\s*$",
+        r"^\s*\d+\s+\|\s+[^|]+\|\s+[-+]?\d\.\d{6}e[-+]\d{2}\s+\|\s+[-+]?\d\.\d{6}e[-+]\d{2}\s+\|\s+[-+]?\d\.\d{6}e[-+]\d{2}\s*$",
         re.MULTILINE,
     )
     rows = row_pattern.findall(out)

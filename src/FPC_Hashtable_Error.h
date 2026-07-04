@@ -126,6 +126,16 @@ typedef struct _FPC_REGISTER_S_
   struct _FPC_REGISTER_S_ *next;
 } _FPC_REGISTER_T_;
 
+typedef struct _FPC_LINE_REL_ERROR_S_
+{
+  char *file_name;
+  int line;
+  double max_relative_error;
+  struct _FPC_LINE_REL_ERROR_S_ *next;
+} _FPC_LINE_REL_ERROR_T_;
+
+_FPC_LINE_REL_ERROR_T_ *_FPC_LINE_REL_ERROR_HEAD_ = NULL;
+
 /** Program name and input **/
 extern int _FPC_PROG_INPUTS;
 extern char **_FPC_PROG_ARGS;
@@ -292,6 +302,68 @@ static inline int _FPC_REGISTER_EQUAL_(_FPC_REGISTER_T_ *x, _FPC_REGISTER_T_ *y)
   return (strcmp(x->register_name, y->register_name) == 0 && strcmp(x->function_name, y->function_name) == 0);
 }
 
+static inline int _FPC_RELATIVE_ERROR_GREATER_(double candidate, double current)
+{
+  if (isnan(candidate))
+    return !isnan(current);
+  if (isnan(current))
+    return 0;
+  return candidate > current;
+}
+
+void _FPC_LINE_MAX_RELATIVE_ERROR_UPDATE_(const char *file_name, int line, double relative_error)
+{
+  file_name = _FPC_SAFE_STR_(file_name);
+  if (file_name == NULL || file_name[0] == '\0' || line == 0)
+    return;
+
+  _FPC_LINE_REL_ERROR_T_ *cur = _FPC_LINE_REL_ERROR_HEAD_;
+  while (cur != NULL)
+  {
+    if (cur->line == line && strcmp(cur->file_name, file_name) == 0)
+    {
+      if (_FPC_RELATIVE_ERROR_GREATER_(relative_error, cur->max_relative_error))
+        cur->max_relative_error = relative_error;
+      return;
+    }
+    cur = cur->next;
+  }
+
+  _FPC_LINE_REL_ERROR_T_ *entry = (_FPC_LINE_REL_ERROR_T_ *)malloc(sizeof(_FPC_LINE_REL_ERROR_T_));
+  if (entry == NULL)
+  {
+    printf("#FPCHECKER: line relative error table out of memory error!");
+    exit(EXIT_FAILURE);
+  }
+  entry->file_name = (char *)malloc((strlen(file_name) + 1) * sizeof(char));
+  if (entry->file_name == NULL)
+  {
+    printf("#FPCHECKER: line relative error table out of memory error!");
+    exit(EXIT_FAILURE);
+  }
+  strcpy(entry->file_name, file_name);
+  entry->line = line;
+  entry->max_relative_error = relative_error;
+  entry->next = _FPC_LINE_REL_ERROR_HEAD_;
+  _FPC_LINE_REL_ERROR_HEAD_ = entry;
+}
+
+static inline int _FPC_FIND_LINE_MAX_RELATIVE_ERROR_(const char *file_name, int line, double *max_relative_error)
+{
+  file_name = _FPC_SAFE_STR_(file_name);
+  _FPC_LINE_REL_ERROR_T_ *cur = _FPC_LINE_REL_ERROR_HEAD_;
+  while (cur != NULL)
+  {
+    if (cur->line == line && strcmp(cur->file_name, file_name) == 0)
+    {
+      *max_relative_error = cur->max_relative_error;
+      return 1;
+    }
+    cur = cur->next;
+  }
+  return 0;
+}
+
 /*----------------------------------------------------------------------------*/
 /* Insert a key-value pair into a hash table                                  */
 /*----------------------------------------------------------------------------*/
@@ -440,6 +512,7 @@ void _FPC_ADDRESS_HT_UPDATE_(
   temp.line = line;
 
   _FPC_ADDRESS_HT_SET_(hashtable, &temp);
+  _FPC_LINE_MAX_RELATIVE_ERROR_UPDATE_(file_name, line, relative_error);
   free(temp.file_name);
 }
 
@@ -470,6 +543,7 @@ void _FPC_REGISTER_HT_UPDATE_(
   strcpy(temp.function_name, function_name);
 
   _FPC_REGISTER_HT_SET_(hashtable, &temp);
+  _FPC_LINE_MAX_RELATIVE_ERROR_UPDATE_(file_name, line, relative_error);
   free(temp.file_name);
   free(temp.function_name);
 }
@@ -766,6 +840,7 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
     int line;
     double error;
     double relative_error;
+    double max_relative_error;
     uint64_t clock;
     int is_register_entry;
   } ErrorEntry;
@@ -781,6 +856,7 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
     ERRORS_LOG[i].line = 0;
     ERRORS_LOG[i].error = 0.0;
     ERRORS_LOG[i].relative_error = 0.0;
+    ERRORS_LOG[i].max_relative_error = 0.0;
     ERRORS_LOG[i].clock = 0;
     ERRORS_LOG[i].is_register_entry = 0;
   }
@@ -815,6 +891,7 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
               {
                 ERRORS_LOG[j].error = err;
                 ERRORS_LOG[j].relative_error = rel_err;
+                _FPC_FIND_LINE_MAX_RELATIVE_ERROR_(file, line, &ERRORS_LOG[j].max_relative_error);
                 ERRORS_LOG[j].clock = clock;
                 ERRORS_LOG[j].is_register_entry = 0;
               }
@@ -834,6 +911,8 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
           ERRORS_LOG[currentEntry].line = line;
           ERRORS_LOG[currentEntry].error = err;
           ERRORS_LOG[currentEntry].relative_error = rel_err;
+          ERRORS_LOG[currentEntry].max_relative_error = rel_err;
+          _FPC_FIND_LINE_MAX_RELATIVE_ERROR_(file, line, &ERRORS_LOG[currentEntry].max_relative_error);
           ERRORS_LOG[currentEntry].clock = clock;
           ERRORS_LOG[currentEntry].is_register_entry = 0;
           currentEntry++;
@@ -872,6 +951,7 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
               {
                 ERRORS_LOG[j].error = err;
                 ERRORS_LOG[j].relative_error = rel_err;
+                _FPC_FIND_LINE_MAX_RELATIVE_ERROR_(file, line, &ERRORS_LOG[j].max_relative_error);
                 ERRORS_LOG[j].clock = clock;
                 ERRORS_LOG[j].is_register_entry = 1;
               }
@@ -891,6 +971,8 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
           ERRORS_LOG[currentEntry].line = line;
           ERRORS_LOG[currentEntry].error = err;
           ERRORS_LOG[currentEntry].relative_error = rel_err;
+          ERRORS_LOG[currentEntry].max_relative_error = rel_err;
+          _FPC_FIND_LINE_MAX_RELATIVE_ERROR_(file, line, &ERRORS_LOG[currentEntry].max_relative_error);
           ERRORS_LOG[currentEntry].clock = clock;
           ERRORS_LOG[currentEntry].is_register_entry = 1;
           currentEntry++;
@@ -921,6 +1003,9 @@ void _FPC_WRITE_AND_PRINT_TO_JSON_(_FPC_ADDRESS_HTABLE_T *address_hashtable, _FP
       fprintf(fp, ",\n");
       fprintf(fp, "    \"relative_error\": ");
       _FPC_JSON_WRITE_DOUBLE_(fp, ERRORS_LOG[i].relative_error);
+      fprintf(fp, ",\n");
+      fprintf(fp, "    \"max_relative_error\": ");
+      _FPC_JSON_WRITE_DOUBLE_(fp, ERRORS_LOG[i].max_relative_error);
       fprintf(fp, "\n");
       fprintf(fp, "  },\n");
       entries_written++;

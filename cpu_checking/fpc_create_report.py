@@ -69,7 +69,7 @@ fp64_plot_filename = 'histogram_fp64.svg'
 fp32_plot_filename = 'histogram_fp32.svg'
 fp64_exp_usage_per_file = defaultdict(int)
 fp32_exp_usage_per_file = defaultdict(int)
-rounding_errors_per_file_line = defaultdict(lambda: defaultdict(list) ) # ['file'][line] = [1.2e-6, 3.2e-9]
+rounding_errors_per_file_line = defaultdict(lambda: defaultdict(list) ) # ['file'][line] = [error, relative_error, max_relative_error]
 relative_errors_per_line = defaultdict(list) # [line] = [1.2e-6, 3.2e-9, ...], where line is an integer
 
 def getEventFilePaths(p):
@@ -266,13 +266,20 @@ def loadRoundingErrorTraces(files):
           line            = data[i]['line']
           error           = data[i]['error']
           relative_error  = data[i]['relative_error']
+          max_relative_error = data[i].get('max_relative_error', relative_error)
           if not rounding_errors_per_file_line[file_name][line]:
-            rounding_errors_per_file_line[file_name][line] = [0.0, 0.0]
-          current_errors = [rounding_errors_per_file_line[file_name][line][0], rounding_errors_per_file_line[file_name][line][1]]
+            rounding_errors_per_file_line[file_name][line] = [0.0, 0.0, 0.0]
+          current_errors = [
+            rounding_errors_per_file_line[file_name][line][0],
+            rounding_errors_per_file_line[file_name][line][1],
+            rounding_errors_per_file_line[file_name][line][2],
+          ]
           if abs(error) > current_errors[0]:
             current_errors[0] = error
           if relative_error > current_errors[1]:
             current_errors[1] = relative_error
+          if max_relative_error > current_errors[2]:
+            current_errors[2] = max_relative_error
           rounding_errors_per_file_line[file_name][line] = current_errors
 
 def loadErrorsPerLineTraces(files):
@@ -395,7 +402,8 @@ def getSourceCodeByLine(file_name, lines):
 
   return source_by_line
 
-def createRoundingErrorsReport_Text():
+def createRoundingErrorsReport_Text(rank_by_max_relative_error=False,
+                                    rank_by_relative_error=False):
   files = getSortedRoundingErrorFiles()
   print("\n===== Rounding Error Report =====")
   if len(files) == 0:
@@ -405,42 +413,60 @@ def createRoundingErrorsReport_Text():
   total_lines = 0
   max_abs_error = 0.0
   max_relative_error = 0.0
+  max_seen_relative_error = 0.0
   for file_name in files:
     for line in rounding_errors_per_file_line[file_name]:
       total_lines += 1
       error = rounding_errors_per_file_line[file_name][line][0]
       relative_error = rounding_errors_per_file_line[file_name][line][1]
+      max_line_relative_error = rounding_errors_per_file_line[file_name][line][2]
       if abs(error) > max_abs_error:
         max_abs_error = abs(error)
       if relative_error > max_relative_error:
         max_relative_error = relative_error
+      if max_line_relative_error > max_seen_relative_error:
+        max_seen_relative_error = max_line_relative_error
 
   print('Files with rounding errors:', len(files))
   print('Lines with rounding errors:', total_lines)
   print('Max abs rounding error:   {:.6e}'.format(max_abs_error))
   print('Max relative error:       {:.6e}'.format(max_relative_error))
+  print('Max seen relative error:  {:.6e}'.format(max_seen_relative_error))
 
   # Keep table rows compact for remote terminals.
   line_col_width = 6
-  code_col_width = 56
+  code_col_width = 46
   error_col_width = 13
   rel_error_col_width = 13
+  max_rel_error_col_width = 13
 
   header_row = (
-    '{:<{line_w}} | {:<{code_w}} | {:>{err_w}} | {:>{rel_w}}'.format(
-      'Line', 'Code', 'Error', 'Rel. Error',
+    '{:<{line_w}} | {:<{code_w}} | {:>{err_w}} | {:>{rel_w}} | {:>{max_rel_w}}'.format(
+      'Line', 'Code', 'Error', 'Rel. Error', 'Max Rel. Error',
       line_w=line_col_width,
       code_w=code_col_width,
       err_w=error_col_width,
-      rel_w=rel_error_col_width
+      rel_w=rel_error_col_width,
+      max_rel_w=max_rel_error_col_width
     )
   )
   separator_row = '-' * len(header_row)
 
   for file_name in files:
     print("\n--- File: " + file_name)
-    # Keep shell output deterministic and easier to scan.
-    sorted_lines = sorted(rounding_errors_per_file_line[file_name].keys())
+    if rank_by_max_relative_error:
+      sorted_lines = sorted(
+        rounding_errors_per_file_line[file_name].keys(),
+        key=lambda line: (-rounding_errors_per_file_line[file_name][line][2], line)
+      )
+    elif rank_by_relative_error:
+      sorted_lines = sorted(
+        rounding_errors_per_file_line[file_name].keys(),
+        key=lambda line: (-rounding_errors_per_file_line[file_name][line][1], line)
+      )
+    else:
+      # Keep shell output deterministic and easier to scan.
+      sorted_lines = sorted(rounding_errors_per_file_line[file_name].keys())
     source_by_line = getSourceCodeByLine(file_name, sorted_lines)
     print(header_row)
     print(separator_row)
@@ -448,17 +474,20 @@ def createRoundingErrorsReport_Text():
     for line in sorted_lines:
       error = rounding_errors_per_file_line[file_name][line][0]
       relative_error = rounding_errors_per_file_line[file_name][line][1]
+      max_line_relative_error = rounding_errors_per_file_line[file_name][line][2]
       source_line = truncateTextForTable(source_by_line[line], code_col_width)
       print(
-        '{:<{line_w}} | {:<{code_w}} | {:>{err_w}.6e} | {:>{rel_w}.6e}'.format(
+        '{:<{line_w}} | {:<{code_w}} | {:>{err_w}.6e} | {:>{rel_w}.6e} | {:>{max_rel_w}.6e}'.format(
           line,
           source_line,
           error,
           relative_error,
+          max_line_relative_error,
           line_w=line_col_width,
           code_w=code_col_width,
           err_w=error_col_width,
-          rel_w=rel_error_col_width
+          rel_w=rel_error_col_width,
+          max_rel_w=max_rel_error_col_width
         )
       )
 
@@ -896,8 +925,13 @@ if __name__ == '__main__':
   parser.add_argument('-t', '--title', nargs=1, type=str, help='Title of report.')
   parser.add_argument('-q', '--query', nargs=1, type=str, action='store', help='Query file.')
   parser.add_argument('-s', '--show', action='store', nargs='?', default=0, type=str, help='Show report on screen (main, event, or rounding_error).')
+  parser.add_argument('--rank-by-max-relative-error', action='store_true', help='Rank rounding report lines within each file by max relative error.')
+  parser.add_argument('--rank-by-relative-error', action='store_true', help='Rank rounding report lines within each file by last relative error.')
   parser.add_argument('dir', nargs='?', default=os.getcwd())
   args = parser.parse_args()
+
+  if args.rank_by_max_relative_error and args.rank_by_relative_error:
+    parser.error('--rank-by-max-relative-error and --rank-by-relative-error are mutually exclusive.')
 
   if (args.show != 0):
     prCyan('Generating FPChecker report...')
@@ -910,9 +944,11 @@ if __name__ == '__main__':
     loadRoundingErrorTraces(fileListErrors)
     if (args.show == None ):
       createRootReport_Text()
-      createRoundingErrorsReport_Text()
+      createRoundingErrorsReport_Text(args.rank_by_max_relative_error,
+                                      args.rank_by_relative_error)
     elif (args.show in ['rounding_error', 'rounding_errors', 'rounding']):
-      createRoundingErrorsReport_Text()
+      createRoundingErrorsReport_Text(args.rank_by_max_relative_error,
+                                      args.rank_by_relative_error)
     else:
       event_name = args.show
       createEventReport_Text(event_name)

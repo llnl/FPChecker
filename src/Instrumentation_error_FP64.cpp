@@ -199,6 +199,8 @@ CPUFPInstrumentation_error_fp64::CPUFPInstrumentation_error_fp64(Module *M)
     SET_ODR_LIKAGE("_FPC_ADDRESS_HT_UPDATE_FP64_")
     // SET_ODR_LIKAGE("_FPC_REGISTER_HT_UPDATE_")
     SET_ODR_LIKAGE("_FPC_REGISTER_HT_UPDATE_FP64_")
+    SET_ODR_LIKAGE("_FPC_LINE_MAX_RELATIVE_ERROR_UPDATE_FP64_")
+    SET_ODR_LIKAGE("_FPC_FIND_LINE_MAX_RELATIVE_ERROR_FP64_")
     // SET_ODR_LIKAGE("_FPC_REGISTER_RANGE_UPDATE_")
     SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_ADDRESS_FP64")
     SET_ODR_LIKAGE("_FPC_FIND_ERRORS_BY_REGISTER_FP64")
@@ -253,6 +255,11 @@ CPUFPInstrumentation_error_fp64::CPUFPInstrumentation_error_fp64(Module *M)
   clock = mod->getGlobalVariable("_FPC_CLOCK_FP64_", true);
   assert(clock && "Invalid table!");
   clock->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
+  GlobalVariable *line_rel_error_head = nullptr;
+  line_rel_error_head = mod->getGlobalVariable("_FPC_LINE_REL_ERROR_HEAD_FP64_", true);
+  assert(line_rel_error_head && "Invalid table!");
+  line_rel_error_head->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
   GlobalVariable *lines_to_keep = nullptr;
   lines_to_keep = mod->getGlobalVariable("_FPC_LINES_TO_KEEP_", true);
