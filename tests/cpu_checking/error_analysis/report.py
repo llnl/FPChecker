@@ -45,6 +45,10 @@ def mpi_runtime_broken(output):
 
   markers = (
     'PMIx_Finalize',
+    'pmix_ifinit: socket() failed',
+    "The PMIx server's listener thread failed to start",
+    'prte_init() failed',
+    'prte_session_dir failed',
     'Signal: Segmentation fault',
     'exited on\nsignal 11',
     'exited on signal 11',

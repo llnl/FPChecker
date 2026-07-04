@@ -105,6 +105,7 @@ uintptr_t _FPC_CLOCK_FP64_ = 0;
 typedef struct _FPC_ADDRESS_FP64_S_
 {
   uintptr_t address_value;
+  long double shadow_value;
   long double error;
   long double relative_error;
   uint64_t clock; // clock incremented when item is updated/created
@@ -116,6 +117,7 @@ typedef struct _FPC_ADDRESS_FP64_S_
 typedef struct _FPC_REGISTER_FP64_S_
 {
   char *register_name;
+  long double shadow_value;
   long double error;
   long double relative_error;
   uint64_t clock; // clock incremented when item is updated/created
@@ -234,6 +236,7 @@ _FPC_ADDRESS_FP64_T_ *_FPC_ADDRESS_HT_NEWPAIR_FP64_(_FPC_ADDRESS_FP64_T_ *val)
   }
 
   newpair->address_value = val->address_value;
+  newpair->shadow_value = val->shadow_value;
   newpair->error = val->error;
   newpair->relative_error = val->relative_error;
   newpair->clock = val->clock;
@@ -259,6 +262,7 @@ _FPC_REGISTER_FP64_T_ *_FPC_REGISTER_HT_NEWPAIR_FP64_(_FPC_REGISTER_FP64_T_ *val
   newpair->register_name = (char *)malloc((strlen(val->register_name) + 1) * sizeof(char));
   newpair->register_name[0] = '\0';
   strcpy(newpair->register_name, val->register_name);
+  newpair->shadow_value = val->shadow_value;
   newpair->error = val->error;
   newpair->relative_error = val->relative_error;
   newpair->clock = val->clock;
@@ -316,6 +320,7 @@ void _FPC_ADDRESS_HT_SET_FP64_(_FPC_ADDRESS_HTABLE_FP64_T *hashtable, _FPC_ADDRE
   /* There's already a pair */
   if (next != NULL && _FPC_ADDRESS_EQUAL_FP64_(newVal, next))
   {
+    next->shadow_value = newVal->shadow_value;
     next->error = newVal->error;
     next->relative_error = newVal->relative_error;
     next->clock = newVal->clock;
@@ -372,6 +377,7 @@ void _FPC_REGISTER_HT_SET_FP64_(_FPC_REGISTER_HTABLE_FP64_T *hashtable, _FPC_REG
   /* There's already a pair */
   if (next != NULL && _FPC_REGISTER_EQUAL_FP64_(newVal, next))
   {
+    next->shadow_value = newVal->shadow_value;
     next->error = newVal->error;
     next->relative_error = newVal->relative_error;
     next->clock = newVal->clock;
@@ -416,6 +422,7 @@ void _FPC_REGISTER_HT_SET_FP64_(_FPC_REGISTER_HTABLE_FP64_T *hashtable, _FPC_REG
 void _FPC_ADDRESS_HT_UPDATE_FP64_(
     _FPC_ADDRESS_HTABLE_FP64_T *hashtable,
     uintptr_t address_value,
+    long double shadow_value,
     long double error,
     long double relative_error,
     const char *file_name,
@@ -424,6 +431,7 @@ void _FPC_ADDRESS_HT_UPDATE_FP64_(
   file_name = _FPC_SAFE_STR_(file_name);
   _FPC_ADDRESS_FP64_T_ temp;
   temp.address_value = address_value;
+  temp.shadow_value = shadow_value;
   temp.error = error;
   temp.relative_error = relative_error;
   temp.clock = ++_FPC_CLOCK_FP64_;
@@ -440,6 +448,7 @@ void _FPC_REGISTER_HT_UPDATE_FP64_(
     _FPC_REGISTER_HTABLE_FP64_T *hashtable,
     const char *register_name,
     const char *function_name,
+    long double shadow_value,
     long double error,
     long double relative_error,
     const char *file_name,
@@ -449,6 +458,7 @@ void _FPC_REGISTER_HT_UPDATE_FP64_(
   function_name = _FPC_SAFE_STR_(function_name);
   _FPC_REGISTER_FP64_T_ temp;
   temp.register_name = (char *)register_name;
+  temp.shadow_value = shadow_value;
   temp.error = error;
   temp.relative_error = relative_error;
   temp.clock = ++_FPC_CLOCK_FP64_;
@@ -471,10 +481,11 @@ void _FPC_REGISTER_HT_UPDATE_FP64_(
 /*----------------------------------------------------------------------------*/
 
 // Return 1 if found, 0 otherwise
-int _FPC_FIND_ERRORS_BY_ADDRESS_FP64(_FPC_ADDRESS_HTABLE_FP64_T *hashtable,
-                                uintptr_t address_value,
-                                long double *error,
-                                long double *relative_error)
+static inline int _FPC_FIND_VALUE_BY_ADDRESS_FP64(_FPC_ADDRESS_HTABLE_FP64_T *hashtable,
+                                                  uintptr_t address_value,
+                                                  long double *shadow_value,
+                                                  long double *error,
+                                                  long double *relative_error)
 {
   if (hashtable == NULL || hashtable->table == NULL || hashtable->size == 0)
   {
@@ -499,6 +510,7 @@ int _FPC_FIND_ERRORS_BY_ADDRESS_FP64(_FPC_ADDRESS_HTABLE_FP64_T *hashtable,
 
   if (next != NULL && _FPC_ADDRESS_EQUAL_FP64_(&temp, next))
   {
+    *shadow_value = next->shadow_value;
     *error = next->error;
     *relative_error = next->relative_error;
     return 1;
@@ -513,11 +525,12 @@ int _FPC_FIND_ERRORS_BY_ADDRESS_FP64(_FPC_ADDRESS_HTABLE_FP64_T *hashtable,
 }
 
 // Return 1 if found, 0 otherwise
-int _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HTABLE_FP64_T *hashtable,
-                                 const char *register_name,
-                                 const char *function_name,
-                                 long double *error,
-                                 long double *relative_error)
+static inline int _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HTABLE_FP64_T *hashtable,
+                                                   const char *register_name,
+                                                   const char *function_name,
+                                                   long double *shadow_value,
+                                                   long double *error,
+                                                   long double *relative_error)
 {
   if (hashtable == NULL || hashtable->table == NULL || hashtable->size == 0)
   {
@@ -543,6 +556,7 @@ int _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HTABLE_FP64_T *hashtable,
 
   if (next != NULL && _FPC_REGISTER_EQUAL_FP64_(&temp, next))
   {
+    *shadow_value = next->shadow_value;
     *error = next->error;
     *relative_error = next->relative_error;
     return 1;
@@ -554,6 +568,29 @@ int _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HTABLE_FP64_T *hashtable,
     return 0;
   }
   return 0;
+}
+
+int _FPC_FIND_ERRORS_BY_ADDRESS_FP64(_FPC_ADDRESS_HTABLE_FP64_T *hashtable,
+                                     uintptr_t address_value,
+                                     long double *error,
+                                     long double *relative_error)
+{
+  long double shadow_value = 0.0L;
+  return _FPC_FIND_VALUE_BY_ADDRESS_FP64(hashtable, address_value,
+                                         &shadow_value, error,
+                                         relative_error);
+}
+
+int _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HTABLE_FP64_T *hashtable,
+                                      const char *register_name,
+                                      const char *function_name,
+                                      long double *error,
+                                      long double *relative_error)
+{
+  long double shadow_value = 0.0L;
+  return _FPC_FIND_VALUE_BY_REGISTER_FP64(hashtable, register_name,
+                                          function_name, &shadow_value, error,
+                                          relative_error);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -575,22 +612,27 @@ void _FPC_ADDRESS_RANGE_UPDATE_FP64_(
     return;
   }
 
-  // Create temp buffers to copy and hold the errors
+  // Create temp buffers to copy and hold the shadow values/errors
+  long double *shadow_buffer = (long double *)malloc(size * sizeof(long double));
   long double *error_buffer = (long double *)malloc(size * sizeof(long double));
   long double *relative_error_buffer = (long double *)malloc(size * sizeof(long double));
 
   for (size_t offset = 0; offset < size; offset++)
   {
     uintptr_t current_address = address_src + offset;
+    long double tmp_shadow_value = 0.0L;
     long double tmp_error = 0.0;
     long double tmp_relative_error = 0.0;
 
-    int found = _FPC_FIND_ERRORS_BY_ADDRESS_FP64(hashtable, current_address, &tmp_error, &tmp_relative_error);
+    int found = _FPC_FIND_VALUE_BY_ADDRESS_FP64(hashtable, current_address,
+                                                &tmp_shadow_value, &tmp_error,
+                                                &tmp_relative_error);
     if (!found)
     {
       //printf("#FPCHECKER: Trying to update address %lu in memcpy/memmove, but we don't have its error!!\n",
       //       current_address);
     }
+    shadow_buffer[offset] = tmp_shadow_value;
     error_buffer[offset] = tmp_error;
     relative_error_buffer[offset] = tmp_relative_error;
   }
@@ -599,7 +641,9 @@ void _FPC_ADDRESS_RANGE_UPDATE_FP64_(
   for (size_t offset = 0; offset < size; offset++)
   {
     uintptr_t dst_address = address_dst + offset;
-    _FPC_ADDRESS_HT_UPDATE_FP64_(hashtable, dst_address, error_buffer[offset], relative_error_buffer[offset], file_name, line);
+    _FPC_ADDRESS_HT_UPDATE_FP64_(hashtable, dst_address, shadow_buffer[offset],
+                                 error_buffer[offset],
+                                 relative_error_buffer[offset], file_name, line);
   }
 
   /*   for (size_t offset = 0; offset < size; offset++)
@@ -623,6 +667,7 @@ void _FPC_ADDRESS_RANGE_UPDATE_FP64_(
       _FPC_ADDRESS_HT_UPDATE_(hashtable, dst_address, error, relative_error, file_name, line);
     } */
 
+  free(shadow_buffer);
   free(error_buffer);
   free(relative_error_buffer);
 }

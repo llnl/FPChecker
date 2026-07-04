@@ -5,6 +5,10 @@ norm errors against FPChecker rounding errors at the corresponding norm lines.
 
 Run from:
   /g/g90/laguna/fpchecker/FPChecker/experiments/benchmark
+
+Default mode runs FP32 benchmark directories. To run the FP64 benchmark
+directories, use:
+  compare_polybench_fpchecker.py fp64
 """
 
 from __future__ import annotations
@@ -107,16 +111,26 @@ def run_cmd(
     )
 
 
-def discover_benchmarks(root: Path) -> List[Path]:
+def discover_benchmarks(root: Path, mode: str) -> List[Path]:
     benchmarks: List[Path] = []
     for makefile in root.rglob("Makefile"):
         bench_dir = makefile.parent
-        if bench_dir.name.endswith("_fp64"):
+        is_fp64_dir = any(part.endswith("_fp64") for part in bench_dir.relative_to(root).parts)
+        if mode == "fp32" and is_fp64_dir:
             continue
-        if any(part.endswith("_fp64") for part in bench_dir.parts):
+        if mode == "fp64" and not is_fp64_dir:
             continue
         benchmarks.append(bench_dir)
     return sorted(benchmarks)
+
+
+def configure_mode_environment(env: Dict[str, str], mode: str) -> None:
+    if mode == "fp64":
+        env.pop("FPC_INSTRUMENT_ERR_TRACKING", None)
+        env["FPC_INSTRUMENT_ERR_TRACKING_FP64"] = "1"
+    else:
+        env.pop("FPC_INSTRUMENT_ERR_TRACKING_FP64", None)
+        env["FPC_INSTRUMENT_ERR_TRACKING"] = "1"
 
 
 def parse_makefile_outputs(makefile: Path) -> List[str]:
@@ -177,7 +191,7 @@ def find_executable(bench_dir: Path) -> Optional[Path]:
 def parse_baseline_errors(output: str) -> List[BaselineError]:
     errors: List[BaselineError] = []
     for line in output.splitlines():
-        if "same FP32 outputs" in line:
+        if "same FP32 outputs" in line or "same FP64 outputs" in line:
             continue
         match = BASELINE_RE.match(line)
         if not match:
@@ -327,6 +341,14 @@ def relative_difference(baseline: float, fpchecker: float) -> float:
     if baseline == 0.0:
         return 0.0 if fpchecker == 0.0 else math.inf
     return abs(baseline - fpchecker) / abs(baseline)
+
+
+def absolute_difference(baseline: Optional[float], fpchecker: Optional[float]) -> Optional[float]:
+    if baseline is None or fpchecker is None:
+        return None
+    if math.isnan(baseline) or math.isnan(fpchecker):
+        return None
+    return abs(fpchecker - baseline)
 
 
 def select_site(label: str, sites: Dict[str, List[NormSite]]) -> Optional[NormSite]:
@@ -525,6 +547,21 @@ def compare_benchmark(
                 )
                 continue
 
+            if math.isnan(baseline.value):
+                comparisons.append(
+                    Comparison(
+                        benchmark=benchmark_name,
+                        label=baseline.raw_label or "(default)",
+                        baseline=baseline.value,
+                        fpchecker=fpchecker,
+                        relative_error=None,
+                        site=site,
+                        diagnostics=diagnostics_text,
+                        status="BASELINE_NAN",
+                    )
+                )
+                continue
+
             comparisons.append(
                 Comparison(
                     benchmark=benchmark_name,
@@ -560,13 +597,14 @@ def fmt_float(value: Optional[float]) -> str:
     return f"{value:.6e}"
 
 
-def print_results(comparisons: Sequence[Comparison]) -> None:
+def build_result_rows(comparisons: Sequence[Comparison]) -> Tuple[List[str], List[List[str]]]:
     headers = [
         "Benchmark",
         "Output",
         "Baseline",
         "FPChecker",
         "RelDiff",
+        "Delta",
         "Source",
         "Diagnostics",
         "Status",
@@ -583,11 +621,31 @@ def print_results(comparisons: Sequence[Comparison]) -> None:
                 fmt_float(item.baseline),
                 fmt_float(item.fpchecker),
                 fmt_float(item.relative_error),
+                fmt_float(absolute_difference(item.baseline, item.fpchecker)),
                 source,
                 item.diagnostics,
                 item.status,
             ]
         )
+    return headers, rows
+
+
+def print_summary(comparisons: Sequence[Comparison]) -> None:
+    ok = sum(1 for item in comparisons if item.status == "OK")
+    baseline_nan = sum(1 for item in comparisons if item.status == "BASELINE_NAN")
+    total = len(comparisons)
+    failed = total - ok - baseline_nan
+    if baseline_nan:
+        print(
+            f"Summary: {ok}/{total} comparisons OK, "
+            f"{baseline_nan} baseline NaN/not comparable, {failed} missing/failed."
+        )
+    else:
+        print(f"Summary: {ok}/{total} comparisons OK, {failed} missing/failed.")
+
+
+def print_results(comparisons: Sequence[Comparison]) -> None:
+    headers, rows = build_result_rows(comparisons)
 
     widths = [len(header) for header in headers]
     for row in rows:
@@ -599,11 +657,45 @@ def print_results(comparisons: Sequence[Comparison]) -> None:
     for row in rows:
         print("  ".join(value.ljust(widths[idx]) for idx, value in enumerate(row)))
 
-    ok = sum(1 for item in comparisons if item.status == "OK")
-    total = len(comparisons)
-    failed = total - ok
     print()
-    print(f"Summary: {ok}/{total} comparisons OK, {failed} missing/failed.")
+    print_summary(comparisons)
+
+
+def latex_escape(value: str) -> str:
+    replacements = {
+        "\\": r"\textbackslash{}",
+        "&": r"\&",
+        "%": r"\%",
+        "$": r"\$",
+        "#": r"\#",
+        "_": r"\_",
+        "{": r"\{",
+        "}": r"\}",
+        "~": r"\textasciitilde{}",
+        "^": r"\textasciicircum{}",
+    }
+    return "".join(replacements.get(char, char) for char in value)
+
+
+def print_latex_results(comparisons: Sequence[Comparison]) -> None:
+    headers, rows = build_result_rows(comparisons)
+    column_spec = "llrrrrlll"
+
+    print(r"\begin{tabular}{" + column_spec + "}")
+    print(r"\hline")
+    print(" & ".join(r"\textbf{" + latex_escape(header) + "}" for header in headers) + r" \\")
+    print(r"\hline")
+    for row in rows:
+        print(" & ".join(latex_escape(value) for value in row) + r" \\")
+    print(r"\hline")
+    print(r"\end{tabular}")
+    print()
+    print("% ", end="")
+    print_summary(comparisons)
+
+
+def acceptable_status(status: str) -> bool:
+    return status in {"OK", "BASELINE_NAN"}
 
 
 def filter_benchmarks(benchmarks: Iterable[Path], patterns: Sequence[str]) -> List[Path]:
@@ -620,6 +712,13 @@ def filter_benchmarks(benchmarks: Iterable[Path], patterns: Sequence[str]) -> Li
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(
         description="Compare PolyBench baseline norm errors against FPChecker rounding traces."
+    )
+    parser.add_argument(
+        "mode",
+        nargs="?",
+        choices=("fp32", "fp64"),
+        default="fp32",
+        help="Benchmark precision mode to run. Defaults to fp32; use 'fp64' for *_fp64 directories.",
     )
     parser.add_argument(
         "--root",
@@ -648,6 +747,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         action="store_true",
         help="Stop after the first benchmark with a missing/failed comparison.",
     )
+    parser.add_argument(
+        "--latex",
+        action="store_true",
+        help="Print the final results table as LaTeX tabular output.",
+    )
     args = parser.parse_args(argv)
 
     root = Path(args.root).resolve()
@@ -658,16 +762,18 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     env = os.environ.copy()
     if DEFAULT_INSTALL_BIN.is_dir():
         env["PATH"] = f"{DEFAULT_INSTALL_BIN}:{env.get('PATH', '')}"
+    configure_mode_environment(env, args.mode)
 
-    benchmarks = filter_benchmarks(discover_benchmarks(root), args.benchmark)
+    benchmarks = filter_benchmarks(discover_benchmarks(root, args.mode), args.benchmark)
     if not benchmarks:
-        print("error: no benchmarks matched", file=sys.stderr)
+        print(f"error: no {args.mode} benchmarks matched", file=sys.stderr)
         return 2
 
     all_comparisons: List[Comparison] = []
     for index, bench_dir in enumerate(benchmarks, start=1):
         benchmark_name = str(bench_dir.relative_to(root))
-        print(f"[{index}/{len(benchmarks)}] {benchmark_name}", flush=True)
+        progress_stream = sys.stderr if args.latex else sys.stdout
+        print(f"[{index}/{len(benchmarks)}] {benchmark_name}", file=progress_stream, flush=True)
         try:
             comparisons = compare_benchmark(
                 bench_dir=bench_dir,
@@ -696,9 +802,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if args.stop_on_failure and any(item.status != "OK" for item in comparisons):
             break
 
-    print()
-    print_results(all_comparisons)
-    return 0 if all(item.status == "OK" for item in all_comparisons) else 1
+    if args.latex:
+        print_latex_results(all_comparisons)
+    else:
+        print()
+        print_results(all_comparisons)
+    return 0 if all(acceptable_status(item.status) for item in all_comparisons) else 1
 
 
 if __name__ == "__main__":

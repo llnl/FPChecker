@@ -36,10 +36,11 @@ void init_array_long_double (int n,
                  long double POLYBENCH_1D(B,N,n))
 {
   int i;
+  long double n_shadow = (long double)(DATA_TYPE)n;
 
   for (i = 0; i < n; i++) {
-    A[i] = ((long double) i + 2.0L) / n;
-    B[i] = ((long double) i + 3.0L) / n;
+    A[i] = ((long double)(DATA_TYPE) i + (long double) SCALAR_VAL(2.0)) / n_shadow;
+    B[i] = ((long double)(DATA_TYPE) i + (long double) SCALAR_VAL(3.0)) / n_shadow;
   }
 }
 
@@ -52,7 +53,7 @@ void print_array(int n,
   DATA_TYPE max_value = 0;
   DATA_TYPE sum = 0;
   DATA_TYPE norm = 0;
-  long double max_value_long_double = 0;
+  long double max_shadow = 0;
   long double sum_long_double = 0;
   long double norm_long_double = 0;
 
@@ -67,10 +68,10 @@ void print_array(int n,
     if (value_long_double < 0.0L)
       value_long_double = -value_long_double;
 
-    if (value > max_value)
+    if (value > max_value) {
       max_value = value;
-    if (value_long_double > max_value_long_double)
-      max_value_long_double = value_long_double;
+      max_shadow = value_long_double;
+    }
   }
 
   if (max_value != 0) {
@@ -81,9 +82,9 @@ void print_array(int n,
     norm = SQRT_FUN(sum);
   }
 
-  if (max_value_long_double != 0) {
+  if (max_shadow != 0) {
     for (i = 0; i < n; i++) {
-      long double scaled = A_long_double[i] / max_value_long_double;
+      long double scaled = A_long_double[i] / max_shadow;
       sum_long_double += scaled * scaled;
     }
     norm_long_double = sqrtl(sum_long_double);
@@ -91,7 +92,7 @@ void print_array(int n,
 
   fprintf(POLYBENCH_DUMP_TARGET, "Max value in A: %.17e\n", max_value);
   fprintf(POLYBENCH_DUMP_TARGET, "Norm of A: %.17e\n", norm);
-  fprintf(POLYBENCH_DUMP_TARGET, "Max value in A_long_double: %.21Le\n", max_value_long_double);
+  fprintf(POLYBENCH_DUMP_TARGET, "Max value in A_long_double: %.21Le\n", max_shadow);
   fprintf(POLYBENCH_DUMP_TARGET, "Norm of A_long_double: %.21Le\n", norm_long_double);
 
   long double norm_error = norm_long_double - (long double)norm;
@@ -124,13 +125,14 @@ void kernel_jacobi_1d_long_double(int tsteps, int n,
                       long double POLYBENCH_1D(B,N,n))
 {
   int t, i;
+  long double c_shadow = (long double) SCALAR_VAL(0.33333);
 
 #pragma scop
   for (t = 0; t < _PB_TSTEPS; t++) {
     for (i = 1; i < _PB_N - 1; i++)
-      B[i] = 0.33333L * (A[i-1] + A[i] + A[i + 1]);
+      B[i] = c_shadow * (A[i-1] + A[i] + A[i + 1]);
     for (i = 1; i < _PB_N - 1; i++)
-      A[i] = 0.33333L * (B[i-1] + B[i] + B[i + 1]);
+      A[i] = c_shadow * (B[i-1] + B[i] + B[i + 1]);
   }
 #pragma endscop
 }

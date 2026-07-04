@@ -89,6 +89,7 @@ char _FPC_LAST_BASIC_BLOCK_[_FPC_BB_NAME_SIZE_]; // Last basic block ID
 
 // Call/return double precision error propagation stack
 #define _FPC_RET_STACK_MAX_ 8192
+long double _FPC_RET_SHADOW_STACK_FP64_[_FPC_RET_STACK_MAX_];
 long double _FPC_RET_ERR_STACK_FP64_[_FPC_RET_STACK_MAX_];
 long double _FPC_RET_REL_ERR_STACK_FP64_[_FPC_RET_STACK_MAX_];
 char _FPC_RET_FUNC_STACK_FP64_[_FPC_RET_STACK_MAX_][_FPC_BB_NAME_SIZE_];
@@ -96,6 +97,7 @@ int _FPC_RET_STACK_TOP_FP64_;
 
 // Caller-to-callee argument error propagation buffer
 #define _FPC_ARG_BUF_MAX_ 256
+long double _FPC_ARG_SHADOW_BUF_FP64_[_FPC_ARG_BUF_MAX_];
 long double _FPC_ARG_ERR_BUF_FP64_[_FPC_ARG_BUF_MAX_];
 long double _FPC_ARG_REL_ERR_BUF_FP64_[_FPC_ARG_BUF_MAX_];
 int _FPC_ARG_BUF_COUNT_FP64_;
@@ -118,6 +120,84 @@ static inline void _FPC_ENSURE_RUNTIME_READY_()
       fpc_atexit_registered = 1;
     }
   }
+}
+
+static inline long double _FPC_READ_FP64_VALUE_FROM_ADDRESS_(uintptr_t address)
+{
+  if (address < 4096)
+    return 0.0L;
+
+  double value = 0.0;
+  memcpy(&value, (const void *)address, sizeof(value));
+  return (long double)value;
+}
+
+static inline int _FPC_TRY_PARSE_FP64_LITERAL_(const char *text,
+                                               long double *value)
+{
+  if (text == NULL || text[0] == '\0')
+    return 0;
+
+  if (text[0] == '0' && (text[1] == 'x' || text[1] == 'X'))
+  {
+    int has_fp_syntax = 0;
+    int hex_digits = 0;
+    for (const char *p = text + 2; *p != '\0'; ++p)
+    {
+      if (*p == '.' || *p == 'p' || *p == 'P')
+      {
+        has_fp_syntax = 1;
+        break;
+      }
+      if ((*p >= '0' && *p <= '9') || (*p >= 'a' && *p <= 'f') ||
+          (*p >= 'A' && *p <= 'F'))
+      {
+        hex_digits++;
+        continue;
+      }
+      hex_digits = 0;
+      break;
+    }
+
+    if (!has_fp_syntax && hex_digits > 0 && hex_digits <= 16)
+    {
+      char *endptr = NULL;
+      unsigned long long bits = strtoull(text, &endptr, 16);
+      if (endptr != text)
+      {
+        while (*endptr == ' ' || *endptr == '\t' || *endptr == '\n' ||
+               *endptr == '\r' || *endptr == '\f' || *endptr == '\v')
+        {
+          ++endptr;
+        }
+
+        if (*endptr == '\0')
+        {
+          double decoded = 0.0;
+          memcpy(&decoded, &bits, sizeof(decoded));
+          *value = (long double)decoded;
+          return 1;
+        }
+      }
+    }
+  }
+
+  char *endptr = NULL;
+  long double parsed = strtold(text, &endptr);
+  if (endptr == text)
+    return 0;
+
+  while (*endptr == ' ' || *endptr == '\t' || *endptr == '\n' ||
+         *endptr == '\r' || *endptr == '\f' || *endptr == '\v')
+  {
+    ++endptr;
+  }
+
+  if (*endptr != '\0')
+    return 0;
+
+  *value = parsed;
+  return 1;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -293,7 +373,9 @@ void FPC_APPEND_ERROR_LOG_ENTRY_FP64(int line, long double relative_error)
 
 // *** Error Calculation *** //
 // Instrumentation for STORE instructions
-void _FPC_FP64_STORE_INST_(const char *reg, const char *function_name, uintptr_t address, int loc, char *file_name)
+void _FPC_FP64_STORE_INST_(const char *reg, const char *function_name,
+                           double stored_value, uintptr_t address, int loc,
+                           char *file_name)
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
@@ -306,11 +388,14 @@ void _FPC_FP64_STORE_INST_(const char *reg, const char *function_name, uintptr_t
   printf("reg=%s, address=%lu\n", reg, address);
 #endif
 
-  long double error = 0.0;
-  long double relative_error = 0.0;
+  long double shadow_value = 0.0L;
+  long double error = 0.0L;
+  long double relative_error = 0.0L;
 
   // Find if this register already has an error
-  int found = _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, reg, function_name, &error, &relative_error);
+  int found = _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, reg,
+                                               function_name, &shadow_value,
+                                               &error, &relative_error);
   if (!found)
   {
     if (_FPC_WARNING_COUNT_ < MAX_WARNINGS)
@@ -319,12 +404,17 @@ void _FPC_FP64_STORE_INST_(const char *reg, const char *function_name, uintptr_t
       printf("#FPCHECKER: Warning: trying to store a register's value (%s) in function %s, but we don't have its error.\n",
              reg, function_name);
     }
+
+    shadow_value = (long double)stored_value;
+    error = 0.0L;
+    relative_error = 0.0L;
   }
 
   // Update table based on the address
   // If address exists, update it
   // If address does not exist, insert new entry
-  _FPC_ADDRESS_HT_UPDATE_FP64_(_FPC_ADDRESS_HT_FP64_, address, error, relative_error, file_name, loc);
+  _FPC_ADDRESS_HT_UPDATE_FP64_(_FPC_ADDRESS_HT_FP64_, address, shadow_value,
+                               error, relative_error, file_name, loc);
 
   // Log location info if line is in _FPC_LINES_TO_KEEP_
   FPC_APPEND_ERROR_LOG_ENTRY_FP64(loc, relative_error);
@@ -352,15 +442,38 @@ void _FPC_FP64_LOAD_INST_(const char *load_reg, const char *function_name, uintp
   printf("reg=%s, address=0x%016llx, func=%s\n", load_reg, (unsigned long long)address, function_name);
 #endif
 
-  long double error = 0.0;
-  long double relative_error = 0.0;
+  long double shadow_value = 0.0L;
+  long double error = 0.0L;
+  long double relative_error = 0.0L;
 
   // Find what's at this memory address
-  int found = _FPC_FIND_ERRORS_BY_ADDRESS_FP64(_FPC_ADDRESS_HT_FP64_, address, &error, &relative_error);
+  int found = _FPC_FIND_VALUE_BY_ADDRESS_FP64(_FPC_ADDRESS_HT_FP64_, address,
+                                              &shadow_value, &error,
+                                              &relative_error);
   if (found)
   {
+    long double current_value = _FPC_READ_FP64_VALUE_FROM_ADDRESS_(address);
+    long double reconciliation_error = (shadow_value - current_value) - error;
+    long double reconciliation_scale = fmaxl(1.0L,
+                                            fmaxl(fabsl(shadow_value),
+                                                  fmaxl(fabsl(current_value),
+                                                        fabsl(error))));
+
+    if (fabsl(reconciliation_error) > (32.0L * DBL_EPSILON * reconciliation_scale))
+    {
+      shadow_value = current_value;
+      error = 0.0L;
+      relative_error = 0.0L;
+    }
+    else if (shadow_value == 0.0L && error == 0.0L && relative_error == 0.0L)
+    {
+      shadow_value = current_value;
+    }
+
     // Update register entry with this error
-    _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, load_reg, function_name, error, relative_error, file_name, loc);
+    _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, load_reg,
+                                  function_name, shadow_value, error,
+                                  relative_error, file_name, loc);
 
     // Log location info if line is in _FPC_LINES_TO_KEEP_
     FPC_APPEND_ERROR_LOG_ENTRY_FP64(loc, relative_error);
@@ -368,7 +481,10 @@ void _FPC_FP64_LOAD_INST_(const char *load_reg, const char *function_name, uintp
   else
   {
     // No error found at this address, create register with zero error
-    _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, load_reg, function_name, 0.0L, 0.0L, file_name, loc);
+    shadow_value = _FPC_READ_FP64_VALUE_FROM_ADDRESS_(address);
+    _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, load_reg,
+                                  function_name, shadow_value, 0.0L, 0.0L,
+                                  file_name, loc);
 
 #ifdef FPC_DEBUG_ERROR_ANALYSIS
     printf("LOAD: No data found at address %lu\n", address);
@@ -434,17 +550,39 @@ void _FPC_FP64_PHI_(const char *phi_values, const char *function_name)
         {
           if (strcmp(pipe_pos + 1, _FPC_LAST_BASIC_BLOCK_) == 0)
           {
-            long double old_error = 0.0;
-            long double old_relative_error = 0.0;
-            int found = _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, first_substr, function_name, &old_error, &old_relative_error);
+            long double old_shadow = 0.0L;
+            long double old_error = 0.0L;
+            long double old_relative_error = 0.0L;
+            int found = _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_,
+                                                         first_substr,
+                                                         function_name,
+                                                         &old_shadow,
+                                                         &old_error,
+                                                         &old_relative_error);
             if (found)
             {
-              _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, register_name, function_name, old_error, old_relative_error, "", 0);
+              _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_,
+                                            register_name, function_name,
+                                            old_shadow, old_error,
+                                            old_relative_error, "", 0);
             }
             else
             {
-              // We don't have its error - create with zero error
-              _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, register_name, function_name, 0.0L, 0.0L, "", 0);
+              long double literal_shadow = 0.0L;
+              if (_FPC_TRY_PARSE_FP64_LITERAL_(first_substr, &literal_shadow))
+              {
+                _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_,
+                                              register_name, function_name,
+                                              literal_shadow, 0.0L, 0.0L,
+                                              "", 0);
+              }
+              else
+              {
+                // We don't have its error - create with zero error
+                _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_,
+                                              register_name, function_name,
+                                              0.0L, 0.0L, 0.0L, "", 0);
+              }
               // exit(1);
             }
           }
@@ -502,16 +640,22 @@ void _FPC_FP64_MEMCPY_INST_(uintptr_t address_dst, uintptr_t address_src,
 
 // Push argument error from caller's register table into the argument buffer.
 // Called once per FP argument, in order, before each user function call.
-void _FPC_FP64_PUSH_ARG_ERROR_(int arg_index, const char *arg_reg, const char *function_name)
+void _FPC_FP64_PUSH_ARG_ERROR_(int arg_index, double arg_value,
+                               const char *arg_reg,
+                               const char *function_name)
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
-  long double error = 0.0;
-  long double relative_error = 0.0;
-  _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, arg_reg, function_name, &error, &relative_error);
+  long double shadow_value = (long double)arg_value;
+  long double error = 0.0L;
+  long double relative_error = 0.0L;
+  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, arg_reg,
+                                   function_name, &shadow_value, &error,
+                                   &relative_error);
 
   if (arg_index >= 0 && arg_index < _FPC_ARG_BUF_MAX_)
   {
+    _FPC_ARG_SHADOW_BUF_FP64_[arg_index] = shadow_value;
     _FPC_ARG_ERR_BUF_FP64_[arg_index] = error;
     _FPC_ARG_REL_ERR_BUF_FP64_[arg_index] = relative_error;
     if (arg_index >= _FPC_ARG_BUF_COUNT_FP64_)
@@ -525,17 +669,19 @@ void _FPC_FP64_POP_ARG_ERROR_(int param_index, const char *param_reg, const char
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
-  long double error = 0.0;
-  long double relative_error = 0.0;
+  long double shadow_value = 0.0L;
+  long double error = 0.0L;
+  long double relative_error = 0.0L;
 
   if (param_index >= 0 && param_index < _FPC_ARG_BUF_COUNT_FP64_)
   {
+    shadow_value = _FPC_ARG_SHADOW_BUF_FP64_[param_index];
     error = _FPC_ARG_ERR_BUF_FP64_[param_index];
     relative_error = _FPC_ARG_REL_ERR_BUF_FP64_[param_index];
   }
 
   _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, param_reg, function_name,
-                           error, relative_error, "", 0);
+                           shadow_value, error, relative_error, "", 0);
 }
 
 // Save error of the value being returned by a function.
@@ -543,12 +689,16 @@ void _FPC_FP64_PUSH_RET_ERROR_(const char *ret_reg, const char *function_name)
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
-  long double error = 0.0;
-  long double relative_error = 0.0;
-  _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, ret_reg, function_name, &error, &relative_error);
+  long double shadow_value = 0.0L;
+  long double error = 0.0L;
+  long double relative_error = 0.0L;
+  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, ret_reg,
+                                   function_name, &shadow_value, &error,
+                                   &relative_error);
 
   if (_FPC_RET_STACK_TOP_FP64_ < _FPC_RET_STACK_MAX_)
   {
+    _FPC_RET_SHADOW_STACK_FP64_[_FPC_RET_STACK_TOP_FP64_] = shadow_value;
     _FPC_RET_ERR_STACK_FP64_[_FPC_RET_STACK_TOP_FP64_] = error;
     _FPC_RET_REL_ERR_STACK_FP64_[_FPC_RET_STACK_TOP_FP64_] = relative_error;
     strncpy(_FPC_RET_FUNC_STACK_FP64_[_FPC_RET_STACK_TOP_FP64_], function_name, _FPC_BB_NAME_SIZE_ - 1);
@@ -558,11 +708,13 @@ void _FPC_FP64_PUSH_RET_ERROR_(const char *ret_reg, const char *function_name)
 }
 
 // Load most recent returned value error into call result register in caller.
-void _FPC_FP64_POP_RET_ERROR_(const char *result_reg, const char *function_name,
+void _FPC_FP64_POP_RET_ERROR_(const char *result_reg, double result_value,
+                              const char *function_name,
                               const char *callee_name, int loc, char *file_name)
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
+  long double shadow_value = (long double)result_value;
   long double error = 0.0L;
   long double relative_error = 0.0L;
 
@@ -578,13 +730,14 @@ void _FPC_FP64_POP_RET_ERROR_(const char *result_reg, const char *function_name,
     if (names_match)
     {
       _FPC_RET_STACK_TOP_FP64_--;
+      shadow_value = _FPC_RET_SHADOW_STACK_FP64_[_FPC_RET_STACK_TOP_FP64_];
       error = _FPC_RET_ERR_STACK_FP64_[_FPC_RET_STACK_TOP_FP64_];
       relative_error = _FPC_RET_REL_ERR_STACK_FP64_[_FPC_RET_STACK_TOP_FP64_];
     }
   }
 
   _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, result_reg, function_name,
-                           error, relative_error, file_name, loc);
+                           shadow_value, error, relative_error, file_name, loc);
   FPC_APPEND_ERROR_LOG_ENTRY_FP64(loc, relative_error);
 }
 
@@ -593,8 +746,8 @@ void _FPC_FP64_POP_RET_ERROR_(const char *result_reg, const char *function_name,
 /*----------------------------------------------------------------------------*/
 // *** FP64 Error Calculation *** //
 // Calculates the error for a given double precision operation
-// Re-computes the operation in long double (128-bit), accounting for propagated
-// operand errors, and records the rounding error of the fp64 result.
+// Re-computes the operation on long double shadow operands and records the
+// rounding error of the fp64 result.
 
 void _FPC_FP64_CALCULATE_ERROR_(
     double x, double y, double z, double w, int loc, char *file_name, int op, int cond,
@@ -612,37 +765,40 @@ void _FPC_FP64_CALCULATE_ERROR_(
   printf("Line: %d, File Name: %s\n", loc, file_name);
 #endif
 
-  long double err_y = 0.0L;
-  long double err_z = 0.0L;
-  long double err_w = 0.0L;
-  long double _tmp_unused_ = 0.0L;
+  long double shadow_y = (long double)y;
+  long double shadow_z = (long double)z;
+  long double shadow_w = (long double)w;
+  long double _tmp_error_ = 0.0L;
+  long double _tmp_relative_error_ = 0.0L;
 
   #ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
-  _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op1_name, function_name, &err_y, &_tmp_unused_);
-  _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op2_name, function_name, &err_z, &_tmp_unused_);
-  _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, fma_name, function_name, &err_w, &_tmp_unused_);
+  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op1_name,
+                                   function_name, &shadow_y, &_tmp_error_,
+                                   &_tmp_relative_error_);
+  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op2_name,
+                                   function_name, &shadow_z, &_tmp_error_,
+                                   &_tmp_relative_error_);
+  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, fma_name,
+                                   function_name, &shadow_w, &_tmp_error_,
+                                   &_tmp_relative_error_);
   #endif
-
-  long double y_high = (long double)y + err_y;
-  long double z_high = (long double)z + err_z;
-  long double w_high = (long double)w + err_w;
 
   long double r_high = 0.0L;
   switch (op)
   {
   case 0:
-    r_high = y_high + z_high;
+    r_high = shadow_y + shadow_z;
     break;
   case 1:
-    r_high = y_high - z_high;
+    r_high = shadow_y - shadow_z;
     break;
   case 2:
-    r_high = y_high * z_high;
+    r_high = shadow_y * shadow_z;
     break;
   case 3:
-    if (z_high != 0.0)
+    if (shadow_z != 0.0L)
     {
-      r_high = y_high / z_high;
+      r_high = shadow_y / shadow_z;
     }
     else
     {
@@ -653,27 +809,30 @@ void _FPC_FP64_CALCULATE_ERROR_(
       }
       else
       {
-        printf("#FPCHECKER_ERROR: Shadow denominator canceled to zero at %s:%d (low-precision denominator=%.21Le, propagated_error=%.21Le)\n",
-               file_name, loc, (long double)z, err_z);
+        printf("#FPCHECKER_ERROR: Shadow denominator canceled to zero at %s:%d (low-precision denominator=%.21Le, shadow denominator=%.21Le)\n",
+               file_name, loc, (long double)z, shadow_z);
       }
-      r_high = 0.0;
+      r_high = 0.0L;
     }
     break;
   case 5:
-    r_high = fmodl(y_high, z_high);
+    r_high = fmodl(shadow_y, shadow_z);
     break;
   case 6:
-    r_high = fmal(y_high, z_high, w_high);
+    r_high = fmal(shadow_y, shadow_z, shadow_w);
     break;
   case 7:
-    r_high = -y_high; // Negation operation
+    r_high = -shadow_y; // Negation operation
     break;
   case 8: // Select instruction
-    if (cond == 1)
-      r_high = z_high;
-    else
-      r_high = w_high;
+  {
+    long double shadow_cond = (long double)cond;
+    _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op1_name,
+                                     function_name, &shadow_cond,
+                                     &_tmp_error_, &_tmp_relative_error_);
+    r_high = (shadow_cond != 0.0L) ? shadow_z : shadow_w;
     break;
+  }
   default:
     printf("#FPCHECKER_ERROR: Unknown operation %d\n", op);
   }
@@ -716,7 +875,9 @@ void _FPC_FP64_CALCULATE_ERROR_(
 #endif
 
   // Update register error table
-  _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, result_name, function_name, err_result, rel_error, file_name, loc);
+  _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, result_name,
+                                function_name, r_high, err_result, rel_error,
+                                file_name, loc);
 
   // Log location info if line is in _FPC_LINES_TO_KEEP_
   FPC_APPEND_ERROR_LOG_ENTRY_FP64(loc, rel_error);
@@ -755,61 +916,64 @@ void _FPC_FP64_MATH_ERROR_(
   printf("Line: %d, File Name: %s\n", loc, file_name);
 #endif
 
-  long double err_y = 0.0L;
-  long double err_z = 0.0L;
-  long double err_w = 0.0L;
-  long double _tmp_unused_ = 0.0L;
+  long double shadow_y = (long double)y;
+  long double shadow_z = (long double)z;
+  long double shadow_w = (long double)w;
+  long double _tmp_error_ = 0.0L;
+  long double _tmp_relative_error_ = 0.0L;
 
 #ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
-  _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op1_name, function_name, &err_y, &_tmp_unused_);
-  _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op2_name, function_name, &err_z, &_tmp_unused_);
-  _FPC_FIND_ERRORS_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op3_name, function_name, &err_w, &_tmp_unused_);
+  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op1_name,
+                                   function_name, &shadow_y, &_tmp_error_,
+                                   &_tmp_relative_error_);
+  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op2_name,
+                                   function_name, &shadow_z, &_tmp_error_,
+                                   &_tmp_relative_error_);
+  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op3_name,
+                                   function_name, &shadow_w, &_tmp_error_,
+                                   &_tmp_relative_error_);
 #endif
-
-  long double y_high = (long double)y + err_y;
-  long double z_high = (long double)z + err_z;
-  long double w_high = (long double)w + err_w;
 
   long double r_high = 0.0L;
 
   // Unary functions
-  if      (strcmp(math_func_name, "sin") == 0)       r_high = sinl(y_high);
-  else if (strcmp(math_func_name, "cos") == 0)       r_high = cosl(y_high);
-  else if (strcmp(math_func_name, "tan") == 0)       r_high = tanl(y_high);
-  else if (strcmp(math_func_name, "asin") == 0)      r_high = asinl(y_high);
-  else if (strcmp(math_func_name, "acos") == 0)      r_high = acosl(y_high);
-  else if (strcmp(math_func_name, "atan") == 0)      r_high = atanl(y_high);
-  else if (strcmp(math_func_name, "sinh") == 0)      r_high = sinhl(y_high);
-  else if (strcmp(math_func_name, "cosh") == 0)      r_high = coshl(y_high);
-  else if (strcmp(math_func_name, "tanh") == 0)      r_high = tanhl(y_high);
-  else if (strcmp(math_func_name, "asinh") == 0)     r_high = asinhl(y_high);
-  else if (strcmp(math_func_name, "acosh") == 0)     r_high = acoshl(y_high);
-  else if (strcmp(math_func_name, "atanh") == 0)     r_high = atanhl(y_high);
-  else if (strcmp(math_func_name, "exp") == 0)       r_high = expl(y_high);
-  else if (strcmp(math_func_name, "exp2") == 0)      r_high = exp2l(y_high);
-  else if (strcmp(math_func_name, "expm1") == 0)     r_high = expm1l(y_high);
-  else if (strcmp(math_func_name, "log") == 0)       r_high = logl(y_high);
-  else if (strcmp(math_func_name, "log2") == 0)      r_high = log2l(y_high);
-  else if (strcmp(math_func_name, "log10") == 0)     r_high = log10l(y_high);
-  else if (strcmp(math_func_name, "log1p") == 0)     r_high = log1pl(y_high);
-  else if (strcmp(math_func_name, "logb") == 0)      r_high = logbl(y_high);
-  else if (strcmp(math_func_name, "sqrt") == 0)      r_high = sqrtl(y_high);
-  else if (strcmp(math_func_name, "cbrt") == 0)      r_high = cbrtl(y_high);
-  else if (strcmp(math_func_name, "fabs") == 0)      r_high = fabsl(y_high);
-  else if (strcmp(math_func_name, "ceil") == 0)      r_high = ceill(y_high);
-  else if (strcmp(math_func_name, "floor") == 0)     r_high = floorl(y_high);
-  else if (strcmp(math_func_name, "trunc") == 0)     r_high = truncl(y_high);
-  else if (strcmp(math_func_name, "round") == 0)     r_high = roundl(y_high);
-  else if (strcmp(math_func_name, "nearbyint") == 0) r_high = nearbyintl(y_high);
-  else if (strcmp(math_func_name, "rint") == 0)      r_high = rintl(y_high);
+  if      (strcmp(math_func_name, "sin") == 0)       r_high = sinl(shadow_y);
+  else if (strcmp(math_func_name, "cos") == 0)       r_high = cosl(shadow_y);
+  else if (strcmp(math_func_name, "tan") == 0)       r_high = tanl(shadow_y);
+  else if (strcmp(math_func_name, "asin") == 0)      r_high = asinl(shadow_y);
+  else if (strcmp(math_func_name, "acos") == 0)      r_high = acosl(shadow_y);
+  else if (strcmp(math_func_name, "atan") == 0)      r_high = atanl(shadow_y);
+  else if (strcmp(math_func_name, "sinh") == 0)      r_high = sinhl(shadow_y);
+  else if (strcmp(math_func_name, "cosh") == 0)      r_high = coshl(shadow_y);
+  else if (strcmp(math_func_name, "tanh") == 0)      r_high = tanhl(shadow_y);
+  else if (strcmp(math_func_name, "asinh") == 0)     r_high = asinhl(shadow_y);
+  else if (strcmp(math_func_name, "acosh") == 0)     r_high = acoshl(shadow_y);
+  else if (strcmp(math_func_name, "atanh") == 0)     r_high = atanhl(shadow_y);
+  else if (strcmp(math_func_name, "exp") == 0)       r_high = expl(shadow_y);
+  else if (strcmp(math_func_name, "exp2") == 0)      r_high = exp2l(shadow_y);
+  else if (strcmp(math_func_name, "expm1") == 0)     r_high = expm1l(shadow_y);
+  else if (strcmp(math_func_name, "log") == 0)       r_high = logl(shadow_y);
+  else if (strcmp(math_func_name, "log2") == 0)      r_high = log2l(shadow_y);
+  else if (strcmp(math_func_name, "log10") == 0)     r_high = log10l(shadow_y);
+  else if (strcmp(math_func_name, "log1p") == 0)     r_high = log1pl(shadow_y);
+  else if (strcmp(math_func_name, "logb") == 0)      r_high = logbl(shadow_y);
+  else if (strcmp(math_func_name, "sqrt") == 0)      r_high = sqrtl(shadow_y);
+  else if (strcmp(math_func_name, "cbrt") == 0)      r_high = cbrtl(shadow_y);
+  else if (strcmp(math_func_name, "fabs") == 0)      r_high = fabsl(shadow_y);
+  else if (strcmp(math_func_name, "ceil") == 0)      r_high = ceill(shadow_y);
+  else if (strcmp(math_func_name, "floor") == 0)     r_high = floorl(shadow_y);
+  else if (strcmp(math_func_name, "trunc") == 0)     r_high = truncl(shadow_y);
+  else if (strcmp(math_func_name, "round") == 0)     r_high = roundl(shadow_y);
+  else if (strcmp(math_func_name, "nearbyint") == 0) r_high = nearbyintl(shadow_y);
+  else if (strcmp(math_func_name, "rint") == 0)      r_high = rintl(shadow_y);
   // Binary functions
-  else if (strcmp(math_func_name, "pow") == 0)       r_high = powl(y_high, z_high);
-  else if (strcmp(math_func_name, "atan2") == 0)     r_high = atan2l(y_high, z_high);
-  else if (strcmp(math_func_name, "hypot") == 0)     r_high = hypotl(y_high, z_high);
-  else if (strcmp(math_func_name, "fmod") == 0)      r_high = fmodl(y_high, z_high);
-  else if (strcmp(math_func_name, "remainder") == 0) r_high = remainderl(y_high, z_high);
+  else if (strcmp(math_func_name, "pow") == 0)       r_high = powl(shadow_y, shadow_z);
+  else if (strcmp(math_func_name, "atan2") == 0)     r_high = atan2l(shadow_y, shadow_z);
+  else if (strcmp(math_func_name, "hypot") == 0)     r_high = hypotl(shadow_y, shadow_z);
+  else if (strcmp(math_func_name, "fmod") == 0)      r_high = fmodl(shadow_y, shadow_z);
+  else if (strcmp(math_func_name, "remainder") == 0) r_high = remainderl(shadow_y, shadow_z);
   // Ternary functions
-  else if (strcmp(math_func_name, "fma") == 0)       r_high = fmal(y_high, z_high, w_high);
+  else if (strcmp(math_func_name, "fma") == 0)       r_high = fmal(shadow_y, shadow_z, shadow_w);
   else
   {
     printf("#FPCHECKER_WARNING: Unknown math function '%s'\n", math_func_name);
@@ -846,7 +1010,9 @@ void _FPC_FP64_MATH_ERROR_(
   printf("\t >>> Math Relative Error: %.21Le <<< \n", rel_error);
 #endif
 
-  _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, result_name, function_name, err_result, rel_error, file_name, loc);
+  _FPC_REGISTER_HT_UPDATE_FP64_(_FPC_REGISTER_HT_FP64_, result_name,
+                                function_name, r_high, err_result, rel_error,
+                                file_name, loc);
   FPC_APPEND_ERROR_LOG_ENTRY_FP64(loc, rel_error);
 }
 

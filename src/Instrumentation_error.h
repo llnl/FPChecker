@@ -108,7 +108,7 @@ namespace CPUAnalysisFP64
     static bool isCmpEqual(const Instruction *inst);
     static bool isFMAOperation(const Instruction *inst);
 
-    static bool isSupportedMathCall(const CallInst *CI,
+    static bool isSupportedMathCall(const CallBase *CI,
                                     std::string &normalizedName);
 
     static bool functionisAnnotated(const Function *f,

@@ -58,7 +58,7 @@ void print_array(int w, int h,
   DATA_TYPE sum = 0;
   DATA_TYPE norm = 0;
 
-  long double max_value_double = 0;
+  long double max_shadow = 0;
   long double sum_double = 0;
   long double norm_double = 0;
 
@@ -76,11 +76,10 @@ void print_array(int w, int h,
       if (value_double < 0.0L)
         value_double = -value_double;
 
-      if (value > max_value)
+      if (value > max_value) {
         max_value = value;
-
-      if (value_double > max_value_double)
-        max_value_double = value_double;
+        max_shadow = value_double;
+      }
     }
   }
 
@@ -94,10 +93,10 @@ void print_array(int w, int h,
     norm = SQRT_FUN(sum);
   }
 
-  if (max_value_double != 0) {
+  if (max_shadow != 0) {
     for (i = 0; i < w; i++) {
       for (j = 0; j < h; j++) {
-        long double scaled = imgOut_double[i][j] / max_value_double;
+        long double scaled = imgOut_double[i][j] / max_shadow;
         sum_double += scaled * scaled;
       }
     }
@@ -106,7 +105,7 @@ void print_array(int w, int h,
 
   fprintf(POLYBENCH_DUMP_TARGET, "Max value in imgOut: %.17e\n", max_value);
   fprintf(POLYBENCH_DUMP_TARGET, "Norm of imgOut: %.17e\n", norm);
-  fprintf(POLYBENCH_DUMP_TARGET, "Max value in imgOut_double: %.21Le\n", max_value_double);
+  fprintf(POLYBENCH_DUMP_TARGET, "Max value in imgOut_double: %.21Le\n", max_shadow);
   fprintf(POLYBENCH_DUMP_TARGET, "Norm of imgOut_double: %.21Le\n", norm_double);
 
   long double norm_error = norm_double - (long double)norm;
@@ -219,15 +218,26 @@ void kernel_deriche_long_double(int w, int h, long double alpha,
     long double k;
     long double a1, a2, a3, a4, a5, a6, a7, a8;
     long double b1, b2, c1, c2;
+    double alpha_low = (double)alpha;
+    double k_low;
+    double a2_low, a3_low, a4_low;
+    double b1_low, b2_low;
 
 #pragma scop
-   k = (1.0L-expl(-alpha))*(1.0L-expl(-alpha))/(1.0L+2.0L*alpha*expl(-alpha)-expl(2.0L*alpha));
+   k_low = (SCALAR_VAL(1.0)-EXP_FUN(-alpha_low))*(SCALAR_VAL(1.0)-EXP_FUN(-alpha_low))/(SCALAR_VAL(1.0)+SCALAR_VAL(2.0)*alpha_low*EXP_FUN(-alpha_low)-EXP_FUN(SCALAR_VAL(2.0)*alpha_low));
+   a2_low = k_low*EXP_FUN(-alpha_low)*(alpha_low-SCALAR_VAL(1.0));
+   a3_low = k_low*EXP_FUN(-alpha_low)*(alpha_low+SCALAR_VAL(1.0));
+   a4_low = -k_low*EXP_FUN(SCALAR_VAL(-2.0)*alpha_low);
+   b1_low = POW_FUN(SCALAR_VAL(2.0),-alpha_low);
+   b2_low = -EXP_FUN(SCALAR_VAL(-2.0)*alpha_low);
+
+   k = (long double)k_low;
    a1 = a5 = k;
-   a2 = a6 = k*expl(-alpha)*(alpha-1.0L);
-   a3 = a7 = k*expl(-alpha)*(alpha+1.0L);
-   a4 = a8 = -k*expl(-2.0L*alpha);
-   b1 =  powl(2.0L,-alpha);
-   b2 = -expl(-2.0L*alpha);
+   a2 = a6 = (long double)a2_low;
+   a3 = a7 = (long double)a3_low;
+   a4 = a8 = (long double)a4_low;
+   b1 =  (long double)b1_low;
+   b2 = (long double)b2_low;
    c1 = c2 = 1.0L;
 
    for (i=0; i<_PB_W; i++) {
