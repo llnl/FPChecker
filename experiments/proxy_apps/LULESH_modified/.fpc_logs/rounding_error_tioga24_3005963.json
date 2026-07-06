@@ -1,0 +1,3852 @@
+[
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 172,
+    "error": -1.084202172485504434007e-19,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 5.551115123125783010267e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 176,
+    "error": -2.710505431213761085019e-20,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 5.551115123125783010267e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 173,
+    "error": -1.084202172485504434007e-19,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 5.551115123125783010267e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 935,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.376009786109978277563e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1735,
+    "error": -6.938893903907228377648e-18,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 1.249199731409874219454e-05
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 934,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.772038812464401558112e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 945,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.315680021824597841994e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 933,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.315680021824597841994e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1031,
+    "error": -1.084202172485504434007e-19,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 5.553729836970777271315e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 947,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.376009786109978277563e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 951,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.272644153253996714017e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 961,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.315680021824597841994e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1028,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1026,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1027,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1537,
+    "error": -6.938893903907228377648e-18,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 3.778455343812736072372e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1534,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.793705886045865059479e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1753,
+    "error": -6.938893903907228377648e-18,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 1.249199731409874219454e-05
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1533,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.550044380975617145219e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2382,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.550044380975617145219e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1771,
+    "error": -6.938893903907228377648e-18,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 1.360346976630284058194e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1605,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.630962548329872417399e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1745,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150980560939365e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1763,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150980560939365e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1781,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.084906447758671195638e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1944,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1945,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2285,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.793705886045865059479e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2339,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.239477872189433437980e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2284,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.239522871582750342350e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2289,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2288,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2286,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.239477872189433437980e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2287,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.291430323277090278340e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2206,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.291430323277090278340e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2340,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.239522871582750342350e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2341,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.291430323277090278340e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2237,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.119689165955320075119e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2298,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2051,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 941,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.315680021824597841994e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 938,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.772038812464401558112e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 943,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.376009786109978277563e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 937,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.315680021824597841994e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 946,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.772038812464401558112e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 939,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.376009786109978277563e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 957,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 5.710906369605882672835e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 955,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.272644153253996714017e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 942,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.772038812464401558112e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 950,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.772038812464401558112e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2607,
+    "error": 1.065200194716453552246e-08,
+    "relative_error": 2.892366050260787102913e-02,
+    "max_relative_error": 1.021418577117640727594e-01
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 252,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 253,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 254,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 255,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 256,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 257,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 258,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 954,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.772038812464401558112e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2296,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.550044380975617145219e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2603,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 243,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 244,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 245,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 246,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 247,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 248,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 949,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.315680021824597841994e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 242,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 249,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 251,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 953,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.315680021824597841994e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 260,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 261,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 262,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 263,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 264,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 265,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 266,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 267,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 376,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.303865262937037613753e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 348,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 349,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.116904826614488109576e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 401,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.020355100306158376602e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 351,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 352,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.066251004650614100921e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 404,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.090953192928068879708e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 350,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.066251004650614100921e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 355,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.116904826614488109576e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 357,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 358,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.425670507585790219852e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 406,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.153784589594980356593e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 361,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.750728271107059232217e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 359,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.750728271107059232217e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 364,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.425670507585790219852e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 360,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 366,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 367,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.605113450938435154372e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 411,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.543722706633536144988e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 370,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.685624585314813834433e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 963,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.272644153253996714017e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 368,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.685624585314813834433e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 373,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.605113450938435154372e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 369,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 959,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.272644153253996714017e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 167,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2560,
+    "error": 2.376986208232380326510e-20,
+    "relative_error": 2.843150796349995949766e-16,
+    "max_relative_error": 5.127710762435740935854e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 962,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.535289477224407365409e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2633,
+    "error": 2.888514699035172640651e-21,
+    "relative_error": 8.613637006467921849473e-17,
+    "max_relative_error": 5.216057403472671026280e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 219,
+    "error": 5.214546581534286462389e-20,
+    "relative_error": 2.033650759289837673973e-16,
+    "max_relative_error": 2.033650759289837673973e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 206,
+    "error": -4.579271871093561208088e-21,
+    "relative_error": 1.901966328562450365261e-16,
+    "max_relative_error": 2.157272426109732579932e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 165,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2461,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 958,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.535289477224407365409e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 703,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.310410411392052735781e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1466,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.659611600298573313005e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 195,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-util.cc",
+    "line": 203,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.562999712647525627331e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1386,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.776028344124411189690e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1387,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.120995321403072617257e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1454,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.372842811631256063129e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1704,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1545,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1847,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.084906447758671195638e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 53,
+    "error": 1.392310407049256182344e-20,
+    "relative_error": 1.961572842460237937056e-17,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2135,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.239477872189433437980e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2503,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1347,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.039384119090337381269e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2144,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2161,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.793705886045865059479e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 319,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.665282547251009603445e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 394,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.562960403799537539353e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 414,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.543722698792810022389e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 556,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 5.972586505353125698182e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 557,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 5.937658770603238364707e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1305,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 192,
+    "error": 1.309592345793953414856e-20,
+    "relative_error": 1.665504082420478784486e-16,
+    "max_relative_error": 1.665504082420478784486e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1379,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.110223023624236389495e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1432,
+    "error": -6.938893903907228377648e-18,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 3.778455343812736072372e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1456,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.477540287212252091462e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1662,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1733,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.063572380081342067350e-05
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1843,
+    "error": 1.657324662872342528000e+19,
+    "relative_error": 1.657324662872342430282e-17,
+    "max_relative_error": 1.084906447758671195638e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2533,
+    "error": -1.104286117758291945953e-22,
+    "relative_error": 5.479720160815419382365e-17,
+    "max_relative_error": 1.550116513811455696043e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2179,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.114383520554848452933e-14
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 321,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.564078238232098823771e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1363,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 555,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.498775737366803074720e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 193,
+    "error": -1.762912732461430209696e-16,
+    "relative_error": 1.977553431348971899782e-16,
+    "max_relative_error": 2.150912789277910306955e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1447,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.487541769321166151416e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1378,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.110223023624236389495e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 166,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1459,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.780803796856600655541e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2516,
+    "error": -7.300184373573349314257e-54,
+    "relative_error": 6.570167250249398794559e-17,
+    "max_relative_error": 2.239324815283056968459e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2611,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.630962548329872417399e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1346,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.191494761905497461825e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 325,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-util.cc",
+    "line": 186,
+    "error": 5.675460101883800234646e-13,
+    "relative_error": 5.877940393102562984066e-17,
+    "max_relative_error": 5.877940393102562984066e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 684,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 409,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.199275439099529368618e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 549,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 169,
+    "error": 4.853498787767140942861e-19,
+    "relative_error": 4.968945563524355996726e-17,
+    "max_relative_error": 8.597222070785417311469e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1382,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.110223023624236389495e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 198,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1455,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.067471417394417329852e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1381,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1380,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1546,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1461,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.468730384966139774539e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 303,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 385,
+    "error": -1.734723475976807094412e-18,
+    "relative_error": 5.782411586589356860802e-17,
+    "max_relative_error": 5.782411586589356860802e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 324,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.664840692449833801943e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 329,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.665282547251009603445e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 185,
+    "error": -5.121592039358802139759e-11,
+    "relative_error": 1.621271676931993770780e-16,
+    "max_relative_error": 1.621271676931993770780e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1464,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.642887203876078695456e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1385,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.991889556745895717334e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1383,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.110223023624236389495e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1561,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.947689284963587570744e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 307,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2818,
+    "error": 5.214546581534286462389e-20,
+    "relative_error": 2.033650759289837673973e-16,
+    "max_relative_error": 2.033650759289837673973e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 300,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-util.cc",
+    "line": 195,
+    "error": -9.748646334628574550152e-12,
+    "relative_error": 4.090844071564501840525e-17,
+    "max_relative_error": 4.090844071564501840525e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 338,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.564078238232098823771e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 327,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.564078238232098823771e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 878,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 675,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.418510027068704731169e-14
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 688,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.318950597275038658125e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 702,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.310448638231428424695e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1463,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.579846439440257029559e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 304,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 171,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 332,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 687,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.318950597275038658125e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1594,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1291,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 45,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.180924960666813719521e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2810,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.033650759289837673973e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 178,
+    "error": 5.780338120520557392001e-21,
+    "relative_error": 1.212382263180028379107e-16,
+    "max_relative_error": 1.832266378857021165528e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 113,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1699,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1732,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 871,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 676,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.910975217116778378814e-14
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 340,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.664840692449833801943e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 686,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.537415600268894223159e-13
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 699,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.776787563948026308663e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 704,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.310448638372306144598e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 328,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 194,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1544,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1453,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.327085315316598630066e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1420,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.776028344124411189690e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 378,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1723,
+    "error": 8.739675649849232286215e-12,
+    "relative_error": 7.058096883824172134287e-17,
+    "max_relative_error": 9.750437169399232981086e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 674,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.344943738626793200820e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 682,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.436472023962114195046e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 698,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.776787563948026308663e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1589,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.010907801728303865221e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1939,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.145349665509055705656e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1654,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 334,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.564078238232098823771e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2397,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1458,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.619335305707087713925e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 412,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.672628388456397209881e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 802,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 866,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1365,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1834,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.098611715896317558412e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 685,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 4.773659326031017154287e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 697,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.776787563948026308663e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1608,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.329809725158562367861e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2118,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.793705886045865059479e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1658,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2230,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.239477872189433437980e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 203,
+    "error": -4.579271871093561208088e-21,
+    "relative_error": 1.901966328562450365261e-16,
+    "max_relative_error": 2.157272426109732579932e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-util.cc",
+    "line": 53,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1465,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.932023372932200496289e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 407,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 4.324380286939855896722e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 320,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1084,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.303865262937037613753e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1688,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1713,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 873,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 677,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.683978112490052149210e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 681,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.085526891522167896007e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 696,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.327179202457172430975e-14
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1838,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 8.505327725235855754944e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2123,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.202827780103430833356e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1606,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.380984490896830748415e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2134,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.793705886045865059479e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 181,
+    "error": -4.579271871093561208088e-21,
+    "relative_error": 1.901966328562450365261e-16,
+    "max_relative_error": 2.038935409242156764672e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2614,
+    "error": 2.888514699035172640651e-21,
+    "relative_error": 8.613637006467921849473e-17,
+    "max_relative_error": 5.216057403472671026280e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1588,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 8.258370841175633355416e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1649,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1936,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 5.715476602536089852862e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2067,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1661,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2229,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.239522871582750342350e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-util.cc",
+    "line": 210,
+    "error": -1.501388775528698688299e-14,
+    "relative_error": 2.188046213817831286887e-01,
+    "max_relative_error": 8.001171188756588493010e-01
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 298,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1692,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1712,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 854,
+    "error": -1.084202172485504434007e-19,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 5.551115123125783010267e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1714,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.330836998197219297401e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1749,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.063572380081342067350e-05
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-util.cc",
+    "line": 185,
+    "error": 5.675460101883800234646e-13,
+    "relative_error": 5.877940393102562984066e-17,
+    "max_relative_error": 5.877940393102562984066e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 893,
+    "error": 1.570386984301649717677e-38,
+    "relative_error": 1.005047770457832886269e-16,
+    "max_relative_error": 1.119617331361906882056e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2306,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.550044380975617145219e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1364,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 877,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 692,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.085526891522167896007e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1833,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.260246112584974324043e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1877,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.619501711882311850549e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2122,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2538,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.537415204774358762080e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1925,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 9.257901812331156919484e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2131,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.013581222362798215915e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2605,
+    "error": -7.101334631443023681641e-09,
+    "relative_error": 1.928203405561038186371e-17,
+    "max_relative_error": 2.431963941840355572379e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1931,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.291021954413416439856e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1941,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.681983774099129088908e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2178,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.892251575927230425609e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 395,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.672628409772733043168e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 171,
+    "error": -1.355252715606880542509e-20,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 5.551115123125783010267e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 413,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.672628388456397209881e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 399,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 323,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 794,
+    "error": -2.842170943040400743484e-14,
+    "relative_error": 5.551115123125782393969e-17,
+    "max_relative_error": 1.536310158851870397729e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1709,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1695,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1743,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.994576767261930173455e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 889,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 868,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1875,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 9.216515751859643067642e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2112,
+    "error": -3.930181264877319335938e-07,
+    "relative_error": 1.305623350313443275851e-17,
+    "max_relative_error": 9.294072350753268185250e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1929,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 8.550593778372606453058e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2612,
+    "error": -1.242062008799393879599e-14,
+    "relative_error": 8.816067512858398161382e-17,
+    "max_relative_error": 6.630962548329872417399e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1935,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 9.592905547301557701436e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2181,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.239522871582750342350e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 397,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 210,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1460,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.251366676774620307025e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 299,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1677,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1708,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.330836998197219297401e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1742,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.201404187815631069704e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1698,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1731,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1757,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979151042166276344e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1866,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.380049098469093512278e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2108,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2527,
+    "error": -1.642853021621704101562e-06,
+    "relative_error": 5.025641025641025641071e-02,
+    "max_relative_error": 8.358689815643458027292e-02
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1831,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 9.029419891287119597983e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1923,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.070600504543521768349e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2585,
+    "error": 4.855881067931293662565e-20,
+    "relative_error": 3.629872732043005431885e-16,
+    "max_relative_error": 5.216057403472671026280e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2394,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1651,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2061,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.361912549608987213957e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 408,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 4.324380286939855896722e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1230,
+    "error": -4.579271871093561208088e-21,
+    "relative_error": 1.901966328562450365261e-16,
+    "max_relative_error": 2.157272426109732579932e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-util.cc",
+    "line": 206,
+    "error": 4.550804177938516659196e-13,
+    "relative_error": 8.001171188756587936814e-01,
+    "max_relative_error": 8.001171188756587936814e-01
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1680,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1706,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1768,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.063572380081342067350e-05
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1721,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2458,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2523,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1914,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.074854348412720438041e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 691,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.535289477224407365409e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1837,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 9.439782651516929260027e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1924,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.084906447758671195638e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2602,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2389,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1934,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.835150017518852523393e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2059,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2064,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.361912549608987213957e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2177,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.400002511188240237466e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2198,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.239477872189433437980e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2208,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 284,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 392,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1705,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.330836998197219297401e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1684,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1710,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1761,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 390,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1756,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979151005064071004e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 870,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1598,
+    "error": 1.827515916374977678061e-11,
+    "relative_error": 5.859529070168812470943e-17,
+    "max_relative_error": 6.060311214073408685721e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1911,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2103,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 5.534281164451174389921e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2091,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2526,
+    "error": 4.470348358154296875000e-07,
+    "relative_error": 1.367526191692199048839e-17,
+    "max_relative_error": 1.326335627381609004061e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1611,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.550044380975617145219e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 680,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.436472024072514815237e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2022,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.291430323277090278340e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2166,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2416,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2174,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.106706301349084388381e-14
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1657,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 211,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.605583929880351078502e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1425,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.776028344124411189690e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-util.cc",
+    "line": 208,
+    "error": 0.0,
+    "relative_error": 1e9999,
+    "max_relative_error": 1e9999
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1666,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1702,
+    "error": 2.842170943040400743484e-14,
+    "relative_error": 5.551115123125782393969e-17,
+    "max_relative_error": 2.347297681702036884231e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1687,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 881,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1720,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1751,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2522,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1607,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.031746031746031746004e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1874,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.501976387487183332425e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 693,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.535289477036062761211e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1880,
+    "error": 1.657324662872342528000e+19,
+    "relative_error": 1.657324662872342430282e-17,
+    "max_relative_error": 9.257901812331156919484e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2540,
+    "error": 2.376986208232380326510e-20,
+    "relative_error": 2.843150796349995949766e-16,
+    "max_relative_error": 6.630962548329872417399e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1928,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.046104613789397583922e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2165,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.793705886022392313228e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2407,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1653,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1660,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 215,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1669,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 302,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1690,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 853,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.119689165955320075119e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 885,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2315,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.550044380975617145219e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1755,
+    "error": 4.440892098500626161695e-16,
+    "relative_error": 5.551115123125782393969e-17,
+    "max_relative_error": 7.764847758982112310336e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1805,
+    "error": 1.657324662872342528000e+19,
+    "relative_error": 1.657324662872342430282e-17,
+    "max_relative_error": 1.070600504543521768349e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2525,
+    "error": 2.089887857437133789062e-06,
+    "relative_error": 6.393184946161036946674e-17,
+    "max_relative_error": 1.409919560717716129458e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 876,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1829,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.098611715896317558412e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 398,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.672628407171486066635e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1839,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 8.505327725235855754944e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1884,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 9.257901812331156919484e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1940,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.106886771926587281653e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1290,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2819,
+    "error": -4.579271871093561208088e-21,
+    "relative_error": 1.901966328562450365261e-16,
+    "max_relative_error": 2.157272426109732579932e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 1084,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 310,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1672,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 799,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1694,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1767,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 888,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2297,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1857,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.084906447758671195638e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1918,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.630962548329872417399e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2090,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 872,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1913,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.074854348412720438041e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2601,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2021,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1648,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 393,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-util.cc",
+    "line": 204,
+    "error": 4.549588260025150742924e-13,
+    "relative_error": 7.991711107539429722593e-01,
+    "max_relative_error": 8.001171188756587936814e-01
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1531,
+    "error": -1.084202172485504434007e-19,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 1.490235899876531864209e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1676,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 382,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1697,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 891,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1828,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.260246112584974324043e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1876,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.619501711882311850549e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2412,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 381,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 342,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.807735016533239724352e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 396,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.672628409772733043168e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2831,
+    "error": -1.033895191682177028270e-15,
+    "relative_error": 2.937670523793372370639e-17,
+    "max_relative_error": 4.219125372843787387042e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1701,
+    "error": -1.084202172485504434007e-19,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 1.550044380975617145219e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1679,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 800,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1741,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.482148777053387376529e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 867,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1809,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.070600504543521768349e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2531,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.630962548329872417399e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1577,
+    "error": -4.579271871093561208088e-21,
+    "relative_error": 1.901966328562450365261e-16,
+    "max_relative_error": 2.157272426109732579932e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2136,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.308160678724737757074e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2168,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 391,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.562960403799537539353e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 336,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1415,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.776028344124411189690e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1683,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1906,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1894,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 8.705963844257136932868e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1650,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1656,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 224,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1532,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.550044380975617145219e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1665,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1686,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 801,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 880,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1750,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1775,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979151042166276344e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1872,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.297971275826332836987e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2110,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1836,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 9.029419891287119597983e-07
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2142,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2196,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.793705886045865059479e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1659,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2231,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 184,
+    "error": -1.109951974082035164315e-17,
+    "relative_error": 5.549759870410175821576e-17,
+    "max_relative_error": 5.549759870410175821576e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1668,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1689,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 884,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1725,
+    "error": -7.140954494389006868005e-12,
+    "relative_error": 5.766913410225512136395e-02,
+    "max_relative_error": 5.876270894364983629141e-02
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1777,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 869,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1759,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 875,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2197,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.239522871582750342350e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 380,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2184,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.239522871582750342350e-12
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1430,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.776028344124411189690e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1671,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1760,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1693,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 887,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1719,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1774,
+    "error": 4.440892098500626161695e-16,
+    "relative_error": 5.551115123125782393969e-17,
+    "max_relative_error": 8.051057511795019564789e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1778,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2521,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1819,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.070600504543521768349e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1871,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.380049098469093512278e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2109,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1927,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.046886572687430715655e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1652,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2386,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1405,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.776028344124411189690e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1043,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 305,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1034,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1675,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1696,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1769,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979150921594223754e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 387,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 890,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1724,
+    "error": 1.598721155460225418210e-12,
+    "relative_error": 1.291115283626371660291e-17,
+    "max_relative_error": 6.188400414037212645930e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1596,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1779,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1908,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.131127625913446834605e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2114,
+    "error": -4.153698682785034179688e-07,
+    "relative_error": 1.379865107357217993959e-02,
+    "max_relative_error": 5.703597122302158273395e-02
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2125,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2534,
+    "error": 7.475065759519200492278e-20,
+    "relative_error": 2.632833617383561381733e-17,
+    "max_relative_error": 1.075856864319578896392e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2147,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2408,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1307,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1678,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 49,
+    "error": 1.156708192770472543032e-17,
+    "relative_error": 9.253665542163780515180e-17,
+    "max_relative_error": 1.865460619984570389835e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1773,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979151079090959212e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2456,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1869,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.501976387487183332425e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1912,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2093,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1647,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1681,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1739,
+    "error": 4.440892098500626161695e-16,
+    "relative_error": 5.551115123125782393969e-17,
+    "max_relative_error": 8.017545774625487214722e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1595,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1903,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.131127625913446834605e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2113,
+    "error": -8.083879947662353515625e-07,
+    "relative_error": 2.685500161308217133136e-17,
+    "max_relative_error": 1.140786144852373560156e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2200,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 379,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1663,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1685,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-init.cc",
+    "line": 438,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 879,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2606,
+    "error": 3.550667315721511840820e-09,
+    "relative_error": 9.641017027805181290919e-18,
+    "max_relative_error": 2.205756934691152318405e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 297,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 333,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1289,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 199,
+    "error": 2.035526051370490502324e-20,
+    "relative_error": 2.157272426109732579932e-16,
+    "max_relative_error": 2.157272426109732579932e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1667,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1738,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979151005064071004e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 882,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 388,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 2504,
+    "error": 3.216739966096214022040e-20,
+    "relative_error": 3.847593547064957317233e-16,
+    "max_relative_error": 5.127710762435740935854e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 308,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1909,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1306,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh-util.cc",
+    "line": 227,
+    "error": -9.114074512456271648375e-18,
+    "relative_error": 8.800117524454632918589e-17,
+    "max_relative_error": 8.800117524454632918589e-17
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1670,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 886,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1600,
+    "error": 2.086153472191654145718e-11,
+    "relative_error": 6.688536540914889739589e-02,
+    "max_relative_error": 6.688536540914889739589e-02
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1867,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.297971275826332836987e-15
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1674,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1737,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.245979151079090959212e-06
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1904,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1353,
+    "error": -1.084202172485504434007e-19,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 1.490235899876531864209e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 309,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1599,
+    "error": 3.913669388566631823778e-11,
+    "relative_error": 1.254832275213444277355e-16,
+    "max_relative_error": 1.254832275213444277355e-16
+  },
+  {
+    "file": "/g/g90/laguna/fpchecker/FPChecker/experiments/proxy_apps/LULESH/lulesh.cc",
+    "line": 1410,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.776028344124411189690e-16
+  }
+]
