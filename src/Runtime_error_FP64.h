@@ -210,7 +210,7 @@ void _FPC_INIT_HASH_TABLE_FP64()
   printf("#FPCHECKER: Initializing...\n");
 #endif
 
-  int64_t size = 1024;
+  int64_t size = 65536;
   _FPC_ADDRESS_HT_FP64_  = _FPC_ADDRESS_HT_CREATE_FP64_(size);
   _FPC_REGISTER_HT_FP64_ = _FPC_REGISTER_HT_CREATE_FP64_(size);
 
@@ -823,17 +823,41 @@ void _FPC_FP64_CALCULATE_ERROR_(
   long double _tmp_error_ = 0.0L;
   long double _tmp_relative_error_ = 0.0L;
 
-  #ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
-  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op1_name,
-                                   function_name, &shadow_y, &_tmp_error_,
-                                   &_tmp_relative_error_);
-  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op2_name,
-                                   function_name, &shadow_z, &_tmp_error_,
-                                   &_tmp_relative_error_);
-  _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, fma_name,
-                                   function_name, &shadow_w, &_tmp_error_,
-                                   &_tmp_relative_error_);
-  #endif
+#ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
+  if (op == 6)
+  {
+    _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op1_name,
+                                     function_name, &shadow_y, &_tmp_error_,
+                                     &_tmp_relative_error_);
+    _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op2_name,
+                                     function_name, &shadow_z, &_tmp_error_,
+                                     &_tmp_relative_error_);
+    _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, fma_name,
+                                     function_name, &shadow_w, &_tmp_error_,
+                                     &_tmp_relative_error_);
+  }
+  else if (op == 7)
+  {
+    _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op1_name,
+                                     function_name, &shadow_y, &_tmp_error_,
+                                     &_tmp_relative_error_);
+  }
+  else
+  {
+    _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op1_name,
+                                     function_name, &shadow_y, &_tmp_error_,
+                                     &_tmp_relative_error_);
+    _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, op2_name,
+                                     function_name, &shadow_z, &_tmp_error_,
+                                     &_tmp_relative_error_);
+    if (op == 8)
+    {
+      _FPC_FIND_VALUE_BY_REGISTER_FP64(_FPC_REGISTER_HT_FP64_, fma_name,
+                                       function_name, &shadow_w,
+                                       &_tmp_error_, &_tmp_relative_error_);
+    }
+  }
+#endif
 
   long double r_high = 0.0L;
   switch (op)

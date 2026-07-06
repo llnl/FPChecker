@@ -246,6 +246,11 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   assert(line_rel_error_head && "Invalid table!");
   line_rel_error_head->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
+  GlobalVariable *line_rel_error_table = nullptr;
+  line_rel_error_table = mod->getGlobalVariable("_FPC_LINE_REL_ERROR_TABLE_", true);
+  assert(line_rel_error_table && "Invalid table!");
+  line_rel_error_table->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
   GlobalVariable *lines_to_keep = nullptr;
   lines_to_keep = mod->getGlobalVariable("_FPC_LINES_TO_KEEP_", true);
   assert(lines_to_keep && "Invalid table!");

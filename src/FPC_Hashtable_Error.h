@@ -129,12 +129,16 @@ typedef struct _FPC_REGISTER_S_
 typedef struct _FPC_LINE_REL_ERROR_S_
 {
   char *file_name;
+  const char *file_key;
   int line;
+  uint64_t key_hash;
   double max_relative_error;
   struct _FPC_LINE_REL_ERROR_S_ *next;
 } _FPC_LINE_REL_ERROR_T_;
 
+#define _FPC_LINE_REL_ERROR_TABLE_SIZE_ 16384
 _FPC_LINE_REL_ERROR_T_ *_FPC_LINE_REL_ERROR_HEAD_ = NULL;
+_FPC_LINE_REL_ERROR_T_ *_FPC_LINE_REL_ERROR_TABLE_[_FPC_LINE_REL_ERROR_TABLE_SIZE_] = {NULL};
 
 /** Program name and input **/
 extern int _FPC_PROG_INPUTS;
@@ -311,17 +315,71 @@ static inline int _FPC_RELATIVE_ERROR_GREATER_(double candidate, double current)
   return candidate > current;
 }
 
+static inline void _FPC_REPLACE_STRING_IF_DIFFERENT_(char **dst, const char *src)
+{
+  if (dst == NULL || src == NULL)
+    return;
+  if (*dst != NULL && strcmp(*dst, src) == 0)
+    return;
+
+  char *copy = (char *)malloc((strlen(src) + 1) * sizeof(char));
+  if (copy == NULL)
+  {
+    printf("#FPCHECKER: string copy out of memory error!");
+    exit(EXIT_FAILURE);
+  }
+  copy[0] = '\0';
+  strcpy(copy, src);
+  free(*dst);
+  *dst = copy;
+}
+
+static inline uint64_t _FPC_LINE_REL_ERROR_HASH_(const char *file_name, int line)
+{
+  uint64_t hash = 5381u;
+  const unsigned char *p = (const unsigned char *)file_name;
+  int c;
+  while ((c = *p++))
+    hash = ((hash << 5) + hash) + (uint64_t)c;
+  hash = ((hash << 5) + hash) + ':';
+  hash = ((hash << 5) + hash) + (uint64_t)line;
+  return hash;
+}
+
 void _FPC_LINE_MAX_RELATIVE_ERROR_UPDATE_(const char *file_name, int line, double relative_error)
 {
+  if (relative_error == 0.0)
+    return;
+
   file_name = _FPC_SAFE_STR_(file_name);
   if (file_name == NULL || file_name[0] == '\0' || line == 0)
     return;
 
-  _FPC_LINE_REL_ERROR_T_ *cur = _FPC_LINE_REL_ERROR_HEAD_;
+  uint64_t key_hash = _FPC_LINE_REL_ERROR_HASH_(file_name, line);
+  static const char *last_file_key = NULL;
+  static int last_line = 0;
+  static uint64_t last_key_hash = 0;
+  static _FPC_LINE_REL_ERROR_T_ *last_entry = NULL;
+
+  if (last_entry != NULL && last_line == line && last_key_hash == key_hash &&
+      last_file_key == file_name)
+  {
+    if (_FPC_RELATIVE_ERROR_GREATER_(relative_error, last_entry->max_relative_error))
+      last_entry->max_relative_error = relative_error;
+    return;
+  }
+
+  size_t bin = (size_t)(key_hash % _FPC_LINE_REL_ERROR_TABLE_SIZE_);
+  _FPC_LINE_REL_ERROR_T_ *cur = _FPC_LINE_REL_ERROR_TABLE_[bin];
   while (cur != NULL)
   {
-    if (cur->line == line && strcmp(cur->file_name, file_name) == 0)
+    if (cur->line == line && cur->key_hash == key_hash &&
+        (cur->file_key == file_name || strcmp(cur->file_name, file_name) == 0))
     {
+      last_file_key = file_name;
+      last_line = line;
+      last_key_hash = key_hash;
+      last_entry = cur;
       if (_FPC_RELATIVE_ERROR_GREATER_(relative_error, cur->max_relative_error))
         cur->max_relative_error = relative_error;
       return;
@@ -342,19 +400,32 @@ void _FPC_LINE_MAX_RELATIVE_ERROR_UPDATE_(const char *file_name, int line, doubl
     exit(EXIT_FAILURE);
   }
   strcpy(entry->file_name, file_name);
+  entry->file_key = file_name;
   entry->line = line;
+  entry->key_hash = key_hash;
   entry->max_relative_error = relative_error;
-  entry->next = _FPC_LINE_REL_ERROR_HEAD_;
+  entry->next = _FPC_LINE_REL_ERROR_TABLE_[bin];
+  _FPC_LINE_REL_ERROR_TABLE_[bin] = entry;
   _FPC_LINE_REL_ERROR_HEAD_ = entry;
+  last_file_key = file_name;
+  last_line = line;
+  last_key_hash = key_hash;
+  last_entry = entry;
 }
 
 static inline int _FPC_FIND_LINE_MAX_RELATIVE_ERROR_(const char *file_name, int line, double *max_relative_error)
 {
   file_name = _FPC_SAFE_STR_(file_name);
-  _FPC_LINE_REL_ERROR_T_ *cur = _FPC_LINE_REL_ERROR_HEAD_;
+  if (file_name == NULL || file_name[0] == '\0' || line == 0)
+    return 0;
+
+  uint64_t key_hash = _FPC_LINE_REL_ERROR_HASH_(file_name, line);
+  size_t bin = (size_t)(key_hash % _FPC_LINE_REL_ERROR_TABLE_SIZE_);
+  _FPC_LINE_REL_ERROR_T_ *cur = _FPC_LINE_REL_ERROR_TABLE_[bin];
   while (cur != NULL)
   {
-    if (cur->line == line && strcmp(cur->file_name, file_name) == 0)
+    if (cur->line == line && cur->key_hash == key_hash &&
+        (cur->file_key == file_name || strcmp(cur->file_name, file_name) == 0))
     {
       *max_relative_error = cur->max_relative_error;
       return 1;
@@ -395,9 +466,7 @@ void _FPC_ADDRESS_HT_SET_(_FPC_ADDRESS_HTABLE_T *hashtable, _FPC_ADDRESS_T_ *new
     next->error = newVal->error;
     next->relative_error = newVal->relative_error;
     next->clock = newVal->clock;
-    next->file_name = (char *)realloc(next->file_name, (strlen(newVal->file_name) + 1) * sizeof(char));
-    next->file_name[0] = '\0';
-    strcpy(next->file_name, newVal->file_name);
+    _FPC_REPLACE_STRING_IF_DIFFERENT_(&next->file_name, newVal->file_name);
     next->line = newVal->line;
   }
   else
@@ -423,6 +492,38 @@ void _FPC_ADDRESS_HT_SET_(_FPC_ADDRESS_HTABLE_T *hashtable, _FPC_ADDRESS_T_ *new
       last->next = newpair;
     }
   }
+}
+
+static inline void _FPC_ADDRESS_HT_DELETE_(_FPC_ADDRESS_HTABLE_T *hashtable,
+                                           uintptr_t address_value)
+{
+  if (hashtable == NULL || hashtable->table == NULL || hashtable->size == 0)
+    return;
+
+  _FPC_ADDRESS_T_ temp;
+  temp.address_value = address_value;
+  size_t bin = _FPC_HT_HASH_ADDRESS_(hashtable, &temp);
+  _FPC_ADDRESS_T_ *current = hashtable->table[bin];
+  _FPC_ADDRESS_T_ *previous = NULL;
+
+  while (current != NULL && !_FPC_ADDRESS_EQUAL_(&temp, current))
+  {
+    previous = current;
+    current = current->next;
+  }
+
+  if (current == NULL)
+    return;
+
+  if (previous == NULL)
+    hashtable->table[bin] = current->next;
+  else
+    previous->next = current->next;
+
+  free(current->file_name);
+  free(current);
+  if (hashtable->n > 0)
+    hashtable->n--;
 }
 
 /* Set for register items (has function_name field) */
@@ -452,13 +553,8 @@ void _FPC_REGISTER_HT_SET_(_FPC_REGISTER_HTABLE_T *hashtable, _FPC_REGISTER_T_ *
     next->error = newVal->error;
     next->relative_error = newVal->relative_error;
     next->clock = newVal->clock;
-    next->file_name = (char *)realloc(next->file_name, (strlen(newVal->file_name) + 1) * sizeof(char));
-    next->file_name[0] = '\0';
-    strcpy(next->file_name, newVal->file_name);
+    _FPC_REPLACE_STRING_IF_DIFFERENT_(&next->file_name, newVal->file_name);
     next->line = newVal->line;
-    next->function_name = (char *)realloc(next->function_name, (strlen(newVal->function_name) + 1) * sizeof(char));
-    next->function_name[0] = '\0';
-    strcpy(next->function_name, newVal->function_name);
   }
   else
   { /* Nope, couldn't find it */
@@ -506,14 +602,11 @@ void _FPC_ADDRESS_HT_UPDATE_(
   temp.error = error;
   temp.relative_error = relative_error;
   temp.clock = ++_FPC_CLOCK_;
-  temp.file_name = (char *)malloc((strlen(file_name) + 1) * sizeof(char));
-  temp.file_name[0] = '\0';
-  strcpy(temp.file_name, file_name);
+  temp.file_name = (char *)file_name;
   temp.line = line;
 
   _FPC_ADDRESS_HT_SET_(hashtable, &temp);
   _FPC_LINE_MAX_RELATIVE_ERROR_UPDATE_(file_name, line, relative_error);
-  free(temp.file_name);
 }
 
 void _FPC_REGISTER_HT_UPDATE_(
@@ -534,18 +627,12 @@ void _FPC_REGISTER_HT_UPDATE_(
   temp.error = error;
   temp.relative_error = relative_error;
   temp.clock = ++_FPC_CLOCK_;
-  temp.file_name = (char *)malloc((strlen(file_name) + 1) * sizeof(char));
-  temp.file_name[0] = '\0';
-  strcpy(temp.file_name, file_name);
+  temp.file_name = (char *)file_name;
   temp.line = line;
-  temp.function_name = (char *)malloc((strlen(function_name) + 1) * sizeof(char));
-  temp.function_name[0] = '\0';
-  strcpy(temp.function_name, function_name);
+  temp.function_name = (char *)function_name;
 
   _FPC_REGISTER_HT_SET_(hashtable, &temp);
   _FPC_LINE_MAX_RELATIVE_ERROR_UPDATE_(file_name, line, relative_error);
-  free(temp.file_name);
-  free(temp.function_name);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -683,10 +770,16 @@ void _FPC_ADDRESS_RANGE_UPDATE_(
     return;
   }
 
-  // Create temp buffers to copy and hold the errors
+  // Copy source metadata first so overlapping memmove ranges do not clobber it.
+  unsigned char *found_buffer = (unsigned char *)malloc(size * sizeof(unsigned char));
   double *shadow_buffer = (double *)malloc(size * sizeof(double));
   double *error_buffer = (double *)malloc(size * sizeof(double));
   double *relative_error_buffer = (double *)malloc(size * sizeof(double));
+  if (found_buffer == NULL || shadow_buffer == NULL || error_buffer == NULL || relative_error_buffer == NULL)
+  {
+    printf("#FPCHECKER: memcpy shadow propagation out of memory error!");
+    exit(EXIT_FAILURE);
+  }
 
   for (size_t offset = 0; offset < size; offset++)
   {
@@ -698,23 +791,27 @@ void _FPC_ADDRESS_RANGE_UPDATE_(
     int found = _FPC_FIND_VALUE_BY_ADDRESS(hashtable, current_address,
                                            &tmp_shadow_value, &tmp_error,
                                            &tmp_relative_error);
-    if (!found)
-    {
-      //printf("#FPCHECKER: Trying to update address %lu in memcpy/memmove, but we don't have its error!!\n",
-      //       current_address);
-    }
+    found_buffer[offset] = (unsigned char)found;
     shadow_buffer[offset] = tmp_shadow_value;
     error_buffer[offset] = tmp_error;
     relative_error_buffer[offset] = tmp_relative_error;
   }
 
-  // Update the table with the copied errors
+  // Propagate only tracked source metadata. Untracked source bytes clear any
+  // previous destination metadata instead of creating zero-error entries.
   for (size_t offset = 0; offset < size; offset++)
   {
     uintptr_t dst_address = address_dst + offset;
-    _FPC_ADDRESS_HT_UPDATE_(hashtable, dst_address, shadow_buffer[offset],
-                            error_buffer[offset],
-                            relative_error_buffer[offset], file_name, line);
+    if (found_buffer[offset])
+    {
+      _FPC_ADDRESS_HT_UPDATE_(hashtable, dst_address, shadow_buffer[offset],
+                              error_buffer[offset],
+                              relative_error_buffer[offset], file_name, line);
+    }
+    else
+    {
+      _FPC_ADDRESS_HT_DELETE_(hashtable, dst_address);
+    }
   }
 
   /*   for (size_t offset = 0; offset < size; offset++)
@@ -738,6 +835,7 @@ void _FPC_ADDRESS_RANGE_UPDATE_(
       _FPC_ADDRESS_HT_UPDATE_(hashtable, dst_address, error, relative_error, file_name, line);
     } */
 
+  free(found_buffer);
   free(shadow_buffer);
   free(error_buffer);
   free(relative_error_buffer);

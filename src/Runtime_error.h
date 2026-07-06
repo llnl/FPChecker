@@ -165,7 +165,7 @@ void _FPC_INIT_HASH_TABLE_()
   printf("#FPCHECKER: Initializing...\n");
 #endif
 
-  int64_t size = 1024;
+  int64_t size = 65536;
   _FPC_ADDRESS_HT_ = _FPC_ADDRESS_HT_CREATE_(size);
   _FPC_REGISTER_HT_ = _FPC_REGISTER_HT_CREATE_(size);
 
@@ -768,17 +768,41 @@ void _FPC_FP32_CALCULATE_ERROR_(
   double _tmp_error_ = 0.0;
   double _tmp_relative_error_ = 0.0;
 
-  #ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
-  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name,
-                              &shadow_y, &_tmp_error_,
-                              &_tmp_relative_error_);
-  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op2_name, function_name,
-                              &shadow_z, &_tmp_error_,
-                              &_tmp_relative_error_);
-  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, fma_name, function_name,
-                              &shadow_w, &_tmp_error_,
-                              &_tmp_relative_error_);
-  #endif
+#ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
+  if (op == 6)
+  {
+    _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name,
+                                &shadow_y, &_tmp_error_,
+                                &_tmp_relative_error_);
+    _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op2_name, function_name,
+                                &shadow_z, &_tmp_error_,
+                                &_tmp_relative_error_);
+    _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, fma_name, function_name,
+                                &shadow_w, &_tmp_error_,
+                                &_tmp_relative_error_);
+  }
+  else if (op == 7)
+  {
+    _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name,
+                                &shadow_y, &_tmp_error_,
+                                &_tmp_relative_error_);
+  }
+  else
+  {
+    _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name,
+                                &shadow_y, &_tmp_error_,
+                                &_tmp_relative_error_);
+    _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op2_name, function_name,
+                                &shadow_z, &_tmp_error_,
+                                &_tmp_relative_error_);
+    if (op == 8)
+    {
+      _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, fma_name, function_name,
+                                  &shadow_w, &_tmp_error_,
+                                  &_tmp_relative_error_);
+    }
+  }
+#endif
 
   double r_high = 0.0;
   switch (op)
