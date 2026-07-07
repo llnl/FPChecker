@@ -120,7 +120,7 @@ OPENMP_LDFLAGS = #-fopenmp
 OPTFLAGS = -g -O2
 #
 CXX=FPC_INSTRUMENT_ERR_TRACKING_FP64=1 clang++-fpchecker
-#CXX=clang++-fpchecker
+# CXX=clang++-fpchecker
 CXXFLAGS = -std=c++11  $(OPTFLAGS)
 CPPFLAGS = $(OPENMP_FLAGS)
 LDFLAGS = $(OPENMP_LDFLAGS) 

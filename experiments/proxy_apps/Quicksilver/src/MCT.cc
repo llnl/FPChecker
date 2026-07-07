@@ -111,6 +111,19 @@ MC_Nearest_Facet MCT_Nearest_Facet(MC_Particle *mc_particle,
     MC_Nearest_Facet nearest_facet =
        MCT_Nearest_Facet_3D_G(mc_particle, domain, location, coordinate, direction_cosine);
 
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+    {
+        volatile double base_val = 123456.789;
+        double inj_x = base_val;
+        double inj_y = base_val + 1.0e-11;
+        volatile double cancelled_result __attribute__((unused)) = inj_y - inj_x; // Injection standalone
+
+        double state_x = (nearest_facet.distance_to_facet - current_best_distance + distance_threshold + 1.0) * 123456.789;
+        double state_y = state_x + state_x * 1.0e-15;
+        volatile double state_cancelled_result __attribute__((unused)) = state_y - state_x; // Injection state
+    }
+#endif
+
     if (nearest_facet.distance_to_facet < 0) { nearest_facet.distance_to_facet = 0; }
 
     if (nearest_facet.distance_to_facet >= PhysicalConstants::_hugeDouble)
@@ -212,6 +225,19 @@ void MCT_Generate_Coordinate_3D_G(uint64_t *random_number_seed,
     // numbers 1-4 are the barycentric coordinates of the random point.
     double r4 = 1.0 - r1 - r2 - r3;
 
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+    {
+        volatile double base_val = 123456.789;
+        double inj_x = base_val;
+        double inj_y = base_val + 1.0e-11;
+        volatile double cancelled_result __attribute__((unused)) = inj_y - inj_x; // Injection standalone
+
+        double state_x = (r1 + r2 + r3 + r4 + current_volume + 1.0) * 123456.789;
+        double state_y = state_x + state_x * 1.0e-15;
+        volatile double state_cancelled_result __attribute__((unused)) = state_y - state_x; // Injection state
+    }
+#endif
+
     // error check
     if ((point0 == NULL) || (point1 == NULL) || (point2 == NULL))
     {
@@ -292,6 +318,19 @@ namespace
                              B * coordinate.y +
                              C * coordinate.z +
                              D);
+
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+    {
+        volatile double base_val = 123456.789;
+        double inj_x = base_val;
+        double inj_y = base_val + 1.0e-11;
+        volatile double cancelled_result __attribute__((unused)) = inj_y - inj_x; // Injection standalone
+
+        double state_x = (numerator + plane_tolerance + facet_normal_dot_direction_cosine + 1.0) * 123456.789;
+        double state_y = state_x + state_x * 1.0e-15;
+        volatile double state_cancelled_result __attribute__((unused)) = state_y - state_x; // Injection state
+    }
+#endif
 
     /* Plane equation: numerator = -P(x,y,z) = -(Ax + By + Cz + D)
        if: numerator < -1e-8*length(x,y,z)   too negative!
@@ -584,6 +623,19 @@ namespace
                 plane.B * direction_cosine->beta +
                 plane.C * direction_cosine->gamma);
 
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+            if (facet_index == 0) {
+               volatile double base_val = 123456.789;
+               double inj_x = base_val;
+               double inj_y = base_val + 1.0e-11;
+               volatile double cancelled_result __attribute__((unused)) = inj_y - inj_x; // Injection standalone
+
+               double state_x = (facet_normal_dot_direction_cosine + plane.A + plane.B + plane.C + 1.0) * 123456.789;
+               double state_y = state_x + state_x * 1.0e-15;
+               volatile double state_cancelled_result __attribute__((unused)) = state_y - state_x; // Injection state
+            }
+#endif
+
             // Consider only those facets whose outer normals have
             // a positive dot product with the direction cosine.
             // I.e. the particle is LEAVING the cell.
@@ -640,6 +692,19 @@ namespace
      v0.x -= v3.x; v0.y -= v3.y; v0.z -= v3.z;
      v1.x -= v3.x; v1.y -= v3.y; v1.z -= v3.z;
      v2.x -= v3.x; v2.y -= v3.y; v2.z -= v3.z;
+
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+     {
+        volatile double base_val = 123456.789;
+        double inj_x = base_val;
+        double inj_y = base_val + 1.0e-11;
+        volatile double cancelled_result __attribute__((unused)) = inj_y - inj_x; // Injection standalone
+
+        double state_x = (v0.x + v1.y + v2.z + v0.z*(v1.x*v2.y - v1.y*v2.x) + 1.0) * 123456.789;
+        double state_y = state_x + state_x * 1.0e-15;
+        volatile double state_cancelled_result __attribute__((unused)) = state_y - state_x; // Injection state
+     }
+#endif
 
      return
         v0.z*(v1.x*v2.y - v1.y*v2.x) +

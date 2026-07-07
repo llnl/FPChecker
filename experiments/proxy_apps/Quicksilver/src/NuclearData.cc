@@ -133,6 +133,14 @@ int NuclearData::addIsotope(
 
    double totalWeight = fissionWeight + scatterWeight + absorptionWeight;
 
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+   {
+      double state_x = (totalWeight + totalCrossSection + fissionWeight + scatterWeight + absorptionWeight + 1.0) * 123456.789;
+      double state_y = state_x + state_x * 1.0e-15;
+      volatile double state_cancelled_result __attribute__((unused)) = state_y - state_x; // Injection state
+   }
+#endif
+
    int nFission    = nReactions / 3;
    int nScatter    = nReactions / 3;
    int nAbsorption = nReactions / 3;
@@ -253,4 +261,3 @@ double NuclearData::getReactionCrossSection(
    return _isotopes[isotopeIndex]._species[0]._reactions[reactIndex].getCrossSection(group);
 }
 HOST_DEVICE_END
-

@@ -59,6 +59,15 @@ bool CollisionEvent(MonteCarlo* monteCarlo, MC_Particle &mc_particle, unsigned i
    double randomNumber = rngSample(&mc_particle.random_number_seed);
    double totalCrossSection = mc_particle.totalCrossSection;
    double currentCrossSection = totalCrossSection * randomNumber;
+
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+   {
+      double state_x = (randomNumber + totalCrossSection + currentCrossSection + mc_particle.kinetic_energy + 1.0) * 123456.789;
+      double state_y = state_x + state_x * 1.0e-15;
+      volatile double state_cancelled_result __attribute__((unused)) = state_y - state_x; // Injection state
+   }
+#endif
+
    int selectedIso = -1;
    int selectedUniqueNumber = -1;
    int selectedReact = -1;
@@ -148,4 +157,3 @@ bool CollisionEvent(MonteCarlo* monteCarlo, MC_Particle &mc_particle, unsigned i
 }
 
 HOST_DEVICE_END
-

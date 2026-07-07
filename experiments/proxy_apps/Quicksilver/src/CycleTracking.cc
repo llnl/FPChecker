@@ -19,6 +19,16 @@ void CycleTrackingGuts( MonteCarlo *monteCarlo, int particle_index, ParticleVaul
     // Copy a single particle from the particle vault into mc_particle
     MC_Load_Particle(monteCarlo, mc_particle, processingVault, particle_index);
 
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+    {
+        volatile double base_val = 123456.789;
+        double inj_x = base_val;
+        double inj_y = base_val + 1.0e-11;
+
+        volatile double cancelled_result __attribute__((unused)) = inj_y - inj_x; // Injection standalone
+    }
+#endif
+
     // set the particle.task to the index of the processed vault the particle will census into.
     mc_particle.task = 0;//processed_vault;
 
@@ -37,6 +47,17 @@ void CycleTrackingFunction( MonteCarlo *monteCarlo, MC_Particle &mc_particle, in
     unsigned int tally_index =      (particle_index) % monteCarlo->_tallies->GetNumBalanceReplications();
     unsigned int flux_tally_index = (particle_index) % monteCarlo->_tallies->GetNumFluxReplications();
     unsigned int cell_tally_index = (particle_index) % monteCarlo->_tallies->GetNumCellTallyReplications();
+
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+    {
+        volatile double base_val = 123456.789;
+        double inj_x = base_val;
+        double inj_y = base_val + 1.0e-11;
+
+        volatile double cancelled_result __attribute__((unused)) = inj_y - inj_x; // Injection standalone
+    }
+#endif
+
     do
     {
         // Determine the outcome of a particle at the end of this segment such as:
@@ -50,10 +71,33 @@ void CycleTrackingFunction( MonteCarlo *monteCarlo, MC_Particle &mc_particle, in
 #endif   
         MC_Segment_Outcome_type::Enum segment_outcome = MC_Segment_Outcome(monteCarlo, mc_particle, flux_tally_index);
 
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+        {
+            double state_x = (double(segment_outcome) + mc_particle.num_mean_free_paths + mc_particle.num_segments + 1.0) * 123456.789;
+            double state_y = state_x + state_x * 1.0e-15;
+            volatile double state_cancelled_result __attribute__((unused)) = state_y - state_x; // Injection state
+        }
+#endif
+
         QS::atomicIncrement( monteCarlo->_tallies->_balanceTask[tally_index]._numSegments);
+
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+        {
+            double state_x = (mc_particle.coordinate.x + mc_particle.coordinate.y + mc_particle.coordinate.z + double(tally_index) + 1.0) * 123456.789;
+            double state_y = state_x + state_x * 1.0e-15;
+            volatile double state_cancelled_result __attribute__((unused)) = state_y - state_x; // Injection state
+        }
+#endif
 
         mc_particle.num_segments += 1.;  /* Track the number of segments this particle has
                                             undergone this cycle on all processes. */
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+        {
+            double state_x = (mc_particle.num_segments + mc_particle.velocity.x + mc_particle.velocity.y + mc_particle.velocity.z + 1.0) * 123456.789;
+            double state_y = state_x + state_x * 1.0e-15;
+            volatile double state_cancelled_result __attribute__((unused)) = state_y - state_x; // Injection state
+        }
+#endif
         switch (segment_outcome) {
         case MC_Segment_Outcome_type::Collision:
             {
@@ -118,4 +162,3 @@ void CycleTrackingFunction( MonteCarlo *monteCarlo, MC_Particle &mc_particle, in
     } while ( keepTrackingThisParticle );
 }
 HOST_DEVICE_END
-
