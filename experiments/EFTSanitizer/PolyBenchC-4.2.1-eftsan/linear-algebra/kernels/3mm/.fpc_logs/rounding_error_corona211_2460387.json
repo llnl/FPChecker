@@ -1,0 +1,134 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 36,
+    "error": 2.98023222766730100e-09,
+    "relative_error": 1.70298984438131481e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 39,
+    "error": -5.38097486707522776e-10,
+    "relative_error": 2.42143869018385249e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 42,
+    "error": 5.75726681606436586e-10,
+    "relative_error": 3.16649674883540122e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 45,
+    "error": 5.96046448309017762e-10,
+    "relative_error": 5.41860407553652541e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 59,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 62,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 65,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 68,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 162,
+    "error": -1.24176344207249656e-09,
+    "relative_error": 2.98023226097399240e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 170,
+    "error": 1.57139517786841765e-08,
+    "relative_error": 9.09755102976452496e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 178,
+    "error": 4.84568662972861830e-08,
+    "relative_error": 9.37689035306754485e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 203,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 211,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 219,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 111,
+    "error": 4.35564395662169090e-09,
+    "relative_error": 5.86906149655116893e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 121,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 112,
+    "error": -1.12398682688308327e-04,
+    "relative_error": 6.12233048830654469e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 96,
+    "error": -4.84568662972861830e-08,
+    "relative_error": 9.37689035306754485e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 93,
+    "error": 4.84568662972861830e-08,
+    "relative_error": 9.37689035306754485e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 115,
+    "error": -4.40646620880613682e-06,
+    "relative_error": 3.25213239966104427e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 94,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/3mm/3mm.c",
+    "line": 101,
+    "error": 6.64325674470944705e-08,
+    "relative_error": 9.54043686310746811e-08
+  }
+]

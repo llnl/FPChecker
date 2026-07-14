@@ -1,0 +1,37 @@
+benchmark                           source            line  baseline_error  error          absolute_difference  status                                                                       
+----------------------------------  ----------------  ----  --------------  -------------  -------------------  -----------------------------------------------------------------------------
+datamining/correlation              correlation.c     91    1.907349e-06    2.208669e-06   3.013208e-07         OK                                                                           
+datamining/covariance               covariance.c      86    -3.155367e-06   -2.325209e-06  8.301576e-07         OK                                                                           
+linear-algebra/blas/gemm            gemm.c            122   -2.659828e-06   -2.210768e-06  4.490605e-07         OK                                                                           
+linear-algebra/blas/gemver          gemver.c          145   3.657617e-07    3.979250e-07   3.216328e-08         OK                                                                           
+linear-algebra/blas/gesummv         gesummv.c         116   -2.654499e-10   6.923208e-08   6.949753e-08         OK                                                                           
+linear-algebra/blas/symm            symm.c            120   -4.957729e-07   -5.128453e-07  1.707234e-08         OK                                                                           
+linear-algebra/blas/syr2k           syr2k.c           117   -4.193087e-06   -3.341215e-06  8.518713e-07         OK                                                                           
+linear-algebra/blas/syrk            syrk.c            108   -2.100331e-06   -2.117377e-06  1.704641e-08         OK                                                                           
+linear-algebra/blas/trmm            trmm.c            112   5.323429e-07    6.829521e-07   1.506092e-07         OK                                                                           
+linear-algebra/kernels/2mm          2mm.c             125   -7.800430e-07   -6.728378e-07  1.072052e-07         OK                                                                           
+linear-algebra/kernels/3mm          3mm.c             116   -4.406466e-06   -4.752563e-06  3.460964e-07         OK                                                                           
+linear-algebra/kernels/atax         atax.c            99    6.409299e-07    6.972972e-07   5.636731e-08         OK                                                                           
+linear-algebra/kernels/bicg         bicg.c            108   -5.409218e-07   -4.275306e-07  1.133912e-07         OK                                                                           
+linear-algebra/kernels/bicg         bicg.c            150   3.961483e-07    4.724857e-07   7.633735e-08         OK                                                                           
+linear-algebra/kernels/doitgen      doitgen.c         104   -1.071842e-05   -1.056314e-05  1.552761e-07         OK                                                                           
+linear-algebra/kernels/mvt          mvt.c             127   3.754942e-07    4.501536e-07   7.465939e-08         OK                                                                           
+linear-algebra/kernels/mvt          mvt.c             136   3.754942e-07    -2.306627e-07  6.061569e-07         OK                                                                           
+linear-algebra/solvers/cholesky     cholesky.c        137   1.230026e-05    -2.137173e+02  2.137173e+02         OK                                                                           
+linear-algebra/solvers/durbin       durbin.c          92    5.984561e-05    3.063748e-03   3.003903e-03         OK                                                                           
+linear-algebra/solvers/gramschmidt  gramschmidt.c     121   5.503824e-07    -6.360146e-04  6.365650e-04         OK                                                                           
+linear-algebra/solvers/gramschmidt  gramschmidt.c     181   6.186970e-01    -5.852426e+00  6.471123e+00         OK                                                                           
+linear-algebra/solvers/lu           lu.c              139   1.784087e-05    9.066246e+01   9.066245e+01         OK                                                                           
+linear-algebra/solvers/ludcmp       ludcmp.c          158   7.089004e-08    -1.623490e-03  1.623561e-03         OK                                                                           
+linear-algebra/solvers/trisolv      trisolv.c         102   -2.604887e-07   -6.465365e+02  6.465365e+02         OK                                                                           
+medley/deriche                      -                 -     -               -              -                    RUN_FAILED: line=96, error=null, baseline_error=null, log=gdb_eft_line_96.log
+medley/floyd-warshall               floyd-warshall.c  94    -2.199363e-04   -2.179253e-04  2.011040e-06         OK                                                                           
+medley/nussinov                     nussinov.c        100   -3.638229e-05   -3.636107e-05  2.122330e-08         OK                                                                           
+stencils/adi                        adi.c             85    -2.778179e-06   9.875128e+08   9.875128e+08         OK                                                                           
+stencils/fdtd-2d                    fdtd-2d.c         118   2.071477e-06    -3.273516e+06  3.273516e+06         OK                                                                           
+stencils/heat-3d                    heat-3d.c         94    1.478775e-06    1.449255e-06   2.952008e-08         OK                                                                           
+stencils/jacobi-1d                  jacobi-1d.c       87    -1.807078e-06   -3.016480e-08  1.776913e-06         OK                                                                           
+stencils/jacobi-2d                  jacobi-2d.c       93    -5.333203e-06   -1.346952e-06  3.986251e-06         OK                                                                           
+stencils/seidel-2d                  seidel-2d.c       82    -3.293482e-06   -5.238885e-06  1.945402e-06         OK                                                                           
+
+Summary: 32/33 EFTSan entries OK, 1 missing/failed.

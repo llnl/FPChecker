@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 102,
+    "error": -646.53653862707768,
+    "baseline_error": -2.6048871770711912e-07
+  }
+
+]

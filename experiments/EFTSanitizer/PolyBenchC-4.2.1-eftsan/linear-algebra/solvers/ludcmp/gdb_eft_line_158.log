@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x40c10f: file ludcmp.c, line 158.
+==BEGIN DUMP_ARRAYS==
+begin dump: x
+Breakpoint 1, print_array (n=40, x=0x42e000, x_double=0x435000) at ludcmp.c:158
+158	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=1.0007171630859375, op1=0, op2=1.0007171630859375, res_=0x15555549aec8, op1_=0x155555490380, op2_=0x15555549ae90, instId=187, err=0, c_err=-0.0016234898409182329) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40d49f: file ludcmp.c, line 175.
+Max value in x: 3.9996614e+00
+Norm of x: 1.0007172e+00
+Max value in x_double: 3.99966184778001432e+00
+Norm of x_double: 1.00071723397597756e+00
+
+Breakpoint 3, print_array (n=40, x=0x42e000, x_double=0x435000) at ludcmp.c:175
+175	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = 7.0890040060334059e-08

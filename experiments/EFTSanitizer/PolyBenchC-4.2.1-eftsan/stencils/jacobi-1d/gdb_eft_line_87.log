@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x4069af: file jacobi-1d.c, line 87.
+==BEGIN DUMP_ARRAYS==
+begin dump: A
+Breakpoint 1, print_array (n=30, A=0x422000, A_double=0x424000) at jacobi-1d.c:87
+87	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=3.3112633228302002, op1=0, op2=3.3112633228302002, res_=0x155555496078, op1_=0x15555548e860, op2_=0x155555496040, instId=187, err=0, c_err=-3.0164798222201883e-08) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x407d3f: file jacobi-1d.c, line 104.
+Max value in A: 1.0333333e+00
+Norm of A: 3.3112633e+00
+Max value in A_double: 1.03333333333333344e+00
+Norm of A_double: 3.31126151575245053e+00
+
+Breakpoint 3, print_array (n=30, A=0x422000, A_double=0x424000) at jacobi-1d.c:104
+104	  fprintf(POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = -1.8070777496603796e-06

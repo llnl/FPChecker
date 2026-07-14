@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/blas/symm/symm.c",
+    "line": 120,
+    "error": -5.1284528101443177e-07,
+    "baseline_error": -4.9577293914637721e-07
+  }
+
+]

@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/lu/lu.c",
+    "line": 139,
+    "error": 90.662464568970805,
+    "baseline_error": 1.7840873091756748e-05
+  }
+
+]

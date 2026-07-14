@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x405a6f: file trisolv.c, line 102.
+==BEGIN DUMP_ARRAYS==
+begin dump: x
+Breakpoint 1, print_array (n=40, x=0x423000, x_double=0x429000) at trisolv.c:102
+102	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=4.2105598449707031, op1=0, op2=4.2105598449707031, res_=0x1555554cfab8, op1_=0x1555554c6c50, op2_=0x1555554cfa80, instId=187, err=0, c_err=-646.53653862707768) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x406dff: file trisolv.c, line 119.
+Max value in x: 4.8780489e-01
+Norm of x: 4.2105598e+00
+Max value in x_double: 4.87804878048780532e-01
+Norm of x_double: 4.21055958448198542e+00
+
+Breakpoint 3, print_array (n=40, x=0x423000, x_double=0x429000) at trisolv.c:119
+119	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = -2.6048871770711912e-07

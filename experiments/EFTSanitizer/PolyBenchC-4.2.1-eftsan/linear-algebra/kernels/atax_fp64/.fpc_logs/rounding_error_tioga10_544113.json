@@ -1,0 +1,62 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/atax_fp64/atax.c",
+    "line": 35,
+    "error": -8.456776945386934585258e-17,
+    "relative_error": 4.279332912123509067257e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/atax_fp64/atax.c",
+    "line": 38,
+    "error": -6.139294801699168857567e-18,
+    "relative_error": 3.240183367563450230583e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/atax_fp64/atax.c",
+    "line": 140,
+    "error": 1.461938209379454178816e-15,
+    "relative_error": 2.079622608800321641784e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/atax_fp64/atax.c",
+    "line": 142,
+    "error": -1.897787482718626961287e-15,
+    "relative_error": 7.665736199226986559919e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/atax_fp64/atax.c",
+    "line": 95,
+    "error": -1.685934378214959394882e-17,
+    "relative_error": 2.028304020448459265015e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/atax_fp64/atax.c",
+    "line": 87,
+    "error": -3.103420298522507891903e-15,
+    "relative_error": 1.041968292488560698786e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/atax_fp64/atax.c",
+    "line": 96,
+    "error": 9.513223542256810105755e-15,
+    "relative_error": 2.665420296544459226201e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/atax_fp64/atax.c",
+    "line": 82,
+    "error": 1.897787482718626961287e-15,
+    "relative_error": 7.665736199226986559919e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/atax_fp64/atax.c",
+    "line": 79,
+    "error": -1.897787482718626961287e-15,
+    "relative_error": 7.665736199226986559919e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/atax_fp64/atax.c",
+    "line": 98,
+    "error": 3.816391647148975607706e-16,
+    "relative_error": 6.388103381445747338291e-17
+  }
+]

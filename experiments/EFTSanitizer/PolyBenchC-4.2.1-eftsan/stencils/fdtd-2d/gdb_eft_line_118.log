@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x40b405: file fdtd-2d.c, line 118.
+==BEGIN DUMP_ARRAYS==
+begin dump: fdtd
+Breakpoint 1, print_array (nx=20, ny=30, ex=0x42b000, ey=0x42c000, hz=0x42d000, ex_double=0x42f000, ey_double=0x431000, hz_double=0x433000) at fdtd-2d.c:118
+118	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=10.201765060424805, op1=0, op2=10.201765060424805, res_=0x155555492450, op1_=0x1555554cf738, op2_=0x155555492418, instId=348, err=0, c_err=-3273515.8131631031) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40d912: file fdtd-2d.c, line 140.
+Max value in fdtd: 4.1260429e+01
+Norm of fdtd: 1.0201765e+01
+Max value in fdtd_double: 4.12604285065749892e+01
+Norm of fdtd_double: 1.02017671319016134e+01
+
+Breakpoint 3, print_array (nx=20, ny=30, ex=0x42b000, ey=0x42c000, hz=0x42d000, ex_double=0x42f000, ey_double=0x431000, hz_double=0x433000) at fdtd-2d.c:140
+140	  fprintf(POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = 2.0714768087515267e-06

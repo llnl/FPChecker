@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x4065f9: file syrk.c, line 108.
+==BEGIN DUMP_ARRAYS==
+begin dump: C
+Breakpoint 1, print_array (n=30, C=0x423000, C_double=0x425000) at syrk.c:108
+108	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=11.305855751037598, op1=0, op2=11.305855751037598, res_=0x1555554ae8e8, op1_=0x155555498500, op2_=0x1555554ae8b0, instId=220, err=0, c_err=-2.1173771608341771e-06) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x4079c9: file syrk.c, line 127.
+Max value in C: 1.3596664e+01
+Norm of C: 1.1305856e+01
+Max value in C_double: 1.35966666666666640e+01
+Norm of C_double: 1.13058536507068474e+01
+
+Breakpoint 3, print_array (n=30, C=0x423000, C_double=0x425000) at syrk.c:127
+127	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = -2.1003307502098778e-06

@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x407d62: file cholesky.c, line 137.
+==BEGIN DUMP_ARRAYS==
+begin dump: A
+Breakpoint 1, print_array (n=40, A=0x425000, A_double=0x427000) at cholesky.c:137
+137	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=21.128463745117188, op1=0, op2=21.128463745117188, res_=0x1555554ac118, op1_=0x1555554a7760, op2_=0x1555554ac0e0, instId=220, err=0, c_err=-213.71730555969191) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x409133: file cholesky.c, line 156.
+Max value in A: 1.0000005e+00
+Norm of A: 2.1128464e+01
+Max value in A_double: 1.00000000000000155e+00
+Norm of A_double: 2.11284760453753222e+01
+
+Breakpoint 3, print_array (n=40, A=0x425000, A_double=0x427000) at cholesky.c:156
+156	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = 1.2300258134700925e-05

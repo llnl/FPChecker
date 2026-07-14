@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x40816f: file gramschmidt.c, line 121.
+==BEGIN DUMP_ARRAYS==
+begin dump: R
+Breakpoint 1, print_array (m=20, n=30, A=0x42c000, R=0x42d000, Q=0x42e000, R_double=0x431000, Q_double=0x433000) at gramschmidt.c:121
+121	    norm_R = 0 + norm_R;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=5.60076904296875, op1=0, op2=5.60076904296875, res_=0x1555554bcb88, op1_=0x15555549e1f8, op2_=0x1555554bcb50, instId=273, err=0, c_err=-0.0006360146453616277) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40a150: file gramschmidt.c, line 150.
+Max value in R: 2.5714783e+02
+Norm of R: 5.6007690e+00
+Max value in R_double: 2.57147817412475831e+02
+Norm of R_double: 5.60076959335118296e+00
+
+Breakpoint 3, print_array (m=20, n=30, A=0x42c000, R=0x42d000, Q=0x42e000, R_double=0x431000, Q_double=0x433000) at gramschmidt.c:150
+150	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error R: %.17e\n", norm_error_R);
+$1 = 5.5038243296223754e-07

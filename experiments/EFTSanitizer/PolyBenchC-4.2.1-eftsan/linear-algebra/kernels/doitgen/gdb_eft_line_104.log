@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x405552: file doitgen.c, line 104.
+==BEGIN DUMP_ARRAYS==
+begin dump: A
+Breakpoint 1, print_array (nr=10, nq=8, np=12, A=0x422000, A_double=0x425000) at doitgen.c:104
+104	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=19.317111968994141, op1=0, op2=19.317111968994141, res_=0x1555554869b8, op1_=0x1555554baf50, op2_=0x155555486980, instId=261, err=0, c_err=-1.0563144793760458e-05) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x406958: file doitgen.c, line 125.
+Max value in A: 3.5138888e+00
+Norm of A: 1.9317112e+01
+Max value in A_double: 3.51388888888888884e+00
+Norm of A_double: 1.93171012505732342e+01
+
+Breakpoint 3, print_array (nr=10, nq=8, np=12, A=0x422000, A_double=0x425000) at doitgen.c:125
+125	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = -1.0718420906385973e-05

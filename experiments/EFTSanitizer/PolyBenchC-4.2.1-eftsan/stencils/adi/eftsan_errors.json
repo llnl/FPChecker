@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/stencils/adi/adi.c",
+    "line": 85,
+    "error": 987512835.07243037,
+    "baseline_error": -2.7781788620728776e-06
+  }
+
+]

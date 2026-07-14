@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/datamining/covariance/covariance.c",
+    "line": 86,
+    "error": -2.3252093166043912e-06,
+    "baseline_error": -3.155366876228527e-06
+  }
+
+]

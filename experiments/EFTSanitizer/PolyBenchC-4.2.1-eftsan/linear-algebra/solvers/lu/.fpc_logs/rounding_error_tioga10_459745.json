@@ -1,0 +1,128 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 54,
+    "error": 8.58306901108107922e-08,
+    "relative_error": 5.78495740073044499e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 178,
+    "error": -3.01897525999128558e-07,
+    "relative_error": 6.03795044800461831e-06
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 51,
+    "error": 8.58306901108107922e-08,
+    "relative_error": 5.78495740073044499e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 182,
+    "error": 5.24520873845801816e-07,
+    "relative_error": 5.24520848834698818e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 88,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 201,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 85,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 205,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 116,
+    "error": 5.24520873845801816e-07,
+    "relative_error": 5.24520848834698818e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 144,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 199,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 34,
+    "error": 2.38418579323607105e-08,
+    "relative_error": 9.53674317294427573e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 176,
+    "error": -3.03089618951257744e-07,
+    "relative_error": 6.06179245128738469e-06
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 119,
+    "error": -5.24520873845801816e-07,
+    "relative_error": 5.24520848834698818e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 138,
+    "error": 1.78408733297885647e-05,
+    "relative_error": 6.10922539359997016e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 134,
+    "error": 1.35898590047922596e-06,
+    "relative_error": 1.35898583567773203e-06
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 219,
+    "error": 8.58306901108107922e-08,
+    "relative_error": 5.78495740073044499e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 220,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 135,
+    "error": 1.08642578618400876e-03,
+    "relative_error": 1.27391409279043471e-06
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 117,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/lu/lu.c",
+    "line": 125,
+    "error": -8.34465026633424145e-07,
+    "relative_error": 8.34465026633423933e-07
+  }
+]

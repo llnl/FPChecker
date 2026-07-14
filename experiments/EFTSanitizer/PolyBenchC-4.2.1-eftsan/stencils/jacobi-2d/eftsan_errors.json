@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/stencils/jacobi-2d/jacobi-2d.c",
+    "line": 93,
+    "error": -1.3469518661451887e-06,
+    "baseline_error": -5.3332030756081394e-06
+  }
+
+]

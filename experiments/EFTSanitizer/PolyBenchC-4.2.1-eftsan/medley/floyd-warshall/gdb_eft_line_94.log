@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x404d3f: file floyd-warshall.c, line 94.
+==BEGIN DUMP_ARRAYS==
+begin dump: path
+Breakpoint 1, print_array (n=60, path=0x420000, path_double=0x424000) at floyd-warshall.c:94
+94	    norm = norm + 0;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=37.850803375244141, op1=37.850803375244141, op2=0, res_=0x1555554ca5d8, op1_=0x1555554ca5a0, op2_=0x1555554ca300, instId=220, err=0, c_err=-0.0002179252846139568) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40610a: file floyd-warshall.c, line 112.
+Max value in path: 3.0000000e+00
+Norm of path: 3.7850803e+01
+Max value in path_double: 3.00000000000000000e+00
+Norm of path_double: 3.78505834389193083e+01
+
+Breakpoint 3, print_array (n=60, path=0x420000, path_double=0x424000) at floyd-warshall.c:112
+112	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = -0.00021993632483230385

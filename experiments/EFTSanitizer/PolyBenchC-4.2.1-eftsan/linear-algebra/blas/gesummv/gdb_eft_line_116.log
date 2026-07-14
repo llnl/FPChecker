@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x4080af: file gesummv.c, line 116.
+==BEGIN DUMP_ARRAYS==
+begin dump: y
+Breakpoint 1, print_array (n=30, y=0x428000, y_double=0x42f000) at gesummv.c:116
+116	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=4.2860579490661621, op1=0, op2=4.2860579490661621, res_=0x1555554b0d70, op1_=0x1555554aa198, op2_=0x1555554b0d38, instId=187, err=0, c_err=6.9232079451993976e-08) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40943f: file gesummv.c, line 133.
+Max value in y: 2.3820000e+01
+Norm of y: 4.2860579e+00
+Max value in y_double: 2.38200004087554120e+01
+Norm of y_double: 4.28605794880071223e+00
+
+Breakpoint 3, print_array (n=30, y=0x428000, y_double=0x42f000) at gesummv.c:133
+133	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = -2.6544988429577643e-10

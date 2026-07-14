@@ -1,0 +1,62 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/jacobi-1d_fp64/jacobi-1d.c",
+    "line": 28,
+    "error": -1.036497276896142238911e-16,
+    "relative_error": 1.003061880867234424778e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/jacobi-1d_fp64/jacobi-1d.c",
+    "line": 29,
+    "error": 1.485356976305141074590e-17,
+    "relative_error": 1.392522165286069757428e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/jacobi-1d_fp64/jacobi-1d.c",
+    "line": 116,
+    "error": -2.119615247209161168485e-16,
+    "relative_error": 2.081162426365295887599e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/jacobi-1d_fp64/jacobi-1d.c",
+    "line": 114,
+    "error": -2.622685055242435225864e-16,
+    "relative_error": 2.597967260070901806583e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/jacobi-1d_fp64/jacobi-1d.c",
+    "line": 78,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/jacobi-1d_fp64/jacobi-1d.c",
+    "line": 79,
+    "error": 6.288372600415925717243e-16,
+    "relative_error": 5.735236131140556543738e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/jacobi-1d_fp64/jacobi-1d.c",
+    "line": 65,
+    "error": 1.036497276896142238911e-16,
+    "relative_error": 1.003061880867234424778e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/jacobi-1d_fp64/jacobi-1d.c",
+    "line": 81,
+    "error": 1.105886215935214522688e-17,
+    "relative_error": 3.339773106637012670240e-18
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/jacobi-1d_fp64/jacobi-1d.c",
+    "line": 70,
+    "error": -1.036497276896142238911e-16,
+    "relative_error": 1.003061880867234424778e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/jacobi-1d_fp64/jacobi-1d.c",
+    "line": 62,
+    "error": -1.036497276896142238911e-16,
+    "relative_error": 1.003061880867234424778e-16
+  }
+]

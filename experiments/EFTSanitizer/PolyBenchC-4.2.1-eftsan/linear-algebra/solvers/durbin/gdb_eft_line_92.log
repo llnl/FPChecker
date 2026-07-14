@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x4080ff: file durbin.c, line 92.
+==BEGIN DUMP_ARRAYS==
+begin dump: y
+Breakpoint 1, print_array (n=40, y=0x425000, y_double=0x427000) at durbin.c:92
+92	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=4.3566770553588867, op1=0, op2=4.3566770553588867, res_=0x1555554d6118, op1_=0x1555554cbdb0, op2_=0x1555554d60e0, instId=187, err=0, c_err=0.0030637482352691985) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40948f: file durbin.c, line 109.
+Max value in y: 4.0901726e-01
+Norm of y: 4.3566771e+00
+Max value in y_double: 4.09165870209463989e-01
+Norm of y_double: 4.35673690096829525e+00
+
+Breakpoint 3, print_array (n=40, y=0x425000, y_double=0x427000) at durbin.c:109
+109	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = 5.9845609408526457e-05

@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x405d45: file trmm.c, line 112.
+==BEGIN DUMP_ARRAYS==
+begin dump: B
+Breakpoint 1, print_array (m=20, n=30, B=0x423000, B_double=0x425000) at trmm.c:112
+112	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=10.304265022277832, op1=0, op2=10.304265022277832, res_=0x155555495c18, op1_=0x1555554c11f8, op2_=0x155555495be0, instId=224, err=0, c_err=6.829521403101446e-07) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x407115: file trmm.c, line 131.
+Max value in B: 1.1437500e+01
+Norm of B: 1.0304265e+01
+Max value in B_double: 1.14374999999999982e+01
+Norm of B_double: 1.03042655546207662e+01
+
+Breakpoint 3, print_array (m=20, n=30, B=0x423000, B_double=0x425000) at trmm.c:131
+131	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = 5.323429341785868e-07

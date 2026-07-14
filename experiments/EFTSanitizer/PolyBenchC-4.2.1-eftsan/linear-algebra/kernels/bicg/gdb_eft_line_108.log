@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x406870: file bicg.c, line 108.
+==BEGIN DUMP_ARRAYS==
+begin dump: s
+Breakpoint 1, print_array (m=38, n=42, s=0x42a000, q=0x42b000, s_double=0x432000, q_double=0x433000) at bicg.c:108
+108	    norm_s = 0 + norm_s;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=4.4603242874145508, op1=0, op2=4.4603242874145508, res_=0x1555554b7e18, op1_=0x1555554af598, op2_=0x1555554b7de0, instId=222, err=0, c_err=-4.2753061225424288e-07) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x407c42: file bicg.c, line 125.
+Max value in s: 1.3503967e+01
+Norm of s: 4.4603243e+00
+Max value in s_double: 1.35039682539682531e+01
+Norm of s_double: 4.46032374649270480e+00
+
+Breakpoint 3, print_array (m=38, n=42, s=0x42a000, q=0x42b000, s_double=0x432000, q_double=0x433000) at bicg.c:125
+125	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error in s: %.17e\n", norm_error_s);
+$1 = -5.4092184598175663e-07

@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x40b3e9: file correlation.c, line 91.
+==BEGIN DUMP_ARRAYS==
+begin dump: corr
+Breakpoint 1, print_array (m=28, corr=0x42a000, corr_double=0x42f000) at correlation.c:91
+91	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=27.999998092651367, op1=0, op2=27.999998092651367, res_=0x1555554b0868, op1_=0x1555554b3cb0, op2_=0x1555554b0830, instId=220, err=0, c_err=2.2086694151649726e-06) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40c7b9: file correlation.c, line 109.
+Max value in corr: 1.0000005e+00
+Norm of corr: 2.7999998e+01
+Max value in corr_double: 1.00000000000000044e+00
+Norm of corr_double: 2.79999999999999964e+01
+
+Breakpoint 3, print_array (m=28, corr=0x42a000, corr_double=0x42f000) at correlation.c:109
+109	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = 1.9073486292597863e-06

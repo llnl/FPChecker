@@ -1,0 +1,110 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 39,
+    "error": -5.96046445533460201e-09,
+    "relative_error": 1.49011611383365050e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 40,
+    "error": 2.38418579323607105e-08,
+    "relative_error": 3.66797814344010931e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 167,
+    "error": -1.66893005371093750e-06,
+    "relative_error": 9.27698750876161743e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 44,
+    "error": -2.98023222766730100e-09,
+    "relative_error": 1.49011611383365050e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 62,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 63,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 191,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 67,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 163,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 122,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 94,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 187,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 112,
+    "error": -1.50080076699588005e-07,
+    "relative_error": 1.54501557615767618e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 113,
+    "error": -1.18428449724206075e-04,
+    "relative_error": 4.66890449210273078e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 116,
+    "error": -4.16716665796457164e-06,
+    "relative_error": 2.61649761067772321e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 96,
+    "error": 1.66893005371093750e-06,
+    "relative_error": 9.27698750876161743e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 93,
+    "error": -1.66893005371093750e-06,
+    "relative_error": 9.27698750876161743e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 102,
+    "error": 1.46627425934298117e-06,
+    "relative_error": 7.91724761350781924e-08
+  }
+]

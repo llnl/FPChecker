@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/durbin/durbin.c",
+    "line": 92,
+    "error": 0.0030637482352691985,
+    "baseline_error": 5.9845609408526457e-05
+  }
+
+]

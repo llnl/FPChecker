@@ -1,0 +1,14 @@
+Breakpoint 1 at 0x409825: file symm.c, line 120.
+==BEGIN DUMP_ARRAYS==
+begin dump: C
+Breakpoint 1, print_array (m=20, n=30, C=0x427000, C_double=0x42a000) at symm.c:120
+120	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=11.940805435180664, op1=0, op2=11.940805435180664, res_=0x1555554c5440, op1_=0x155555498d88, op2_=0x1555554c5408, instId=224, err=0, c_err=-5.1284528101443177e-07) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40a8f9: file symm.c, line 134.
+
+Breakpoint 3, print_array (m=20, n=30, C=0x427000, C_double=0x42a000) at symm.c:134
+134	  fprintf (POLYBENCH_DUMP_TARGET, "Max value in C: %.7e\n", max_value);
+$1 = -4.9577293914637721e-07

@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/medley/nussinov/nussinov.c",
+    "line": 100,
+    "error": -3.6361066222920735e-05,
+    "baseline_error": -3.6382289525960232e-05
+  }
+
+]

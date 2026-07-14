@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/medley/floyd-warshall/floyd-warshall.c",
+    "line": 94,
+    "error": -0.0002179252846139568,
+    "baseline_error": -0.00021993632483230385
+  }
+
+]

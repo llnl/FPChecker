@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/blas/gemm/gemm.c",
+    "line": 122,
+    "error": -2.2107678442894743e-06,
+    "baseline_error": -2.6598283131562539e-06
+  }
+
+]

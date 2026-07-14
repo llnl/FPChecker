@@ -1,0 +1,92 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 149,
+    "error": 1.85436672239802647e-07,
+    "relative_error": 6.48128174818727794e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 171,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 54,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 146,
+    "error": 1.85436672239802647e-07,
+    "relative_error": 6.48128174818727794e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 168,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 38,
+    "error": -2.48352687026720531e-09,
+    "relative_error": 2.98023224432064637e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 99,
+    "error": -3.86628617604856117e-04,
+    "relative_error": 1.03612006540465915e-06
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 98,
+    "error": 5.86622787013268976e-08,
+    "relative_error": 7.20463908322121676e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 110,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 103,
+    "error": -1.07184209063859726e-05,
+    "relative_error": 5.54866942371485691e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 88,
+    "error": 5.29819064176706433e-08,
+    "relative_error": 1.50778547907995524e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 35,
+    "error": -4.96705374053441062e-09,
+    "relative_error": 2.98023224432064637e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 83,
+    "error": -1.85436672239802647e-07,
+    "relative_error": 6.48128174818727794e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 80,
+    "error": 1.85436672239802647e-07,
+    "relative_error": 6.48128174818727794e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 81,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00
+  }
+]

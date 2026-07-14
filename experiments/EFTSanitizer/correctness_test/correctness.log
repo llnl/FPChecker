@@ -1,0 +1,6 @@
+Running test: ContinuedFraction1
+Traceback (most recent call last):
+  File "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/correctness_test/correctness_test.py", line 58, in <module>
+    errorLog = open(os.path.join(newDir, "error.log"), "r")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'correctness_obj/ContinuedFraction1/error.log'

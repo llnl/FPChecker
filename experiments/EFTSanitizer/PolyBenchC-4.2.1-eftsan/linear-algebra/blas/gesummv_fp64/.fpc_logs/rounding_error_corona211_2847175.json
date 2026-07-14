@@ -1,0 +1,74 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 39,
+    "error": -7.426784881525705372951e-18,
+    "relative_error": 7.682880911923143489467e-18
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 41,
+    "error": 9.283481101907131716189e-19,
+    "relative_error": 1.392522165286069757428e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 42,
+    "error": -5.549759870410175821576e-18,
+    "relative_error": 5.549759870410175821576e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 156,
+    "error": -1.086804257699469644649e-15,
+    "relative_error": 1.996171085570454449768e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 159,
+    "error": -3.104287660260496295450e-15,
+    "relative_error": 2.042294513329273913753e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 108,
+    "error": -1.432773170939594109541e-16,
+    "relative_error": 2.245306377090863929908e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 91,
+    "error": -3.104287660260496295450e-15,
+    "relative_error": 2.042294513329273913753e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 157,
+    "error": -4.935288289154016183602e-16,
+    "relative_error": 8.420397081021070265793e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 109,
+    "error": -1.231653667943533037032e-16,
+    "relative_error": 6.704594677551457088596e-18
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 94,
+    "error": 3.104287660260496295450e-15,
+    "relative_error": 2.042294513329273913753e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 111,
+    "error": 3.647256108241236916001e-16,
+    "relative_error": 8.509581890540460583619e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/blas/gesummv_fp64/gesummv.c",
+    "line": 100,
+    "error": -6.643990912991171171598e-16,
+    "relative_error": 2.789248913934160905762e-17
+  }
+]

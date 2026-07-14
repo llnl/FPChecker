@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/stencils/fdtd-2d/fdtd-2d.c",
+    "line": 118,
+    "error": -3273515.8131631031,
+    "baseline_error": 2.0714768087515267e-06
+  }
+
+]

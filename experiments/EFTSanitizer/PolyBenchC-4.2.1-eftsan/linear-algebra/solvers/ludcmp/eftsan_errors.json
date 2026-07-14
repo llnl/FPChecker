@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/ludcmp/ludcmp.c",
+    "line": 158,
+    "error": -0.0016234898409182329,
+    "baseline_error": 7.0890040060334059e-08
+  }
+
+]

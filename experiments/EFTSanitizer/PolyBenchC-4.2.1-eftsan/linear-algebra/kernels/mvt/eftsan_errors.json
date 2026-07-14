@@ -1,0 +1,16 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/mvt/mvt.c",
+    "line": 127,
+    "error": 4.5015362561908755e-07,
+    "baseline_error": 3.7549423659299919e-07
+  }
+,
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/mvt/mvt.c",
+    "line": 136,
+    "error": -2.306627078081747e-07,
+    "baseline_error": 3.7549423659299919e-07
+  }
+
+]

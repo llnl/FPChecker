@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/2mm/2mm.c",
+    "line": 125,
+    "error": -6.728377964619286e-07,
+    "baseline_error": -7.8004297776601561e-07
+  }
+
+]

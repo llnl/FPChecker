@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x40cd6f: file gemver.c, line 145.
+==BEGIN DUMP_ARRAYS==
+begin dump: w
+Breakpoint 1, print_array (n=40, w=0x431000, w_double=0x43d000) at gemver.c:145
+145	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=3.8456656932830811, op1=0, op2=3.8456656932830811, res_=0x1555554a0cd8, op1_=0x155555496dd0, op2_=0x1555554a0ca0, instId=187, err=0, c_err=3.9792495001503993e-07) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40e0ff: file gemver.c, line 162.
+Max value in w: 4.8171602e+03
+Norm of w: 3.8456657e+00
+Max value in w_double: 4.81715936735026025e+03
+Norm of w_double: 3.84566605904474867e+00
+
+Breakpoint 3, print_array (n=40, w=0x431000, w_double=0x43d000) at gemver.c:162
+162	  fprintf(POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = 3.6576166762003481e-07

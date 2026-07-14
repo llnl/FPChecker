@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/blas/syrk/syrk.c",
+    "line": 108,
+    "error": -2.1173771608341771e-06,
+    "baseline_error": -2.1003307502098778e-06
+  }
+
+]

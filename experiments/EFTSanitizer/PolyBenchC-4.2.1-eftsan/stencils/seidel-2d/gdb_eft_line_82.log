@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x4073f2: file seidel-2d.c, line 82.
+==BEGIN DUMP_ARRAYS==
+begin dump: A
+Breakpoint 1, print_array (n=40, A=0x424000, A_double=0x426000) at seidel-2d.c:82
+82	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=13.85384464263916, op1=0, op2=13.85384464263916, res_=0x155555483768, op1_=0x1555554d57b0, op2_=0x155555483730, instId=220, err=0, c_err=-5.2388846370312614e-06) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x4087c3: file seidel-2d.c, line 100.
+Max value in A: 4.0025002e+01
+Norm of A: 1.3853845e+01
+Max value in A_double: 4.00249999999999986e+01
+Norm of A_double: 1.38538413491567844e+01
+
+Breakpoint 3, print_array (n=40, A=0x424000, A_double=0x426000) at seidel-2d.c:100
+100	  fprintf(POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = -3.2934823757102549e-06

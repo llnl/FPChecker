@@ -1,0 +1,16 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/gramschmidt/gramschmidt.c",
+    "line": 121,
+    "error": -0.0006360146453616277,
+    "baseline_error": 5.5038243296223754e-07
+  }
+,
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/gramschmidt/gramschmidt.c",
+    "line": 181,
+    "error": -5.8524262778457281,
+    "baseline_error": 0.61869695538933023
+  }
+
+]

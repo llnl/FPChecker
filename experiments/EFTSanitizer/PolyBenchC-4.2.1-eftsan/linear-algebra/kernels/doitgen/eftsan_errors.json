@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 104,
+    "error": -1.0563144793760458e-05,
+    "baseline_error": -1.0718420906385973e-05
+  }
+
+]

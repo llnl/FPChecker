@@ -1,0 +1,6 @@
+sqrt
+sqrtf
+exp
+expf
+pow
+powf

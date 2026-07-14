@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x407f3d: file nussinov.c, line 100.
+==BEGIN DUMP_ARRAYS==
+begin dump: table
+Breakpoint 1, print_array (n=60, table=0x427000, table_double=0x42b000) at nussinov.c:100
+100	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=17.345785140991211, op1=0, op2=17.345785140991211, res_=0x155555486b08, op1_=0x1555554aafd0, op2_=0x155555486ad0, instId=222, err=0, c_err=-3.6361066222920735e-05) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40930c: file nussinov.c, line 118.
+Max value in table: 2.8000000e+01
+Norm of table: 1.7345785e+01
+Max value in table_double: 2.80000000000000000e+01
+Norm of table_double: 1.73457487587016850e+01
+
+Breakpoint 3, print_array (n=60, table=0x427000, table_double=0x42b000) at nussinov.c:118
+118	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = -3.6382289525960232e-05

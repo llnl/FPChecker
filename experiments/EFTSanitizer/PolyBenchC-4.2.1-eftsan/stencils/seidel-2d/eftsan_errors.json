@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/stencils/seidel-2d/seidel-2d.c",
+    "line": 82,
+    "error": -5.2388846370312614e-06,
+    "baseline_error": -3.2934823757102549e-06
+  }
+
+]

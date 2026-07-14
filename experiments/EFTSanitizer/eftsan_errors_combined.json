@@ -1,0 +1,299 @@
+[
+  {
+    "benchmark": "datamining/correlation",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/datamining/correlation/correlation.c",
+    "line": 91,
+    "baseline_error": 1.9073486292597863e-06,
+    "error": 2.2086694151649726e-06,
+    "absolute_difference": 3.013207859051863e-07,
+    "status": "OK"
+  },
+  {
+    "benchmark": "datamining/covariance",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/datamining/covariance/covariance.c",
+    "line": 86,
+    "baseline_error": -3.155366876228527e-06,
+    "error": -2.325209316604391e-06,
+    "absolute_difference": 8.301575596241358e-07,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/blas/gemm",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/blas/gemm/gemm.c",
+    "line": 122,
+    "baseline_error": -2.659828313156254e-06,
+    "error": -2.2107678442894743e-06,
+    "absolute_difference": 4.4906046886677964e-07,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/blas/gemver",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/blas/gemver/gemver.c",
+    "line": 145,
+    "baseline_error": 3.657616676200348e-07,
+    "error": 3.9792495001503993e-07,
+    "absolute_difference": 3.216328239500512e-08,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/blas/gesummv",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/blas/gesummv/gesummv.c",
+    "line": 116,
+    "baseline_error": -2.6544988429577643e-10,
+    "error": 6.923207945199398e-08,
+    "absolute_difference": 6.949752933628975e-08,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/blas/symm",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/blas/symm/symm.c",
+    "line": 120,
+    "baseline_error": -4.957729391463772e-07,
+    "error": -5.128452810144318e-07,
+    "absolute_difference": 1.707234186805456e-08,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/blas/syr2k",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/blas/syr2k/syr2k.c",
+    "line": 117,
+    "baseline_error": -4.1930865108952275e-06,
+    "error": -3.3412151878301004e-06,
+    "absolute_difference": 8.518713230651272e-07,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/blas/syrk",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/blas/syrk/syrk.c",
+    "line": 108,
+    "baseline_error": -2.100330750209878e-06,
+    "error": -2.117377160834177e-06,
+    "absolute_difference": 1.7046410624299292e-08,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/blas/trmm",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/blas/trmm/trmm.c",
+    "line": 112,
+    "baseline_error": 5.323429341785868e-07,
+    "error": 6.829521403101446e-07,
+    "absolute_difference": 1.506092061315578e-07,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/kernels/2mm",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/2mm/2mm.c",
+    "line": 125,
+    "baseline_error": -7.800429777660156e-07,
+    "error": -6.728377964619286e-07,
+    "absolute_difference": 1.07205181304087e-07,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/kernels/3mm",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/3mm/3mm.c",
+    "line": 116,
+    "baseline_error": -4.406466210582494e-06,
+    "error": -4.7525626092829355e-06,
+    "absolute_difference": 3.4609639870044184e-07,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/kernels/atax",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/atax/atax.c",
+    "line": 99,
+    "baseline_error": 6.409299011522762e-07,
+    "error": 6.972972108012662e-07,
+    "absolute_difference": 5.6367309648989974e-08,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/kernels/bicg",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/bicg/bicg.c",
+    "line": 108,
+    "baseline_error": -5.409218459817566e-07,
+    "error": -4.275306122542429e-07,
+    "absolute_difference": 1.1339123372751375e-07,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/kernels/bicg",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/bicg/bicg.c",
+    "line": 150,
+    "baseline_error": 3.9614833724499476e-07,
+    "error": 4.7248568397241894e-07,
+    "absolute_difference": 7.633734672742418e-08,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/kernels/doitgen",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/doitgen/doitgen.c",
+    "line": 104,
+    "baseline_error": -1.0718420906385973e-05,
+    "error": -1.0563144793760458e-05,
+    "absolute_difference": 1.5527611262551496e-07,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/kernels/mvt",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/mvt/mvt.c",
+    "line": 127,
+    "baseline_error": 3.754942365929992e-07,
+    "error": 4.5015362561908755e-07,
+    "absolute_difference": 7.465938902608837e-08,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/kernels/mvt",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/mvt/mvt.c",
+    "line": 136,
+    "baseline_error": 3.754942365929992e-07,
+    "error": -2.306627078081747e-07,
+    "absolute_difference": 6.061569444011739e-07,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/solvers/cholesky",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/cholesky/cholesky.c",
+    "line": 137,
+    "baseline_error": 1.2300258134700925e-05,
+    "error": -213.7173055596919,
+    "absolute_difference": 213.71731785995004,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/solvers/durbin",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/durbin/durbin.c",
+    "line": 92,
+    "baseline_error": 5.984560940852646e-05,
+    "error": 0.0030637482352691985,
+    "absolute_difference": 0.003003902625860672,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/solvers/gramschmidt",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/gramschmidt/gramschmidt.c",
+    "line": 121,
+    "baseline_error": 5.503824329622375e-07,
+    "error": -0.0006360146453616277,
+    "absolute_difference": 0.0006365650277945899,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/solvers/gramschmidt",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/gramschmidt/gramschmidt.c",
+    "line": 181,
+    "baseline_error": 0.6186969553893302,
+    "error": -5.852426277845728,
+    "absolute_difference": 6.471123233235058,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/solvers/lu",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/lu/lu.c",
+    "line": 139,
+    "baseline_error": 1.7840873091756748e-05,
+    "error": 90.6624645689708,
+    "absolute_difference": 90.6624467280977,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/solvers/ludcmp",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/ludcmp/ludcmp.c",
+    "line": 158,
+    "baseline_error": 7.089004006033406e-08,
+    "error": -0.001623489840918233,
+    "absolute_difference": 0.0016235607309582933,
+    "status": "OK"
+  },
+  {
+    "benchmark": "linear-algebra/solvers/trisolv",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/solvers/trisolv/trisolv.c",
+    "line": 102,
+    "baseline_error": -2.604887177071191e-07,
+    "error": -646.5365386270777,
+    "absolute_difference": 646.536538366589,
+    "status": "OK"
+  },
+  {
+    "benchmark": "medley/deriche",
+    "file": "-",
+    "line": -1,
+    "baseline_error": null,
+    "error": null,
+    "absolute_difference": null,
+    "status": "RUN_FAILED: line=96, error=null, baseline_error=null, log=gdb_eft_line_96.log"
+  },
+  {
+    "benchmark": "medley/floyd-warshall",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/medley/floyd-warshall/floyd-warshall.c",
+    "line": 94,
+    "baseline_error": -0.00021993632483230385,
+    "error": -0.0002179252846139568,
+    "absolute_difference": 2.0110402183470496e-06,
+    "status": "OK"
+  },
+  {
+    "benchmark": "medley/nussinov",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/medley/nussinov/nussinov.c",
+    "line": 100,
+    "baseline_error": -3.638228952596023e-05,
+    "error": -3.6361066222920735e-05,
+    "absolute_difference": 2.1223303039496556e-08,
+    "status": "OK"
+  },
+  {
+    "benchmark": "stencils/adi",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/stencils/adi/adi.c",
+    "line": 85,
+    "baseline_error": -2.7781788620728776e-06,
+    "error": 987512835.0724304,
+    "absolute_difference": 987512835.0724331,
+    "status": "OK"
+  },
+  {
+    "benchmark": "stencils/fdtd-2d",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/stencils/fdtd-2d/fdtd-2d.c",
+    "line": 118,
+    "baseline_error": 2.0714768087515267e-06,
+    "error": -3273515.813163103,
+    "absolute_difference": 3273515.8131651743,
+    "status": "OK"
+  },
+  {
+    "benchmark": "stencils/heat-3d",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/stencils/heat-3d/heat-3d.c",
+    "line": 94,
+    "baseline_error": 1.4787748128242129e-06,
+    "error": 1.4492547357885926e-06,
+    "absolute_difference": 2.9520077035620254e-08,
+    "status": "OK"
+  },
+  {
+    "benchmark": "stencils/jacobi-1d",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/stencils/jacobi-1d/jacobi-1d.c",
+    "line": 87,
+    "baseline_error": -1.8070777496603796e-06,
+    "error": -3.016479822220188e-08,
+    "absolute_difference": 1.7769129514381777e-06,
+    "status": "OK"
+  },
+  {
+    "benchmark": "stencils/jacobi-2d",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/stencils/jacobi-2d/jacobi-2d.c",
+    "line": 93,
+    "baseline_error": -5.3332030756081394e-06,
+    "error": -1.3469518661451887e-06,
+    "absolute_difference": 3.986251209462951e-06,
+    "status": "OK"
+  },
+  {
+    "benchmark": "stencils/seidel-2d",
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/stencils/seidel-2d/seidel-2d.c",
+    "line": 82,
+    "baseline_error": -3.293482375710255e-06,
+    "error": -5.2388846370312614e-06,
+    "absolute_difference": 1.9454022613210065e-06,
+    "status": "OK"
+  }
+]

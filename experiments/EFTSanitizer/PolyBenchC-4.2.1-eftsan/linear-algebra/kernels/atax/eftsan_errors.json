@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/linear-algebra/kernels/atax/atax.c",
+    "line": 99,
+    "error": 6.9729721080126619e-07,
+    "baseline_error": 6.4092990115227622e-07
+  }
+
+]

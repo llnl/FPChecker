@@ -1,0 +1,104 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 34,
+    "error": -2.921924854848434449650e-17,
+    "relative_error": 3.000895796871365110321e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 36,
+    "error": 2.645453300864630818978e-17,
+    "relative_error": 2.709976552105231570642e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 38,
+    "error": 5.285485590866834115786e-18,
+    "relative_error": 5.549759870410175821576e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 192,
+    "error": -4.805184028455755651521e-16,
+    "relative_error": 5.130959216825637391343e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 193,
+    "error": 1.682681771697502881580e-16,
+    "relative_error": 2.387589000381591926846e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 91,
+    "error": 4.805184028455755651521e-16,
+    "relative_error": 5.130959216825637391343e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 132,
+    "error": -1.682681771697502881580e-16,
+    "relative_error": 2.387589000381591926846e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 145,
+    "error": 7.670730370334943870603e-17,
+    "relative_error": 1.246493685179428379334e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 96,
+    "error": 9.020562075079396890942e-16,
+    "relative_error": 6.679934301851331226982e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 104,
+    "error": -3.686287386450715075625e-17,
+    "relative_error": 5.315438972920247205223e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 146,
+    "error": 3.684552662974738268531e-15,
+    "relative_error": 1.578979821001550383492e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 107,
+    "error": -1.170504665415350586954e-15,
+    "relative_error": 2.624259430351341972947e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 88,
+    "error": -4.805184028455755651521e-16,
+    "relative_error": 5.130959216825637391343e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 129,
+    "error": 1.682681771697502881580e-16,
+    "relative_error": 2.387589000381591926846e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 105,
+    "error": -6.558989462668307623971e-15,
+    "relative_error": 3.296887805245701239447e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 148,
+    "error": 3.582203977892106649961e-16,
+    "relative_error": 7.415598665671444902897e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/kernels/bicg_fp64/bicg.c",
+    "line": 137,
+    "error": -1.682681771697502881580e-16,
+    "relative_error": 1.469285538696364262362e-17
+  }
+]

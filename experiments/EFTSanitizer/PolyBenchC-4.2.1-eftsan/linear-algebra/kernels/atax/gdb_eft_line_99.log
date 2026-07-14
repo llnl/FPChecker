@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x40659f: file atax.c, line 99.
+==BEGIN DUMP_ARRAYS==
+begin dump: y
+Breakpoint 1, print_array (n=42, y=0x426000, y_double=0x42d000) at atax.c:99
+99	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=5.9742164611816406, op1=0, op2=5.9742164611816406, res_=0x1555554b9ee8, op1_=0x1555554b07c0, op2_=0x1555554b9eb0, instId=187, err=0, c_err=6.9729721080126619e-07) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40792f: file atax.c, line 116.
+Max value in y: 2.9784208e+01
+Norm of y: 5.9742165e+00
+Max value in y_double: 2.97842105263157926e+01
+Norm of y_double: 5.97421710211154178e+00
+
+Breakpoint 3, print_array (n=42, y=0x426000, y_double=0x42d000) at atax.c:116
+116	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = 6.4092990115227622e-07

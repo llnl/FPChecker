@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/llvm_pass/build/cmake_install.cmake",
+		"/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/llvm_pass/build/EFTSan/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

@@ -1,0 +1,12 @@
+Breakpoint 1 at 0x41cb02: file deriche.c, line 96.
+
+Program received signal SIGSEGV, Segmentation fault.
+0x000015555553e458 in eftsan_mpfr_powf2 (op1Idx=0x15555549ade8, op1d=2, op2Idx=0x0, op2d=-0.25, res=0x15555549b9b8, computedRes=0.840896428, instId=970, debugInfoAvail=true, linenumber=148, colnumber=10, ts=16423) at handleReal.cpp:1888
+1888	  long double op2 = op2d + op2Idx->error;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Program terminated with signal SIGSEGV, Segmentation fault.
+The program no longer exists.
+Breakpoint 3 at 0x41deca: file deriche.c, line 115.
+The program is not being run.
+No symbol "norm_error" in current context.

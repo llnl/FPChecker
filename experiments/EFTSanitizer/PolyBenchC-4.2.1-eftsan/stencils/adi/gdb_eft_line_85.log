@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x416a52: file adi.c, line 85.
+==BEGIN DUMP_ARRAYS==
+begin dump: u
+Breakpoint 1, print_array (n=20, u=0x436000, u_double=0x43a000) at adi.c:85
+85	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=10.413542747497559, op1=0, op2=10.413542747497559, res_=0x155555495550, op1_=0x155555495080, op2_=0x155555495518, instId=220, err=0, c_err=987512835.07243037) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x417e23: file adi.c, line 103.
+Max value in u: 1.9500000e+00
+Norm of u: 1.0413543e+01
+Max value in u_double: 1.94999999999999996e+00
+Norm of u_double: 1.04135399693186965e+01
+
+Breakpoint 3, print_array (n=20, u=0x436000, u_double=0x43a000) at adi.c:103
+103	  fprintf(POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = -2.7781788620728776e-06

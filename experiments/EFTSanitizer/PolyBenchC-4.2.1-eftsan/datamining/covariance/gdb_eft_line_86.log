@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x407c89: file covariance.c, line 86.
+==BEGIN DUMP_ARRAYS==
+begin dump: cov
+Breakpoint 1, print_array (m=28, cov=0x425000, cov_double=0x429000) at covariance.c:86
+86	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=9.5061759948730469, op1=0, op2=9.5061759948730469, res_=0x155555493f38, op1_=0x155555494130, op2_=0x155555493f00, instId=220, err=0, c_err=-2.3252093166043912e-06) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x409059: file covariance.c, line 104.
+Max value in cov: 8.1826515e+01
+Norm of cov: 9.5061760e+00
+Max value in cov_double: 8.18265306122449090e+01
+Norm of cov_double: 9.50617283950617065e+00
+
+Breakpoint 3, print_array (m=28, cov=0x425000, cov_double=0x429000) at covariance.c:104
+104	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = -3.155366876228527e-06

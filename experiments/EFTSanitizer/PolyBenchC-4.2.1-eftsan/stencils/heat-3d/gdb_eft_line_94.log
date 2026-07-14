@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x40d659: file heat-3d.c, line 94.
+==BEGIN DUMP_ARRAYS==
+begin dump: A
+Breakpoint 1, print_array (n=10, A=0x42c000, A_double=0x42e000) at heat-3d.c:94
+94	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=17.313140869140625, op1=0, op2=17.313140869140625, res_=0x15555548e438, op1_=0x1555554b95f0, op2_=0x15555548e400, instId=253, err=0, c_err=1.4492547357885926e-06) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x40ea5b: file heat-3d.c, line 113.
+Max value in A: 2.8000000e+01
+Norm of A: 1.7313141e+01
+Max value in A_double: 2.80000000000000000e+01
+Norm of A_double: 1.73131423479154378e+01
+
+Breakpoint 3, print_array (n=10, A=0x42c000, A_double=0x42e000) at heat-3d.c:113
+113	  fprintf(POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = 1.4787748128242129e-06

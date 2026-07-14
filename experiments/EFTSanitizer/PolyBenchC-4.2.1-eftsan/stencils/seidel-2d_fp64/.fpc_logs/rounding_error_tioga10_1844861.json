@@ -1,0 +1,62 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d_fp64/seidel-2d.c",
+    "line": 28,
+    "error": 1.422473250300981817418e-15,
+    "relative_error": 3.553961899565226276878e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d_fp64/seidel-2d.c",
+    "line": 114,
+    "error": 2.841477053650010020647e-15,
+    "relative_error": 7.467745213272036847901e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d_fp64/seidel-2d.c",
+    "line": 79,
+    "error": -7.429820647608664785366e-15,
+    "relative_error": 5.363003993156660198422e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d_fp64/seidel-2d.c",
+    "line": 116,
+    "error": 2.841477053650010020647e-15,
+    "relative_error": 7.467745213272036847901e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d_fp64/seidel-2d.c",
+    "line": 76,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d_fp64/seidel-2d.c",
+    "line": 62,
+    "error": -1.422473250300981817418e-15,
+    "relative_error": 3.553961899565226276878e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d_fp64/seidel-2d.c",
+    "line": 77,
+    "error": -1.936784066458585584769e-13,
+    "relative_error": 1.009115283497084886246e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d_fp64/seidel-2d.c",
+    "line": 115,
+    "error": -1.136590821460004008259e-14,
+    "relative_error": 5.044788377541074159988e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d_fp64/seidel-2d.c",
+    "line": 67,
+    "error": 1.422473250300981817418e-15,
+    "relative_error": 3.553961899565226276878e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/stencils/seidel-2d_fp64/seidel-2d.c",
+    "line": 59,
+    "error": 1.422473250300981817418e-15,
+    "relative_error": 3.553961899565226276878e-17
+  }
+]

@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/stencils/heat-3d/heat-3d.c",
+    "line": 94,
+    "error": 1.4492547357885926e-06,
+    "baseline_error": 1.4787748128242129e-06
+  }
+
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 178,
+    "error": -9.105129844533266236795e-16,
+    "relative_error": 9.105129844533266439980e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 172,
+    "error": -3.705701381601783639397e-16,
+    "relative_error": 7.411402763203567283416e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 50,
+    "error": -9.679756995950583586819e-16,
+    "relative_error": 6.524121148119522214316e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 53,
+    "error": -9.679756995950583586819e-16,
+    "relative_error": 6.524121148119522214316e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 176,
+    "error": -2.043016363723060280222e-15,
+    "relative_error": 2.043016363723060371318e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 128,
+    "error": 5.993469609499868511193e-16,
+    "relative_error": 5.993469609499868911305e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 118,
+    "error": -1.509859945403313474799e-15,
+    "relative_error": 1.509859945403313407680e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 34,
+    "error": -2.222614453595284089715e-17,
+    "relative_error": 8.890457814381136366565e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 214,
+    "error": -9.679756995950583586819e-16,
+    "relative_error": 6.524121148119522214316e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 129,
+    "error": 1.074501598807842128736e-12,
+    "relative_error": 2.406970232257927867447e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 113,
+    "error": 9.105129844533266236795e-16,
+    "relative_error": 9.105129844533266439980e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 170,
+    "error": -3.866637641580100703820e-16,
+    "relative_error": 7.733275283160201755848e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 110,
+    "error": -9.105129844533266236795e-16,
+    "relative_error": 9.105129844533266439980e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/PolyBenchC-4.2.1/linear-algebra/solvers/cholesky_fp64/cholesky.c",
+    "line": 131,
+    "error": 2.712240154689737892113e-14,
+    "relative_error": 1.283689438303525641646e-15
+  }
+]

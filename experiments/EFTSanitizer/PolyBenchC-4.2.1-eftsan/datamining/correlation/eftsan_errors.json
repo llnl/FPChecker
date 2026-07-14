@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan/datamining/correlation/correlation.c",
+    "line": 91,
+    "error": 2.2086694151649726e-06,
+    "baseline_error": 1.9073486292597863e-06
+  }
+
+]

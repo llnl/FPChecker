@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x4078d2: file lu.c, line 139.
+==BEGIN DUMP_ARRAYS==
+begin dump: A
+Breakpoint 1, print_array (n=40, A=0x425000, A_double=0x427000) at lu.c:139
+139	    norm = norm + 0; 
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=29.203149795532227, op1=29.203149795532227, op2=0, res_=0x1555554cbd78, op1_=0x1555554cbd40, op2_=0x1555554cb8e0, instId=220, err=0, c_err=90.662464568970805) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x408c9e: file lu.c, line 158.
+Max value in A: 1.0000008e+00
+Norm of A: 2.9203150e+01
+Max value in A_double: 1.00000000000000400e+00
+Norm of A_double: 2.92031676364053183e+01
+
+Breakpoint 3, print_array (n=40, A=0x425000, A_double=0x427000) at lu.c:158
+158	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = 1.7840873091756748e-05

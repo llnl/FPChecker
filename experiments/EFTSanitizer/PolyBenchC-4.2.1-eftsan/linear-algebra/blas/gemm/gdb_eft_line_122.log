@@ -1,0 +1,19 @@
+Breakpoint 1 at 0x406e25: file gemm.c, line 122.
+==BEGIN DUMP_ARRAYS==
+begin dump: C
+
+Breakpoint 1, print_array (ni=20, nj=25, C=0x423000, C_double=0x426000) at gemm.c:122
+122	    norm = 0 + norm;
+Breakpoint 2 at 0x15555553c6ed: file handleReal.cpp, line 874.
+
+Breakpoint 2, eftsan_sum (res=15.78987979888916, op1=0, op2=15.78987979888916, res_=0x15555548cd78, op1_=0x1555554cdf28, op2_=0x15555548cd40, instId=224, err=0, c_err=-2.2107678442894743e-06) at handleReal.cpp:874
+874	  m_get_error(res_, res);
+Breakpoint 3 at 0x4081f5: file gemm.c, line 141.
+Max value in C: 1.3090001e+01
+Norm of C: 1.5789880e+01
+Max value in C_double: 1.30900000000000016e+01
+Norm of C_double: 1.57898771390608470e+01
+
+Breakpoint 3, print_array (ni=20, nj=25, C=0x423000, C_double=0x426000) at gemm.c:141
+141	  fprintf (POLYBENCH_DUMP_TARGET, "Norm error: %.17e\n", norm_error);
+$1 = -2.6598283131562539e-06
