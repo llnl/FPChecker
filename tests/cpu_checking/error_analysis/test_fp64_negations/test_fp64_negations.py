@@ -48,3 +48,7 @@ def test_1():
 
     assert error_1 == 0.0
     assert error_2 == 0.0
+
+    # threshold = 1e-16
+    # assert error_1 < threshold
+    # assert error_2 < threshold

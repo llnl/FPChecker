@@ -32,8 +32,8 @@ void init_array(int m, int n,
 
   for (i = 0; i < m; i++)
     for (j = 0; j < n; j++) {
-      A[i][j] = (((DATA_TYPE) ((i*j) % m) / m )*100) + 10;
-      Q[i][j] = 0.0;
+      A[i][j] = (((DATA_TYPE) ((i*j) % m) / m )*100) + 10.00f;
+      Q[i][j] = 0.0f;
     }
   for (i = 0; i < n; i++)
     for (j = 0; j < n; j++)
@@ -94,10 +94,10 @@ void print_array(int m, int n,
 
   POLYBENCH_DUMP_START;
   POLYBENCH_DUMP_BEGIN("R");
-  for (i = 0; i < n; i++)
+  for (i = 0; i < n; i++){
     for (j = 0; j < n; j++) {
-	DATA_TYPE value = R[i][j];
-	double value_double = R_double[i][j];
+      DATA_TYPE value = R[i][j];
+      double value_double = R_double[i][j];
 
 	if (value < 0)
 	  value = -value;
@@ -109,7 +109,7 @@ void print_array(int m, int n,
 	if (value_double > max_value_R_double)
 	  max_value_R_double = value_double;
     }
-
+  }
   if (max_value_R != 0) {
     for (i = 0; i < n; i++) {
       for (j = 0; j < n; j++) {
@@ -153,7 +153,7 @@ void print_array(int m, int n,
   POLYBENCH_DUMP_END("R");
 
   POLYBENCH_DUMP_BEGIN("Q");
-  for (i = 0; i < m; i++)
+  for (i = 0; i < m; i++){
     for (j = 0; j < n; j++) {
 	DATA_TYPE value = Q[i][j];
 	double value_double = Q_double[i][j];
@@ -167,8 +167,8 @@ void print_array(int m, int n,
 	  max_value_Q = value;
 	if (value_double > max_value_Q_double)
 	  max_value_Q_double = value_double;
-    }
-
+    } 
+  }
   if (max_value_Q != 0) {
     for (i = 0; i < m; i++) {
       for (j = 0; j < n; j++) {

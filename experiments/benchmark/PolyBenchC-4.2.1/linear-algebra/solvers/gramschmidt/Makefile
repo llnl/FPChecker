@@ -1,10 +1,5 @@
 OP = -O2 -fno-vectorize -fno-slp-vectorize
 
-FPCHK_FLAGS =
-ifeq ($(FPCHK_LOCAL_ONLY),1)
-FPCHK_FLAGS += -DFPC_CALCULATE_LOCAL_ERRORS_ONLY
-endif
-
 CC = FPC_INSTRUMENT_ERR_TRACKING=1 clang-fpchecker
 
 INCLUDE_PATH = -I. -I../../../utilities
