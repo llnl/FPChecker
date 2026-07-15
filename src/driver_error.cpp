@@ -18,6 +18,8 @@
 #include "llvm/Passes/PassPlugin.h"
 #include "llvm/Support/Casting.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/Transforms/Scalar/SimplifyCFG.h"
+#include "llvm/Transforms/Utils/Mem2Reg.h"
 
 #include <fstream>
 #include <iostream>
@@ -96,6 +98,32 @@ namespace CPUAnalysis
     static bool isRequired() { return true; }
   };
 
+  // Clang's -O0 IR is marked optnone, so regular canonicalization passes skip
+  // it. Error tracking needs simple stack-local branch diamonds promoted to SSA
+  // so select/phi instrumentation can model shadow-side control flow.
+  struct CPUPrepareO0ForErrorAnalysis : public PassInfoMixin<CPUPrepareO0ForErrorAnalysis>
+  {
+    PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM)
+    {
+      bool changed = false;
+      for (Function &F : M)
+      {
+        if (F.isDeclaration())
+          continue;
+        if (CUDAAnalysis::CodeMatching::isUnwantedFunction(&F))
+          continue;
+        if (F.hasFnAttribute(Attribute::OptimizeNone))
+        {
+          F.removeFnAttr(Attribute::OptimizeNone);
+          changed = true;
+        }
+      }
+      return changed ? PreservedAnalyses::none() : PreservedAnalyses::all();
+    }
+
+    static bool isRequired() { return true; }
+  };
+
   PassPluginLibraryInfo getMyModulePassPluginInfo()
   {
     const auto callback = [](PassBuilder &PB)
@@ -108,6 +136,12 @@ namespace CPUAnalysis
                 "Optimzation Level: " + std::to_string(opt.getSpeedupLevel());
             CUDAAnalysis::Logging::info(fname.c_str());
 #endif
+            if (opt.getSpeedupLevel() == 0)
+            {
+              MPM.addPass(CPUPrepareO0ForErrorAnalysis());
+              MPM.addPass(createModuleToFunctionPassAdaptor(PromotePass()));
+              MPM.addPass(createModuleToFunctionPassAdaptor(SimplifyCFGPass()));
+            }
             // MPM.addPass(createModuleToFunctionPassAdaptor(CPUKernelAnalysis()));
             MPM.addPass(CPUKernelAnalysis());
             return true;

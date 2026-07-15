@@ -27,7 +27,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 
 DEFAULT_ROOT = Path("PolyBenchC-4.2.1")
-DEFAULT_INSTALL_BIN = Path("/g/g90/laguna/fpchecker/FPChecker/build/install/bin")
+DEFAULT_INSTALL_BIN = Path(__file__).resolve().parents[2] / "build" / "install" / "bin"
 FLOAT_RE = r"[+-]?(?:(?:\d+(?:\.\d*)?)|(?:\.\d+))(?:[eE][+-]?\d+)?|[+-]?(?:inf|infinity|nan)"
 BASELINE_RE = re.compile(
     rf"^\s*(?:FPChecker-style\s+)?Norm error(?P<label>[^:]*):\s*(?P<value>{FLOAT_RE})\s*$",
