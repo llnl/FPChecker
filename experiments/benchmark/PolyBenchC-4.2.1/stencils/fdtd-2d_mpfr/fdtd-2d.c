@@ -148,7 +148,7 @@ void print_array(int nx, int ny,
     mpfr_sqrt(norm_mpfr, sum_mpfr, MPFR_RNDN);
   }
 
-  fprintf(POLYBENCH_DUMP_TARGET, "Norm (fp32) : %.7f\n", norm_fp32);
+  fprintf(POLYBENCH_DUMP_TARGET, "Norm (fp32) : %.7e\n", norm_fp32);
   fprintf(POLYBENCH_DUMP_TARGET, "Norm (mpfr) : ");
   mpfr_out_str(POLYBENCH_DUMP_TARGET, 10, 20, norm_mpfr, MPFR_RNDN);
   fprintf(POLYBENCH_DUMP_TARGET, "\n");

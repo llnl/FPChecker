@@ -29,10 +29,11 @@ void init_array (int n,
 {
   int i, j, k;
 
-  for (i = 0; i < n; i++)
+  for (i = 0; i < n; i++){
     for (j = 0; j < n; j++)
       for (k = 0; k < n; k++)
-        A[i][j][k] = B[i][j][k] = (DATA_TYPE) (i + j + (n-k))* 10 / n;
+        A[i][j][k] = B[i][j][k] = (DATA_TYPE) (i + j + (n-k))* 10.0f / n;
+  }
 }
 
 static
@@ -42,10 +43,11 @@ void init_array_double (int n,
 {
   int i, j, k;
 
-  for (i = 0; i < n; i++)
+  for (i = 0; i < n; i++){
     for (j = 0; j < n; j++)
       for (k = 0; k < n; k++)
         A[i][j][k] = B[i][j][k] = (double) (i + j + (n-k))* 10.0 / n;
+  }
 }
 
 static
@@ -63,8 +65,8 @@ void print_array(int n,
 
   POLYBENCH_DUMP_START;
   POLYBENCH_DUMP_BEGIN("A");
-  for (i = 0; i < n; i++)
-    for (j = 0; j < n; j++)
+  for (i = 0; i < n; i++){
+    for (j = 0; j < n; j++){
       for (k = 0; k < n; k++) {
         DATA_TYPE value = A[i][j][k];
         double value_double = A_double[i][j][k];
@@ -79,7 +81,8 @@ void print_array(int n,
         if (value_double > max_value_double)
           max_value_double = value_double;
       }
-
+    }
+  }
   if (max_value != 0) {
     for (i = 0; i < n; i++)
       for (j = 0; j < n; j++)

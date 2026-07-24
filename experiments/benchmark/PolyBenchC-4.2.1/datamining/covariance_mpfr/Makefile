@@ -22,8 +22,7 @@ endif
 
 MPFR_LIBS = $(MPFR_LIB_PATH) -lmpfr -lgmp -lm
 
-TARGET = covariance_same_fp32_mpfr
-
+TARGET = covariance
 all:
 	$(CC) -c $(TARGET).c $(OP) $(INCLUDE_PATH) $(MPFR_INCLUDE) $(DATASET) $(DUMP) $(PROTO)
 	$(CC) -c ../../utilities/polybench.c $(OP) $(INCLUDE_PATH) $(DATASET) $(DUMP) $(PROTO)
