@@ -12,6 +12,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <stdarg.h>
+#include <stdint.h>
 
 #if defined(FPC_DEBUG_ERROR_ANALYSIS) || defined(FPDC_DEBUG_CALLSTACK)
 static inline int _FPC_DEBUG_OUTPUT_ENABLED_(void)
@@ -82,6 +83,31 @@ FPC_SeriesManager *FPC_DATA_MANAGER;
 // Maximum number of warnings to print
 #define MAX_WARNINGS 3
 int _FPC_WARNING_COUNT_;
+
+double _FPC_STABILITY_ETA_ABS_ = 0.0;
+double _FPC_STABILITY_ETA_REL_ = 1.0e-6;
+#define _FPC_STABILITY_TAU_ 1.0e-30
+int  _FPC_STABILITY_WARNING_COUNT_ = 0;
+long _FPC_STABILITY_MAX_WARNINGS_  = MAX_WARNINGS;
+int  _FPC_NONFINITE_WARNING_COUNT_ = 0;
+#define _FPC_NONFINITE_MAX_WARNINGS 10
+
+static int    _FPC_PERTURB_ENABLE_    = 0;
+static double _FPC_PERTURB_DELTA_ABS_ = 0.0;
+static double _FPC_PERTURB_DELTA_REL_ = 1.0e-7;
+static int    _FPC_PERTURB_SIGN_MODE_ = 0;
+static unsigned long _FPC_PERTURB_SIGN_TICK_ = 0;
+
+static double _FPC_PERTURB_NEXT_SIGN_(void)
+{
+  switch (_FPC_PERTURB_SIGN_MODE_)
+  {
+  case 1: return (_FPC_PERTURB_SIGN_TICK_++ % 2 == 0) ? 1.0 : -1.0;
+  case 2: return (rand() & 1) ? 1.0 : -1.0;
+  case 0:
+  default: return 1.0;
+  }
+}
 
 // Last basic block name
 #define _FPC_BB_NAME_SIZE_ 512                   // max size of a basic block name - for example: "%bb_26"
@@ -155,9 +181,103 @@ static inline int _FPC_TRY_PARSE_FP_LITERAL_(const char *text, double *value)
   return 1;
 }
 
+enum _FPC_STABILITY_CLASS_
+{
+  _FPC_STABLE_TRUE  = 0,
+  _FPC_STABLE_FALSE = 1,
+  _FPC_UNSTABLE     = 2
+};
+
+static double _FPC_STABILITY_WIDTH_(double abs_err, double rel_err, double val)
+{
+  double a1 = fabs(abs_err);
+  double scale = fabs(val);
+  if (scale < _FPC_STABILITY_TAU_)
+    scale = _FPC_STABILITY_TAU_;
+  double a2 = rel_err * scale;
+  return (a1 > a2) ? a1 : a2;
+}
+
+/* COMPRESSED predicate code: 0=eq 1=ne 2=lt 3=le 4=gt 5=ge */
+static int _FPC_CLASSIFY_STABILITY_COMPRESSED_(int pred, double a, double b,
+                                               double wa, double wb, double eta)
+{
+  double u = wa + wb + eta;
+  double g = b - a;
+  double diff = a - b;
+
+  if (u == 0.0)
+    return _FPC_STABLE_TRUE;
+
+  switch (pred)
+  {
+  case 2:
+  case 3:
+    if (g > u)  return _FPC_STABLE_TRUE;
+    if (g < -u) return _FPC_STABLE_FALSE;
+    return _FPC_UNSTABLE;
+  case 4:
+  case 5:
+    if (diff > u)  return _FPC_STABLE_TRUE;
+    if (diff < -u) return _FPC_STABLE_FALSE;
+    return _FPC_UNSTABLE;
+  case 0:
+    if (fabs(diff) > u) return _FPC_STABLE_FALSE;
+    return _FPC_UNSTABLE;
+  case 1:
+    if (fabs(diff) > u) return _FPC_STABLE_TRUE;
+    return _FPC_UNSTABLE;
+  default:
+    return _FPC_STABLE_TRUE;
+  }
+}
+
+static const char *_FPC_PRED_NAME_COMPRESSED_(int pred)
+{
+  switch (pred)
+  {
+  case 0: return "==";
+  case 1: return "!=";
+  case 2: return "<";
+  case 3: return "<=";
+  case 4: return ">";
+  case 5: return ">=";
+  default: return "?";
+  }
+}
+
 /*----------------------------------------------------------------------------*/
 /* Initialize                                                                 */
 /*----------------------------------------------------------------------------*/
+
+void _FPC_INIT_STABILITY_CONFIG_()
+{
+  char *eta_abs = getenv("FPC_STABILITY_ETA_ABS");
+  if (eta_abs != NULL) _FPC_STABILITY_ETA_ABS_ = atof(eta_abs);
+  char *eta_rel = getenv("FPC_STABILITY_ETA_REL");
+  if (eta_rel != NULL) _FPC_STABILITY_ETA_REL_ = atof(eta_rel);
+  char *smw = getenv("FPC_STABILITY_MAX_WARNINGS");
+  if (smw != NULL) _FPC_STABILITY_MAX_WARNINGS_ = atol(smw);
+
+  char *p_en = getenv("FPC_PERTURB_ENABLE");
+  if (p_en != NULL) _FPC_PERTURB_ENABLE_ = atoi(p_en);
+  char *p_da = getenv("FPC_PERTURB_DELTA_ABS");
+  if (p_da != NULL) _FPC_PERTURB_DELTA_ABS_ = atof(p_da);
+  char *p_dr = getenv("FPC_PERTURB_DELTA_REL");
+  if (p_dr != NULL) _FPC_PERTURB_DELTA_REL_ = atof(p_dr);
+  char *p_sg = getenv("FPC_PERTURB_SIGN");
+  if (p_sg != NULL)
+  {
+    if      (strcmp(p_sg, "alternate") == 0) _FPC_PERTURB_SIGN_MODE_ = 1;
+    else if (strcmp(p_sg, "random")    == 0) _FPC_PERTURB_SIGN_MODE_ = 2;
+    else                                     _FPC_PERTURB_SIGN_MODE_ = 0;
+  }
+
+#ifndef FPC_QUIET
+  printf("#FPCHECKER: Branch-stability tolerances: eta_abs=%g, eta_rel=%g\n",
+         _FPC_STABILITY_ETA_ABS_, _FPC_STABILITY_ETA_REL_);
+#endif
+}
 
 void _FPC_INIT_HASH_TABLE_()
 {
@@ -239,6 +359,7 @@ void _FPC_INIT_FPCHECKER()
   _FPC_LAST_BASIC_BLOCK_[0] = '\0';
   _FPC_RET_STACK_TOP_ = 0;
   _FPC_INIT_HASH_TABLE_();
+  _FPC_INIT_STABILITY_CONFIG_();
   _FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED();
 }
 
@@ -256,6 +377,7 @@ void _FPC_INIT_ARGS_FPCHECKER(int argc, char **argv)
   _FPC_LAST_BASIC_BLOCK_[0] = '\0';
   _FPC_RET_STACK_TOP_ = 0;
   _FPC_INIT_HASH_TABLE_();
+  _FPC_INIT_STABILITY_CONFIG_();
   _FPC_CHECK_IF_LINE_ERRORS_ARE_SAVED();
 }
 
@@ -471,53 +593,89 @@ void _FPC_FP32_BRANCH_(const char *basic_block_name)
 void _FPC_FP32_CMP_(int low_cond, float y, float z, int predicate, int loc,
                     char *file_name, const char *result_name,
                     const char *op1_name, const char *op2_name,
-                    const char *function_name)
+                    const char *function_name, int is_branch_controlling)
 {
   _FPC_ENSURE_RUNTIME_READY_();
-
+  
   double shadow_y = (double)y;
   double shadow_z = (double)z;
-  double _tmp_error_ = 0.0;
-  double _tmp_relative_error_ = 0.0;
+  double err_y = 0.0, rho_y = 0.0;
+  double err_z = 0.0, rho_z = 0.0;
 
 #ifndef FPC_CALCULATE_LOCAL_ERRORS_ONLY
   _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op1_name, function_name,
-                              &shadow_y, &_tmp_error_,
-                              &_tmp_relative_error_);
+                              &shadow_y, &err_y, &rho_y);
   _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, op2_name, function_name,
-                              &shadow_z, &_tmp_error_,
-                              &_tmp_relative_error_);
+                              &shadow_z, &err_z, &rho_z);
 #endif
 
   int shadow_cond = low_cond;
   switch (predicate)
   {
-  case 0:
-    shadow_cond = (shadow_y == shadow_z);
-    break;
-  case 1:
-    shadow_cond = (shadow_y != shadow_z);
-    break;
-  case 2:
-    shadow_cond = (shadow_y < shadow_z);
-    break;
-  case 3:
-    shadow_cond = (shadow_y <= shadow_z);
-    break;
-  case 4:
-    shadow_cond = (shadow_y > shadow_z);
-    break;
-  case 5:
-    shadow_cond = (shadow_y >= shadow_z);
-    break;
-  default:
-    shadow_cond = low_cond;
-    break;
+  case 0: shadow_cond = (shadow_y == shadow_z); break;
+  case 1: shadow_cond = (shadow_y != shadow_z); break;
+  case 2: shadow_cond = (shadow_y <  shadow_z); break;
+  case 3: shadow_cond = (shadow_y <= shadow_z); break;
+  case 4: shadow_cond = (shadow_y >  shadow_z); break;
+  case 5: shadow_cond = (shadow_y >= shadow_z); break;
+  default: shadow_cond = low_cond; break;
   }
 
   _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_name, function_name,
                            shadow_cond ? 1.0 : 0.0, 0.0, 0.0, file_name,
                            loc);
+
+  /* ---- Phase 1: branch-instability classification ---- */
+  if (is_branch_controlling)
+  {
+    double wa = _FPC_STABILITY_WIDTH_(err_y, rho_y, shadow_y);
+    double wb = _FPC_STABILITY_WIDTH_(err_z, rho_z, shadow_z);
+
+    double m = fabs(shadow_y) > fabs(shadow_z) ? fabs(shadow_y) : fabs(shadow_z);
+    double eta = _FPC_STABILITY_ETA_ABS_;
+    double eta_scaled = _FPC_STABILITY_ETA_REL_ * m;
+    if (eta_scaled > eta)
+      eta = eta_scaled;
+
+    // Handle non-finite values: if any of wa, wb, eta, shadow_y, shadow_z are non-finite, we cannot classify the comparison
+    if (!isfinite(err_y) || !isfinite(rho_y) ||
+        !isfinite(err_z) || !isfinite(rho_z) ||
+        !isfinite(wa) || !isfinite(wb) || !isfinite(eta) ||
+        !isfinite(shadow_y) || !isfinite(shadow_z))
+    {
+      if (_FPC_NONFINITE_WARNING_COUNT_ < _FPC_NONFINITE_MAX_WARNINGS)
+      {
+        _FPC_NONFINITE_WARNING_COUNT_++;
+        printf("#FPCHECKER: WARNING: non-finite shadow state at %s:%d in %s: "
+               "(%g %s %g) wa=%g, wb=%g, eta=%g -- comparison NOT classified\n",
+               file_name ? file_name : "Unknown", loc,
+               function_name ? function_name : "Unknown",
+               shadow_y, _FPC_PRED_NAME_COMPRESSED_(predicate), shadow_z,
+               wa, wb, eta);
+      }
+      return;
+    }
+
+    int cls = _FPC_CLASSIFY_STABILITY_COMPRESSED_(predicate, shadow_y, shadow_z,
+                                                  wa, wb, eta);
+
+    if (cls == _FPC_UNSTABLE)
+    {
+      if (_FPC_STABILITY_WARNING_COUNT_ < _FPC_STABILITY_MAX_WARNINGS_)
+      {
+        _FPC_STABILITY_WARNING_COUNT_++;
+        printf("#FPCHECKER: Unstable branch at %s:%d in %s: "
+               "(%g %s %g) observed=%s, uncertainty u=%g (wa=%g, wb=%g, eta=%g)\n",
+               file_name ? file_name : "Unknown", loc,
+               function_name ? function_name : "Unknown",
+               shadow_y, _FPC_PRED_NAME_COMPRESSED_(predicate), shadow_z,
+               low_cond ? "true" : "false",
+               wa + wb + eta, wa, wb, eta);
+      }
+      double mag = rho_y > rho_z ? rho_y : rho_z;
+      FPC_APPEND_ERROR_LOG_ENTRY(loc, mag);
+    }
+  }
 }
 
 // This function is called for PHI nodes in SSA form
@@ -683,6 +841,85 @@ void _FPC_FP32_POP_ARG_ERROR_(int param_index, const char *param_reg, const char
 
   _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, param_reg, function_name,
                            shadow_value, error, relative_error, "", 0);
+}
+
+static void __attribute__((unused)) _FPC_PERTURB_RECONCILE_(double val, double dx, double sign,
+                                    double r_old, double rho_old,
+                                    double *r_new_out, double *rho_new_out)
+{
+  double r_seed = sign * dx;
+  double r_ref  = (r_old != 0.0) ? r_old : r_seed;
+  double sgn    = (r_ref >= 0.0) ? 1.0 : -1.0;
+  double amag   = fabs(r_old);
+  double bmag   = fabs(r_seed);
+  double mag    = (amag > bmag) ? amag : bmag;
+  double r_new  = sgn * mag;
+
+  double scale = fabs(val);
+  if (scale < _FPC_STABILITY_TAU_)
+    scale = _FPC_STABILITY_TAU_;
+  double rho_new = fabs(r_new) / scale;
+  if (rho_new < rho_old)
+    rho_new = rho_old;
+
+  *r_new_out   = r_new;
+  *rho_new_out = rho_new;
+}
+
+void _FPC_FP32_PERTURB_SCALAR_(float x, const char *param_reg,
+                               const char *function_name)
+{
+  _FPC_ENSURE_RUNTIME_READY_();
+  if (!_FPC_PERTURB_ENABLE_)
+    return;
+
+  double dx = _FPC_PERTURB_DELTA_REL_ * fabs((double)x);
+  if (_FPC_PERTURB_DELTA_ABS_ > dx)
+    dx = _FPC_PERTURB_DELTA_ABS_;
+
+  double sign = _FPC_PERTURB_NEXT_SIGN_();
+
+  double shadow_old = (double)x, r_old = 0.0, rho_old = 0.0;
+  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, param_reg, function_name,
+                              &shadow_old, &r_old, &rho_old);
+
+  double r_new = 0.0, rho_new = 0.0;
+  _FPC_PERTURB_RECONCILE_((double)x, dx, sign, r_old, rho_old, &r_new, &rho_new);
+
+  _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, param_reg, function_name,
+                         (double)x + r_new, r_new, rho_new, "", 0);
+}
+
+void _FPC_FP32_PERTURB_POINTER_(const float *p, long int n,
+                                const char *param_reg,
+                                const char *function_name)
+{
+  _FPC_ENSURE_RUNTIME_READY_();
+  if (!_FPC_PERTURB_ENABLE_)
+    return;
+  if (p == NULL || n <= 0)
+    return;
+
+  for (long int i = 0; i < n; ++i)
+  {
+    double xi = (double)p[i];
+
+    double dx = _FPC_PERTURB_DELTA_REL_ * fabs(xi);
+    if (_FPC_PERTURB_DELTA_ABS_ > dx)
+      dx = _FPC_PERTURB_DELTA_ABS_;
+
+    double sign = _FPC_PERTURB_NEXT_SIGN_();
+
+    uintptr_t addr = (uintptr_t)(&p[i]);
+
+    double shadow_old = xi, r_old = 0.0, rho_old = 0.0;
+    _FPC_FIND_VALUE_BY_ADDRESS(_FPC_ADDRESS_HT_, addr, &shadow_old, &r_old, &rho_old);
+
+    double r_new = 0.0, rho_new = 0.0;
+    _FPC_PERTURB_RECONCILE_(xi, dx, sign, r_old, rho_old, &r_new, &rho_new);
+
+    _FPC_ADDRESS_HT_UPDATE_(_FPC_ADDRESS_HT_, addr, xi + r_new, r_new, rho_new, "", 0);
+  }
 }
 
 // Save error of the value being returned by a function.

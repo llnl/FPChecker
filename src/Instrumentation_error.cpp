@@ -21,6 +21,38 @@
 #include <list>
 #include <string>
 
+#include <vector>   /* Phase 2 */
+#include <cstdlib>  /* Phase 2 */
+
+namespace {  /* Phase 2: parse "_FPC_PERTURB_INPUTS_" spec strings */
+struct PerturbTarget { int argIndex; long count; };  // count<0 => scalar
+static std::vector<PerturbTarget> parsePerturbSpec(const std::string &spec)
+{
+  std::vector<PerturbTarget> out;
+  size_t i = 0, n = spec.size();
+  while (i < n)
+  {
+    while (i < n && (spec[i] == ';' || spec[i] == ' ' || spec[i] == '\t')) i++;
+    if (i >= n) break;
+    if (spec.compare(i, 3, "arg") != 0) { while (i < n && spec[i] != ';') i++; continue; }
+    i += 3;
+    long idx = 0; bool haveIdx = false;
+    while (i < n && spec[i] >= '0' && spec[i] <= '9') { idx = idx*10 + (spec[i]-'0'); i++; haveIdx = true; }
+    if (!haveIdx) { while (i < n && spec[i] != ';') i++; continue; }
+    long count = -1;
+    if (i < n && spec[i] == '[')
+    {
+      i++; long k = 0; bool haveK = false;
+      while (i < n && spec[i] >= '0' && spec[i] <= '9') { k = k*10 + (spec[i]-'0'); i++; haveK = true; }
+      if (i < n && spec[i] == ']') i++;
+      count = haveK ? k : 0;
+    }
+    out.push_back(PerturbTarget{(int)idx, count});
+  }
+  return out;
+}
+}  // namespace  /* BF Phase 2 */
+
 using namespace CPUAnalysis;
 using namespace llvm;
 
@@ -53,7 +85,9 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   fpc_fp32_cmp_function(nullptr),
   fpc_fp32_push_ret_error(nullptr), fpc_fp32_pop_ret_error(nullptr),
   fpc_fp32_push_arg_error(nullptr), fpc_fp32_pop_arg_error(nullptr),
-  fpc_fp32_math_error(nullptr)
+  fpc_fp32_math_error(nullptr),
+  fpc_fp32_perturb_scalar(nullptr),   /* BF Phase 2 */
+  fpc_fp32_perturb_pointer(nullptr)   /* BF Phase 2 */
 {
 
 #ifdef FPC_DEBUG
@@ -154,6 +188,18 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
                    GlobalValue::LinkageTypes::LinkOnceODRLinkage,
                    "_FPC_FP32_MATH_ERROR_");
     }
+    if (f->getName().str().find("_FPC_FP32_PERTURB_SCALAR_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp32_perturb_scalar,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP32_PERTURB_SCALAR_");
+    }
+    if (f->getName().str().find("_FPC_FP32_PERTURB_POINTER_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp32_perturb_pointer,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP32_PERTURB_POINTER_");
+    }
 
     SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
@@ -170,6 +216,8 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     SET_ODR_LIKAGE("_FPC_FP32_PUSH_ARG_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP32_POP_ARG_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP32_MATH_ERROR_")
+    SET_ODR_LIKAGE("_FPC_FP32_PERTURB_SCALAR_")   /* BF Phase 2 */
+    SET_ODR_LIKAGE("_FPC_FP32_PERTURB_POINTER_")  /* BF Phase 2 */
 
     // Hash table functions
     SET_ODR_LIKAGE("_FPC_ADDRESS_HT_CREATE_")
@@ -419,6 +467,110 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
       }
     }
   }
+
+  /* ===== Phase 2: seed input perturbation for annotated functions =====
+   * Seeds the error tables at function entry for inputs named in the
+   * _FPC_PERTURB_INPUTS_ annotation. Scalars -> register table (via the
+   * spill slot at -O0); pointers -> address table (per element). The live
+   * SSA value is NOT modified: seed-only (mechanism-b) form of Phase 2.
+   * Guarded so the pass stays usable against a runtime lacking the helpers. */
+  if (fpc_fp32_perturb_scalar && fpc_fp32_perturb_pointer)
+  {
+    std::string perturbSpec;
+    if (getPerturbSpec(f, perturbSpec))
+    {
+      std::vector<PerturbTarget> targets = parsePerturbSpec(perturbSpec);
+
+      std::vector<llvm::Argument *> argv;
+      for (auto &a : f->args()) argv.push_back(&a);
+
+      IRBuilder<> pBuilder(first_inst);
+
+      for (const auto &t : targets)
+      {
+        if (t.argIndex < 0 || (size_t)t.argIndex >= argv.size())
+          continue;
+        llvm::Argument *arg = argv[t.argIndex];
+
+        std::string regName;
+        { llvm::raw_string_ostream rso(regName); arg->printAsOperand(rso, false); rso.flush(); }
+        Value *regStr = pBuilder.CreateGlobalStringPtr(regName);
+        Value *fnStr  = pBuilder.CreateGlobalStringPtr(f->getName());
+
+        if (t.count < 0)
+        {
+          // Scalar float parameter.
+          if (!arg->getType()->isFloatTy())
+            continue;
+
+          // At -O0 the parameter is immediately spilled to a stack slot and
+          // every downstream use reloads from it. Seeding the register table
+          // (keyed on the SSA arg) is orphaned: reloads read error from the
+          // ADDRESS table for the slot, which is unseeded. Fix: find the alloca
+          // the arg is stored into and seed that slot via the pointer hook
+          // (n=1), inserting AFTER the spill store so the slot holds the value.
+          llvm::StoreInst *spill = nullptr;
+          for (llvm::User *U : arg->users())
+          {
+            if (auto *SI = llvm::dyn_cast<llvm::StoreInst>(U))
+            {
+              if (SI->getValueOperand() == arg &&
+                  llvm::isa<llvm::AllocaInst>(SI->getPointerOperand()))
+              {
+                spill = SI;
+                break;
+              }
+            }
+          }
+
+          if (spill)
+          {
+            llvm::Value *slot = spill->getPointerOperand();
+            IRBuilder<> slotBuilder(spill->getNextNode());
+            Value *slotRegStr = slotBuilder.CreateGlobalStringPtr(regName);
+            Value *slotFnStr  = slotBuilder.CreateGlobalStringPtr(f->getName());
+            std::vector<Value *> a;
+            a.push_back(slot);      // const float *p  (the stack slot)
+            a.push_back(ConstantInt::get(Type::getInt64Ty(mod->getContext()),
+                                         (uint64_t)1, true));  // long n = 1
+            a.push_back(slotRegStr);
+            a.push_back(slotFnStr);
+            CallInst *c = slotBuilder.CreateCall(fpc_fp32_perturb_pointer, a);
+            (*insrtrumented_instructions)++;
+            setFakeDebugLocation(first_inst, c, f);
+          }
+          else
+          {
+            // No spill (arg stays in a register): seed register table.
+            std::vector<Value *> a;
+            a.push_back(arg);
+            a.push_back(regStr);
+            a.push_back(fnStr);
+            CallInst *c = pBuilder.CreateCall(fpc_fp32_perturb_scalar, a);
+            (*insrtrumented_instructions)++;
+            setFakeDebugLocation(first_inst, c, f);
+          }
+        }
+        else if (t.count > 0)
+        {
+          // Pointer parameter with fixed element count -> seed address table.
+          if (!arg->getType()->isPointerTy())
+            continue;
+          std::vector<Value *> a;
+          a.push_back(arg);       // const float *p
+          a.push_back(ConstantInt::get(Type::getInt64Ty(mod->getContext()),
+                                       (uint64_t)t.count, true));  // long n
+          a.push_back(regStr);
+          a.push_back(fnStr);
+          CallInst *c = pBuilder.CreateCall(fpc_fp32_perturb_pointer, a);
+          (*insrtrumented_instructions)++;
+          setFakeDebugLocation(first_inst, c, f);
+        }
+        // t.count == 0 (symbolic/unresolved length): skip safely for this cut.
+      }
+    }
+  }
+  /* ===== end Phase 2 ===== */
 
   for (auto bb = f->begin(), end = f->end(); bb != end; ++bb)
   {
@@ -793,6 +945,9 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
               args.push_back(builder.CreateGlobalStringPtr(lhsName));
               args.push_back(builder.CreateGlobalStringPtr(rhsName));
               args.push_back(builder.CreateGlobalStringPtr(f->getName()));
+               // Phase 1: mark whether this compare directly controls a branch.
+              int isBrCtrl = isBranchControllingFCmp(inst) ? 1 : 0;
+              args.push_back(ConstantInt::get(builder.getInt32Ty(), isBrCtrl));
 
               ArrayRef<Value *> args_ref(args);
               CallInst *hookCall = builder.CreateCall(fpc_fp32_cmp_function, args_ref);
@@ -1332,6 +1487,107 @@ bool CPUFPInstrumentation_error::isCmpEqual(const Instruction *inst)
       if (cmpInst->getPredicate() == llvm::CmpInst::Predicate::FCMP_OEQ ||
           cmpInst->getPredicate() == llvm::CmpInst::Predicate::FCMP_UEQ)
         return true;
+    }
+  }
+  return false;
+}
+
+
+// Phase 1: returns true if inst is an FCmp on float operands whose result
+// directly controls a conditional branch.
+bool CPUFPInstrumentation_error::isBranchControllingFCmp(const Instruction *inst)
+{
+  if (inst->getOpcode() != Instruction::FCmp)
+    return false;
+
+  const CmpInst *cmpInst = dyn_cast<CmpInst>(inst);
+  if (!cmpInst)
+    return false;
+
+  if (!cmpInst->getOperand(0)->getType()->isFloatTy())
+    return false;
+
+  for (const User *U : inst->users())
+  {
+    // Direct: fcmp result is the condition of a conditional branch.
+    if (const BranchInst *br = dyn_cast<BranchInst>(U))
+    {
+      if (br->isConditional() && br->getCondition() == inst)
+        return true;
+    }
+    // Direct: fcmp result is the condition of a select (ternary / min / max).
+    if (const SelectInst *sel = dyn_cast<SelectInst>(U))
+    {
+      if (sel->getCondition() == inst)
+        return true;
+    }
+    // Indirect: fcmp -> zext/sext/trunc -> branch/select/call (e.g. a compare
+    // passed to a helper like fbr_emit at -O0).
+    if (isa<ZExtInst>(U) || isa<SExtInst>(U) || isa<TruncInst>(U))
+    {
+      for (const User *U2 : U->users())
+      {
+        if (isa<BranchInst>(U2) || isa<SelectInst>(U2) || isa<CallInst>(U2))
+          return true;
+      }
+    }
+    // fcmp result is a direct operand of a select or call.
+    if (isa<SelectInst>(U) || isa<CallInst>(U))
+      return true;
+  }
+  return false;
+}
+
+
+/* Phase 2: returns the payload after "_FPC_PERTURB_INPUTS_:" in outSpec. */
+bool CPUFPInstrumentation_error::getPerturbSpec(const Function *f, std::string &outSpec)
+{
+  const char *TAG = "_FPC_PERTURB_INPUTS_:";
+  assert((f != nullptr) && "Function not initialized!");
+  const llvm::Module *M = f->getParent();
+  if (M == nullptr)
+    return false;
+
+  llvm::GlobalVariable *GV = M->getGlobalVariable("llvm.global.annotations");
+  if (!GV || !GV->hasInitializer())
+    return false;
+
+  llvm::Constant *Initializer = GV->getInitializer();
+  llvm::ConstantArray *CA = llvm::dyn_cast<llvm::ConstantArray>(Initializer);
+  if (!CA)
+    return false;
+
+  for (unsigned i = 0; i < CA->getNumOperands(); ++i)
+  {
+    llvm::ConstantStruct *CS = llvm::dyn_cast<llvm::ConstantStruct>(CA->getOperand(i));
+    if (!CS || CS->getNumOperands() != 5)
+      continue;
+
+    llvm::Value *AnnotatedValue = CS->getOperand(0)->stripPointerCasts();
+    llvm::Function *AnnotatedFunc = llvm::dyn_cast<llvm::Function>(AnnotatedValue);
+    if (!(AnnotatedFunc && AnnotatedFunc == f))
+      continue;
+
+    llvm::Constant *AnnotationStrPtrConstant = CS->getOperand(1);
+    llvm::GlobalVariable *AnnotationStrGV =
+        llvm::dyn_cast<llvm::GlobalVariable>(AnnotationStrPtrConstant->stripPointerCasts());
+    if (!(AnnotationStrGV && AnnotationStrGV->hasInitializer()))
+      continue;
+
+    llvm::Constant *StringInitializer = AnnotationStrGV->getInitializer();
+    llvm::ConstantDataArray *CDA = llvm::dyn_cast<llvm::ConstantDataArray>(StringInitializer);
+    if (!(CDA && CDA->isString()))
+      continue;
+
+    llvm::StringRef s = CDA->getAsString();
+    while (!s.empty() && s.back() == '\0')
+      s = s.drop_back();
+
+    size_t pos = s.find(TAG);
+    if (pos != llvm::StringRef::npos)
+    {
+      outSpec = s.substr(pos + std::string(TAG).size()).str();
+      return true;
     }
   }
   return false;

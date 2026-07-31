@@ -21,6 +21,37 @@
 
 #include <list>
 #include <string>
+#include <vector>   /* Phase 2 */
+#include <cstdlib>  /* Phase 2 */
+
+namespace {  /* Phase 2: parse "_FPC_PERTURB_INPUTS_" spec strings */
+struct PerturbTarget { int argIndex; long count; };  // count<0 => scalar
+static std::vector<PerturbTarget> parsePerturbSpec(const std::string &spec)
+{
+  std::vector<PerturbTarget> out;
+  size_t i = 0, n = spec.size();
+  while (i < n)
+  {
+    while (i < n && (spec[i] == ';' || spec[i] == ' ' || spec[i] == '\t')) i++;
+    if (i >= n) break;
+    if (spec.compare(i, 3, "arg") != 0) { while (i < n && spec[i] != ';') i++; continue; }
+    i += 3;
+    long idx = 0; bool haveIdx = false;
+    while (i < n && spec[i] >= '0' && spec[i] <= '9') { idx = idx*10 + (spec[i]-'0'); i++; haveIdx = true; }
+    if (!haveIdx) { while (i < n && spec[i] != ';') i++; continue; }
+    long count = -1;
+    if (i < n && spec[i] == '[')
+    {
+      i++; long k = 0; bool haveK = false;
+      while (i < n && spec[i] >= '0' && spec[i] <= '9') { k = k*10 + (spec[i]-'0'); i++; haveK = true; }
+      if (i < n && spec[i] == ']') i++;
+      count = haveK ? k : 0;
+    }
+    out.push_back(PerturbTarget{(int)idx, count});
+  }
+  return out;
+}
+}  // namespace  /* BF Phase 2 */
 
 using namespace CPUAnalysisFP64;
 using namespace llvm;
@@ -64,7 +95,9 @@ CPUFPInstrumentation_error_fp64::CPUFPInstrumentation_error_fp64(Module *M)
       fpc_fp64_pop_ret_error(nullptr),
       fpc_fp64_push_arg_error(nullptr),
       fpc_fp64_pop_arg_error(nullptr),
-      fpc_fp64_math_error(nullptr)
+      fpc_fp64_math_error(nullptr),
+      fpc_fp64_perturb_scalar(nullptr),   /* BF Phase 2 */
+      fpc_fp64_perturb_pointer(nullptr)   /* BF Phase 2 */
 {
 
 #ifdef FPC_DEBUG
@@ -165,6 +198,18 @@ CPUFPInstrumentation_error_fp64::CPUFPInstrumentation_error_fp64(Module *M)
                    GlobalValue::LinkageTypes::LinkOnceODRLinkage,
                    "_FPC_FP64_MATH_ERROR_");
     }
+    if (f->getName().str().find("_FPC_FP64_PERTURB_SCALAR_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp64_perturb_scalar,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP64_PERTURB_SCALAR_");
+    }
+    if (f->getName().str().find("_FPC_FP64_PERTURB_POINTER_") != std::string::npos)
+    {
+      confFunction(f, &fpc_fp64_perturb_pointer,
+                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
+                   "_FPC_FP64_PERTURB_POINTER_");
+    }
 
     SET_ODR_LIKAGE("_FPC_FP64_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP64_LOAD_INST_")
@@ -181,6 +226,8 @@ CPUFPInstrumentation_error_fp64::CPUFPInstrumentation_error_fp64(Module *M)
     SET_ODR_LIKAGE("_FPC_FP64_PUSH_ARG_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP64_POP_ARG_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP64_MATH_ERROR_")
+    SET_ODR_LIKAGE("_FPC_FP64_PERTURB_SCALAR_")   /* BF Phase 2 */
+    SET_ODR_LIKAGE("_FPC_FP64_PERTURB_POINTER_")  /* BF Phase 2 */
 
     // Hash table functions
     SET_ODR_LIKAGE("_FPC_ADDRESS_HT_CREATE_FP64_")
@@ -401,6 +448,96 @@ void CPUFPInstrumentation_error_fp64::instrumentFunctionErrorAnalysis(Function *
   // corrupted by relocation issues in shared libraries).
   Constant *loadInst_filename = builder.CreateGlobalStringPtr(module_filename);
   //  -------------------------------------------------------------------------------
+
+  /* ===== Phase 2: seed input perturbation for annotated functions ===== */
+  if (fpc_fp64_perturb_scalar && fpc_fp64_perturb_pointer)
+  {
+    std::string perturbSpec;
+    if (getPerturbSpec(f, perturbSpec))
+    {
+      std::vector<PerturbTarget> targets = parsePerturbSpec(perturbSpec);
+
+      std::vector<llvm::Argument *> argv;
+      for (auto &a : f->args()) argv.push_back(&a);
+
+      IRBuilder<> pBuilder(first_inst);
+
+      for (const auto &t : targets)
+      {
+        if (t.argIndex < 0 || (size_t)t.argIndex >= argv.size())
+          continue;
+        llvm::Argument *arg = argv[t.argIndex];
+
+        std::string regName;
+        { llvm::raw_string_ostream rso(regName); arg->printAsOperand(rso, false); rso.flush(); }
+        Value *regStr = pBuilder.CreateGlobalStringPtr(regName);
+        Value *fnStr  = pBuilder.CreateGlobalStringPtr(f->getName());
+
+        if (t.count < 0)
+        {
+          // Scalar double parameter.
+          if (!arg->getType()->isDoubleTy())
+            continue;
+
+          // At -O0 the parameter is spilled to a stack slot; seed the slot.
+          llvm::StoreInst *spill = nullptr;
+          for (llvm::User *U : arg->users())
+          {
+            if (auto *SI = llvm::dyn_cast<llvm::StoreInst>(U))
+            {
+              if (SI->getValueOperand() == arg &&
+                  llvm::isa<llvm::AllocaInst>(SI->getPointerOperand()))
+              {
+                spill = SI;
+                break;
+              }
+            }
+          }
+
+          if (spill)
+          {
+            llvm::Value *slot = spill->getPointerOperand();
+            IRBuilder<> slotBuilder(spill->getNextNode());
+            Value *slotRegStr = slotBuilder.CreateGlobalStringPtr(regName);
+            Value *slotFnStr  = slotBuilder.CreateGlobalStringPtr(f->getName());
+            std::vector<Value *> a;
+            a.push_back(slot);      // const double *p (the stack slot)
+            a.push_back(ConstantInt::get(Type::getInt64Ty(mod->getContext()),
+                                         (uint64_t)1, true));  // long n = 1
+            a.push_back(slotRegStr);
+            a.push_back(slotFnStr);
+            CallInst *c = slotBuilder.CreateCall(fpc_fp64_perturb_pointer, a);
+            (*insrtrumented_instructions)++;
+            setFakeDebugLocation(first_inst, c, f);
+          }
+          else
+          {
+            std::vector<Value *> a;
+            a.push_back(arg);
+            a.push_back(regStr);
+            a.push_back(fnStr);
+            CallInst *c = pBuilder.CreateCall(fpc_fp64_perturb_scalar, a);
+            (*insrtrumented_instructions)++;
+            setFakeDebugLocation(first_inst, c, f);
+          }
+        }
+        else if (t.count > 0)
+        {
+          if (!arg->getType()->isPointerTy())
+            continue;
+          std::vector<Value *> a;
+          a.push_back(arg);       // const double *p
+          a.push_back(ConstantInt::get(Type::getInt64Ty(mod->getContext()),
+                                       (uint64_t)t.count, true));
+          a.push_back(regStr);
+          a.push_back(fnStr);
+          CallInst *c = pBuilder.CreateCall(fpc_fp64_perturb_pointer, a);
+          (*insrtrumented_instructions)++;
+          setFakeDebugLocation(first_inst, c, f);
+        }
+      }
+    }
+  }
 
   // ============= Pop argument errors into callee parameters ===================
   {
@@ -812,6 +949,9 @@ void CPUFPInstrumentation_error_fp64::instrumentFunctionErrorAnalysis(Function *
               args.push_back(builder.CreateGlobalStringPtr(lhsName));
               args.push_back(builder.CreateGlobalStringPtr(rhsName));
               args.push_back(builder.CreateGlobalStringPtr(f->getName()));
+              // Phase 1: mark whether this compare directly controls a branch.
+              int isBrCtrl = isBranchControllingFCmp(inst) ? 1 : 0;
+              args.push_back(ConstantInt::get(builder.getInt32Ty(), isBrCtrl));
 
               ArrayRef<Value *> args_ref(args);
               CallInst *hookCall = builder.CreateCall(fpc_fp64_cmp_function, args_ref);
@@ -1752,4 +1892,91 @@ void CPUFPInstrumentation_error_fp64::instrumentMainFunction(Function *f)
       }
     }
   }
+}
+
+
+/* Phase 1: true if this fcmp directly feeds a branch/select/call. */
+bool CPUFPInstrumentation_error_fp64::isBranchControllingFCmp(const Instruction *inst)
+{
+  if (inst->getOpcode() != Instruction::FCmp)
+    return false;
+  const CmpInst *cmpInst = dyn_cast<CmpInst>(inst);
+  if (!cmpInst)
+    return false;
+  if (!cmpInst->getOperand(0)->getType()->isDoubleTy())   /* FP64: was isFloatTy() */
+    return false;
+  for (const User *U : inst->users())
+  {
+    // Direct: fcmp result is the condition of a conditional branch.
+    if (const BranchInst *br = dyn_cast<BranchInst>(U))
+    {
+      if (br->isConditional() && br->getCondition() == inst)
+        return true;
+    }
+    // Direct: fcmp result is the condition of a select (ternary / min / max).
+    if (const SelectInst *sel = dyn_cast<SelectInst>(U))
+    {
+      if (sel->getCondition() == inst)
+        return true;
+    }
+    // Indirect: fcmp -> zext/sext/trunc -> branch/select/call.
+    if (isa<ZExtInst>(U) || isa<SExtInst>(U) || isa<TruncInst>(U))
+    {
+      for (const User *U2 : U->users())
+      {
+        if (isa<BranchInst>(U2) || isa<SelectInst>(U2) || isa<CallInst>(U2))
+          return true;
+      }
+    }
+    // fcmp result is a direct operand of a select or call.
+    if (isa<SelectInst>(U) || isa<CallInst>(U))
+      return true;
+  }
+  return false;
+}
+
+/* Phase 2: returns the payload after "_FPC_PERTURB_INPUTS_:" in outSpec. */
+bool CPUFPInstrumentation_error_fp64::getPerturbSpec(const Function *f, std::string &outSpec)
+{
+  const char *TAG = "_FPC_PERTURB_INPUTS_:";
+  assert((f != nullptr) && "Function not initialized!");
+  const llvm::Module *M = f->getParent();
+  if (M == nullptr)
+    return false;
+  llvm::GlobalVariable *GV = M->getGlobalVariable("llvm.global.annotations");
+  if (!GV || !GV->hasInitializer())
+    return false;
+  llvm::Constant *Initializer = GV->getInitializer();
+  llvm::ConstantArray *CA = llvm::dyn_cast<llvm::ConstantArray>(Initializer);
+  if (!CA)
+    return false;
+  for (unsigned i = 0; i < CA->getNumOperands(); ++i)
+  {
+    llvm::ConstantStruct *CS = llvm::dyn_cast<llvm::ConstantStruct>(CA->getOperand(i));
+    if (!CS || CS->getNumOperands() != 5)
+      continue;
+    llvm::Value *AnnotatedValue = CS->getOperand(0)->stripPointerCasts();
+    llvm::Function *AnnotatedFunc = llvm::dyn_cast<llvm::Function>(AnnotatedValue);
+    if (!(AnnotatedFunc && AnnotatedFunc == f))
+      continue;
+    llvm::Constant *AnnotationStrPtrConstant = CS->getOperand(1);
+    llvm::GlobalVariable *AnnotationStrGV =
+        llvm::dyn_cast<llvm::GlobalVariable>(AnnotationStrPtrConstant->stripPointerCasts());
+    if (!(AnnotationStrGV && AnnotationStrGV->hasInitializer()))
+      continue;
+    llvm::Constant *StringInitializer = AnnotationStrGV->getInitializer();
+    llvm::ConstantDataArray *CDA = llvm::dyn_cast<llvm::ConstantDataArray>(StringInitializer);
+    if (!(CDA && CDA->isString()))
+      continue;
+    llvm::StringRef s = CDA->getAsString();
+    while (!s.empty() && s.back() == '\0')
+      s = s.drop_back();
+    size_t pos = s.find(TAG);
+    if (pos != llvm::StringRef::npos)
+    {
+      outSpec = s.substr(pos + std::string(TAG).size()).str();
+      return true;
+    }
+  }
+  return false;
 }
