@@ -1,0 +1,137 @@
+\subsection{Extracting EFTSanitizer Error for Correctness Evaluation}
+
+EFTSanitizer~\cite{chowdhary2022fast} tracks floating-point error using
+error-free transformations. Instead of re-executing every operation in a
+higher precision, it rewrites primitive floating-point operations, such as
+addition, subtraction, multiplication, and division, so that the rounding error
+carried by each computed value is propagated explicitly.
+
+This representation is useful for debugging, but it is not reported in the
+same source-line format as FPChecker. FPChecker directly associates each
+reported error with a source location. EFTSanitizer, in contrast, exposes the
+propagated error inside its runtime operation handlers. Therefore, to compare
+the two tools on the same correctness cases, we extracted the EFTSanitizer
+error through its debugging interface.
+
+\paragraph{Making the target value inspectable.}
+For each benchmark, we first identified the source statement that produces the
+value used in the correctness comparison. In PolyBench, this value is often not
+a single scalar output; the final result may be a matrix. We therefore reduced
+the output to a scalar norm and inspected the propagated error of that scalar.
+
+One practical complication is that EFTSanitizer does not provide the same GDB
+debugging support for elementary functions such as \texttt{sqrt}. When the
+final scalar was produced by such a function, we inserted an identity
+operation:
+
+\begin{lstlisting}[language=C]
+norm = 0.0f + norm;
+\end{lstlisting}
+
+Adding zero leaves the mathematical value unchanged and does not introduce a
+new rounding error. Its purpose is only to force the value through an
+instrumented EFTSanitizer arithmetic handler, such as \texttt{eftsan\_add}.
+This gives us a stable breakpoint where the accumulated error carried by the
+value can be inspected.
+
+\paragraph{Validation of the extracted variable.}
+Before applying this procedure to the benchmark suite, we validated which
+EFTSanitizer runtime variable contains the propagated error. We used a small
+toy program where the expected error could be computed independently. The
+program computes a floating-point result, computes the reference result in a
+higher precision, and then passes the difference through an identity
+operation. Running this program under GDB showed that the runtime variable
+\texttt{c\_err} in the EFTSanitizer arithmetic handler corresponds to the
+propagated error of the computed value. We therefore use \texttt{c\_err} as
+the EFTSanitizer error for the selected source-level output.
+
+\paragraph{GDB extraction procedure.}
+The extraction was performed as follows:
+
+\begin{enumerate}
+    \item Compile the program with EFTSanitizer instrumentation and debugging
+    enabled.
+
+    \item Start GDB on the instrumented executable:
+\begin{verbatim}
+gdb ./object-file
+\end{verbatim}
+
+    \item Set a breakpoint at the source line where the target output value is
+    computed:
+\begin{verbatim}
+break file.c:line_number
+run
+\end{verbatim}
+
+    \item After execution reaches that source line, set a breakpoint on the
+    EFTSanitizer arithmetic handler that corresponds to the operation being
+    inspected. For the inserted identity operation above, this is
+    \texttt{eftsan\_add}:
+\begin{verbatim}
+break eftsan_add
+continue
+\end{verbatim}
+
+    \item At the EFTSanitizer runtime breakpoint, inspect the propagated error:
+\begin{verbatim}
+print c_err
+\end{verbatim}
+
+    \item Record the reported \texttt{c\_err} as the EFTSanitizer error for
+    that benchmark output.
+\end{enumerate}
+
+This procedure was then automated for the correctness experiments: each
+benchmark run produced a small EFTSanitizer error record containing the
+benchmark name, source file, source line, extracted \texttt{c\_err}, and run
+status. This made it possible to distinguish successful extractions from build
+or runtime failures instead of silently dropping unsupported cases.
+
+\subsection{Limitations of EFTSanitizer}
+
+During the correctness experiments, we found that EFTSanitizer does not handle
+all small numerical kernels reliably. The main failure mode appears when a
+user-defined function returns a floating-point value. Consider the following
+program:
+
+\begin{lstlisting}[language=C,caption={A small program that fails under EFTSanitizer}]
+float heat_flux(float conductivity, float temp_left,
+                float temp_right, float dx) {
+    return conductivity * (temp_right - temp_left) / dx;
+}
+
+float update_temperature(float temp, float flux,
+                         float dt, float density) {
+    return temp + dt * flux / density;
+}
+
+int main(void) {
+    float flux = heat_flux(0.8f, 72.0f, 75.5f, 0.05f);
+    float next_temp = update_temperature(72.0f, flux, 0.01f, 1.2f);
+    return 0;
+}
+\end{lstlisting}
+
+The program uses only primitive floating-point operations, so it should be
+within EFTSanitizer's supported arithmetic model. The instrumented program
+compiles successfully, but it aborts at runtime with
+\texttt{Illegal instruction (core dumped)}. The failure is caused by the
+EFTSanitizer runtime rather than by the application.
+
+For each call returning a floating-point value, the instrumentation pass emits
+a call to the runtime hook \texttt{eftsan\_get\_return}. This hook is supposed
+to propagate the callee's error metadata back to the caller. In the released
+runtime, however, \texttt{eftsan\_get\_return} is an empty non-\texttt{void}
+function: its body does not return a value. This is undefined behavior, and
+the compiler emits a trap instruction, \texttt{ud2}, in its place. When a
+floating-point value crosses a user-function return boundary, execution reaches
+this trap and the program aborts.
+
+We confirmed that this empty hook is also present in the original author
+repository, so the issue is not caused by our local build. As a result,
+EFTSanitizer can analyze these correctness cases only when the relevant
+floating-point computation stays within a single function or is inlined before
+instrumentation. Kernels that pass floating-point values through user-defined
+function returns are excluded from the comparison and reported as runtime
+failures.

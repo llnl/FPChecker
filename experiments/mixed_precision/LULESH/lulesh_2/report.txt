@@ -1,0 +1,645 @@
+[96mGenerating FPChecker report...[00m
+Trace files found: 0
+Error files found: 1
+
+===== Rounding Error Report =====
+Files with rounding errors: 3
+Lines with rounding errors: 623
+Max abs rounding error:   2.806703e+73
+Max relative error:       inf
+Max seen relative error:  inf
+
+--- File: /g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/mixed_precision/lulesh_new/LULESH/lulesh-init.cc
+Line   | Code                                           |         Error |    Rel. Error | Max Rel. Error
+--------------------------------------------------------------------------------------------------------
+165    | x_local[lnode] = x(gnode);                     |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+166    | y_local[lnode] = y(gnode);                     |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+167    | z_local[lnode] = z(gnode);                     |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+171    | Real_t volume = CalcElemVolume(x_local, y_l... |  7.275958e-12 |  2.980232e-08 |  2.980232e-08
+172    | volo(i) = volume ;                             |  5.820766e-11 |  2.980232e-08 |  2.980232e-08
+173    | elemMass(i) = volume ;                         |  5.820766e-11 |  2.980232e-08 |  2.980232e-08
+176    | nodalMass(idx) += volume / Real_t(8.0) ;       |  1.455192e-11 |  2.980232e-08 |  2.980232e-08
+184    | Real_t scale = (nx*m_tp)/Real_t(45.0);         | -2.980232e-09 |  1.490116e-08 |  1.490116e-08
+185    | Real_t einit = ebase*scale*scale*scale;        | -7.500000e-03 |  2.374171e-08 |  2.374171e-08
+192    | deltatime() = (Real_t(.5)*cbrt(volo(0)))/sq... |  3.930315e-12 |  4.998468e-08 |  4.998468e-08
+224    | Real_t tz = Real_t(1.125)*Real_t(m_planeLoc... |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+450    | regionNum = ((i + myRank) % numReg()) + 1;     | -1.787970e-05 |  2.249421e-08 |  2.249421e-08
+2297   | (line not found)                               |  1.241763e-09 |  9.934107e-09 |  9.934107e-09
+
+--- File: /g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/mixed_precision/lulesh_new/LULESH/lulesh-util.cc
+Line   | Code                                           |         Error |    Rel. Error | Max Rel. Error
+--------------------------------------------------------------------------------------------------------
+52     | {                                              |  9.981348e+14 |  1.000000e+00 |           inf
+195    | std::cout << std::setw(12) << locDom.e(Elem... |  0.000000e+00 |           inf |           inf
+203    | Real_t AbsDiff = FABS(locDom.e(j*nx+k)-locD... |  9.981348e+14 |  1.000000e+00 |           inf
+204    | TotalAbsDiff  += AbsDiff;                      |  0.000000e+00 |           inf |           inf
+206    | if (MaxAbsDiff <AbsDiff) MaxAbsDiff = AbsDiff; |  2.806703e+73 |  1.000000e+00 |           inf
+208    | Real_t RelDiff = AbsDiff / locDom.e(k*nx+j);   |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+210    | if (MaxRelDiff <RelDiff)  MaxRelDiff = RelD... |  1.461860e+66 |  1.000000e+00 |           inf
+
+--- File: /g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/mixed_precision/lulesh_new/LULESH/lulesh.cc
+Line   | Code                                           |         Error |    Rel. Error | Max Rel. Error
+--------------------------------------------------------------------------------------------------------
+44     | printf(" -v              : Output viz file ... |  0.000000e+00 |  0.000000e+00 |           inf
+48     | *Notable changes in LULESH 2.0                 |  1.241763e-09 |  9.934107e-09 |  1.009711e+00
+52     | lulesh-comm.cc - MPI functionality             |  0.000000e+00 |           inf |           inf
+113    | ARE DISCLAIMED. IN NO EVENT SHALL LAWRENCE ... |  1.164153e-10 |  2.980232e-08 |  1.687113e+00
+169    | Real_t targetdt = domain.stoptime() - domai... |  5.934918e-05 |  6.039392e-03 |  6.039392e-03
+171    | if ((domain.dtfixed() <= Real_t(0.0)) && (d... |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+178    | if (domain.dtcourant() < gnewdt) {             |  1.000000e+20 |  1.000000e+00 |           inf
+181    | if (domain.dthydro() < gnewdt) {               | -2.377645e-05 |  7.923736e+01 |  1.067049e+06
+193    | ratio = newdt / olddt ;                        |  8.273102e+03 |  9.998923e-01 |  1.067049e+06
+194    | if (ratio >= Real_t(1.0)) {                    |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+195    | if (ratio < domain.deltatimemultlb()) {        |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+198    | else if (ratio > domain.deltatimemultub()) {   |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+199    | newdt = olddt*domain.deltatimemultub() ;       |  5.555384e-12 |  5.887655e-08 |  5.887655e-08
+203    | if (newdt > domain.dtmax()) {                  | -2.377645e-05 |  7.923736e+01 |  1.067049e+06
+206    | domain.deltatime() = newdt ;                   | -2.377645e-05 |  7.923736e+01 |  1.067049e+06
+210    | if ((targetdt > domain.deltatime()) &&         |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+211    | (targetdt < (Real_t(4.0) * domain.deltatime... |  0.000000e+00 |  0.000000e+00 |  1.067049e+06
+215    | if (targetdt < domain.deltatime()) {           |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+219    | domain.time() += domain.deltatime() ;          | -8.312608e-05 |  4.797018e-01 |  4.797018e-01
+242    | elemX[0] = domain.x(nd0i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+243    | elemX[1] = domain.x(nd1i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+244    | elemX[2] = domain.x(nd2i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+245    | elemX[3] = domain.x(nd3i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+246    | elemX[4] = domain.x(nd4i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+247    | elemX[5] = domain.x(nd5i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+248    | elemX[6] = domain.x(nd6i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+249    | elemX[7] = domain.x(nd7i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+251    | elemY[0] = domain.y(nd0i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+252    | elemY[1] = domain.y(nd1i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+253    | elemY[2] = domain.y(nd2i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+254    | elemY[3] = domain.y(nd3i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+255    | elemY[4] = domain.y(nd4i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+256    | elemY[5] = domain.y(nd5i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+257    | elemY[6] = domain.y(nd6i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+258    | elemY[7] = domain.y(nd7i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+260    | elemZ[0] = domain.z(nd0i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+261    | elemZ[1] = domain.z(nd1i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+262    | elemZ[2] = domain.z(nd2i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+263    | elemZ[3] = domain.z(nd3i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+264    | elemZ[4] = domain.z(nd4i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+265    | elemZ[5] = domain.z(nd5i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+266    | elemZ[6] = domain.z(nd6i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+267    | elemZ[7] = domain.z(nd7i);                     |  0.000000e+00 |  0.000000e+00 |           inf
+284    | sigxx[i] = sigyy[i] = sigzz[i] =  - domain.... |  0.000000e+00 |  0.000000e+00 |           inf
+297    | const Real_t x0 = x[0] ;   const Real_t x1 ... |  0.000000e+00 |  0.000000e+00 |           inf
+298    | const Real_t x2 = x[2] ;   const Real_t x3 ... |  0.000000e+00 |  0.000000e+00 |           inf
+299    | const Real_t x4 = x[4] ;   const Real_t x5 ... |  0.000000e+00 |  0.000000e+00 |           inf
+300    | const Real_t x6 = x[6] ;   const Real_t x7 ... |  0.000000e+00 |  0.000000e+00 |           inf
+302    | const Real_t y0 = y[0] ;   const Real_t y1 ... |  0.000000e+00 |  0.000000e+00 |           inf
+303    | const Real_t y2 = y[2] ;   const Real_t y3 ... |  0.000000e+00 |  0.000000e+00 |           inf
+304    | const Real_t y4 = y[4] ;   const Real_t y5 ... |  0.000000e+00 |  0.000000e+00 |           inf
+305    | const Real_t y6 = y[6] ;   const Real_t y7 ... |  0.000000e+00 |  0.000000e+00 |           inf
+307    | const Real_t z0 = z[0] ;   const Real_t z1 ... |  0.000000e+00 |  0.000000e+00 |           inf
+308    | const Real_t z2 = z[2] ;   const Real_t z3 ... |  0.000000e+00 |  0.000000e+00 |           inf
+309    | const Real_t z4 = z[4] ;   const Real_t z5 ... |  0.000000e+00 |  0.000000e+00 |           inf
+310    | const Real_t z6 = z[6] ;   const Real_t z7 ... |  0.000000e+00 |  0.000000e+00 |           inf
+319    | fjxxi = Real_t(.125) * ( (x6-x0) + (x5-x3) ... |  0.000000e+00 |  0.000000e+00 |           inf
+320    | fjxet = Real_t(.125) * ( (x6-x0) - (x5-x3) ... |  0.000000e+00 |  0.000000e+00 |           inf
+321    | fjxze = Real_t(.125) * ( (x6-x0) + (x5-x3) ... |  0.000000e+00 |  0.000000e+00 |           inf
+323    | fjyxi = Real_t(.125) * ( (y6-y0) + (y5-y3) ... |  0.000000e+00 |  0.000000e+00 |           inf
+324    | fjyet = Real_t(.125) * ( (y6-y0) - (y5-y3) ... |  0.000000e+00 |  0.000000e+00 |           inf
+325    | fjyze = Real_t(.125) * ( (y6-y0) + (y5-y3) ... |  0.000000e+00 |  0.000000e+00 |           inf
+327    | fjzxi = Real_t(.125) * ( (z6-z0) + (z5-z3) ... |  0.000000e+00 |  0.000000e+00 |           inf
+328    | fjzet = Real_t(.125) * ( (z6-z0) - (z5-z3) ... |  0.000000e+00 |  0.000000e+00 |           inf
+329    | fjzze = Real_t(.125) * ( (z6-z0) + (z5-z3) ... |  0.000000e+00 |  0.000000e+00 |           inf
+332    | cjxxi =    (fjyet * fjzze) - (fjzet * fjyze);  |  0.000000e+00 |  0.000000e+00 |           inf
+333    | cjxet =  - (fjyxi * fjzze) + (fjzxi * fjyze);  |  0.000000e+00 |  0.000000e+00 |           inf
+334    | cjxze =    (fjyxi * fjzet) - (fjzxi * fjyet);  |  0.000000e+00 |  0.000000e+00 |           inf
+336    | cjyxi =  - (fjxet * fjzze) + (fjzet * fjxze);  |  0.000000e+00 |  0.000000e+00 |           inf
+337    | cjyet =    (fjxxi * fjzze) - (fjzxi * fjxze);  |  0.000000e+00 |  0.000000e+00 |           inf
+338    | cjyze =  - (fjxxi * fjzet) + (fjzxi * fjxet);  |  0.000000e+00 |  0.000000e+00 |           inf
+340    | cjzxi =    (fjxet * fjyze) - (fjyet * fjxze);  |  0.000000e+00 |  0.000000e+00 |           inf
+341    | cjzet =  - (fjxxi * fjyze) + (fjyxi * fjxze);  |  0.000000e+00 |  0.000000e+00 |           inf
+342    | cjzze =    (fjxxi * fjyet) - (fjyxi * fjxet);  |  0.000000e+00 |  0.000000e+00 |           inf
+348    | b[0][0] =   -  cjxxi  -  cjxet  -  cjxze;      |  0.000000e+00 |  0.000000e+00 |           inf
+349    | b[0][1] =      cjxxi  -  cjxet  -  cjxze;      |  0.000000e+00 |  0.000000e+00 |           inf
+350    | b[0][2] =      cjxxi  +  cjxet  -  cjxze;      |  0.000000e+00 |  0.000000e+00 |           inf
+351    | b[0][3] =   -  cjxxi  +  cjxet  -  cjxze;      |  0.000000e+00 |  0.000000e+00 |           inf
+352    | b[0][4] = -b[0][2];                            |  0.000000e+00 |  0.000000e+00 |           inf
+353    | b[0][5] = -b[0][3];                            |  0.000000e+00 |  0.000000e+00 |           inf
+354    | b[0][6] = -b[0][0];                            |  0.000000e+00 |  0.000000e+00 |           inf
+355    | b[0][7] = -b[0][1];                            |  0.000000e+00 |  0.000000e+00 |           inf
+357    | b[1][0] =   -  cjyxi  -  cjyet  -  cjyze;      |  0.000000e+00 |  0.000000e+00 |           inf
+358    | b[1][1] =      cjyxi  -  cjyet  -  cjyze;      |  0.000000e+00 |  0.000000e+00 |           inf
+359    | b[1][2] =      cjyxi  +  cjyet  -  cjyze;      |  0.000000e+00 |  0.000000e+00 |           inf
+360    | b[1][3] =   -  cjyxi  +  cjyet  -  cjyze;      |  0.000000e+00 |  0.000000e+00 |           inf
+361    | b[1][4] = -b[1][2];                            |  0.000000e+00 |  0.000000e+00 |           inf
+362    | b[1][5] = -b[1][3];                            |  0.000000e+00 |  0.000000e+00 |           inf
+363    | b[1][6] = -b[1][0];                            |  0.000000e+00 |  0.000000e+00 |           inf
+364    | b[1][7] = -b[1][1];                            |  0.000000e+00 |  0.000000e+00 |           inf
+366    | b[2][0] =   -  cjzxi  -  cjzet  -  cjzze;      |  0.000000e+00 |  0.000000e+00 |           inf
+367    | b[2][1] =      cjzxi  -  cjzet  -  cjzze;      |  0.000000e+00 |  0.000000e+00 |           inf
+368    | b[2][2] =      cjzxi  +  cjzet  -  cjzze;      |  0.000000e+00 |  0.000000e+00 |           inf
+369    | b[2][3] =   -  cjzxi  +  cjzet  -  cjzze;      |  0.000000e+00 |  0.000000e+00 |           inf
+370    | b[2][4] = -b[2][2];                            |  0.000000e+00 |  0.000000e+00 |           inf
+371    | b[2][5] = -b[2][3];                            |  0.000000e+00 |  0.000000e+00 |           inf
+372    | b[2][6] = -b[2][0];                            |  0.000000e+00 |  0.000000e+00 |           inf
+373    | b[2][7] = -b[2][1];                            |  0.000000e+00 |  0.000000e+00 |           inf
+376    | *volume = Real_t(8.) * ( fjxet * cjxet + fj... |  0.000000e+00 |  0.000000e+00 |           inf
+378    |                                                |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+379    | /******************************************/   |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+380    |                                                |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+381    | static inline                                  |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+382    | void SumElemFaceNormal(Real_t *normalX0, Re... |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+385    | Real_t *normalX3, Real_t *normalY3, Real_t ... |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+387    | const Real_t x1, const Real_t y1, const Rea... |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+388    | const Real_t x2, const Real_t y2, const Rea... |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+390    | {                                              |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+391    | Real_t bisectX0 = Real_t(0.5) * (x3 + x2 - ... |  0.000000e+00 |  0.000000e+00 |  1.752948e+02
+392    | Real_t bisectY0 = Real_t(0.5) * (y3 + y2 - ... |  0.000000e+00 |  0.000000e+00 |  6.058549e+00
+393    | Real_t bisectZ0 = Real_t(0.5) * (z3 + z2 - ... |  0.000000e+00 |  0.000000e+00 |  1.752948e+02
+394    | Real_t bisectX1 = Real_t(0.5) * (x2 + x1 - ... |  0.000000e+00 |  0.000000e+00 |  1.752948e+02
+395    | Real_t bisectY1 = Real_t(0.5) * (y2 + y1 - ... |  0.000000e+00 |  0.000000e+00 |  1.752948e+02
+396    | Real_t bisectZ1 = Real_t(0.5) * (z2 + z1 - ... |  0.000000e+00 |  0.000000e+00 |  4.829580e+00
+397    | Real_t areaX = Real_t(0.25) * (bisectY0 * b... |  0.000000e+00 |  0.000000e+00 |  1.662265e+01
+398    | Real_t areaY = Real_t(0.25) * (bisectZ0 * b... |  0.000000e+00 |  0.000000e+00 |  1.662263e+01
+399    | Real_t areaZ = Real_t(0.25) * (bisectX0 * b... |  0.000000e+00 |  0.000000e+00 |  1.662263e+01
+401    | *normalX0 += areaX;                            |  0.000000e+00 |  0.000000e+00 |  4.947093e+00
+402    | *normalX1 += areaX;                            |  0.000000e+00 |  0.000000e+00 |  4.539532e+00
+403    | *normalX2 += areaX;                            |  0.000000e+00 |  0.000000e+00 |  4.539532e+00
+404    | *normalX3 += areaX;                            |  0.000000e+00 |  0.000000e+00 |  7.728638e+00
+406    | *normalY0 += areaY;                            |  0.000000e+00 |  0.000000e+00 |  4.539532e+00
+407    | *normalY1 += areaY;                            |  0.000000e+00 |  0.000000e+00 |  1.000002e+00
+408    | *normalY2 += areaY;                            |  0.000000e+00 |  0.000000e+00 |  4.539532e+00
+409    | *normalY3 += areaY;                            |  0.000000e+00 |  0.000000e+00 |  7.728638e+00
+411    | *normalZ0 += areaZ;                            |  0.000000e+00 |  0.000000e+00 |  1.000002e+00
+412    | *normalZ1 += areaZ;                            |  0.000000e+00 |  0.000000e+00 |  7.728638e+00
+413    | *normalZ2 += areaZ;                            |  0.000000e+00 |  0.000000e+00 |  4.947093e+00
+414    | *normalZ3 += areaZ;                            |  0.000000e+00 |  0.000000e+00 |  1.000002e+00
+549    | SumElemStressesToNodeForces( B, sigxx[k], s... |  0.000000e+00 |  0.000000e+00 |           inf
+555    | domain.fx(gnode) += fx_local[lnode];           |  0.000000e+00 |  0.000000e+00 |           inf
+556    | domain.fy(gnode) += fy_local[lnode];           |  0.000000e+00 |  0.000000e+00 |           inf
+557    | domain.fz(gnode) += fz_local[lnode];           |  0.000000e+00 |  0.000000e+00 |           inf
+603    | (y1 + y2) * (z0 + z1) - (y0 + y1) * (z1 + z... |  0.000000e+00 |  0.000000e+00 |  3.515829e+02
+604    | (y0 + y4) * (z3 + z4) - (y3 + y4) * (z0 + z... |  0.000000e+00 |  0.000000e+00 |  3.107886e+04
+605    | (y2 + y5) * (z3 + z5) + (y3 + y5) * (z2 + z5); |  0.000000e+00 |  0.000000e+00 |  3.107886e+04
+607    | - (x1 + x2) * (z0 + z1) + (x0 + x1) * (z1 +... |  0.000000e+00 |  0.000000e+00 |  3.515829e+02
+608    | (x0 + x4) * (z3 + z4) + (x3 + x4) * (z0 + z... |  0.000000e+00 |  0.000000e+00 |  3.107886e+04
+609    | (x2 + x5) * (z3 + z5) - (x3 + x5) * (z2 + z5); |  0.000000e+00 |  0.000000e+00 |  3.107886e+04
+612    | - (y1 + y2) * (x0 + x1) + (y0 + y1) * (x1 +... |  0.000000e+00 |  0.000000e+00 |  3.107886e+04
+613    | (y0 + y4) * (x3 + x4) + (y3 + y4) * (x0 + x... |  0.000000e+00 |  0.000000e+00 |  3.515829e+02
+614    | (y2 + y5) * (x3 + x5) - (y3 + y5) * (x2 + x5); |  0.000000e+00 |  0.000000e+00 |  3.515829e+02
+616    | *dvdx *= twelfth;                              | -1.164153e-10 |  2.980232e-08 |  1.000003e+00
+617    | *dvdy *= twelfth;                              |  1.164153e-10 |  2.980232e-08 |  1.000003e+00
+618    | *dvdz *= twelfth;                              |  1.164153e-10 |  2.980232e-08 |  1.000003e+00
+674    | hxx[i] = hourgam[0][i] * xd[0] + hourgam[1]... |  0.000000e+00 |  0.000000e+00 |  1.386795e+07
+675    | hourgam[2][i] * xd[2] + hourgam[3][i] * xd[... |  0.000000e+00 |  0.000000e+00 |  1.102519e+07
+676    | hourgam[4][i] * xd[4] + hourgam[5][i] * xd[... |  0.000000e+00 |  0.000000e+00 |  1.102519e+07
+677    | hourgam[6][i] * xd[6] + hourgam[7][i] * xd[7]; |  0.000000e+00 |  0.000000e+00 |  1.102519e+07
+680    | hgfx[i] = coefficient *                        |  0.000000e+00 |  0.000000e+00 |           inf
+681    | (hourgam[i][0] * hxx[0] + hourgam[i][1] * h... |  0.000000e+00 |  0.000000e+00 |  1.440356e+00
+682    | hourgam[i][2] * hxx[2] + hourgam[i][3] * hx... |  0.000000e+00 |  0.000000e+00 |  1.423152e+00
+685    | hxx[i] = hourgam[0][i] * yd[0] + hourgam[1]... |  0.000000e+00 |  0.000000e+00 |  1.000003e+00
+686    | hourgam[2][i] * yd[2] + hourgam[3][i] * yd[... |  0.000000e+00 |  0.000000e+00 |  1.000052e+00
+687    | hourgam[4][i] * yd[4] + hourgam[5][i] * yd[... |  0.000000e+00 |  0.000000e+00 |  1.000052e+00
+688    | hourgam[6][i] * yd[6] + hourgam[7][i] * yd[7]; |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+691    | hgfy[i] = coefficient *                        |  0.000000e+00 |  0.000000e+00 |           inf
+692    | (hourgam[i][0] * hxx[0] + hourgam[i][1] * h... |  0.000000e+00 |  0.000000e+00 |  1.420745e+00
+693    | hourgam[i][2] * hxx[2] + hourgam[i][3] * hx... |  0.000000e+00 |  0.000000e+00 |  1.444648e+00
+696    | hxx[i] = hourgam[0][i] * zd[0] + hourgam[1]... |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+697    | hourgam[2][i] * zd[2] + hourgam[3][i] * zd[... |  0.000000e+00 |  0.000000e+00 |  1.000052e+00
+698    | hourgam[4][i] * zd[4] + hourgam[5][i] * zd[... |  0.000000e+00 |  0.000000e+00 |  1.000052e+00
+699    | hourgam[6][i] * zd[6] + hourgam[7][i] * zd[7]; |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+702    | hgfz[i] = coefficient *                        |  0.000000e+00 |  0.000000e+00 |           inf
+703    | (hourgam[i][0] * hxx[0] + hourgam[i][1] * h... |  0.000000e+00 |  0.000000e+00 |  1.441993e+00
+704    | hourgam[i][2] * hxx[2] + hourgam[i][3] * hx... |  0.000000e+00 |  0.000000e+00 |  1.011257e+00
+794    | Real_t volinv=Real_t(1.0)/determ[i2];          | -1.525879e-05 |  2.980232e-08 |  1.169360e+21
+799    | x8n[i3] * gamma[i1][0] + x8n[i3+1] * gamma[... |  0.000000e+00 |  0.000000e+00 |  1.752948e+02
+800    | x8n[i3+2] * gamma[i1][2] + x8n[i3+3] * gamm... |  0.000000e+00 |  0.000000e+00 |  7.310182e+00
+801    | x8n[i3+4] * gamma[i1][4] + x8n[i3+5] * gamm... |  0.000000e+00 |  0.000000e+00 |  7.186408e+00
+802    | x8n[i3+6] * gamma[i1][6] + x8n[i3+7] * gamm... |  0.000000e+00 |  0.000000e+00 |  1.024546e+01
+805    | y8n[i3] * gamma[i1][0] + y8n[i3+1] * gamma[... |  0.000000e+00 |  0.000000e+00 |  1.902019e+01
+806    | y8n[i3+2] * gamma[i1][2] + y8n[i3+3] * gamm... |  0.000000e+00 |  0.000000e+00 |  7.310173e+00
+807    | y8n[i3+4] * gamma[i1][4] + y8n[i3+5] * gamm... |  0.000000e+00 |  0.000000e+00 |  8.955865e+00
+808    | y8n[i3+6] * gamma[i1][6] + y8n[i3+7] * gamm... |  0.000000e+00 |  0.000000e+00 |  1.024543e+01
+811    | z8n[i3] * gamma[i1][0] + z8n[i3+1] * gamma[... |  0.000000e+00 |  0.000000e+00 |  7.032265e+00
+812    | z8n[i3+2] * gamma[i1][2] + z8n[i3+3] * gamm... |  0.000000e+00 |  0.000000e+00 |  1.594956e+01
+813    | z8n[i3+4] * gamma[i1][4] + z8n[i3+5] * gamm... |  0.000000e+00 |  0.000000e+00 |  8.955865e+00
+814    | z8n[i3+6] * gamma[i1][6] + z8n[i3+7] * gamm... |  0.000000e+00 |  0.000000e+00 |  1.024543e+01
+816    | hourgam[0][i1] = gamma[i1][0] -  volinv*(dv... |  0.000000e+00 |  0.000000e+00 |  1.386795e+07
+817    | dvdy[i3  ] * hourmody +                        |  0.000000e+00 |  0.000000e+00 |  9.424277e+00
+818    | dvdz[i3  ] * hourmodz );                       |  0.000000e+00 |  0.000000e+00 |  9.424277e+00
+820    | hourgam[1][i1] = gamma[i1][1] -  volinv*(dv... |  0.000000e+00 |  0.000000e+00 |  9.000724e+06
+821    | dvdy[i3+1] * hourmody +                        |  0.000000e+00 |  0.000000e+00 |  3.095404e+01
+822    | dvdz[i3+1] * hourmodz );                       |  0.000000e+00 |  0.000000e+00 |  8.361284e+00
+824    | hourgam[2][i1] = gamma[i1][2] -  volinv*(dv... |  0.000000e+00 |  0.000000e+00 |  1.102519e+07
+825    | dvdy[i3+2] * hourmody +                        |  0.000000e+00 |  0.000000e+00 |  1.127682e+01
+826    | dvdz[i3+2] * hourmodz );                       |  0.000000e+00 |  0.000000e+00 |  7.388209e+00
+828    | hourgam[3][i1] = gamma[i1][3] -  volinv*(dv... |  0.000000e+00 |  0.000000e+00 |  9.032329e+06
+829    | dvdy[i3+3] * hourmody +                        |  0.000000e+00 |  0.000000e+00 |  3.095404e+01
+830    | dvdz[i3+3] * hourmodz );                       |  0.000000e+00 |  0.000000e+00 |  8.361285e+00
+832    | hourgam[4][i1] = gamma[i1][4] -  volinv*(dv... |  0.000000e+00 |  0.000000e+00 |  8.996969e+06
+833    | dvdy[i3+4] * hourmody +                        |  0.000000e+00 |  0.000000e+00 |  3.095402e+01
+834    | dvdz[i3+4] * hourmodz );                       |  0.000000e+00 |  0.000000e+00 |  7.747297e+00
+836    | hourgam[5][i1] = gamma[i1][5] -  volinv*(dv... |  0.000000e+00 |  0.000000e+00 |  1.102519e+07
+837    | dvdy[i3+5] * hourmody +                        |  0.000000e+00 |  0.000000e+00 |  1.127683e+01
+838    | dvdz[i3+5] * hourmodz );                       |  0.000000e+00 |  0.000000e+00 |  8.337481e+00
+840    | hourgam[6][i1] = gamma[i1][6] -  volinv*(dv... |  0.000000e+00 |  0.000000e+00 |  1.091876e+06
+841    | dvdy[i3+6] * hourmody +                        |  0.000000e+00 |  0.000000e+00 |  9.013614e+00
+842    | dvdz[i3+6] * hourmodz );                       |  0.000000e+00 |  0.000000e+00 |  9.013614e+00
+844    | hourgam[7][i1] = gamma[i1][7] -  volinv*(dv... |  0.000000e+00 |  0.000000e+00 |  1.102519e+07
+845    | dvdy[i3+7] * hourmody +                        |  0.000000e+00 |  0.000000e+00 |  1.127683e+01
+846    | dvdz[i3+7] * hourmodz );                       |  0.000000e+00 |  0.000000e+00 |  8.337481e+00
+853    | ss1=domain.ss(i2);                             |  0.000000e+00 |  0.000000e+00 |           inf
+854    | mass1=domain.elemMass(i2);                     |  5.820766e-11 |  2.980232e-08 |  2.980232e-08
+866    | xd1[0] = domain.xd(n0si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+867    | xd1[1] = domain.xd(n1si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+868    | xd1[2] = domain.xd(n2si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+869    | xd1[3] = domain.xd(n3si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+870    | xd1[4] = domain.xd(n4si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+871    | xd1[5] = domain.xd(n5si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+872    | xd1[6] = domain.xd(n6si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+873    | xd1[7] = domain.xd(n7si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+875    | yd1[0] = domain.yd(n0si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+876    | yd1[1] = domain.yd(n1si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+877    | yd1[2] = domain.yd(n2si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+878    | yd1[3] = domain.yd(n3si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+879    | yd1[4] = domain.yd(n4si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+880    | yd1[5] = domain.yd(n5si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+881    | yd1[6] = domain.yd(n6si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+882    | yd1[7] = domain.yd(n7si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+884    | zd1[0] = domain.zd(n0si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+885    | zd1[1] = domain.zd(n1si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+886    | zd1[2] = domain.zd(n2si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+887    | zd1[3] = domain.zd(n3si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+888    | zd1[4] = domain.zd(n4si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+889    | zd1[5] = domain.zd(n5si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+890    | zd1[6] = domain.zd(n6si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+891    | zd1[7] = domain.zd(n7si2);                     |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+893    | coefficient = - hourg * Real_t(0.01) * ss1 ... | -8.699627e-30 |  5.567762e-08 |           inf
+933    | domain.fx(n0si2) += hgfx[0];                   |  0.000000e+00 |  0.000000e+00 |           inf
+934    | domain.fy(n0si2) += hgfy[0];                   |  0.000000e+00 |  0.000000e+00 |           inf
+935    | domain.fz(n0si2) += hgfz[0];                   |  0.000000e+00 |  0.000000e+00 |           inf
+937    | domain.fx(n1si2) += hgfx[1];                   |  0.000000e+00 |  0.000000e+00 |           inf
+938    | domain.fy(n1si2) += hgfy[1];                   |  0.000000e+00 |  0.000000e+00 |           inf
+939    | domain.fz(n1si2) += hgfz[1];                   |  0.000000e+00 |  0.000000e+00 |           inf
+941    | domain.fx(n2si2) += hgfx[2];                   |  0.000000e+00 |  0.000000e+00 |           inf
+942    | domain.fy(n2si2) += hgfy[2];                   |  0.000000e+00 |  0.000000e+00 |           inf
+943    | domain.fz(n2si2) += hgfz[2];                   |  0.000000e+00 |  0.000000e+00 |           inf
+945    | domain.fx(n3si2) += hgfx[3];                   |  0.000000e+00 |  0.000000e+00 |           inf
+946    | domain.fy(n3si2) += hgfy[3];                   |  0.000000e+00 |  0.000000e+00 |           inf
+947    | domain.fz(n3si2) += hgfz[3];                   |  0.000000e+00 |  0.000000e+00 |           inf
+949    | domain.fx(n4si2) += hgfx[4];                   |  0.000000e+00 |  0.000000e+00 |           inf
+950    | domain.fy(n4si2) += hgfy[4];                   |  0.000000e+00 |  0.000000e+00 |           inf
+951    | domain.fz(n4si2) += hgfz[4];                   |  0.000000e+00 |  0.000000e+00 |           inf
+953    | domain.fx(n5si2) += hgfx[5];                   |  0.000000e+00 |  0.000000e+00 |           inf
+954    | domain.fy(n5si2) += hgfy[5];                   |  0.000000e+00 |  0.000000e+00 |           inf
+955    | domain.fz(n5si2) += hgfz[5];                   |  0.000000e+00 |  0.000000e+00 |           inf
+957    | domain.fx(n6si2) += hgfx[6];                   |  0.000000e+00 |  0.000000e+00 |           inf
+958    | domain.fy(n6si2) += hgfy[6];                   |  0.000000e+00 |  0.000000e+00 |           inf
+959    | domain.fz(n6si2) += hgfz[6];                   |  0.000000e+00 |  0.000000e+00 |           inf
+961    | domain.fx(n7si2) += hgfx[7];                   |  0.000000e+00 |  0.000000e+00 |           inf
+962    | domain.fy(n7si2) += hgfy[7];                   |  0.000000e+00 |  0.000000e+00 |           inf
+963    | domain.fz(n7si2) += hgfz[7];                   |  0.000000e+00 |  0.000000e+00 |           inf
+1023   | dvdx[jj] = pfx[ii];                            | -1.164153e-10 |  2.980232e-08 |  1.000003e+00
+1024   | dvdy[jj] = pfy[ii];                            |  1.164153e-10 |  2.980232e-08 |  1.000003e+00
+1025   | dvdz[jj] = pfz[ii];                            |  1.164153e-10 |  2.980232e-08 |  1.000003e+00
+1026   | x8n[jj]  = x1[ii];                             |  0.000000e+00 |  0.000000e+00 |  1.687113e+00
+1027   | y8n[jj]  = y1[ii];                             |  0.000000e+00 |  0.000000e+00 |  1.687113e+00
+1028   | z8n[jj]  = z1[ii];                             |  0.000000e+00 |  0.000000e+00 |  1.687113e+00
+1031   | determ[i] = domain.volo(i) * domain.v(i);      |  5.820766e-11 |  2.980232e-08 |  1.000001e+00
+1034   | if ( domain.v(i) <= Real_t(0.0) ) {            |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+1043   | if ( hgcoef > Real_t(0.) ) {                   |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+1084   | if (determ[k] <= Real_t(0.0)) {                |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+1145   | domain.xdd(i) = domain.fx(i) / domain.nodal... |  0.000000e+00 |  0.000000e+00 |           inf
+1146   | domain.ydd(i) = domain.fy(i) / domain.nodal... |  0.000000e+00 |  0.000000e+00 |           inf
+1147   | domain.zdd(i) = domain.fz(i) / domain.nodal... |  0.000000e+00 |  0.000000e+00 |           inf
+1193   | xdtmp = domain.xd(i) + domain.xdd(i) * dt ;    |  0.000000e+00 |  0.000000e+00 |           inf
+1194   | if( FABS(xdtmp) < u_cut ) xdtmp = Real_t(0.0); |  0.000000e+00 |  0.000000e+00 |           inf
+1195   | domain.xd(i) = xdtmp ;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1197   | ydtmp = domain.yd(i) + domain.ydd(i) * dt ;    |  0.000000e+00 |  0.000000e+00 |           inf
+1198   | if( FABS(ydtmp) < u_cut ) ydtmp = Real_t(0.0); |  0.000000e+00 |  0.000000e+00 |           inf
+1199   | domain.yd(i) = ydtmp ;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1201   | zdtmp = domain.zd(i) + domain.zdd(i) * dt ;    |  0.000000e+00 |  0.000000e+00 |           inf
+1202   | if( FABS(zdtmp) < u_cut ) zdtmp = Real_t(0.0); |  0.000000e+00 |  0.000000e+00 |           inf
+1203   | domain.zd(i) = zdtmp ;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1215   | domain.x(i) += domain.xd(i) * dt ;             |  0.000000e+00 |  0.000000e+00 |           inf
+1216   | domain.y(i) += domain.yd(i) * dt ;             |  0.000000e+00 |  0.000000e+00 |           inf
+1217   | domain.z(i) += domain.zd(i) * dt ;             |  0.000000e+00 |  0.000000e+00 |           inf
+1230   | const Real_t delt = domain.deltatime() ;       | -2.377645e-05 |  7.923736e+01 |  1.067049e+06
+1289   | Real_t dx61 = x6 - x1;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1290   | Real_t dy61 = y6 - y1;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1291   | Real_t dz61 = z6 - z1;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1293   | Real_t dx70 = x7 - x0;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1294   | Real_t dy70 = y7 - y0;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1295   | Real_t dz70 = z7 - z0;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1297   | Real_t dx63 = x6 - x3;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1298   | Real_t dy63 = y6 - y3;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1299   | Real_t dz63 = z6 - z3;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1301   | Real_t dx20 = x2 - x0;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1302   | Real_t dy20 = y2 - y0;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1303   | Real_t dz20 = z2 - z0;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1305   | Real_t dx50 = x5 - x0;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1306   | Real_t dy50 = y5 - y0;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1307   | Real_t dz50 = z5 - z0;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1309   | Real_t dx64 = x6 - x4;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1310   | Real_t dy64 = y6 - y4;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1311   | Real_t dz64 = z6 - z4;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1313   | Real_t dx31 = x3 - x1;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1314   | Real_t dy31 = y3 - y1;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1315   | Real_t dz31 = z3 - z1;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1317   | Real_t dx72 = x7 - x2;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1318   | Real_t dy72 = y7 - y2;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1319   | Real_t dz72 = z7 - z2;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1321   | Real_t dx43 = x4 - x3;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1322   | Real_t dy43 = y4 - y3;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1323   | Real_t dz43 = z4 - z3;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1325   | Real_t dx57 = x5 - x7;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1326   | Real_t dy57 = y5 - y7;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1327   | Real_t dz57 = z5 - z7;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1329   | Real_t dx14 = x1 - x4;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1330   | Real_t dy14 = y1 - y4;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1331   | Real_t dz14 = z1 - z4;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1333   | Real_t dx25 = x2 - x5;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1334   | Real_t dy25 = y2 - y5;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1335   | Real_t dz25 = z2 - z5;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1341   | TRIPLE_PRODUCT(dx31 + dx72, dx63, dx20,        |  0.000000e+00 |  0.000000e+00 |           inf
+1343   | dz31 + dz72, dz63, dz20) +                     |  0.000000e+00 |  0.000000e+00 |           inf
+1344   | TRIPLE_PRODUCT(dx43 + dx57, dx64, dx70,        |  0.000000e+00 |  0.000000e+00 |           inf
+1346   | dz43 + dz57, dz64, dz70) +                     |  0.000000e+00 |  0.000000e+00 |           inf
+1347   | TRIPLE_PRODUCT(dx14 + dx25, dx61, dx50,        |  0.000000e+00 |  0.000000e+00 |           inf
+1353   | volume *= twelveth;                            |  5.820766e-11 |  2.980232e-08 |           inf
+1363   | return CalcElemVolume( x[0], x[1], x[2], x[... |  0.000000e+00 |  0.000000e+00 |           inf
+1364   | y[0], y[1], y[2], y[3], y[4], y[5], y[6], y... |  0.000000e+00 |  0.000000e+00 |           inf
+1365   | z[0], z[1], z[2], z[3], z[4], z[5], z[6], z... |  0.000000e+00 |  0.000000e+00 |           inf
+1378   | Real_t fx = (x2 - x0) - (x3 - x1);             |  0.000000e+00 |  0.000000e+00 |           inf
+1379   | Real_t fy = (y2 - y0) - (y3 - y1);             |  0.000000e+00 |  0.000000e+00 |           inf
+1380   | Real_t fz = (z2 - z0) - (z3 - z1);             |  0.000000e+00 |  0.000000e+00 |           inf
+1381   | Real_t gx = (x2 - x0) + (x3 - x1);             |  0.000000e+00 |  0.000000e+00 |           inf
+1382   | Real_t gy = (y2 - y0) + (y3 - y1);             |  0.000000e+00 |  0.000000e+00 |           inf
+1383   | Real_t gz = (z2 - z0) + (z3 - z1);             |  0.000000e+00 |  0.000000e+00 |           inf
+1385   | (fx * fx + fy * fy + fz * fz) *                |  0.000000e+00 |  0.000000e+00 |           inf
+1386   | (gx * gx + gy * gy + gz * gz) -                |  0.000000e+00 |  0.000000e+00 |           inf
+1387   | (fx * gx + fy * gy + fz * gz) *                |  0.000000e+00 |  0.000000e+00 |           inf
+1405   | charLength = std::max(a,charLength) ;          |  0.000000e+00 |  0.000000e+00 |           inf
+1410   | charLength = std::max(a,charLength) ;          |  0.000000e+00 |  0.000000e+00 |           inf
+1415   | charLength = std::max(a,charLength) ;          |  0.000000e+00 |  0.000000e+00 |           inf
+1420   | charLength = std::max(a,charLength) ;          |  0.000000e+00 |  0.000000e+00 |           inf
+1425   | charLength = std::max(a,charLength) ;          |  0.000000e+00 |  0.000000e+00 |           inf
+1430   | charLength = std::max(a,charLength) ;          |  0.000000e+00 |  0.000000e+00 |           inf
+1432   | charLength = Real_t(4.0) * volume / SQRT(ch... |  3.725290e-09 |  2.980232e-08 |           inf
+1447   | const Real_t inv_detJ = Real_t(1.0) / detJ ;   |  0.000000e+00 |  0.000000e+00 |           inf
+1453   | d[0] = inv_detJ * ( pfx[0] * (xvel[0]-xvel[6]) |  0.000000e+00 |  0.000000e+00 |           inf
+1454   | + pfx[1] * (xvel[1]-xvel[7])                   |  0.000000e+00 |  0.000000e+00 |           inf
+1455   | + pfx[2] * (xvel[2]-xvel[4])                   |  0.000000e+00 |  0.000000e+00 |           inf
+1456   | + pfx[3] * (xvel[3]-xvel[5]) );                |  0.000000e+00 |  0.000000e+00 |           inf
+1458   | d[1] = inv_detJ * ( pfy[0] * (yvel[0]-yvel[6]) |  0.000000e+00 |  0.000000e+00 |           inf
+1459   | + pfy[1] * (yvel[1]-yvel[7])                   |  0.000000e+00 |  0.000000e+00 |           inf
+1460   | + pfy[2] * (yvel[2]-yvel[4])                   |  0.000000e+00 |  0.000000e+00 |           inf
+1461   | + pfy[3] * (yvel[3]-yvel[5]) );                |  0.000000e+00 |  0.000000e+00 |           inf
+1463   | d[2] = inv_detJ * ( pfz[0] * (zvel[0]-zvel[6]) |  0.000000e+00 |  0.000000e+00 |           inf
+1464   | + pfz[1] * (zvel[1]-zvel[7])                   |  0.000000e+00 |  0.000000e+00 |           inf
+1465   | + pfz[2] * (zvel[2]-zvel[4])                   |  0.000000e+00 |  0.000000e+00 |           inf
+1466   | + pfz[3] * (zvel[3]-zvel[5]) );                |  0.000000e+00 |  0.000000e+00 |           inf
+1531   | volume = CalcElemVolume(x_local, y_local, z... |  5.820766e-11 |  2.980232e-08 |           inf
+1532   | relativeVolume = volume / domain.volo(k) ;     |  0.000000e+00 |  0.000000e+00 |           inf
+1533   | domain.vnew(k) = relativeVolume ;              |  0.000000e+00 |  0.000000e+00 |           inf
+1534   | domain.delv(k) = relativeVolume - domain.v(... |  0.000000e+00 |  0.000000e+00 |           inf
+1537   | domain.arealg(k) = CalcElemCharacteristicLe... |  3.725290e-09 |  2.980232e-08 |           inf
+1544   | xd_local[lnode] = domain.xd(gnode);            |  0.000000e+00 |  0.000000e+00 |           inf
+1545   | yd_local[lnode] = domain.yd(gnode);            |  0.000000e+00 |  0.000000e+00 |           inf
+1546   | zd_local[lnode] = domain.zd(gnode);            |  0.000000e+00 |  0.000000e+00 |           inf
+1552   | x_local[j] -= dt2 * xd_local[j];               |  0.000000e+00 |  0.000000e+00 |           inf
+1553   | y_local[j] -= dt2 * yd_local[j];               |  0.000000e+00 |  0.000000e+00 |           inf
+1554   | z_local[j] -= dt2 * zd_local[j];               |  0.000000e+00 |  0.000000e+00 |           inf
+1561   | B, detJ, D );                                  |  0.000000e+00 |  0.000000e+00 |           inf
+1577   | const Real_t deltatime = domain.deltatime() ;  | -2.377645e-05 |  7.923736e+01 |  1.067049e+06
+1588   | Real_t vdov = domain.dxx(k) + domain.dyy(k)... |  0.000000e+00 |  0.000000e+00 |           inf
+1589   | Real_t vdovthird = vdov/Real_t(3.0) ;          |  0.000000e+00 |  0.000000e+00 |           inf
+1592   | domain.vdov(k) = vdov ;                        |  0.000000e+00 |  0.000000e+00 |           inf
+1593   | domain.dxx(k) -= vdovthird ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1594   | domain.dyy(k) -= vdovthird ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1595   | domain.dzz(k) -= vdovthird ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1598   | if (domain.vnew(k) <= Real_t(0.0))             |  0.000000e+00 |  0.000000e+00 |           inf
+1634   | Real_t x0 = domain.x(n0) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1635   | Real_t x1 = domain.x(n1) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1636   | Real_t x2 = domain.x(n2) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1637   | Real_t x3 = domain.x(n3) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1638   | Real_t x4 = domain.x(n4) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1639   | Real_t x5 = domain.x(n5) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1640   | Real_t x6 = domain.x(n6) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1641   | Real_t x7 = domain.x(n7) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1643   | Real_t y0 = domain.y(n0) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1644   | Real_t y1 = domain.y(n1) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1645   | Real_t y2 = domain.y(n2) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1646   | Real_t y3 = domain.y(n3) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1647   | Real_t y4 = domain.y(n4) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1648   | Real_t y5 = domain.y(n5) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1649   | Real_t y6 = domain.y(n6) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1650   | Real_t y7 = domain.y(n7) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1652   | Real_t z0 = domain.z(n0) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1653   | Real_t z1 = domain.z(n1) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1654   | Real_t z2 = domain.z(n2) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1655   | Real_t z3 = domain.z(n3) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1656   | Real_t z4 = domain.z(n4) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1657   | Real_t z5 = domain.z(n5) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1658   | Real_t z6 = domain.z(n6) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1659   | Real_t z7 = domain.z(n7) ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1661   | Real_t xv0 = domain.xd(n0) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1662   | Real_t xv1 = domain.xd(n1) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1663   | Real_t xv2 = domain.xd(n2) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1664   | Real_t xv3 = domain.xd(n3) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1665   | Real_t xv4 = domain.xd(n4) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1666   | Real_t xv5 = domain.xd(n5) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1667   | Real_t xv6 = domain.xd(n6) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1668   | Real_t xv7 = domain.xd(n7) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1670   | Real_t yv0 = domain.yd(n0) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1671   | Real_t yv1 = domain.yd(n1) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1672   | Real_t yv2 = domain.yd(n2) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1673   | Real_t yv3 = domain.yd(n3) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1674   | Real_t yv4 = domain.yd(n4) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1675   | Real_t yv5 = domain.yd(n5) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1676   | Real_t yv6 = domain.yd(n6) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1677   | Real_t yv7 = domain.yd(n7) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1679   | Real_t zv0 = domain.zd(n0) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1680   | Real_t zv1 = domain.zd(n1) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1681   | Real_t zv2 = domain.zd(n2) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1682   | Real_t zv3 = domain.zd(n3) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1683   | Real_t zv4 = domain.zd(n4) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1684   | Real_t zv5 = domain.zd(n5) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1685   | Real_t zv6 = domain.zd(n6) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1686   | Real_t zv7 = domain.zd(n7) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+1688   | Real_t vol = domain.volo(i)*domain.vnew(i) ;   |  5.820766e-11 |  2.980232e-08 |           inf
+1689   | Real_t norm = Real_t(1.0) / ( vol + ptiny ) ;  | -1.525879e-05 |  2.980232e-08 |           inf
+1691   | Real_t dxj = Real_t(-0.25)*((x0+x1+x5+x4) -... |  0.000000e+00 |  0.000000e+00 |           inf
+1692   | Real_t dyj = Real_t(-0.25)*((y0+y1+y5+y4) -... |  0.000000e+00 |  0.000000e+00 |           inf
+1693   | Real_t dzj = Real_t(-0.25)*((z0+z1+z5+z4) -... |  0.000000e+00 |  0.000000e+00 |           inf
+1695   | Real_t dxi = Real_t( 0.25)*((x1+x2+x6+x5) -... |  0.000000e+00 |  0.000000e+00 |           inf
+1696   | Real_t dyi = Real_t( 0.25)*((y1+y2+y6+y5) -... |  0.000000e+00 |  0.000000e+00 |           inf
+1697   | Real_t dzi = Real_t( 0.25)*((z1+z2+z6+z5) -... |  0.000000e+00 |  0.000000e+00 |           inf
+1699   | Real_t dxk = Real_t( 0.25)*((x4+x5+x6+x7) -... |  0.000000e+00 |  0.000000e+00 |           inf
+1700   | Real_t dyk = Real_t( 0.25)*((y4+y5+y6+y7) -... |  0.000000e+00 |  0.000000e+00 |           inf
+1701   | Real_t dzk = Real_t( 0.25)*((z4+z5+z6+z7) -... |  0.000000e+00 |  0.000000e+00 |           inf
+1705   | ax = dyi*dzj - dzi*dyj ;                       |  0.000000e+00 |  0.000000e+00 |           inf
+1706   | ay = dzi*dxj - dxi*dzj ;                       |  0.000000e+00 |  0.000000e+00 |           inf
+1707   | az = dxi*dyj - dyi*dxj ;                       |  0.000000e+00 |  0.000000e+00 |           inf
+1709   | domain.delx_zeta(i) = vol / SQRT(ax*ax + ay... |  3.725290e-09 |  2.980232e-08 |           inf
+1711   | ax *= norm ;                                   |  0.000000e+00 |  0.000000e+00 |           inf
+1712   | ay *= norm ;                                   |  0.000000e+00 |  0.000000e+00 |           inf
+1713   | az *= norm ;                                   | -2.384186e-07 |  2.980232e-08 |           inf
+1715   | dxv = Real_t(0.25)*((xv4+xv5+xv6+xv7) - (xv... |  0.000000e+00 |  0.000000e+00 |           inf
+1716   | dyv = Real_t(0.25)*((yv4+yv5+yv6+yv7) - (yv... |  0.000000e+00 |  0.000000e+00 |           inf
+1717   | dzv = Real_t(0.25)*((zv4+zv5+zv6+zv7) - (zv... |  0.000000e+00 |  0.000000e+00 |           inf
+1719   | domain.delv_zeta(i) = ax*dxv + ay*dyv + az*... |  0.000000e+00 |  0.000000e+00 |           inf
+1723   | ax = dyj*dzk - dzj*dyk ;                       |  0.000000e+00 |  0.000000e+00 |           inf
+1724   | ay = dzj*dxk - dxj*dzk ;                       |  0.000000e+00 |  0.000000e+00 |           inf
+1725   | az = dxj*dyk - dyj*dxk ;                       |  0.000000e+00 |  0.000000e+00 |           inf
+1727   | domain.delx_xi(i) = vol / SQRT(ax*ax + ay*a... |  3.725290e-09 |  2.980232e-08 |           inf
+1729   | ax *= norm ;                                   | -2.384186e-07 |  2.980232e-08 |           inf
+1730   | ay *= norm ;                                   |  0.000000e+00 |  0.000000e+00 |           inf
+1731   | az *= norm ;                                   |  0.000000e+00 |  0.000000e+00 |           inf
+1733   | dxv = Real_t(0.25)*((xv1+xv2+xv6+xv5) - (xv... |  0.000000e+00 |  0.000000e+00 |           inf
+1734   | dyv = Real_t(0.25)*((yv1+yv2+yv6+yv5) - (yv... |  0.000000e+00 |  0.000000e+00 |           inf
+1735   | dzv = Real_t(0.25)*((zv1+zv2+zv6+zv5) - (zv... |  0.000000e+00 |  0.000000e+00 |           inf
+1737   | domain.delv_xi(i) = ax*dxv + ay*dyv + az*dzv ; |  0.000000e+00 |  0.000000e+00 |           inf
+1741   | ax = dyk*dzi - dzk*dyi ;                       |  0.000000e+00 |  0.000000e+00 |           inf
+1742   | ay = dzk*dxi - dxk*dzi ;                       |  0.000000e+00 |  0.000000e+00 |           inf
+1743   | az = dxk*dyi - dyk*dxi ;                       |  0.000000e+00 |  0.000000e+00 |           inf
+1745   | domain.delx_eta(i) = vol / SQRT(ax*ax + ay*... |  3.725290e-09 |  2.980232e-08 |           inf
+1747   | ax *= norm ;                                   |  0.000000e+00 |  0.000000e+00 |           inf
+1748   | ay *= norm ;                                   | -2.384186e-07 |  2.980232e-08 |           inf
+1749   | az *= norm ;                                   |  0.000000e+00 |  0.000000e+00 |           inf
+1751   | dxv = Real_t(-0.25)*((xv0+xv1+xv5+xv4) - (x... |  0.000000e+00 |  0.000000e+00 |           inf
+1752   | dyv = Real_t(-0.25)*((yv0+yv1+yv5+yv4) - (y... |  0.000000e+00 |  0.000000e+00 |           inf
+1753   | dzv = Real_t(-0.25)*((zv0+zv1+zv5+zv4) - (z... |  0.000000e+00 |  0.000000e+00 |           inf
+1755   | domain.delv_eta(i) = ax*dxv + ay*dyv + az*d... |  0.000000e+00 |  0.000000e+00 |           inf
+1779   | Real_t norm = Real_t(1.) / (domain.delv_xi(... |  2.370555e+27 |  2.370555e-09 |           inf
+1783   | case 0:         delvm = domain.delv_xi(doma... |  0.000000e+00 |  0.000000e+00 |           inf
+1793   | case 0:         delvp = domain.delv_xi(doma... |  0.000000e+00 |  0.000000e+00 |           inf
+1802   | delvm = delvm * norm ;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1803   | delvp = delvp * norm ;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1805   | phixi = Real_t(.5) * ( delvm + delvp ) ;       |  0.000000e+00 |  0.000000e+00 |           inf
+1807   | delvm *= monoq_limiter_mult ;                  |  0.000000e+00 |  0.000000e+00 |           inf
+1808   | delvp *= monoq_limiter_mult ;                  |  0.000000e+00 |  0.000000e+00 |           inf
+1810   | if ( delvm < phixi ) phixi = delvm ;           |  0.000000e+00 |  0.000000e+00 |           inf
+1811   | if ( delvp < phixi ) phixi = delvp ;           |  0.000000e+00 |  0.000000e+00 |           inf
+1812   | if ( phixi < Real_t(0.)) phixi = Real_t(0.) ;  |  0.000000e+00 |  0.000000e+00 |           inf
+1813   | if ( phixi > monoq_max_slope) phixi = monoq... |  0.000000e+00 |  0.000000e+00 |           inf
+1817   | norm = Real_t(1.) / ( domain.delv_eta(ielem... |  2.370555e+27 |  2.370555e-09 |           inf
+1821   | case 0:          delvm = domain.delv_eta(do... |  1.249847e+06 |  1.000000e+00 |           inf
+1831   | case 0:          delvp = domain.delv_eta(do... |  0.000000e+00 |  0.000000e+00 |           inf
+1840   | delvm = delvm * norm ;                         |  1.249847e+42 |  1.000000e+00 |           inf
+1841   | delvp = delvp * norm ;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1843   | phieta = Real_t(.5) * ( delvm + delvp ) ;      |  6.249236e+41 |  1.000000e+00 |           inf
+1845   | delvm *= monoq_limiter_mult ;                  |  2.499694e+42 |  1.000000e+00 |           inf
+1846   | delvp *= monoq_limiter_mult ;                  |  0.000000e+00 |  0.000000e+00 |           inf
+1848   | if ( delvm  < phieta ) phieta = delvm ;        |  6.249236e+41 |  1.000000e+00 |           inf
+1849   | if ( delvp  < phieta ) phieta = delvp ;        |  0.000000e+00 |  0.000000e+00 |           inf
+1850   | if ( phieta < Real_t(0.)) phieta = Real_t(0... |  0.000000e+00 |  0.000000e+00 |           inf
+1851   | if ( phieta > monoq_max_slope)  phieta = mo... |  0.000000e+00 |  0.000000e+00 |           inf
+1854   | norm = Real_t(1.) / ( domain.delv_zeta(iele... |  2.370555e+27 |  2.370555e-09 |           inf
+1858   | case 0:           delvm = domain.delv_zeta(... |  0.000000e+00 |  0.000000e+00 |           inf
+1868   | case 0:           delvp = domain.delv_zeta(... |  0.000000e+00 |  0.000000e+00 |           inf
+1877   | delvm = delvm * norm ;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1878   | delvp = delvp * norm ;                         |  0.000000e+00 |  0.000000e+00 |           inf
+1880   | phizeta = Real_t(.5) * ( delvm + delvp ) ;     |  0.000000e+00 |  0.000000e+00 |           inf
+1882   | delvm *= monoq_limiter_mult ;                  |  0.000000e+00 |  0.000000e+00 |           inf
+1883   | delvp *= monoq_limiter_mult ;                  |  0.000000e+00 |  0.000000e+00 |           inf
+1885   | if ( delvm   < phizeta ) phizeta = delvm ;     |  0.000000e+00 |  0.000000e+00 |           inf
+1886   | if ( delvp   < phizeta ) phizeta = delvp ;     |  0.000000e+00 |  0.000000e+00 |           inf
+1887   | if ( phizeta < Real_t(0.)) phizeta = Real_t... |  0.000000e+00 |  0.000000e+00 |           inf
+1888   | if ( phizeta > monoq_max_slope  ) phizeta =... |  0.000000e+00 |  0.000000e+00 |           inf
+1892   | if ( domain.vdov(ielem) > Real_t(0.) )  {      |  0.000000e+00 |  0.000000e+00 |           inf
+1897   | Real_t delvxxi   = domain.delv_xi(ielem)   ... |  0.000000e+00 |  0.000000e+00 |           inf
+1898   | Real_t delvxeta  = domain.delv_eta(ielem)  ... |  0.000000e+00 |  0.000000e+00 |           inf
+1899   | Real_t delvxzeta = domain.delv_zeta(ielem) ... |  0.000000e+00 |  0.000000e+00 |           inf
+1901   | if ( delvxxi   > Real_t(0.) ) delvxxi   = R... |  0.000000e+00 |  0.000000e+00 |           inf
+1902   | if ( delvxeta  > Real_t(0.) ) delvxeta  = R... |  0.000000e+00 |  0.000000e+00 |           inf
+1903   | if ( delvxzeta > Real_t(0.) ) delvxzeta = R... |  0.000000e+00 |  0.000000e+00 |           inf
+1905   | Real_t rho = domain.elemMass(ielem) / (doma... |  0.000000e+00 |  0.000000e+00 |           inf
+1907   | qlin = -qlc_monoq * rho *                      |  0.000000e+00 |  0.000000e+00 |           inf
+1908   | (  delvxxi   * (Real_t(1.) - phixi) +          |  0.000000e+00 |  0.000000e+00 |           inf
+1909   | delvxeta  * (Real_t(1.) - phieta) +            |  0.000000e+00 |  0.000000e+00 |           inf
+1910   | delvxzeta * (Real_t(1.) - phizeta)  ) ;        |  0.000000e+00 |  0.000000e+00 |           inf
+1912   | qquad = qqc_monoq * rho *                      |  0.000000e+00 |  0.000000e+00 |           inf
+1913   | (  delvxxi*delvxxi     * (Real_t(1.) - phix... |  0.000000e+00 |  0.000000e+00 |           inf
+1914   | delvxeta*delvxeta   * (Real_t(1.) - phieta*... |  0.000000e+00 |  0.000000e+00 |           inf
+1915   | delvxzeta*delvxzeta * (Real_t(1.) - phizeta... |  0.000000e+00 |  0.000000e+00 |           inf
+1918   | domain.qq(ielem) = qquad ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1919   | domain.ql(ielem) = qlin  ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+1995   | for (Index_t i=0; i<numElem; ++i) {            |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+1996   | if ( domain.q(i) > domain.qstop() ) {          |  0.000000e+00 |  0.000000e+00 |           inf
+2025   | bvc[i] = c1s * (compression[i] + Real_t(1.));  |  0.000000e+00 |  0.000000e+00 |           inf
+2033   | p_new[i] = bvc[i] * e_old[i] ;                 | -1.550617e-07 |  1.000000e+00 |           inf
+2035   | if    (FABS(p_new[i]) <  p_cut   )             | -1.550617e-07 |  1.000000e+00 |           inf
+2038   | if    ( vnewc[ielem] >= eosvmax ) /* imposs... | -1.550617e-07 |  1.000000e+00 |           inf
+2041   | if    (p_new[i]       <  pmin)                 |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+2064   | e_new[i] = e_old[i] - Real_t(0.5) * delvc[i... |  0.000000e+00 |  0.000000e+00 |           inf
+2065   | + Real_t(0.5) * work[i];                       | -1.162963e-07 |  1.000000e+00 |           inf
+2067   | if (e_new[i]  < emin ) {                       | -1.162963e-07 |  1.000000e+00 |           inf
+2077   | Real_t vhalf = Real_t(1.) / (Real_t(1.) + c... |  0.000000e+00 |  0.000000e+00 |           inf
+2079   | if ( delvc[i] > Real_t(0.) ) {                 |  0.000000e+00 |  0.000000e+00 |           inf
+2083   | Real_t ssc = ( pbvc[i] * e_new[i]              | -7.753087e-08 |  1.000000e+00 |           inf
+2084   | + vhalf * vhalf * bvc[i] * pHalfStep[i] ) /... | -7.753087e-08 |  1.000000e+00 |           inf
+2086   | if ( ssc <= Real_t(.1111111e-36) ) {           |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+2092   | q_new[i] = (ssc*ql_old[i] + qq_old[i]) ;       |  0.000000e+00 |  0.000000e+00 |           inf
+2095   | e_new[i] = e_new[i] + Real_t(0.5) * delvc[i]   | -1.162963e-07 |  1.000000e+00 |           inf
+2096   | * (  Real_t(3.0)*(p_old[i]     + q_old[i])     |  0.000000e+00 |  0.000000e+00 |           inf
+2097   | - Real_t(4.0)*(pHalfStep[i] + q_new[i])) ;     |  0.000000e+00 |  0.000000e+00 |           inf
+2103   | e_new[i] += Real_t(0.5) * work[i];             | -2.325926e-07 |  1.000000e+00 |           inf
+2105   | if (FABS(e_new[i]) < e_cut) {                  | -2.325926e-07 |  1.000000e+00 |           inf
+2108   | if (     e_new[i]  < emin ) {                  | -2.325926e-07 |  1.000000e+00 |           inf
+2122   | if (delvc[i] > Real_t(0.)) {                   |  0.000000e+00 |  0.000000e+00 |           inf
+2126   | Real_t ssc = ( pbvc[i] * e_new[i]              | -1.550617e-07 |  1.000000e+00 |           inf
+2127   | + vnewc[ielem] * vnewc[ielem] * bvc[i] * p_... | -2.584363e-07 |  1.000000e+00 |           inf
+2129   | if ( ssc <= Real_t(.1111111e-36) ) {           |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+2135   | q_tilde = (ssc*ql_old[i] + qq_old[i]) ;        |  0.000000e+00 |  0.000000e+00 |           inf
+2138   | e_new[i] = e_new[i] - (  Real_t(7.0)*(p_old... | -2.325926e-07 |  1.000000e+00 |           inf
+2139   | - Real_t(8.0)*(pHalfStep[i] + q_new[i])        |  0.000000e+00 |  0.000000e+00 |           inf
+2140   | + (p_new[i] + q_tilde)) * delvc[i]*sixth ;     |  0.000000e+00 |  0.000000e+00 |           inf
+2142   | if (FABS(e_new[i]) < e_cut) {                  | -2.325926e-07 |  1.000000e+00 |           inf
+2145   | if (     e_new[i]  < emin ) {                  | -2.325926e-07 |  1.000000e+00 |           inf
+2157   | if ( delvc[i] <= Real_t(0.) ) {                |  0.000000e+00 |  0.000000e+00 |           inf
+2158   | Real_t ssc = ( pbvc[i] * e_new[i]              | -1.550617e-07 |  1.000000e+00 |           inf
+2159   | + vnewc[ielem] * vnewc[ielem] * bvc[i] * p_... | -2.584363e-07 |  1.000000e+00 |           inf
+2161   | if ( ssc <= Real_t(.1111111e-36) ) {           |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+2167   | q_new[i] = (ssc*ql_old[i] + qq_old[i]) ;       |  0.000000e+00 |  0.000000e+00 |           inf
+2169   | if (FABS(q_new[i]) < q_cut) q_new[i] = Real... |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+2190   | Real_t ssTmp = (pbvc[i] * enewc[i] + vnewc[... | -2.584363e-07 |  1.000000e+00 |           inf
+2191   | bvc[i] * pnewc[i]) / rho0;                     | -2.584363e-07 |  1.000000e+00 |           inf
+2192   | if (ssTmp <= Real_t(.1111111e-36)) {           |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+2198   | domain.ss(ielem) = ssTmp ;                     |  0.000000e+00 |  0.000000e+00 |           inf
+2245   | e_old[i] = domain.e(ielem) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+2246   | delvc[i] = domain.delv(ielem) ;                |  0.000000e+00 |  0.000000e+00 |           inf
+2247   | p_old[i] = domain.p(ielem) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+2248   | q_old[i] = domain.q(ielem) ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+2249   | qq_old[i] = domain.qq(ielem) ;                 |  0.000000e+00 |  0.000000e+00 |           inf
+2250   | ql_old[i] = domain.ql(ielem) ;                 |  0.000000e+00 |  0.000000e+00 |           inf
+2257   | compression[i] = Real_t(1.) / vnewc[ielem] ... |  0.000000e+00 |  0.000000e+00 |           inf
+2258   | vchalf = vnewc[ielem] - delvc[i] * Real_t(.5); |  0.000000e+00 |  0.000000e+00 |           inf
+2259   | compHalfStep[i] = Real_t(1.) / vchalf - Rea... |  0.000000e+00 |  0.000000e+00 |           inf
+2267   | if (vnewc[ielem] <= eosvmin) { /* impossibl... |  0.000000e+00 |  0.000000e+00 |           inf
+2276   | if (vnewc[ielem] >= eosvmax) { /* impossibl... |  0.000000e+00 |  0.000000e+00 |           inf
+2300   | domain.p(ielem) = p_new[i] ;                   | -1.550617e-07 |  1.000000e+00 |           inf
+2301   | domain.e(ielem) = e_new[i] ;                   | -2.325926e-07 |  1.000000e+00 |           inf
+2302   | domain.q(ielem) = q_new[i] ;                   |  0.000000e+00 |  0.000000e+00 |           inf
+2343   | vnewc[i] = domain.vnew(i) ;                    |  0.000000e+00 |  0.000000e+00 |           inf
+2347   | if (eosvmin != Real_t(0.)) {                   |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+2350   | if (vnewc[i] < eosvmin)                        |  0.000000e+00 |  0.000000e+00 |           inf
+2355   | if (eosvmax != Real_t(0.)) {                   |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+2358   | if (vnewc[i] > eosvmax)                        |  0.000000e+00 |  0.000000e+00 |           inf
+2368   | Real_t vc = domain.v(i) ;                      |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+2369   | if (eosvmin != Real_t(0.)) {                   |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+2373   | if (eosvmax != Real_t(0.)) {                   |  0.000000e+00 |  0.000000e+00 |  1.000001e+00
+2377   | if (vc <= 0.) {                                |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+2417   | Real_t tmpV = domain.vnew(i) ;                 |  0.000000e+00 |  0.000000e+00 |           inf
+2419   | if ( FABS(tmpV - Real_t(1.0)) < v_cut )        |  0.000000e+00 |  0.000000e+00 |           inf
+2422   | domain.v(i) = tmpV ;                           |  0.000000e+00 |  0.000000e+00 |           inf
+2464   | Real_t   qqc2 = Real_t(64.0) * qqc * qqc ;     |  0.000000e+00 |  0.000000e+00 |  0.000000e+00
+2465   | Real_t   dtcourant_tmp = dtcourant;            |  0.000000e+00 |           inf |           inf
+2477   | Real_t dtf = domain.ss(indx) * domain.ss(in... | -4.128213e-45 |  3.715392e-08 |           inf
+2479   | if ( domain.vdov(indx) < Real_t(0.) ) {        |  0.000000e+00 |  0.000000e+00 |           inf
+2481   | + qqc2 * domain.arealg(indx) * domain.areal... |  0.000000e+00 |           inf |           inf
+2482   | * domain.vdov(indx) * domain.vdov(indx) ;      |  0.000000e+00 |           inf |           inf
+2486   | dtf = domain.arealg(indx) / dtf ;              |  0.000000e+00 |  0.000000e+00 |           inf
+2488   | if (domain.vdov(indx) != Real_t(0.)) {         |  0.000000e+00 |           inf |           inf
+2508   | dtcourant = dtcourant_per_thread[0] ;          |  0.000000e+00 |           inf |           inf
+2533   | Real_t dthydro_tmp = dthydro ;                 |  1.000000e+20 |  1.000000e+00 |  4.109692e+04
+2546   | if (domain.vdov(indx) != Real_t(0.)) {         |  0.000000e+00 |  0.000000e+00 |           inf
+2547   | Real_t dtdvov = dvovmax / (FABS(domain.vdov... |  0.000000e+00 |           inf |           inf
+2549   | if ( dthydro_tmp > dtdvov ) {                  |  1.000000e+20 |  1.000000e+00 |  4.109692e+04
+2568   | dthydro =  dthydro_per_thread[0] ;             |  1.000000e+20 |  1.000000e+00 |  4.109692e+04
+2745   | while((locDom->time() < locDom->stoptime())... |  0.000000e+00 |  0.000000e+00 |  4.797018e-01
