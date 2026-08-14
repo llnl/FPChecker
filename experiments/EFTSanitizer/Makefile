@@ -8,7 +8,7 @@ CC = $(LLVM10)/clang
 OPT = $(LLVM10)/opt
 LLC = $(LLVM10)/llc
 
-SRC = toy_exp.c
+SRC = toy_return_fails.c
 TARGET = toy
 
 OPT_LEVEL = -O0

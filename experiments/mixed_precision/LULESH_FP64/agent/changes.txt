@@ -1,0 +1,180 @@
+Mixed precision changes in LULESH_FP64/mixed_precision
+
+This folder implements a coherent temporary mixed-precision case.
+In MIXED mode, global simulation state remains double through Real_t, while
+selected hot-kernel temporaries use mixedprecision_t, which is float.
+
+1. Precision setup
+
+Before, in ../before/lulesh.h:
+
+  typedef real8 Real_t;
+
+After, in mixed_precision/lulesh.h:
+
+  #define PRECISION_DOUBLE 1
+  #define PRECISION_SINGLE 2
+  #define PRECISION_MIXED  3
+
+  #if PRECISION_MODE == PRECISION_SINGLE
+  typedef real4 Real_t;
+  #else
+  typedef real8 Real_t;
+  #endif
+
+  #if PRECISION_MODE == PRECISION_MIXED
+  typedef real4 mixedprecision_t;
+  #else
+  typedef Real_t mixedprecision_t;
+  #endif
+
+Meaning:
+- DOUBLE: Real_t is double, mixedprecision_t is double.
+- SINGLE: Real_t is float, mixedprecision_t is float.
+- MIXED: Real_t is double, mixedprecision_t is float.
+
+2. Hourglass force region
+
+Before, around ../before/lulesh.cc:665:
+
+  void CalcElemFBHourglassForce(Real_t *xd, Real_t *yd, Real_t *zd,
+                                Real_t hourgam[][4],
+                                Real_t coefficient,
+                                Real_t *hgfx, Real_t *hgfy, Real_t *hgfz)
+  {
+     Real_t hxx[4];
+
+After, around mixed_precision/lulesh.cc:668:
+
+  void CalcElemFBHourglassForce(mixedprecision_t *xd, mixedprecision_t *yd,
+                                mixedprecision_t *zd,
+                                mixedprecision_t hourgam[][4],
+                                mixedprecision_t coefficient,
+                                mixedprecision_t *hgfx,
+                                mixedprecision_t *hgfy,
+                                mixedprecision_t *hgfz)
+  {
+     mixedprecision_t hxx[4];
+
+The hourglass scratch arrays were also changed.
+
+Before:
+
+  Real_t *dvdx, *dvdy, *dvdz;
+  Real_t *x8n, *y8n, *z8n;
+  Real_t hourgam[8][4];
+  Real_t hgfx[8], hgfy[8], hgfz[8];
+
+After:
+
+  mixedprecision_t *dvdx, *dvdy, *dvdz;
+  mixedprecision_t *x8n, *y8n, *z8n;
+  mixedprecision_t hourgam[8][4];
+  mixedprecision_t hgfx[8], hgfy[8], hgfz[8];
+
+Reason:
+This is a hot per-element force kernel. Changing a coherent set of temporary
+arrays and local force calculations gives real float work and reduces scratch
+memory traffic, unlike changing one isolated expression.
+
+3. Hourglass coefficient
+
+Before, ../before/lulesh.cc:893:
+
+  coefficient = - hourg * Real_t(0.01) * ss1 * mass1 / volume13;
+
+After, mixed_precision/lulesh.cc:895:
+
+  coefficient = - mixedprecision_t(hourg) * mixedprecision_t(0.01) *
+                ss1 * mass1 / volume13;
+
+Reason:
+The report showed small local relative error for this expression, and it is
+part of the same hourglass working set.
+
+4. Monotonic-Q region
+
+Before, around ../before/lulesh.cc:1770:
+
+  Real_t qlin, qquad;
+  Real_t phixi, phieta, phizeta;
+  Real_t delvm = 0.0, delvp = 0.0;
+  Real_t norm = Real_t(1.) / (domain.delv_xi(ielem) + ptiny);
+
+After, around mixed_precision/lulesh.cc:1781:
+
+  mixedprecision_t qlin, qquad;
+  mixedprecision_t phixi, phieta, phizeta;
+  mixedprecision_t delvm = mixedprecision_t(0.0);
+  mixedprecision_t delvp = mixedprecision_t(0.0);
+  mixedprecision_t norm = mixedprecision_t(1.) /
+     (mixedprecision_t(domain.delv_xi(ielem)) + mixedprecision_t(ptiny));
+
+Final stores cast back to double:
+
+  domain.qq(ielem) = Real_t(qquad);
+  domain.ql(ielem) = Real_t(qlin);
+
+Reason:
+The three limiter norm divisions had the smallest nonzero relative errors in
+the FPChecker report, and they are inside a repeated region-element loop. The
+whole local limiter working set was demoted together to avoid isolated cast
+overhead.
+
+5. Time constraint region
+
+Before, around ../before/lulesh.cc:2461:
+
+  Real_t qqc2 = Real_t(64.0) * qqc * qqc;
+  Real_t dtcourant_tmp = dtcourant;
+  Real_t dtf = domain.ss(indx) * domain.ss(indx);
+
+After, around mixed_precision/lulesh.cc:2489:
+
+  mixedprecision_t qqc2 =
+     mixedprecision_t(64.0) * mixedprecision_t(qqc) * mixedprecision_t(qqc);
+  mixedprecision_t dtcourant_tmp = mixedprecision_t(dtcourant);
+  mixedprecision_t ss = mixedprecision_t(domain.ss(indx));
+  mixedprecision_t vdov = mixedprecision_t(domain.vdov(indx));
+  mixedprecision_t arealg = mixedprecision_t(domain.arealg(indx));
+  mixedprecision_t dtf = ss * ss;
+
+Hydro constraint before:
+
+  Real_t dthydro_tmp = dthydro;
+  Real_t dtdvov = dvovmax / (FABS(domain.vdov(indx)) + Real_t(1.e-20));
+
+Hydro constraint after:
+
+  mixedprecision_t dthydro_tmp = mixedprecision_t(dthydro);
+  mixedprecision_t dtdvov =
+     mixedprecision_t(dvovmax) /
+     (FABS(mixedprecision_t(domain.vdov(indx))) + mixedprecision_t(1.e-20));
+
+Reason:
+These are repeated local constraint calculations. Their final reduced values
+are cast back to Real_t for storage in the double Domain state.
+
+6. Measured result
+
+Command:
+
+  ./compare_precision.sh
+
+Input:
+
+  -s 100 -i 20
+
+Result:
+
+  Config   Elapsed(s)   FOM            Speedup        FasterVsFP64     Final Energy Relative Error  MaxAbsDiff
+  ------   ----------   ---            -------        ------------     ---------------------------  ----------
+  SINGLE   11.7942      1695.7486      1.442068x      +44.21%          1.414294807076e-07           1.87500000000000000e-01
+  MIXED    13.5373      1477.3947      1.256380x      +25.64%          8.630799090709e-09           1.77874689921736717e-01
+  DOUBLE   17.008       1175.9143      1.000000x      +0.00%           0.000000000000e+00           3.72529029846191406e-09
+
+Interpretation:
+This mixed configuration is materially faster than double because it changes
+coherent hot temporary regions, not isolated scalar lines. Final energy error
+is much smaller than full SINGLE, but MaxAbsDiff is close to SINGLE, so the
+configuration should be judged against the application's accuracy threshold.

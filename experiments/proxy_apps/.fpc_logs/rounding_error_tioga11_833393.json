@@ -1,0 +1,51 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/cancellation.cpp",
+    "line": 27,
+    "error": 1.30967237055301666e-10,
+    "relative_error": 1.00000000000000000e+00,
+    "max_relative_error": 1.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/cancellation.cpp",
+    "line": 23,
+    "error": 1.45519152283668518e-11,
+    "relative_error": 1.00000000000000000e+00,
+    "max_relative_error": 1.00000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/cancellation.cpp",
+    "line": 15,
+    "error": 2.50865500817099019e-07,
+    "relative_error": 1.53531497851909610e-07,
+    "max_relative_error": 8.53717796501590408e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/cancellation.cpp",
+    "line": 26,
+    "error": -2.01267910848645115e+05,
+    "relative_error": 1.62426470388002953e+00,
+    "max_relative_error": 1.62426472282470247e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/cancellation.cpp",
+    "line": 22,
+    "error": 1.45519152283668518e-11,
+    "relative_error": 1.17870514362721219e-16,
+    "max_relative_error": 1.17870514362721219e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/cancellation.cpp",
+    "line": 25,
+    "error": -2.01267910848645261e+05,
+    "relative_error": 1.62426470388003241e+00,
+    "max_relative_error": 1.62426471517478288e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/cancellation.cpp",
+    "line": 21,
+    "error": 0.00000000000000000e+00,
+    "relative_error": 0.00000000000000000e+00,
+    "max_relative_error": 0.00000000000000000e+00
+  }
+]

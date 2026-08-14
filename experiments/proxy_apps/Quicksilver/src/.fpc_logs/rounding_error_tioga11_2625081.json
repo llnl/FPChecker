@@ -1,0 +1,2858 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 924,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 40,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.083270436243524646398e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 24,
+    "error": 2.209604027525458036507e-16,
+    "relative_error": 1.755434240408388915210e-16,
+    "max_relative_error": 2.780785885290108419205e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 40,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 5.549759870410175821576e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 41,
+    "error": 8.389014309606590558133e-18,
+    "relative_error": 5.285079015052152065707e-17,
+    "max_relative_error": 1.083270436243524646398e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 28,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 109,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 117,
+    "error": 2.017656874908624331511e-14,
+    "relative_error": 1.238807205553250484826e-15,
+    "max_relative_error": 2.445389400774321154569e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 110,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 133,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 121,
+    "error": 5.545694112263355179948e-17,
+    "relative_error": 5.545694112263355488097e-17,
+    "max_relative_error": 1.102633609417758010228e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 31,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.445389400774321154569e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 13,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 376,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 119,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 123,
+    "error": 5.800403564557251298596e+64,
+    "relative_error": 5.220288781932617549076e-02,
+    "max_relative_error": 5.220288781932617549076e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 331,
+    "error": -4.547473508864641189575e-13,
+    "relative_error": 1.303780964797913950478e-03,
+    "max_relative_error": 1.076257436452136289918e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 658,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.704644164586028738697e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 34,
+    "error": -1.271473593078553676605e-09,
+    "relative_error": 4.456487089576028052423e-02,
+    "max_relative_error": 6.165728498494567351695e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 18,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 80,
+    "error": 5.551115123125782702118e-17,
+    "relative_error": 8.846846528291689105750e-17,
+    "max_relative_error": 8.846846528291689105750e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 41,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 64,
+    "error": 6.071532165918824830442e-17,
+    "relative_error": 3.613813121356499303823e-18,
+    "max_relative_error": 2.381794007999702293852e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 78,
+    "error": 1.412064909445120974851e-15,
+    "relative_error": 1.456734309513595879223e-16,
+    "max_relative_error": 2.578474137111910711322e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 67,
+    "error": 2.523847797419875860214e-11,
+    "relative_error": 1.072360158438798183740e-02,
+    "max_relative_error": 1.027353004522937755791e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 137,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 8.612370599059178279456e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 42,
+    "error": -4.194676876068115234375e-06,
+    "relative_error": 1.243150452631698158679e-15,
+    "max_relative_error": 2.191266269456407210227e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 145,
+    "error": -1.238700982064688815854e-16,
+    "relative_error": 2.053835622173850210536e-16,
+    "max_relative_error": 2.191266269456407210227e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 27,
+    "error": 6.071532165918824830442e-17,
+    "relative_error": 3.613813121356499303823e-18,
+    "max_relative_error": 2.578474137111910711322e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 44,
+    "error": 4.682398132421772274370e-18,
+    "relative_error": 3.754490023067990519591e-17,
+    "max_relative_error": 1.097251574927146596270e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 121,
+    "error": -2.190088388420718956695e-17,
+    "relative_error": 1.807257095093784921106e-17,
+    "max_relative_error": 2.704644164586028738697e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 99,
+    "error": 6.591949208711866958765e-16,
+    "relative_error": 1.741274372722968489367e-17,
+    "max_relative_error": 1.248376678884625883407e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 98,
+    "error": -6.835937500000000000000e-03,
+    "relative_error": 6.113537117903930130991e-03,
+    "max_relative_error": 1.077455646906101254870e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 70,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 237,
+    "error": -1.949729266925714910030e-11,
+    "relative_error": 2.871494349100041858537e-02,
+    "max_relative_error": 5.703597122302158273395e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 233,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 57,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/DirectionCosine.cc",
+    "line": 15,
+    "error": -9.180212146020494401455e-12,
+    "relative_error": 2.011082747026959716148e-02,
+    "max_relative_error": 3.876530686182160713002e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Tallies.cc",
+    "line": 161,
+    "error": -4.097416850257218357001e-14,
+    "relative_error": 6.551611442643735326482e-16,
+    "max_relative_error": 6.766665173602423075700e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 28,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 42,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 51,
+    "error": 2.095545958979982970050e-15,
+    "relative_error": 2.095545958979982926102e-17,
+    "max_relative_error": 2.095545958979982926102e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/utilsMpi.cc",
+    "line": 161,
+    "error": -4.097416850257218357001e-14,
+    "relative_error": 6.551611442643735326482e-16,
+    "max_relative_error": 6.551611442643735326482e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 902,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 467,
+    "error": -1.676380634307861328125e-08,
+    "relative_error": 3.630741444995519445416e-18,
+    "max_relative_error": 4.986996964080112622908e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 460,
+    "error": 1.425725856818438330720e-17,
+    "relative_error": 1.727737383112725637550e-17,
+    "max_relative_error": 3.575613299653158022962e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 211,
+    "error": 2.528393864541969357761e-25,
+    "relative_error": 3.743104282271468005390e-17,
+    "max_relative_error": 1.124648018155917200202e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 67,
+    "error": 1.102633609417758009386e-16,
+    "relative_error": 1.102633609417758010228e-16,
+    "max_relative_error": 1.102633609417758010228e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 212,
+    "error": -7.541510253912872859736e-27,
+    "relative_error": 3.558521291503998646246e-16,
+    "max_relative_error": 1.477351385928312175628e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 158,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 4.239255068651668764370e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 156,
+    "error": -2.681028684649311433219e-17,
+    "relative_error": 4.306217434168590617011e-16,
+    "max_relative_error": 4.226380139272820394824e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 111,
+    "error": 5.547190085053443908691e-08,
+    "relative_error": 5.694238833746426455070e-17,
+    "max_relative_error": 1.508713579449001803957e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 92,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/DirectionCosine.cc",
+    "line": 20,
+    "error": 7.399679827213567762101e-17,
+    "relative_error": 8.007060881202122801091e-17,
+    "max_relative_error": 8.612370599059178279456e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/DirectionCosine.cc",
+    "line": 7,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 5.110824433740322169435e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 104,
+    "error": -7.736866702856559641077e-16,
+    "relative_error": 5.832185160079774829403e-17,
+    "max_relative_error": 5.832185160079774829403e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 116,
+    "error": -1.380839886877538447152e-15,
+    "relative_error": 3.452099717193846236986e-17,
+    "max_relative_error": 3.452099717193846236986e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 119,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 119,
+    "error": -3.328500669530498612403e-17,
+    "relative_error": 4.622655163060166026035e-17,
+    "max_relative_error": 6.959571037490390968836e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 20,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 28,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 203,
+    "error": -2.492043154029385133768e-25,
+    "relative_error": 6.477420070243988641392e-17,
+    "max_relative_error": 6.477420070243988641392e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 204,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 205,
+    "error": -3.328500669530498612403e-17,
+    "relative_error": 4.622655163060166026035e-17,
+    "max_relative_error": 6.959571037490390968836e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 206,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 371,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 27,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 27,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 191,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 63,
+    "error": -1.380839886877538447152e-15,
+    "relative_error": 3.452099717193846236986e-17,
+    "max_relative_error": 3.452099717193846236986e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 78,
+    "error": -5.549759870410175821576e-18,
+    "relative_error": 5.549759870410175821576e-17,
+    "max_relative_error": 5.549759870410175821576e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MonteCarlo.cc",
+    "line": 13,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 340,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 128,
+    "error": -2.026503964636106047692e-14,
+    "relative_error": 6.766665173602423075700e-16,
+    "max_relative_error": 8.260182823294461393426e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/PopulationControl.cc",
+    "line": 106,
+    "error": -1.775923158531256262904e-16,
+    "relative_error": 5.549759870410175821576e-17,
+    "max_relative_error": 5.549759870410175821576e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/ParticleVaultContainer.cc",
+    "line": 27,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.959571037490390968836e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 27,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.509707041284524660224e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 124,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 414,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 175,
+    "error": -2.220446049250313080847e-16,
+    "relative_error": 6.701023147750550509459e-17,
+    "max_relative_error": 6.701023147750550509459e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 394,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.683846964510107324035e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 81,
+    "error": 2.095545958979982970050e-15,
+    "relative_error": 2.095545958979982926102e-17,
+    "max_relative_error": 2.095545958979982926102e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 376,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 400,
+    "error": 1.719138069747327968173e-17,
+    "relative_error": 7.624268926621213674971e-16,
+    "max_relative_error": 2.682938491999406262305e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 351,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 123,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 712,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 211,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 144,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 4.226380139272820394824e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 103,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 413,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.069697613000109605700e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 206,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.057405900105047938736e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 140,
+    "error": 5.551115123125782702118e-17,
+    "relative_error": 8.846846528291689105750e-17,
+    "max_relative_error": 1.456734309513595879223e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 143,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.048248434916645877797e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 162,
+    "error": 8.389014309606590558133e-18,
+    "relative_error": 5.285079015052152065707e-17,
+    "max_relative_error": 1.101411730778925136368e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 110,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 22,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 507,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 489,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 487,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.704644164586028738697e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 623,
+    "error": -1.425725856818438330720e-17,
+    "relative_error": 1.727737383112725637550e-17,
+    "max_relative_error": 2.191266269456407210227e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 692,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 23,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.445389400774321154569e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 125,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Load_Particle.cc",
+    "line": 19,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 33,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 373,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 5.450745186935303263423e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 32,
+    "error": 1.675289240665733814240e-09,
+    "relative_error": 5.871848971388149924019e-17,
+    "max_relative_error": 8.072377993323892103672e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 138,
+    "error": -2.484057404217310249805e-11,
+    "relative_error": 3.245300831816142776890e-17,
+    "max_relative_error": 5.204170427930421265180e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 101,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/PopulationControl.cc",
+    "line": 133,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 83,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 609,
+    "error": 1.054556019331603922140e-19,
+    "relative_error": 1.898836247398744467891e-17,
+    "max_relative_error": 2.163812119208377210566e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 83,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 68,
+    "error": -2.212856634042914549809e-16,
+    "relative_error": 2.212856634042914548124e-16,
+    "max_relative_error": 2.212856634042914548124e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 690,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 222,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 326,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 21,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 382,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/DirectionCosine.cc",
+    "line": 14,
+    "error": -9.094947017729282379150e-12,
+    "relative_error": 1.992441556189099848077e-17,
+    "max_relative_error": 4.299115033055249699639e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/DirectionCosine.cc",
+    "line": 8,
+    "error": 4.607859233063393844532e-17,
+    "relative_error": 4.698442965510842728254e-17,
+    "max_relative_error": 1.723568669490444114612e-13
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 76,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 4.239255068651668764370e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 703,
+    "error": 1.818989403545856475830e-12,
+    "relative_error": 1.309672382471035297368e-17,
+    "max_relative_error": 7.072230865343590606028e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 1283,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/PopulationControl.cc",
+    "line": 104,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 382,
+    "error": 2.848741208205662900355e-17,
+    "relative_error": 4.374080636608715058251e-16,
+    "max_relative_error": 3.421994442373704202785e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 351,
+    "error": -1.244121992927116338024e-17,
+    "relative_error": 2.661264385476703974660e-17,
+    "max_relative_error": 2.997682219624830210947e+04
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 392,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.011970288652695787047e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 412,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.018229532415473926244e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 96,
+    "error": 3.015136718750000000000e-02,
+    "relative_error": 2.696448229099140331841e-17,
+    "max_relative_error": 7.578125118839342224755e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 168,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 36,
+    "error": -1.974874257182346326545e-16,
+    "relative_error": 1.058244772938975889384e-15,
+    "max_relative_error": 3.439662704736215306563e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 35,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 633,
+    "error": 1.250555214937776327133e-12,
+    "relative_error": 4.147172401048235250454e-18,
+    "max_relative_error": 2.077456617446933412877e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 221,
+    "error": -9.694122674736016520569e-17,
+    "relative_error": 4.865786254677102074597e-16,
+    "max_relative_error": 4.225013866172652185413e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 374,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.297140743794976698023e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 86,
+    "error": 2.486899575160350650549e-12,
+    "relative_error": 1.672567733062610208275e-17,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 235,
+    "error": 2.182787284255027770996e-11,
+    "relative_error": 3.214650393337995730095e-17,
+    "max_relative_error": 1.483457575024683616616e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 31,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.830772361903219936102e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 455,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 20,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 216,
+    "error": -4.163336342344337026589e-17,
+    "relative_error": 4.540458523812434430707e-17,
+    "max_relative_error": 4.540458523812434430707e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 246,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/DirectionCosine.cc",
+    "line": 31,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 263,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 144,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.578474137111910711322e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 418,
+    "error": -1.035413074723656734477e-17,
+    "relative_error": 2.208350239108373471169e-17,
+    "max_relative_error": 1.999861745972262455147e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 428,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.794509306534436902596e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 154,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 121,
+    "error": -8.525770487620498805915e+64,
+    "relative_error": 7.673193508684510492552e-17,
+    "max_relative_error": 7.673193508684510492552e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 701,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/DirectionCosine.cc",
+    "line": 13,
+    "error": 8.526512829121202230453e-14,
+    "relative_error": 1.867913958927282975527e-19,
+    "max_relative_error": 6.331810474248395046167e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 120,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 453,
+    "error": -1.425725856818438330720e-17,
+    "relative_error": 1.727737383112725637550e-17,
+    "max_relative_error": 3.575613299653158022962e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 77,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 50,
+    "error": 2.095545958979982970050e-15,
+    "relative_error": 2.095545958979982926102e-17,
+    "max_relative_error": 2.095545958979982926102e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 245,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 111,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Tallies.cc",
+    "line": 140,
+    "error": -4.090408129074721852239e-22,
+    "relative_error": 8.180816258149443704478e-17,
+    "max_relative_error": 8.180816258149443704478e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 226,
+    "error": -1.040834085586084256647e-17,
+    "relative_error": 1.420850485417927748689e-15,
+    "max_relative_error": 1.420850485417927748689e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 43,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/PopulationControl.cc",
+    "line": 153,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 5.549759870410175821576e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 77,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 4.239255068651668764370e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 53,
+    "error": 8.385626177817573356776e-19,
+    "relative_error": 5.282944492025071228913e-17,
+    "max_relative_error": 8.328027937404280933720e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 93,
+    "error": 2.491287887096405029297e-07,
+    "relative_error": 4.452509961485586067097e-17,
+    "max_relative_error": 2.281868438649846099831e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 711,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 251,
+    "error": -8.673617379884035472060e-18,
+    "relative_error": 9.266724545778980542003e-17,
+    "max_relative_error": 1.420850485417927748689e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 622,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 68,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 160,
+    "error": 1.719476882926229688309e-18,
+    "relative_error": 1.083270436243524646398e-16,
+    "max_relative_error": 1.101411730778925136368e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 61,
+    "error": -1.380839886877538447152e-15,
+    "relative_error": 3.452099717193846236986e-17,
+    "max_relative_error": 5.551115123125782393969e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 122,
+    "error": -2.492043154029385133768e-25,
+    "relative_error": 6.477420070243988641392e-17,
+    "max_relative_error": 6.477420070243988641392e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 126,
+    "error": 1.425725856818438330720e-17,
+    "relative_error": 1.727737383112725637550e-17,
+    "max_relative_error": 5.565071747290054708346e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 61,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 693,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Load_Particle.cc",
+    "line": 17,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.477420070243988641392e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 77,
+    "error": 1.408295702276518568397e-11,
+    "relative_error": 5.703597646122632879171e-17,
+    "max_relative_error": 3.062179736881530340833e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Fast_Timer.cc",
+    "line": 102,
+    "error": 1.374456104485943797044e-13,
+    "relative_error": 8.496111324761977848681e-17,
+    "max_relative_error": 8.496111324761977848681e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 319,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 5.363814912674121265040e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 608,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.208550512586246765952e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 390,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 372,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.288616224992616517775e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 353,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 77,
+    "error": 5.551115123125782702118e-17,
+    "relative_error": 7.973666662616564756950e-17,
+    "max_relative_error": 7.973666662616564756950e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 72,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 634,
+    "error": 1.176658770418725907803e-11,
+    "relative_error": 3.902112213713562901904e-17,
+    "max_relative_error": 3.163705131092773781053e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 410,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.078539438533583457953e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 187,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 202,
+    "error": 8.389014309606590558133e-18,
+    "relative_error": 5.285079015052152065707e-17,
+    "max_relative_error": 1.083270436243524646398e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 43,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 4.239255068651668764370e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 630,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 23,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 395,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.682030019457272348631e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 154,
+    "error": 6.071532165918824830442e-17,
+    "relative_error": 3.613813121356499303823e-18,
+    "max_relative_error": 2.578474137111910711322e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Load_Particle.cc",
+    "line": 93,
+    "error": 2.835877239704132080078e-07,
+    "relative_error": 5.068371152420040931426e-17,
+    "max_relative_error": 1.412645368352130655506e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 426,
+    "error": 2.852521033279178688369e-26,
+    "relative_error": 5.705042066558356696042e-17,
+    "max_relative_error": 3.794509306534436902596e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 118,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 57,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 232,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 103,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 127,
+    "error": -5.204170427930421283236e-18,
+    "relative_error": 9.213477832585103987038e-18,
+    "max_relative_error": 5.565071747290054708346e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 145,
+    "error": -2.234472914856844294462e-17,
+    "relative_error": 4.349219166625441384943e-16,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 93,
+    "error": 2.630986273288726806641e-07,
+    "relative_error": 4.702183417269824526439e-17,
+    "max_relative_error": 1.819515419958144719866e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 65,
+    "error": 6.639311322942376136780e-11,
+    "relative_error": 2.820918975900879699453e-17,
+    "max_relative_error": 2.571179599039733377860e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 84,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 700,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 270,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 175,
+    "error": -2.598389983177185058594e-07,
+    "relative_error": 5.212267379511565172838e-17,
+    "max_relative_error": 1.008658134086412714278e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 37,
+    "error": 6.884683795282953155947e-17,
+    "relative_error": 7.133102977194576498325e-17,
+    "max_relative_error": 1.783842436033397033410e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/PopulationControl.cc",
+    "line": 31,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 89,
+    "error": -2.681028684649311433219e-17,
+    "relative_error": 4.306217434168590617011e-16,
+    "max_relative_error": 4.226380139272820394824e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 78,
+    "error": 1.408295702276518568397e-11,
+    "relative_error": 5.703597122302158273395e-02,
+    "max_relative_error": 9.565589557029745345365e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 329,
+    "error": 4.050093593832571059465e-11,
+    "relative_error": 1.161184297901621901915e-16,
+    "max_relative_error": 2.679978478676103244199e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 207,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/DirectionCosine.cc",
+    "line": 9,
+    "error": -7.231628490478314574830e-17,
+    "relative_error": 3.781990530659900955301e-17,
+    "max_relative_error": 6.373397376689177445374e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 97,
+    "error": 2.331542968750000000000e-02,
+    "relative_error": 2.085107739910669183754e-17,
+    "max_relative_error": 7.574108375035294252420e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 33,
+    "error": 4.038156475871801376343e-10,
+    "relative_error": 1.415364247174992377475e-17,
+    "max_relative_error": 7.974737774452335667657e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 215,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 318,
+    "error": -9.013539603252617988774e-22,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 411,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.091092218729109233636e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 34,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 144,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 87,
+    "error": 5.655920176650397479534e-12,
+    "relative_error": 3.803896901479532555541e-17,
+    "max_relative_error": 3.469703426266413896712e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 377,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 54,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 167,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 76,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Tallies.cc",
+    "line": 138,
+    "error": -3.345780141654486339320e-20,
+    "relative_error": 5.502927864563299900150e-17,
+    "max_relative_error": 7.368510489993414596979e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 220,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 109,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 143,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 89,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 218,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.419147859721925722971e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 416,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 705,
+    "error": -6.636469151999335736036e-12,
+    "relative_error": 4.778471298475391384352e-02,
+    "max_relative_error": 1.094257854821235102931e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 113,
+    "error": 6.234162491791650495543e-18,
+    "relative_error": 6.071468655188865852847e-17,
+    "max_relative_error": 6.071468655188865852847e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 545,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 126,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 38,
+    "error": -7.889866537880152463913e-11,
+    "relative_error": 8.626226463716801646632e-17,
+    "max_relative_error": 1.651607304354680274190e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 458,
+    "error": -2.851451713636876661440e-17,
+    "relative_error": 1.727737383112725637550e-17,
+    "max_relative_error": 1.219310094470661286915e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 210,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 33,
+    "error": -3.697129408175570119965e-17,
+    "relative_error": 4.753161662551862968388e-17,
+    "max_relative_error": 3.808763427901539208223e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 196,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 161,
+    "error": 8.389014309606590558133e-18,
+    "relative_error": 5.285079015052152065707e-17,
+    "max_relative_error": 1.101411730778925136368e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Tallies.cc",
+    "line": 139,
+    "error": 3.384743657228184154917e-18,
+    "relative_error": 6.881098735953534641536e-17,
+    "max_relative_error": 6.881098735953534641536e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 21,
+    "error": -5.549759870410175821576e-18,
+    "relative_error": 5.549759870410175821576e-17,
+    "max_relative_error": 5.549759870410175821576e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/PopulationControl.cc",
+    "line": 143,
+    "error": -1.382357769919018153360e-18,
+    "relative_error": 3.455894424797545430945e-17,
+    "max_relative_error": 3.455894424797545430945e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 25,
+    "error": -2.190088388420718956695e-17,
+    "relative_error": 1.807257095093784921106e-17,
+    "max_relative_error": 2.704644164586028738697e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 451,
+    "error": 2.851451713636876661440e-17,
+    "relative_error": 1.727737383112725637550e-17,
+    "max_relative_error": 1.219310094470661286915e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 317,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.682938491999406262305e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 624,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Load_Particle.cc",
+    "line": 321,
+    "error": -4.341890422336448976986e-27,
+    "relative_error": 2.429393557753572435246e-17,
+    "max_relative_error": 1.567426345887303832346e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 212,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.805896138397441839943e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 164,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 164,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 642,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 653,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 189,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.124648018155917200202e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 352,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.432060223548876732558e+04
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 393,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.182368329328891275206e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 694,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 81,
+    "error": 5.545694112263355179948e-17,
+    "relative_error": 5.545694112263355488097e-17,
+    "max_relative_error": 1.102633609417758010228e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 26,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 219,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/DirectionCosine.cc",
+    "line": 19,
+    "error": 4.821989162129280970248e-17,
+    "relative_error": 1.468849911402960045561e-16,
+    "max_relative_error": 8.598102012028953792581e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 31,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 231,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 109,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Fast_Timer.cc",
+    "line": 28,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 710,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Load_Particle.cc",
+    "line": 23,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.490282099179046624226e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Load_Particle.cc",
+    "line": 178,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.477420070243988641392e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 82,
+    "error": 1.102921600619824471501e-17,
+    "relative_error": 3.153460226687619290641e-15,
+    "max_relative_error": 1.110453644880003054421e-11
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 61,
+    "error": 2.766070792553643187262e-17,
+    "relative_error": 2.130437065254913904261e-16,
+    "max_relative_error": 2.200712742659371222004e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Load_Particle.cc",
+    "line": 26,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 55,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 101,
+    "error": 1.425725856818438330720e-17,
+    "relative_error": 1.727737383112725637550e-17,
+    "max_relative_error": 2.191266269456407210227e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 276,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 415,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 31,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MonteCarlo.cc",
+    "line": 87,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 25,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 191,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 72,
+    "error": 1.665334536937734810635e-16,
+    "relative_error": 6.284183203014102489858e-17,
+    "max_relative_error": 6.284183203014102489858e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 111,
+    "error": -6.487865800153258533101e-16,
+    "relative_error": 3.130715907039317539060e-17,
+    "max_relative_error": 3.130715907039317539060e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 325,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 240,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 4.226380139272820394824e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 78,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 215,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 3.786505624547472440068e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 635,
+    "error": 1.051603248924948275089e-11,
+    "relative_error": 3.487276154571159283809e-02,
+    "max_relative_error": 1.087050671286271113041e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 375,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.247400450726559665420e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 183,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 189,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 55,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 631,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 35,
+    "error": -5.448702722787857055664e-06,
+    "relative_error": 9.739106031337451593615e-16,
+    "max_relative_error": 1.721472996277374499034e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Load_Particle.cc",
+    "line": 319,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 408,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 32,
+    "error": 3.353708370040786590494e-16,
+    "relative_error": 1.743832855641275198785e-15,
+    "max_relative_error": 3.044566295282590745198e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 25,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 37,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 196,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 124,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/ParticleVaultContainer.cc",
+    "line": 206,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 247,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 375,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 79,
+    "error": 5.551115123125782702118e-17,
+    "relative_error": 8.846846528291689105750e-17,
+    "max_relative_error": 8.846846528291689105750e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 186,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 599,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/PopulationControl.cc",
+    "line": 57,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 330,
+    "error": 4.004618858743924647570e-11,
+    "relative_error": 1.148146439118163946403e-16,
+    "max_relative_error": 1.359386651609209621459e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Load_Particle.cc",
+    "line": 181,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 448,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 64,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 248,
+    "error": 5.551115123125782702118e-17,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 1.220463883257692075531e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 28,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 26,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 131,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 139,
+    "error": -7.429434845107607543468e-11,
+    "relative_error": 9.706197224676646150246e-17,
+    "max_relative_error": 9.706197224676646150246e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 63,
+    "error": 1.102633609417758009386e-16,
+    "relative_error": 1.102633609417758010228e-16,
+    "max_relative_error": 1.102633609417758010228e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 60,
+    "error": 1.102633609417758009386e-16,
+    "relative_error": 1.102633609417758010228e-16,
+    "max_relative_error": 1.102633609417758010228e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 166,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 127,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Load_Particle.cc",
+    "line": 324,
+    "error": -1.425725856818438330720e-17,
+    "relative_error": 1.727737383112725637550e-17,
+    "max_relative_error": 1.500782720099093287194e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 228,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.384282481433140051930e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 100,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 33,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 117,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 452,
+    "error": 1.425725856818438330720e-17,
+    "relative_error": 1.727737383112725637550e-17,
+    "max_relative_error": 1.219310094470661286915e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 129,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Tallies.cc",
+    "line": 170,
+    "error": -4.097416850257218357001e-14,
+    "relative_error": 6.551611442643735326482e-16,
+    "max_relative_error": 6.551611442643735326482e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Fast_Timer.cc",
+    "line": 94,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 98,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 65,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.868236184887740096330e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 88,
+    "error": 3.169020601490046828985e-12,
+    "relative_error": 2.131319889133135811961e-02,
+    "max_relative_error": 1.036861392541496012065e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 131,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 116,
+    "error": 1.264613413987092371826e-15,
+    "relative_error": 4.532058695714614612162e-16,
+    "max_relative_error": 8.777664836731142098219e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 209,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 143,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 66,
+    "error": 9.163159120362251996994e-11,
+    "relative_error": 3.893254614000182815451e-17,
+    "max_relative_error": 3.100213674813373260594e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 125,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 346,
+    "error": -2.190088388420718956695e-17,
+    "relative_error": 1.807257095093784921106e-17,
+    "max_relative_error": 2.704644164586028738697e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 122,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 105,
+    "error": -7.736866702856559641077e-16,
+    "relative_error": 5.832185160079774829403e-17,
+    "max_relative_error": 5.832185160079774829403e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 370,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 140,
+    "error": -4.945377440890297293663e-11,
+    "relative_error": 6.460715877023615030583e-02,
+    "max_relative_error": 6.460715877023615030583e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 30,
+    "error": 3.439089291124020064672e-16,
+    "relative_error": 7.610515579209989475505e-17,
+    "max_relative_error": 9.514702965153399492076e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 165,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 704,
+    "error": -4.817479748453479260206e-12,
+    "relative_error": 3.468585450450629077082e-17,
+    "max_relative_error": 1.579551562755965807719e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/ParticleVaultContainer.cc",
+    "line": 203,
+    "error": -2.003328046026863900079e-25,
+    "relative_error": 2.014106295205928812068e-17,
+    "max_relative_error": 2.014106295205928812068e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CollisionEvent.cc",
+    "line": 104,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.381794007999702293852e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 198,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 203,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 169,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 122,
+    "error": -2.725366923063247507319e+64,
+    "relative_error": 2.452830253077675810778e-17,
+    "max_relative_error": 2.452830253077675810778e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 212,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 174,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Segment_Outcome.cc",
+    "line": 208,
+    "error": -4.925647492199997712991e-27,
+    "relative_error": 4.426666857012582237371e-16,
+    "max_relative_error": 4.211764654677798967135e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 39,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/PopulationControl.cc",
+    "line": 142,
+    "error": -1.380839886877538447152e-15,
+    "relative_error": 3.452099717193846236986e-17,
+    "max_relative_error": 3.452099717193846236986e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 198,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 58,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 33,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 107,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 166,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 44,
+    "error": 5.551115123125782702118e-17,
+    "relative_error": 5.551115123125783010267e-17,
+    "max_relative_error": 1.110223024625156540424e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 327,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 350,
+    "error": 4.450649918052995701601e-17,
+    "relative_error": 7.445691537550495649492e-17,
+    "max_relative_error": 5.232968011609582948296e+03
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 129,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 134,
+    "error": -8.326672684688674053177e-17,
+    "relative_error": 3.965082230804130491152e-17,
+    "max_relative_error": 7.569702440626067282606e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 121,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 39,
+    "error": 8.385626177817573356776e-19,
+    "relative_error": 5.282944492025071228913e-17,
+    "max_relative_error": 5.369659490000229928208e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 188,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 221,
+    "error": -5.551115123125782702118e-17,
+    "relative_error": 1.564020873451453825087e-16,
+    "max_relative_error": 1.564020873451453825087e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_SourceNow.cc",
+    "line": 82,
+    "error": 1.387778780781445675530e-16,
+    "relative_error": 5.551115123125782393969e-17,
+    "max_relative_error": 5.551115123125782393969e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 236,
+    "error": 2.330580173293128609657e-12,
+    "relative_error": 3.432309013720252425296e-18,
+    "max_relative_error": 5.703597646122632879171e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 610,
+    "error": -9.013539603252617988774e-22,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 73,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.102633609417758010228e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": -1,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 168,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 188,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 629,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MC_Domain.cc",
+    "line": 69,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 144,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 197,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GlobalFccGrid.cc",
+    "line": 44,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 273,
+    "error": 3.964114193150125586840e-18,
+    "relative_error": 5.549759870410175821576e-17,
+    "max_relative_error": 5.549759870410175821576e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 82,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Tallies.cc",
+    "line": 136,
+    "error": -4.097416850257218357001e-14,
+    "relative_error": 6.551611442643735326482e-16,
+    "max_relative_error": 6.551611442643735326482e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 146,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 165,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MonteCarlo.cc",
+    "line": 86,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 112,
+    "error": 1.392115589471387693266e-16,
+    "relative_error": 4.646996000813682525578e-17,
+    "max_relative_error": 4.646996000813682525578e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 175,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 544,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 208,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/PopulationControl.cc",
+    "line": 60,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/PopulationControl.cc",
+    "line": 131,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/initMC.cc",
+    "line": 193,
+    "error": -5.549759870410175821576e-18,
+    "relative_error": 5.549759870410175821576e-17,
+    "max_relative_error": 5.549759870410175821576e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 1084,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 130,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/Parameters.cc",
+    "line": 192,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/CycleTracking.cc",
+    "line": 204,
+    "error": 8.269786641612910958492e-25,
+    "relative_error": 2.509707041284524660224e-16,
+    "max_relative_error": 2.509707041284524660224e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/GridAssignmentObject.cc",
+    "line": 36,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/NuclearData.cc",
+    "line": 36,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MacroscopicCrossSection.cc",
+    "line": 49,
+    "error": 8.389014309606590558133e-18,
+    "relative_error": 5.285079015052152065707e-17,
+    "max_relative_error": 1.083270436243524646398e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/Quicksilver/src/MCT.cc",
+    "line": 699,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  }
+]

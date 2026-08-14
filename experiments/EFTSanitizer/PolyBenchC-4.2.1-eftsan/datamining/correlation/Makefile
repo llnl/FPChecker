@@ -15,7 +15,7 @@ LLC = $(LLVM10)/llc
 BENCHMARK = $(notdir $(CURDIR))
 SRC = $(BENCHMARK).c
 
-OPT_LEVEL = -O0
+OPT_LEVEL = -O2
 
 CFLAGS = -g $(OPT_LEVEL) -fno-inline -fno-vectorize -fno-slp-vectorize -ffp-contract=off \
          -emit-llvm -I. -I$(UTIL) \
