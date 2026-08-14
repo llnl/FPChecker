@@ -27,6 +27,14 @@ double macroscopicCrossSection(MonteCarlo* monteCarlo, int reactionIndex, int do
    // isotopes are present in equal amounts
    double cellNumberDensity = monteCarlo->domain[domainIndex].cell_state[cellIndex]._cellNumberDensity;
 
+#ifndef FPC_QUICKSILVER_DISABLE_INJECTION
+   {
+      double state_x = (atomFraction + cellNumberDensity + double(energyGroup) + 1.0) * 123456.789;
+      double state_y = state_x + state_x * 1.0e-15;
+      volatile double state_cancelled_result __attribute__((unused)) = state_y - state_x; // Injection state
+   }
+#endif
+
    int isotopeGid = monteCarlo->_materialDatabase->_mat[globalMatIndex]._iso[isoIndex]._gid;
    if ( atomFraction == 0.0 || cellNumberDensity == 0.0) { return 1e-20; }
 

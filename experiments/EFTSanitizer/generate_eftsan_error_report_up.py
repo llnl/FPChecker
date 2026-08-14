@@ -10,6 +10,7 @@ import argparse
 import json
 import math
 import os
+import statistics
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -110,12 +111,16 @@ def normalize_opt_level(value: str) -> str:
 def discover_benchmark_dirs(
     benchmarks_root: Path,
     include_missing_run_sh: bool,
-    include_fp64: bool,
+    precision: str,
 ) -> List[Path]:
     if not benchmarks_root.is_dir():
         return []
     benchmark_dirs = sorted(makefile.parent for makefile in benchmarks_root.rglob("Makefile"))
-    if not include_fp64:
+    if precision == "fp64":
+        benchmark_dirs = [
+            path for path in benchmark_dirs if any(part.endswith("_fp64") for part in path.parts)
+        ]
+    else:
         benchmark_dirs = [
             path for path in benchmark_dirs if not any(part.endswith("_fp64") for part in path.parts)
         ]
@@ -279,7 +284,7 @@ def build_rows(entries: Sequence[EftsanEntry]) -> Tuple[List[str], List[List[str
         "source",
         "line",
         "baseline_error",
-        "error",
+        "EFTSan error",
         "absolute_difference",
         "status",
     ]
@@ -300,21 +305,95 @@ def build_rows(entries: Sequence[EftsanEntry]) -> Tuple[List[str], List[List[str
     return headers, rows
 
 
+def passed_entries(entries: Sequence[EftsanEntry]) -> List[EftsanEntry]:
+    passed = []
+    for entry in entries:
+        if (
+            entry.status != "OK"
+            or entry.baseline_error is None
+            or entry.error is None
+            or entry.absolute_difference is None
+        ):
+            continue
+        if not (
+            math.isfinite(entry.baseline_error)
+            and math.isfinite(entry.error)
+            and math.isfinite(entry.absolute_difference)
+        ):
+            continue
+        passed.append(entry)
+    return passed
+
+
+def average_row(entries: Sequence[EftsanEntry]) -> List[str]:
+    passed = passed_entries(entries)
+    passed_count = len(passed)
+    baseline_average = None
+    error_average = None
+    difference_average = None
+    if passed_count:
+        baseline_average = sum(entry.baseline_error for entry in passed) / passed_count
+        error_average = sum(entry.error for entry in passed) / passed_count
+        difference_average = sum(entry.absolute_difference for entry in passed) / passed_count
+
+    return [
+        "Average",
+        "-",
+        "-",
+        fmt_float(baseline_average),
+        fmt_float(error_average),
+        fmt_float(difference_average),
+        f"AVERAGE ({passed_count} passed)",
+    ]
+
+
+def median_row(entries: Sequence[EftsanEntry]) -> List[str]:
+    passed = passed_entries(entries)
+    passed_count = len(passed)
+    return [
+        "Median",
+        "-",
+        "-",
+        fmt_float(
+            statistics.median(entry.baseline_error for entry in passed)
+            if passed
+            else None
+        ),
+        fmt_float(
+            statistics.median(entry.error for entry in passed)
+            if passed
+            else None
+        ),
+        fmt_float(
+            statistics.median(entry.absolute_difference for entry in passed)
+            if passed
+            else None
+        ),
+        f"MEDIAN ({passed_count} passed)",
+    ]
+
+
 def format_table(entries: Sequence[EftsanEntry]) -> str:
     headers, rows = build_rows(entries)
+    avg_row = average_row(entries)
+    med_row = median_row(entries)
     widths = [len(header) for header in headers]
-    for row in rows:
+    for row in [*rows, avg_row, med_row]:
         for idx, value in enumerate(row):
             widths[idx] = max(widths[idx], len(value))
 
+    separator = "  ".join("-" * width for width in widths)
     lines = [
         "  ".join(header.ljust(widths[idx]) for idx, header in enumerate(headers)),
-        "  ".join("-" * width for width in widths),
+        separator,
     ]
     lines.extend(
         "  ".join(value.ljust(widths[idx]) for idx, value in enumerate(row))
         for row in rows
     )
+    lines.append(separator)
+    lines.append("  ".join(value.ljust(widths[idx]) for idx, value in enumerate(avg_row)))
+    lines.append("  ".join(value.ljust(widths[idx]) for idx, value in enumerate(med_row)))
     lines.append("")
     lines.append(summary_text(entries))
     return "\n".join(lines)
@@ -360,6 +439,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         description="Build/run EFTSanitizer PolyBench benchmarks and report JSON errors."
     )
     parser.add_argument(
+        "precision",
+        nargs="?",
+        choices=("fp32", "fp64"),
+        default="fp32",
+        help="Benchmark precision mode. Defaults to fp32; fp64 selects only *_fp64 directories.",
+    )
+    parser.add_argument(
         "--root",
         default=str(SCRIPT_DIR / DEFAULT_ROOT),
         help="EFTSan PolyBench root.",
@@ -392,11 +478,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "--include-missing-run-sh",
         action="store_true",
         help="Include benchmark directories without run.sh as NO_RUN_SH rows.",
-    )
-    parser.add_argument(
-        "--include-fp64",
-        action="store_true",
-        help="Include *_fp64 benchmark directories. Defaults to FP32 directories only.",
     )
     parser.add_argument(
         "--stop-on-failure",
@@ -452,7 +533,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         discover_benchmark_dirs(
             benchmarks_root,
             args.include_missing_run_sh,
-            args.include_fp64,
+            args.precision,
         ),
         args.benchmark,
     )

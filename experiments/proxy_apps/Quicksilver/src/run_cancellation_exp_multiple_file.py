@@ -17,7 +17,7 @@ SOURCE_NAMES = [
     "DirectionCosine.cc",
     "CycleTracking.cc",
 ]
-RUN_SCRIPT = "./run_new.sh"
+RUN_SCRIPT = "./run.sh"
 RUN_TIMEOUT_SECONDS = int(os.environ.get("QS_CANCELLATION_TIMEOUT", "120"))
 INSTALL_BIN_CANDIDATES = [
     pathlib.Path(os.environ["FPCHECKER_INSTALL_BIN"])

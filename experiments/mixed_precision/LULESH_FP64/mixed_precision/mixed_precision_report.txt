@@ -1,0 +1,39 @@
+FP64 mixed_precision coherent-temporary report
+
+Source report:
+../before/report.txt
+
+Configuration:
+The base simulation state remains double in MIXED mode:
+- Real_t is double.
+- mixedprecision_t is float.
+
+The following coherent hot-kernel working sets use mixedprecision_t in MIXED:
+- Hourglass-control temporary arrays and force-local calculations:
+  dvdx/dvdy/dvdz, x8n/y8n/z8n, gamma, hourgam, nodal velocity scratch,
+  hgfx/hgfy/hgfz, coefficient, and threaded force scratch.
+- Monotonic-Q region local limiter calculations:
+  norm, delvm/delvp, phixi/phieta/phizeta, delvxxi/delvxeta/delvxzeta,
+  rho, qlin, and qquad.
+- Time-constraint local calculations:
+  dtcourant_tmp, qqc2, ss, vdov, arealg, dtf, dthydro_tmp, and dtdvov.
+
+Run command:
+./compare_precision.sh
+
+Run input:
+-s 100 -i 20
+
+Results:
+Config   Elapsed(s)   FOM            Speedup        FasterVsFP64     Final Energy Relative Error  MaxAbsDiff
+------   ----------   ---            -------        ------------     ---------------------------  ----------
+SINGLE   11.7942      1695.7486      1.442068x      +44.21%          1.414294807076e-07           1.87500000000000000e-01
+MIXED    13.5373      1477.3947      1.256380x      +25.64%          8.630799090709e-09           1.77874689921736717e-01
+DOUBLE   17.008       1175.9143      1.000000x      +0.00%           0.000000000000e+00           3.72529029846191406e-09
+
+Interpretation:
+This coherent-temporary mixed configuration is materially faster than double,
+unlike isolated scalar demotions. The final energy relative error remains much
+smaller than full SINGLE, but MaxAbsDiff is close to SINGLE, so this
+configuration should be treated as a performance-oriented candidate that needs
+an application-level accuracy threshold.
