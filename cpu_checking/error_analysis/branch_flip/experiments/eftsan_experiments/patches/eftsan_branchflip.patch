@@ -1,0 +1,406 @@
+diff --git a/llvm_pass/EFTSan/EFTSanitizer.cpp b/llvm_pass/EFTSan/EFTSanitizer.cpp
+index 32a081d..d553607 100644
+--- a/llvm_pass/EFTSan/EFTSanitizer.cpp
++++ b/llvm_pass/EFTSan/EFTSanitizer.cpp
+@@ -1285,9 +1285,9 @@ EFTSanitizer::handleError2 (InvokeInst *CI,
+       bool res = handleOperand(F, OpIns, Op[i], &OpIdx, nullptr);
+       if(!res){
+         errs()<<"\nError !!! metadata not found for operand:\n";
+-        Op[i]->dump();
++        Op[i]->print(llvm::errs());
+         errs()<<"In Inst:"<<"\n";
+-        I->dump();
++        I->print(llvm::errs());
+         exit(1);
+       }
+       Constant* ArgNo = ConstantInt::get(Type::getInt64Ty(M->getContext()), i+1);
+@@ -1325,9 +1325,9 @@ EFTSanitizer::handleError (CallInst *CI,
+       bool res = handleOperand(F, OpIns, Op[i], &OpIdx, nullptr);
+       if(!res){
+         errs()<<"\nError !!! metadata not found for operand:\n";
+-        Op[i]->dump();
++        Op[i]->print(llvm::errs());
+         errs()<<"In Inst:"<<"\n";
+-        I->dump();
++        I->print(llvm::errs());
+         exit(1);
+       }
+       Constant* ArgNo = ConstantInt::get(Type::getInt64Ty(M->getContext()), i+1);
+@@ -1408,9 +1408,9 @@ EFTSanitizer::handleInvokeInst (InvokeInst *CI,
+       bool res = handleOperand(F, I, Op[i], &OpIdx, nullptr);
+       if(!res){
+         errs()<<"\nError !!! metadata not found for operand:\n";
+-        Op[i]->dump();
++        Op[i]->print(llvm::errs());
+         errs()<<"In Inst:"<<"\n";
+-        I->dump();
++        I->print(llvm::errs());
+         exit(1);
+       }
+       Constant* ArgNo = ConstantInt::get(Type::getInt64Ty(M->getContext()), i);
+@@ -1500,9 +1500,9 @@ EFTSanitizer::handleCallInst (CallInst *CI,
+       bool res = handleOperand(F, I, Op[i], &OpIdx, nullptr);
+       if(!res){
+         errs()<<"\nError !!! metadata not found for operand:\n";
+-        Op[i]->dump();
++        Op[i]->print(llvm::errs());
+         errs()<<"In Inst:"<<"\n";
+-        I->dump();
++        I->print(llvm::errs());
+         exit(1);
+       }
+       Constant* ArgNo = ConstantInt::get(Type::getInt64Ty(M->getContext()), i);
+@@ -1794,9 +1794,9 @@ EFTSanitizer::handleMathLibFunc (CallInst *CI,
+       bool res = handleOperand(F, CI, Op[i], &ConsIdx[i], nullptr);
+       if(!res){
+         errs()<<"\nError !!! metadata not found for operand:\n";
+-        Op[i]->dump();
++        Op[i]->print(llvm::errs());
+         errs()<<"In Inst:"<<"\n";
+-        I->dump();
++        I->print(llvm::errs());
+         exit(1);
+       }
+ 
+@@ -2697,9 +2697,9 @@ void EFTSanitizer::handleNewPhi(Function *F){
+         bool res = handlePhiOperand(IncValue, &InsIndex, nullptr);
+         if(!res){
+           errs()<<"handleNewPhi:Error !!! metadata not found for operand:\n";
+-          IncValue->dump();
++          IncValue->print(llvm::errs());
+           errs()<<"In Inst:"<<"\n";
+-          it->first->dump();
++          it->first->print(llvm::errs());
+           exit(1);
+         }
+         
+@@ -2787,17 +2787,17 @@ void EFTSanitizer::handleSelect(SelectInst *SI, BasicBlock *BB, Function *F){
+   bool res1 = handleOperand(F, SI, SI->getOperand(1), &InsIndex2, nullptr);
+   if(!res1){
+     errs()<<"\nhandleSelect: Error !!! metadata not found for op:"<<"\n";
+-    SI->getOperand(1)->dump();
++    SI->getOperand(1)->print(llvm::errs());
+     errs()<<"In Inst:"<<"\n";
+-    I->dump();
++    I->print(llvm::errs());
+     exit(1);
+   }
+   bool res2 = handleOperand(F, SI, SI->getOperand(2), &InsIndex3, nullptr);
+   if(!res2){
+     errs()<<"\nhandleSelect: Error !!! metadata not found for op:"<<"\n";
+-    SI->getOperand(1)->dump();
++    SI->getOperand(1)->print(llvm::errs());
+     errs()<<"In Inst:"<<"\n";
+-    I->dump();
++    I->print(llvm::errs());
+     exit(1);
+   }
+ 
+@@ -2841,9 +2841,9 @@ void EFTSanitizer::handleReturn(ReturnInst *RI, BasicBlock *BB, Function *F){
+       bool res = handleOperand(F, RI, OP, &OpIdx, nullptr);
+       if(!res){
+         errs()<<"\nhandleReturn: Error !!! metadata not found for op:"<<"\n";
+-        OP->dump();
++        OP->print(llvm::errs());
+         errs()<<"In Inst:"<<"\n";
+-        OP->dump();
++        OP->print(llvm::errs());
+         exit(1);
+       }
+       long TotalArgs = FuncTotalArg.at(F);
+@@ -2872,9 +2872,9 @@ void EFTSanitizer::handleReturn(ReturnInst *RI, BasicBlock *BB, Function *F){
+       bool res1 = handleOperand(F, RI, V1, &OpIdx, nullptr);
+       if(!res1){
+         errs()<<"\nhandleReturn: Error !!! metadata not found for op:"<<"\n";
+-        OP->dump();
++        OP->print(llvm::errs());
+         errs()<<"In Inst:"<<"\n";
+-        OP->dump();
++        OP->print(llvm::errs());
+         exit(1);
+       }
+       Value *StackTop = IRB.CreateLoad(IRB.getInt64Ty(), MStackTop, "my_load_stack_top");  
+@@ -2887,9 +2887,9 @@ void EFTSanitizer::handleReturn(ReturnInst *RI, BasicBlock *BB, Function *F){
+       bool res2 = handleOperand(F, RI, V2, &OpIdx, nullptr);
+       if(!res2){
+         errs()<<"\nhandleReturn: Error !!! metadata not found for op:"<<"\n";
+-        OP->dump();
++        OP->print(llvm::errs());
+         errs()<<"In Inst:"<<"\n";
+-        OP->dump();
++        OP->print(llvm::errs());
+         exit(1);
+       }
+ 
+@@ -2982,18 +2982,18 @@ void EFTSanitizer::handleBinOpVec(BinaryOperator* BO, BasicBlock *BB, Function *
+   bool res1 = handleOperand(F, BO, BO->getOperand(0), &InsIndex11, &InsIndex12);
+   if(!res1){
+     errs()<<"handleBinOp: Error !!! metadata not found for op:"<<"\n";
+-    BO->getOperand(0)->dump();
++    BO->getOperand(0)->print(llvm::errs());
+     errs()<<"In Inst:"<<"\n";
+-    I->dump();
++    I->print(llvm::errs());
+     exit(1);
+   }
+ 
+   bool res2 = handleOperand(F, BO, BO->getOperand(1), &InsIndex21, &InsIndex22);
+   if(!res2){
+     errs()<<"handleBinOp: Error !!! metadata not found for op:"<<"\n";
+-    BO->getOperand(1)->dump();
++    BO->getOperand(1)->print(llvm::errs());
+     errs()<<"In Inst:"<<"\n";
+-    I->dump();
++    I->print(llvm::errs());
+     exit(1);
+   }
+   Type* BOType = BO->getOperand(0)->getType();
+@@ -3081,18 +3081,18 @@ void EFTSanitizer::handleBinOp(BinaryOperator* BO, BasicBlock *BB, Function *F){
+   bool res1 = handleOperand(F, BO, BO->getOperand(0), &InsIndex1, nullptr);
+   if(!res1){
+     errs()<<"handleBinOp: Error !!! metadata not found for op:"<<"\n";
+-    BO->getOperand(0)->dump();
++    BO->getOperand(0)->print(llvm::errs());
+     errs()<<"In Inst:"<<"\n";
+-    I->dump();
++    I->print(llvm::errs());
+     exit(1);
+   }
+ 
+   bool res2 = handleOperand(F, BO, BO->getOperand(1), &InsIndex2, nullptr);
+   if(!res2){
+     errs()<<"handleBinOp: Error !!! metadata not found for op:"<<"\n";
+-    BO->getOperand(1)->dump();
++    BO->getOperand(1)->print(llvm::errs());
+     errs()<<"In Inst:"<<"\n";
+-    I->dump();
++    I->print(llvm::errs());
+     exit(1);
+   }
+   Type* BOType = BO->getOperand(0)->getType();
+@@ -4200,9 +4200,9 @@ void EFTSanitizer::handleFPTrunc(FPTruncInst *FPT, BasicBlock *BB, Function *F){
+   bool res1 = handleOperand(F, FPT, FPT->getOperand(0), &InsIndex1, nullptr);
+   if(!res1){
+     errs()<<"handleFPTrunc: Error !!! metadata not found for op:"<<"\n";
+-    FPT->getOperand(0)->dump();
++    FPT->getOperand(0)->print(llvm::errs());
+     errs()<<"In Inst:"<<"\n";
+-    I->dump();
++    I->print(llvm::errs());
+     exit(1);
+   }
+   Type* VoidTy = Type::getVoidTy(M->getContext());
+@@ -4221,9 +4221,9 @@ void EFTSanitizer::handleFPToUI(FPToUIInst *FI, BasicBlock *BB, Function *F){
+   bool res1 = handleOperand(F, FI, FI->getOperand(0), &InsIndex1, nullptr);
+   if(!res1){
+     errs()<<"handleFPToUI: Error !!! metadata not found for op:"<<"\n";
+-    FI->getOperand(0)->dump();
++    FI->getOperand(0)->print(llvm::errs());
+     errs()<<"In Inst:"<<"\n";
+-    I->dump();
++    I->print(llvm::errs());
+     exit(1);
+   }
+   Type* FCIOpType = FI->getOperand(0)->getType();
+@@ -4263,9 +4263,9 @@ void EFTSanitizer::handleFPToSI(FPToSIInst *FI, BasicBlock *BB, Function *F){
+   bool res1 = handleOperand(F, FI, FI->getOperand(0), &InsIndex1, nullptr);
+   if(!res1){
+     errs()<<"handleFPToSI: Error !!! metadata not found for op:"<<"\n";
+-    FI->getOperand(0)->dump();
++    FI->getOperand(0)->print(llvm::errs());
+     errs()<<"In Inst:"<<"\n";
+-    I->dump();
++    I->print(llvm::errs());
+     exit(1);
+   }
+   Type* FCIOpType = FI->getOperand(0)->getType();
+@@ -4311,17 +4311,17 @@ void EFTSanitizer::handleFcmp(FCmpInst *FCI, BasicBlock *BB, Function *F){
+   bool res1 = handleOperand(F, FCI, Op1, &InsIndex1, nullptr);
+   if(!res1){
+     errs()<<"handleFcmp: Error !!! metadata not found for op:"<<"\n";
+-    FCI->getOperand(0)->dump();
++    FCI->getOperand(0)->print(llvm::errs());
+     errs()<<"In Inst:"<<"\n";
+-    I->dump();
++    I->print(llvm::errs());
+     exit(1);
+   }
+   bool res2 = handleOperand(F, FCI, Op2, &InsIndex2, nullptr);
+   if(!res2){
+     errs()<<"handleFcmp: Error !!! metadata not found for op:"<<"\n";
+-    FCI->getOperand(1)->dump();
++    FCI->getOperand(1)->print(llvm::errs());
+     errs()<<"In Inst:"<<"\n";
+-    I->dump();
++    I->print(llvm::errs());
+     exit(1);
+   }
+   Type* FCIOpType = FCI->getOperand(0)->getType();
+@@ -4345,46 +4345,55 @@ void EFTSanitizer::handleFcmp(FCmpInst *FCI, BasicBlock *BB, Function *F){
+   ConstantInt* debugInfoAvailable = ConstantInt::get(Int1Ty, debugInfoAvail);
+   ConstantInt* lineNumber = ConstantInt::get(Int32Ty, lineNum);
+   ConstantInt* colNumber = ConstantInt::get(Int32Ty, colNum);
++  uint64_t fileHash = 0;
++  if (instDebugLoc) {
++    StringRef fn = instDebugLoc->getScope()->getFilename();
++    size_t slash = fn.rfind('/');
++    StringRef base = (slash == StringRef::npos) ? fn : fn.substr(slash + 1);
++    fileHash = 14695981039346656037ULL;
++    for (char c : base) { fileHash ^= (uint64_t)(unsigned char)c; fileHash *= 1099511628211ULL; }
++  }
++  Constant* fileId = ConstantInt::get(Int64Ty, fileHash);
+ 
+   Constant* OpCode = ConstantInt::get(Type::getInt64Ty(M->getContext()), FCI->getPredicate());
+   if(isFloat(FCIOpType)){
+     if(isa<ConstantFP>(Op1) && !isa<ConstantFP>(Op2)){
+       CheckBranch = M->getOrInsertFunction("eftsan_check_branch_f1", Int1Ty, FCIOpType, FCIOpType, 
+-          MPtrTy, Int64Ty, Int1Ty, Int32Ty);
++          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int64Ty);
+       IRB.CreateCall(CheckBranch, {FCI->getOperand(0), FCI->getOperand(1), InsIndex2, 
+-          OpCode, I, lineNumber});
++          OpCode, I, lineNumber, fileId});
+     }
+     else if(!isa<ConstantFP>(Op1) && isa<ConstantFP>(Op2)){
+       CheckBranch = M->getOrInsertFunction("eftsan_check_branch_f2", Int1Ty, FCIOpType, MPtrTy, FCIOpType, 
+-          Int64Ty, Int1Ty, Int32Ty);
++          Int64Ty, Int1Ty, Int32Ty, Int64Ty);
+       IRB.CreateCall(CheckBranch, {FCI->getOperand(0), InsIndex1, FCI->getOperand(1), 
+-          OpCode, I, lineNumber});
++          OpCode, I, lineNumber, fileId});
+     }
+     else{
+       CheckBranch = M->getOrInsertFunction("eftsan_check_branch_f", Int1Ty, FCIOpType, MPtrTy, FCIOpType, 
+-          MPtrTy, Int64Ty, Int1Ty, Int32Ty);
++          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int64Ty);
+       IRB.CreateCall(CheckBranch, {FCI->getOperand(0), InsIndex1, FCI->getOperand(1), InsIndex2, 
+-          OpCode, I, lineNumber});
++          OpCode, I, lineNumber, fileId});
+     }
+   }
+   else if(isDouble(FCIOpType)){
+     if(isa<ConstantFP>(Op1) && !isa<ConstantFP>(Op2)){
+       CheckBranch = M->getOrInsertFunction("eftsan_check_branch_d1", Int1Ty, FCIOpType, FCIOpType, 
+-          MPtrTy, Int64Ty, Int1Ty, Int32Ty);
++          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int64Ty);
+       IRB.CreateCall(CheckBranch, {FCI->getOperand(0), FCI->getOperand(1), InsIndex2, 
+-          OpCode, I, lineNumber});
++          OpCode, I, lineNumber, fileId});
+     }
+     else if(!isa<ConstantFP>(Op1) && isa<ConstantFP>(Op2)){
+       CheckBranch = M->getOrInsertFunction("eftsan_check_branch_d2", Int1Ty, FCIOpType, MPtrTy, FCIOpType, 
+-          Int64Ty, Int1Ty, Int32Ty);
++          Int64Ty, Int1Ty, Int32Ty, Int64Ty);
+       IRB.CreateCall(CheckBranch, {FCI->getOperand(0), InsIndex1, FCI->getOperand(1), 
+-          OpCode, I, lineNumber});
++          OpCode, I, lineNumber, fileId});
+     }
+     else{
+       CheckBranch = M->getOrInsertFunction("eftsan_check_branch_d", Int1Ty, FCIOpType, MPtrTy, FCIOpType, 
+-          MPtrTy, Int64Ty, Int1Ty, Int32Ty);
++          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int64Ty);
+       IRB.CreateCall(CheckBranch, {FCI->getOperand(0), InsIndex1, FCI->getOperand(1), InsIndex2, 
+-          OpCode, I, lineNumber});
++          OpCode, I, lineNumber, fileId});
+     }
+   }
+ }
+diff --git a/runtime/handleReal.cpp b/runtime/handleReal.cpp
+index 0722fb9..3ce4ae7 100644
+--- a/runtime/handleReal.cpp
++++ b/runtime/handleReal.cpp
+@@ -232,12 +232,13 @@ extern "C" void eftsan_check_conv_ui(size_t val, smem_entry*res){
+ extern "C" bool eftsan_check_branch_f1(float op1d,
+ 				     float op2d, smem_entry* op2,
+ 				     size_t fcmpFlag, bool computedRes,
+-				     size_t lineNo){
++				     size_t lineNo, size_t fileId){
+ 
+   bool realRes = m_check_branch(op1d, 
+                     op2d + op2->error, fcmpFlag);
+   if(realRes != computedRes){
+     flipsCount++;
++    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
+ #if STATIC
+     m_bf_map[op2->lineno]++;
+ #endif
+@@ -248,12 +249,13 @@ extern "C" bool eftsan_check_branch_f1(float op1d,
+ extern "C" bool eftsan_check_branch_f2(float op1d, smem_entry* op1,
+ 				     float op2d, 
+ 				     size_t fcmpFlag, bool computedRes,
+-				     size_t lineNo){
++				     size_t lineNo, size_t fileId){
+ 
+   bool realRes = m_check_branch(op1d + op1->error, 
+                     op2d, fcmpFlag);
+   if(realRes != computedRes){
+     flipsCount++;
++    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
+ #if STATIC
+     m_bf_map[op1->lineno]++;
+ #endif
+@@ -264,12 +266,13 @@ extern "C" bool eftsan_check_branch_f2(float op1d, smem_entry* op1,
+ extern "C" bool eftsan_check_branch_f(float op1d, smem_entry* op1,
+ 				     float op2d, smem_entry* op2,
+ 				     size_t fcmpFlag, bool computedRes,
+-				     size_t lineNo){
++				     size_t lineNo, size_t fileId){
+ 
+   bool realRes = m_check_branch(op1d + op1->error, 
+                     op2d + op2->error, fcmpFlag);
+   if(realRes != computedRes){
+     flipsCount++;
++    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
+ #if STATIC
+     m_bf_map[op1->lineno]++;
+ #endif
+@@ -280,7 +283,7 @@ extern "C" bool eftsan_check_branch_f(float op1d, smem_entry* op1,
+ extern "C" bool eftsan_check_branch_d1(double op1d,
+ 				     double op2d, smem_entry* op2,
+ 				     size_t fcmpFlag, bool computedRes,
+-				     size_t lineNo){
++				     size_t lineNo, size_t fileId){
+ 
+   double op1Total = op1d;
+   double op2Total = op2d + op2->error;
+@@ -289,6 +292,7 @@ extern "C" bool eftsan_check_branch_d1(double op1d,
+                     op2Total, fcmpFlag);
+   if(realRes != computedRes){
+     flipsCount++;
++    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
+ #if STATIC
+     m_bf_map[op2->lineno]++;
+ #endif
+@@ -299,7 +303,7 @@ extern "C" bool eftsan_check_branch_d1(double op1d,
+ extern "C" bool eftsan_check_branch_d2(double op1d, smem_entry* op1,
+ 				     double op2d,
+ 				     size_t fcmpFlag, bool computedRes,
+-				     size_t lineNo){
++				     size_t lineNo, size_t fileId){
+ 
+   double op1Total = op1d + op1->error;
+   double op2Total = op2d;
+@@ -308,6 +312,7 @@ extern "C" bool eftsan_check_branch_d2(double op1d, smem_entry* op1,
+                     op2Total, fcmpFlag);
+   if(realRes != computedRes){
+     flipsCount++;
++    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
+ #if STATIC
+     m_bf_map[op1->lineno]++;
+ #endif
+@@ -318,7 +323,7 @@ extern "C" bool eftsan_check_branch_d2(double op1d, smem_entry* op1,
+ extern "C" bool eftsan_check_branch_d(double op1d, smem_entry* op1,
+ 				     double op2d, smem_entry* op2,
+ 				     size_t fcmpFlag, bool computedRes,
+-				     size_t lineNo){
++				     size_t lineNo, size_t fileId){
+ 
+   double op1Total = op1d + op1->error;
+   double op2Total = op2d + op2->error;
+@@ -327,6 +332,7 @@ extern "C" bool eftsan_check_branch_d(double op1d, smem_entry* op1,
+                     op2Total, fcmpFlag);
+   if(realRes != computedRes){
+     flipsCount++;
++    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
+ #if STATIC
+     m_bf_map[op1->lineno]++;
+ #endif
