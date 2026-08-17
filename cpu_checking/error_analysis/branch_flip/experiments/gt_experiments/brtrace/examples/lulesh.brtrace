@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# lulesh.brtrace - benchmark config for LULESH. Lives WITH the benchmark.
+# The brtrace tool itself knows nothing about LULESH; this file supplies the
+# LULESH-specific build/run recipe and calls the generic runner.
+#
+# Usage:  BRX=/path/to/brtrace  ./lulesh.brtrace  [size]
+set -euo pipefail
+: "${BRX:?set BRX to the brtrace tool dir}"
+SIZE="${1:-10}"
+HERE="$(cd "$(dirname "$0")" && pwd)"   # the lulesh dir (has fp32/ fp64/)
+
+SRCS="lulesh.cc lulesh-comm.cc lulesh-init.cc lulesh-util.cc lulesh-viz.cc"
+CXXFLAGS="-DUSE_MPI=0 -I."
+
+"$BRX/brtrace_run.sh" \
+  --brx "$BRX" --cc clang++ --out "$HERE" --label lulesh --mods "$HERE/fp64" \
+  --fp32-build "cd '$HERE/fp32' && clang++ \$BRX_CFLAGS $CXXFLAGS $SRCS \$BRX_RT -lm -o lulesh.brx" \
+  --fp64-build "cd '$HERE/fp64' && clang++ \$BRX_CFLAGS $CXXFLAGS $SRCS \$BRX_RT -lm -o lulesh.brx" \
+  --fp32-run   "cd '$HERE/fp32' && OMP_NUM_THREADS=1 ./lulesh.brx -s $SIZE" \
+  --fp64-run   "cd '$HERE/fp64' && OMP_NUM_THREADS=1 ./lulesh.brx -s $SIZE"

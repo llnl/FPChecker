@@ -1,0 +1,72 @@
+Makefile:46: warning: ignoring prerequisites on suffix rule definition
+Makefile:46: warning: ignoring prerequisites on suffix rule definition
+Makefile:46: warning: ignoring prerequisites on suffix rule definition
+Makefile:46: warning: ignoring prerequisites on suffix rule definition
+Building lulesh.cc
+clang++ -DUSE_MPI=0  -c -g -O0 -I. -std=c++11 -Wall -o lulesh.o  lulesh.cc
+Building lulesh-comm.cc
+Building lulesh-viz.cc
+clang++ -DUSE_MPI=0  -c -g -O0 -I. -std=c++11 -Wall -o lulesh-comm.o  lulesh-comm.cc
+Building lulesh-util.cc
+clang++ -DUSE_MPI=0  -c -g -O0 -I. -std=c++11 -Wall -o lulesh-viz.o  lulesh-viz.cc
+Building lulesh-init.cc
+clang++ -DUSE_MPI=0  -c -g -O0 -I. -std=c++11 -Wall -o lulesh-util.o  lulesh-util.cc
+clang++ -DUSE_MPI=0  -c -g -O0 -I. -std=c++11 -Wall -o lulesh-init.o  lulesh-init.cc
+lulesh-init.cc:38:4: warning: initializer order does not match the declaration order [-Wreorder-ctor]
+   20 |    m_v_cut(Real_t(1.0e-10)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~~~
+      |    m_e_cut(Real_t(1.0e-7))
+   21 |    m_u_cut(Real_t(1.0e-7)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~~
+      |    m_p_cut(Real_t(1.0e-7))
+   22 |    m_hgcoef(Real_t(3.0)),
+      |    ~~~~~~~~~~~~~~~~~~~~~
+      |    m_q_cut(Real_t(1.0e-7))
+   23 |    m_ss4o3(Real_t(4.0)/Real_t(3.0)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |    m_v_cut(Real_t(1.0e-10))
+   24 |    m_qstop(Real_t(1.0e+12)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~~~
+      |    m_u_cut(Real_t(1.0e-7))
+   25 |    m_monoq_max_slope(Real_t(1.0)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |    m_hgcoef(Real_t(3.0))
+   26 |    m_monoq_limiter_mult(Real_t(2.0)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |    m_ss4o3(Real_t(4.0)/Real_t(3.0))
+   27 |    m_qlc_monoq(Real_t(0.5)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~~~
+      |    m_qstop(Real_t(1.0e+12))
+   28 |    m_qqc_monoq(Real_t(2.0)/Real_t(3.0)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |    m_monoq_max_slope(Real_t(1.0))
+   29 |    m_qqc(Real_t(2.0)),
+      |    ~~~~~~~~~~~~~~~~~~
+      |    m_monoq_limiter_mult(Real_t(2.0))
+   30 |    m_eosvmax(Real_t(1.0e+9)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~~~~
+      |    m_qlc_monoq(Real_t(0.5))
+   31 |    m_eosvmin(Real_t(1.0e-9)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~~~~
+      |    m_qqc_monoq(Real_t(2.0)/Real_t(3.0))
+   32 |    m_pmin(Real_t(0.)),
+      |    ~~~~~~~~~~~~~~~~~~
+      |    m_qqc(Real_t(2.0))
+   33 |    m_emin(Real_t(-1.0e+15)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~~~
+      |    m_eosvmax(Real_t(1.0e+9))
+   34 |    m_dvovmax(Real_t(0.1)),
+      |    ~~~~~~~~~~~~~~~~~~~~~~
+      |    m_eosvmin(Real_t(1.0e-9))
+   35 |    m_refdens(Real_t(1.0)),
+      |    ^~~~~~~~~~~~~~~~~~~~~~
+      |    m_pmin(Real_t(0.))
+lulesh-init.cc:38:4: note: field 'm_refdens' will be initialized after field 'm_regNumList'
+   38 |    m_refdens(Real_t(1.0)),
+      |    ^~~~~~~~~~~~~~~~~~~~~~
+lulesh-init.cc:45:4: note: field 'm_nodeElemCornerList' will be initialized after field 'm_regElemSize'
+   45 |    m_nodeElemCornerList(0),
+      |    ^~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+Linking
+clang++ -DUSE_MPI=0  lulesh.o lulesh-comm.o lulesh-viz.o lulesh-util.o lulesh-init.o -g -O0 -lm -o lulesh2.0

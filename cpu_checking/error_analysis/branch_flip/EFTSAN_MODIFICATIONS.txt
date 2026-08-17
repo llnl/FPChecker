@@ -1,0 +1,465 @@
+================================================================================
+EFTSANITIZER MODIFICATIONS
+Branch-flip detection study -- LULESH / AMG / QuickSilver / NAS
+Author: das9      Date: 2026-08-12      System: Tioga (tioga10)
+Install: /usr/workspace/das9/EFTSanitizer      Env: eftsan_env (LLVM 10)
+================================================================================
+
+This file records every change made to the EFTSanitizer installation, why it
+was made, and how to verify or revert it.  Two changes are described:
+
+  MOD 1  runtime flip print                      (made 2026-07, prior session)
+  MOD 2  file identifier on the flip print       (made 2026-08-12, this session)
+
+A third section records a CONFIGURATION change that is not a source edit but
+is required for correct results:
+
+  CFG 1  mathFunc.txt per benchmark build directory
+
+================================================================================
+MOD 1 -- RUNTIME FLIP PRINT
+================================================================================
+
+STATUS   In place since July 2026.  Documented here for completeness.
+
+FILE     runtime/handleReal.cpp
+BACKUP   runtime/handleReal.cpp.bak-fliploc
+
+WHAT     Stock EFTSan increments an internal counter (flipsCount) when a
+         branch flip is detected but prints nothing per-event.  A line was
+         added after each `flipsCount++` in the six branch hooks:
+
+             fprintf(stderr, "branch flip @ line %zu\n", lineNo);
+
+WHY      Adjudication against the brtrace census requires per-site flip
+         attribution.  An aggregate count cannot be scored as TP/FP/FN.
+
+AFFECTED FUNCTIONS (all six)
+         eftsan_check_branch_f1   eftsan_check_branch_d1
+         eftsan_check_branch_f2   eftsan_check_branch_d2
+         eftsan_check_branch_f    eftsan_check_branch_d
+
+================================================================================
+MOD 2 -- FILE IDENTIFIER ON THE FLIP PRINT
+================================================================================
+
+STATUS   Made 2026-08-12.  Pass and runtime both rebuilt and verified.
+
+PROBLEM
+    MOD 1 prints a bare line number with no filename.  In a multi-TU build
+    two source files can both have an instrumented FP branch on the same
+    line number, making the flip report unattributable.  Observed cases:
+
+        AMG    line 717   gmres.c  vs  par_relax.c    (45 events)
+        AMG    line 841   gmres.c  vs  par_interp.c   (39 events)
+        LULESH line 210   lulesh.cc vs lulesh-util.cc ( 4 events)
+
+    88 events total, ~0.5% of the suite.  NAS was unaffected (single-TU
+    builds for BT/CG/LU/SP/MG; no collisions in EP/IS).
+
+    The information needed to disambiguate was already present in the pass
+    and being discarded: handleFcmp reads I->getDebugLoc() to extract the
+    line and column, and the same DebugLoc yields the filename via
+    getScope()->getFilename().
+
+SOLUTION
+    Emit an FNV-1a 64-bit hash of the source file BASENAME alongside the
+    line number.  A hash rather than a string pointer because:
+      - no per-site global string constants in the IR
+      - the ABI change is one size_t, matching the existing lineNo
+      - it matches brtrace's module-ID convention (same FNV-1a over
+        basename), so the two side tables join directly
+
+    The harness recovers the filename by hashing each basename it already
+    resolves from the module's debug info and matching on the hash.
+
+--------------------------------------------------------------------------------
+MOD 2a -- PASS
+--------------------------------------------------------------------------------
+
+FILE     llvm_pass/EFTSan/EFTSanitizer.cpp
+BACKUP   llvm_pass/EFTSan/EFTSanitizer.cpp.bak-fileid
+FUNCTION EFTSanitizer::handleFcmp
+
+CHANGE 1 -- inserted immediately after the existing colNumber line
+           (originally line 4347; the block occupies 4348-4356)
+
+    ConstantInt* colNumber = ConstantInt::get(Int32Ty, colNum);      <-- existing
++   uint64_t fileHash = 0;
++   if (instDebugLoc) {
++     StringRef fn = instDebugLoc->getScope()->getFilename();
++     size_t slash = fn.rfind('/');
++     StringRef base = (slash == StringRef::npos) ? fn : fn.substr(slash + 1);
++     fileHash = 14695981039346656037ULL;
++     for (char c : base) { fileHash ^= (uint64_t)(unsigned char)c; fileHash *= 1099511628211ULL; }
++   }
++   Constant* fileId = ConstantInt::get(Int64Ty, fileHash);
+
+    NOTE  fileId must be declared `Constant*`, not `ConstantInt*`.  Int64Ty
+          in this scope is `Type*`, so ConstantInt::get selects the overload
+          returning Constant*.  The adjacent OpCode declaration does the
+          same thing.  Declaring it ConstantInt* is a compile error:
+            "cannot initialize a variable of type 'llvm::ConstantInt *'
+             with an rvalue of type 'llvm::Constant *'"
+
+CHANGE 2 -- six getOrInsertFunction signatures, append Int64Ty
+
+    -   ... MPtrTy, Int64Ty, Int1Ty, Int32Ty);
+    +   ... MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int64Ty);
+
+    Applied to all six: eftsan_check_branch_{f1,f2,f,d1,d2,d}
+
+CHANGE 3 -- six CreateCall argument lists, append fileId
+
+    -   ... OpCode, I, lineNumber});
+    +   ... OpCode, I, lineNumber, fileId});
+
+APPLIED VIA
+    sed -i '4347r /tmp/fileid_block.txt' EFTSanitizer.cpp
+    sed -i 's/Int1Ty, Int32Ty);/Int1Ty, Int32Ty, Int64Ty);/; \
+            s/OpCode, I, lineNumber});/OpCode, I, lineNumber, fileId});/' \
+           EFTSanitizer.cpp
+    sed -i '4356s/ConstantInt\* fileId/Constant* fileId/' EFTSanitizer.cpp
+
+    Both substitution patterns were verified to occur exactly 6 times and
+    only inside handleFcmp before being applied.  Note the string
+    "ConstantInt* colNumber = ConstantInt::get(Int32Ty, colNum);" occurs
+    8 times in the file (handleMathLibFunc and others), which is why the
+    insertion had to be line-anchored rather than pattern-matched.
+
+--------------------------------------------------------------------------------
+MOD 2b -- RUNTIME
+--------------------------------------------------------------------------------
+
+FILE     runtime/handleReal.cpp
+BACKUP   runtime/handleReal.cpp.bak-fileid
+
+CHANGE 1 -- six hook signatures, append the parameter
+
+    -   size_t lineNo){
+    +   size_t lineNo, size_t fileId){
+
+CHANGE 2 -- six print statements
+
+    -   fprintf(stderr, "branch flip @ line %zu\n", lineNo);
+    +   fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
+
+APPLIED VIA
+    sed -i 's/size_t lineNo){/size_t lineNo, size_t fileId){/; \
+            s/fprintf(stderr, "branch flip @ line %zu\\n", lineNo);/\
+            fprintf(stderr, "branch flip @ file %zu line %zu\\n", fileId, lineNo);/' \
+           handleReal.cpp
+
+    Both patterns verified at exactly 6 occurrences beforehand.  This
+    matters: the comment at handleReal.cpp:210 groups the branch hooks with
+    eftsan_check_conversion and eftsan_check_error.  Had those also matched
+    "size_t lineNo){" they would have gained a parameter the pass never
+    passes -- an ABI mismatch that compiles cleanly and corrupts at runtime.
+
+--------------------------------------------------------------------------------
+REBUILD
+--------------------------------------------------------------------------------
+
+    source /usr/workspace/das9/EFTSanitizer/setup_eftsan.sh
+
+    cd /usr/workspace/das9/EFTSanitizer/llvm_pass/build
+    make
+
+    cd /usr/workspace/das9/EFTSanitizer/runtime
+    rm -rf obj
+    make CXX=clang++ LINKER=clang++
+
+    The `rm -rf obj` is mandatory.  handleReal.h is not tracked as a make
+    dependency, so an incremental build silently keeps the old object.
+
+    Pass builds with 11 pre-existing warnings (unhandled switch enumerations)
+    and no errors.  Runtime builds with 11 pre-existing warnings
+    (return-type, format) and no errors.
+
+--------------------------------------------------------------------------------
+OUTPUT FORMAT
+--------------------------------------------------------------------------------
+
+    before:  branch flip @ line 3546
+    after:   branch flip @ file 12745230573499244557 line 3546
+
+--------------------------------------------------------------------------------
+VERIFICATION
+--------------------------------------------------------------------------------
+
+1.  Hash agreement between pass and harness.  Python reference:
+
+        def fnv1a(name):
+            h = 14695981039346656037
+            for c in name.encode():
+                h = ((h ^ c) * 1099511628211) & 0xFFFFFFFFFFFFFFFF
+            return h
+
+        fnv1a("lu.c") == 12745230573499244557
+
+    matches the hash observed in nas/lu/results/O0/fp64/run_O0.stderr.
+
+2.  Detection unchanged.  All 19 cells re-run after the patch reproduced
+    their pre-patch flip counts exactly:
+
+        NAS (14 cells)      identical, event for event
+        LULESH fp32          4056 @ 24        LULESH fp64  14985 @ 22
+        AMG    fp32           284 @  5        AMG    fp64    104 @  3
+        QuickSilver fp64         0 @  0       QS fp32: refused (vector bug)
+
+    The file id is passed but never read by the detection logic, so this is
+    the expected result and confirms the patch is purely additive.
+
+3.  Ambiguity eliminated.  Every cell now reports `ambiguous 0`.  The 88
+    previously-unattributable events resolved as:
+
+        gmres.c:717   27 (fp32)  18 (fp64)
+        gmres.c:841   21 (fp32)  18 (fp64)
+        lulesh.cc:210  2 (fp32)   2 (fp64)
+
+    These match the resolution independently derived by source inspection
+    before the patch was written, so the hash join is confirmed correct.
+    In-TU counts rose by exactly the formerly-ambiguous amounts (AMG fp32
+    236->284, fp64 68->104; LULESH fp32 2568->2570, fp64 13124->13126)
+    while totals were unchanged -- reattribution, not new detection.
+
+--------------------------------------------------------------------------------
+HARNESS CHANGES REQUIRED BY MOD 2
+--------------------------------------------------------------------------------
+
+Directory: branch_flip/experiments/eftsan_experiments/
+Backups:   run_*_eftsan.py.bak-fileid
+
+  run_lulesh_eftsan.py   run_amg_eftsan.py
+  run_nas_eftsan.py      run_quicksilver_eftsan.py
+
+1.  FLIP_RE now captures two groups:
+
+      - FLIP_RE = re.compile(r"branch flip @ line\s+(\d+)")
+      + FLIP_RE = re.compile(r"branch flip @ file\s+(\d+)\s+line\s+(\d+)")
+
+2.  An fnv1a() helper added beside FLIP_RE (must match the pass exactly).
+
+3.  The flip counter keys on (filehash, line) instead of line:
+
+      - lines[int(m.group(1))] += 1
+      + lines[(int(m.group(1)), int(m.group(2)))] += 1
+
+4.  The site-classification loop unpacks the tuple and filters candidates
+    by hash, falling back to the unfiltered list if nothing matches (so an
+    unexpected hash degrades to the old behaviour rather than dropping the
+    event silently):
+
+      - for ln, cnt in lines.most_common():
+      -     cands = line_map.get(ln, [])
+      + for (fhash, ln), cnt in lines.most_common():
+      +     cands = [f for f in line_map.get(ln, []) if fnv1a(f) == fhash]
+      +     if not cands:
+      +         cands = line_map.get(ln, [])
+
+5.  The unresolved_flips comprehension unpacks the tuple key.
+
+NOT changed: build_line_map still returns {line: [files]}; the hash only
+filters that list.  write_site_universe, instrumented_sites.csv and the
+per-benchmark summary CSVs keep their existing format, so adjudicate.py,
+site_table.py and event_table.py need no changes.
+
+Naming note: run_lulesh_eftsan.py uses `n` as the loop variable where the
+other three use `cnt`, so the substitutions differ slightly between files.
+
+================================================================================
+CFG 1 -- mathFunc.txt  (configuration, not a source edit)
+================================================================================
+
+WHAT IT IS
+    EFTSanitizer.cpp:4779 dispatches a call to handleMathLibFunc -- which
+    emits the MPFR shadow equivalent -- only if the callee name appears in
+    mathFunc.txt.  Matching is exact string compare, line by line
+    (isListedFunction, EFTSanitizer.cpp:57-66).  There is no built-in libm
+    table: if the file is missing, NO math call is shadowed.
+
+    Not to be confused with functions.txt, which the pass both appends to
+    (line 47, ios::app) and reads as the instrument-list (line 4882).  That
+    file is self-populating and must not be hand-maintained.
+
+THE PROBLEM FOUND
+    LULESH, AMG and QuickSilver had no mathFunc.txt at all.  Every libm
+    call in those three benchmarks was unshadowed: the real result was
+    correct but the shadow slot was never written, so downstream branch
+    comparisons were evaluated against stale or absent shadow state.
+
+    The only diagnostic is a line on opt's stderr,
+        Check this function call:  %19 = call float @sqrtf(float %15)
+    which a normal build never surfaces.  Nothing warns that the file is
+    missing, and nothing warns that a listed name never matched.
+
+    NAS did have mathFunc.txt files, but their fabs/fabsf entries were
+    inert: clang lowers fabs to the intrinsic llvm.fabs.f32/f64, which
+    never string-matches "fabsf".  Effective NAS coverage was sqrt/sqrtf
+    (plus log in EP) only.
+
+IMPACT (measured)
+    QuickSilver fp64   12160 flips @ 23 loc  ->      0 flips @  0 loc
+    LULESH      fp32   11936 flips @ 36 loc  ->   4056 flips @ 24 loc
+    LULESH      fp64   15419 flips @ 25 loc  ->  14985 flips @ 22 loc
+    AMG         fp32      48 flips @  1 loc  ->    284 flips @  5 loc
+    AMG         fp64      21 flips @  1 loc  ->    104 flips @  3 loc
+    NAS (all 14 cells)                          essentially unchanged
+                                                (SP fp32 506717 -> 506716;
+                                                 EP fp32 gained one site)
+
+    QuickSilver fp64 ground truth is 0 flips (brtrace fp64-vs-ld census),
+    so the corrected run is exactly right and the previous 12160 were all
+    artifacts of unshadowed math.
+
+    AMG fp32 rose because hypre's convergence tests compare a residual norm
+    -- a sqrt of a sum -- against a tolerance.  With sqrt unshadowed the
+    error was laundered away before reaching the comparison.  The GT site
+    gmres.c:573 went from undetected to detected: that cell moves from
+    TP=0/FP=1/FN=1 to TP=1/FP=4.
+
+FILES INSTALLED (in the benchmark SOURCE trees, so copytree carries them
+into the build dir on every run and they survive the harness's rmtree)
+
+    benchmarks/lulesh/lulesh_fp32/mathFunc.txt
+    benchmarks/lulesh/lulesh_fp64/mathFunc.txt
+        sqrt
+        sqrtf
+        llvm.fabs.f64
+        llvm.fabs.f32
+        cbrt
+
+    benchmarks/amg/amg_fp32/mathFunc.txt
+    benchmarks/amg/amg_fp64/mathFunc.txt
+        sqrt
+        sqrtf
+        llvm.fabs.f64
+        llvm.fabs.f32
+
+    benchmarks/quicksilver/qs_fp32/mathFunc.txt
+    benchmarks/quicksilver/qs_fp64/mathFunc.txt
+        sqrt, sqrtf, llvm.fabs.f64, llvm.fabs.f32, cbrt, log, log10, exp,
+        sin, cos, tan, asin, acos, atan, atan2, llvm.floor.f64,
+        llvm.ceil.f64
+
+    benchmarks/nas/{bt,cg,lu,mg,sp}/{...}_fp32,fp64/mathFunc.txt
+        sqrt
+        sqrtf
+        llvm.fabs.f64
+        llvm.fabs.f32
+
+    benchmarks/nas/ep/ep_fp32/mathFunc.txt
+    benchmarks/nas/ep/ep_fp64/mathFunc.txt
+        (as above, plus)  log
+
+    benchmarks/nas/is/  -- none.  Integer sort, no FP branches, no math.
+
+    Both precision spellings are listed in every file.  A name that does
+    not match anything in the module is simply inert, so this keeps the
+    fp32 and fp64 files textually identical.
+
+NAMES THAT MUST NEVER BE LISTED
+    No eftsan_mpfr_* wrapper exists for these.  getOrInsertFunction will
+    happily declare the symbol and the build fails at link:
+
+        cbrtf            (eftsan_mpfr_cbrt exists; the float form does not)
+        log10f
+        drand48
+        llvm.ceil.f32    (llvm.floor.f32 has a remap case; ceil.f32 does not)
+
+    Deliberately omitted for a different reason:
+
+        pow, powf        eftsan_mpfr_pow2 and _powf2 both exist, but a null
+                         shadow dereference at handleReal.cpp:1864
+                         (eftsan_mpfr_powf2) crashed NAS SP and EP on
+                         compile-time-constant operands.  Also omitted from
+                         the NAS reference configuration, so leaving them
+                         out keeps all ten benchmarks comparable.
+
+RESIDUAL UNSHADOWED CALLS (expected, verified in build.log)
+    LULESH fp32:  cbrtf x2, pow x1     ("Check this function call")
+    Everything else in the three new benchmarks is shadowed.
+
+HOW TO REGENERATE THE LIST FOR A NEW BENCHMARK
+    1. Build once with --no-run and grep the build log:
+         grep "Check this function call" <results>/build.log
+       This prints the literal IR callee name of every unshadowed
+       float-returning call.  Use these names, NOT the source spelling --
+       LULESH's FABS macro reaches the pass as llvm.fabs.f32, and a
+       mathFunc.txt entry of "FABS" or "fabs" would match nothing.
+    2. Intersect with the available wrappers:
+         nm -D $EFT_HOME/runtime/obj/libeftsanitizer.so | grep " T eftsan_mpfr_"
+       remembering two transforms the pass applies:
+         - hardcoded remaps, e.g. llvm.fabs.f32 -> eftsan_mpfr_llvm_fabs32
+         - "2" appended when the call has two operands, e.g. pow -> pow2
+    3. Anything with no wrapper stays out of the file.
+
+================================================================================
+EFTSAN LIMITATIONS OBSERVED (for the write-up / for Ignacio)
+================================================================================
+
+ 1. mathFunc.txt is mandatory but undocumented and silent.  A missing file
+    disables all math shadowing with no warning; the resulting false
+    positives look like genuine detections.  QuickSilver fp64 reported
+    12160 flips at 23 sites where the correct answer is zero.
+
+ 2. mathFunc.txt accepts entries that can never match.  "fabsf" and "fabs"
+    sat in five NAS configurations doing nothing, because clang emits
+    llvm.fabs.f32/f64.  A user reasonably believes fabs is tracked.
+
+ 3. The wrapper set is incomplete: no eftsan_mpfr_cbrtf, no _log10f.
+    llvm.sqrt.f32 has no remap case, so it would resolve to the symbol
+    "eftsan_mpfr_llvm.sqrt.f32" -- a name containing dots that cannot
+    exist.  Single-precision coverage is strictly worse than double, which
+    confounds any fp32-vs-fp64 comparison of the tool's own behaviour.
+
+ 4. Flip reports omitted the source filename (fixed here, MOD 2).  The pass
+    had it available in the DebugLoc and discarded it.
+
+ 5. eftsan_mpfr_powf2 dereferences a null shadow entry on compile-time
+    constant operands (handleReal.cpp:1864).  Crashes NAS SP and EP.
+
+ 6. handleLoad() calls exit(0) on vector-typed loads.  QuickSilver fp32 is
+    refused because SysV ABI coercion packs the 12-byte MC_Vector into
+    <2 x float>.  Exit status 0 makes the failure look like success.
+
+ 7. Argument-shadow corruption on large-arity functions (c_print_results,
+    ~18 args) segfaults in the EFTSan prologue.
+
+ 8. Per-TU instrumentation corrupts argument shadows at call boundaries.
+    All TUs must be llvm-link'd into one module before opt -eftsan.
+
+ 9. ERRORTHRESHOLD is a compile-time constant in runtime/handleReal.h, and
+    that header is not a make dependency -- `rm -rf obj` or edits are
+    silently ignored.  Held at 45 throughout (the correctness-suite
+    baseline value).
+
+================================================================================
+REVERTING
+================================================================================
+
+    cd /usr/workspace/das9/EFTSanitizer
+    cp llvm_pass/EFTSan/EFTSanitizer.cpp.bak-fileid llvm_pass/EFTSan/EFTSanitizer.cpp
+    cp runtime/handleReal.cpp.bak-fileid           runtime/handleReal.cpp
+    cd llvm_pass/build && make
+    cd ../../runtime && rm -rf obj && make CXX=clang++ LINKER=clang++
+
+    Harnesses:  cd branch_flip/experiments/eftsan_experiments
+                for f in run_*_eftsan.py; do cp $f.bak-fileid $f; done
+
+    handleReal.cpp.bak-fileid contains MOD 1 (the flip print) but not
+    MOD 2.  To revert MOD 1 as well, use handleReal.cpp.bak-fliploc.
+
+    Note the runtime is a shared install.  After any rebuild, re-verify the
+    correctness suite baseline:
+
+        cd $EFT_HOME/correctness_test
+        rm -rf correctness_obj
+        python3 correctness_test.py
+
+    Expected: all counts exact except "high rounding error", which sits at
+    19(unexpected) against an expected 23 -- a pre-existing toolchain
+    calibration difference, not a regression from these changes.
+    THIS HAS NOT YET BEEN RE-RUN SINCE THE MOD 2 REBUILD.
+
+================================================================================

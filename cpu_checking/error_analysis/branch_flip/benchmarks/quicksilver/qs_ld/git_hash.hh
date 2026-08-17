@@ -1,0 +1,1 @@
+#define GIT_HASH "2843af57420bb515e8f0b816226ae7f190f3ec42" 

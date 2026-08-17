@@ -1,0 +1,17 @@
+sqrt
+sqrtf
+llvm.fabs.f64
+llvm.fabs.f32
+cbrt
+log
+log10
+exp
+sin
+cos
+tan
+asin
+acos
+atan
+atan2
+llvm.floor.f64
+llvm.ceil.f64

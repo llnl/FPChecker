@@ -1,0 +1,269 @@
+# DO NOT DELETE
+
+CollisionEvent.o: CollisionEvent.hh DeclareMacro.hh QS_Precision.hh
+CollisionEvent.o: MC_Particle.hh DirectionCosine.hh portability.hh Tallies.hh
+CollisionEvent.o: QS_Vector.hh QS_atomics.hh gpuPortability.hh qs_assert.hh
+CollisionEvent.o: MemoryControl.hh NuclearData.hh MonteCarlo.hh MC_Domain.hh
+CollisionEvent.o: MC_Facet_Adjacency.hh MC_Location.hh macros.hh MC_Vector.hh
+CollisionEvent.o: MC_Cell_State.hh MC_Facet_Geometry.hh BulkStorage.hh
+CollisionEvent.o: Parameters.hh utils.hh EnergySpectrum.hh
+CollisionEvent.o: MaterialDatabase.hh MacroscopicCrossSection.hh
+CollisionEvent.o: MC_Base_Particle.hh MC_RNG_State.hh
+CollisionEvent.o: ParticleVaultContainer.hh PhysicalConstants.hh
+CoralBenchmark.o: CoralBenchmark.hh QS_Precision.hh MonteCarlo.hh
+CoralBenchmark.o: QS_Vector.hh DeclareMacro.hh QS_atomics.hh
+CoralBenchmark.o: gpuPortability.hh qs_assert.hh MemoryControl.hh
+CoralBenchmark.o: MC_Domain.hh MC_Facet_Adjacency.hh MC_Location.hh macros.hh
+CoralBenchmark.o: MC_Vector.hh MC_Cell_State.hh MC_Facet_Geometry.hh
+CoralBenchmark.o: BulkStorage.hh Parameters.hh Tallies.hh portability.hh
+CoralBenchmark.o: NuclearData.hh utils.hh EnergySpectrum.hh utilsMpi.hh
+CoralBenchmark.o: MC_Processor_Info.hh
+CycleTracking.o: CycleTracking.hh DeclareMacro.hh QS_Precision.hh
+CycleTracking.o: MonteCarlo.hh QS_Vector.hh QS_atomics.hh gpuPortability.hh
+CycleTracking.o: qs_assert.hh MemoryControl.hh MC_Domain.hh
+CycleTracking.o: MC_Facet_Adjacency.hh MC_Location.hh macros.hh MC_Vector.hh
+CycleTracking.o: MC_Cell_State.hh MC_Facet_Geometry.hh BulkStorage.hh
+CycleTracking.o: Parameters.hh ParticleVaultContainer.hh portability.hh
+CycleTracking.o: ParticleVault.hh MC_Base_Particle.hh MC_RNG_State.hh
+CycleTracking.o: MC_Particle.hh DirectionCosine.hh Tallies.hh NuclearData.hh
+CycleTracking.o: utils.hh EnergySpectrum.hh mc_omp_critical.hh
+CycleTracking.o: MC_Segment_Outcome.hh CollisionEvent.hh
+CycleTracking.o: MC_Facet_Crossing_Event.hh MCT.hh
+DecompositionObject.o: DecompositionObject.hh qs_assert.hh
+DirectionCosine.o: DirectionCosine.hh QS_Precision.hh portability.hh
+DirectionCosine.o: DeclareMacro.hh MC_RNG_State.hh PhysicalConstants.hh
+EnergySpectrum.o: EnergySpectrum.hh MonteCarlo.hh QS_Precision.hh
+EnergySpectrum.o: QS_Vector.hh DeclareMacro.hh QS_atomics.hh
+EnergySpectrum.o: gpuPortability.hh qs_assert.hh MemoryControl.hh
+EnergySpectrum.o: MC_Domain.hh MC_Facet_Adjacency.hh MC_Location.hh macros.hh
+EnergySpectrum.o: MC_Vector.hh MC_Cell_State.hh MC_Facet_Geometry.hh
+EnergySpectrum.o: BulkStorage.hh Parameters.hh ParticleVault.hh
+EnergySpectrum.o: MC_Base_Particle.hh portability.hh MC_RNG_State.hh
+EnergySpectrum.o: MC_Particle.hh DirectionCosine.hh Tallies.hh NuclearData.hh
+EnergySpectrum.o: utils.hh mc_omp_critical.hh ParticleVaultContainer.hh
+EnergySpectrum.o: utilsMpi.hh MC_Processor_Info.hh
+GlobalFccGrid.o: GlobalFccGrid.hh QS_Precision.hh TupleToIndex.hh Long64.hh
+GlobalFccGrid.o: portability.hh Tuple.hh IndexToTuple.hh Tuple4ToIndex.hh
+GlobalFccGrid.o: Tuple4.hh IndexToTuple4.hh MC_Vector.hh DeclareMacro.hh
+GridAssignmentObject.o: GridAssignmentObject.hh QS_Precision.hh MC_Vector.hh
+GridAssignmentObject.o: DeclareMacro.hh Tuple.hh qs_assert.hh
+InputBlock.o: InputBlock.hh qs_assert.hh
+MCT.o: MCT.hh QS_Precision.hh portability.hh DeclareMacro.hh Globals.hh
+MCT.o: MonteCarlo.hh QS_Vector.hh QS_atomics.hh gpuPortability.hh
+MCT.o: qs_assert.hh MemoryControl.hh MC_Domain.hh MC_Facet_Adjacency.hh
+MCT.o: MC_Location.hh macros.hh MC_Vector.hh MC_Cell_State.hh
+MCT.o: MC_Facet_Geometry.hh BulkStorage.hh Parameters.hh MC_Nearest_Facet.hh
+MCT.o: MC_Particle.hh DirectionCosine.hh Tallies.hh NuclearData.hh utils.hh
+MCT.o: EnergySpectrum.hh MC_Distance_To_Facet.hh MC_RNG_State.hh
+MCT.o: PhysicalConstants.hh
+MC_Adjacent_Facet.o: MCT.hh QS_Precision.hh portability.hh DeclareMacro.hh
+MC_Adjacent_Facet.o: MC_Domain.hh QS_Vector.hh QS_atomics.hh
+MC_Adjacent_Facet.o: gpuPortability.hh qs_assert.hh MemoryControl.hh
+MC_Adjacent_Facet.o: MC_Facet_Adjacency.hh MC_Location.hh macros.hh
+MC_Adjacent_Facet.o: MC_Vector.hh MC_Cell_State.hh MC_Facet_Geometry.hh
+MC_Adjacent_Facet.o: BulkStorage.hh Globals.hh MonteCarlo.hh Parameters.hh
+MC_Base_Particle.o: MC_Base_Particle.hh QS_Precision.hh portability.hh
+MC_Base_Particle.o: MC_Vector.hh DeclareMacro.hh MC_RNG_State.hh
+MC_Base_Particle.o: MC_Particle.hh DirectionCosine.hh Tallies.hh QS_Vector.hh
+MC_Base_Particle.o: QS_atomics.hh gpuPortability.hh qs_assert.hh
+MC_Base_Particle.o: MemoryControl.hh NuclearData.hh MonteCarlo.hh
+MC_Base_Particle.o: MC_Domain.hh MC_Facet_Adjacency.hh MC_Location.hh
+MC_Base_Particle.o: macros.hh MC_Cell_State.hh MC_Facet_Geometry.hh
+MC_Base_Particle.o: BulkStorage.hh Parameters.hh utils.hh EnergySpectrum.hh
+MC_Domain.o: MC_Domain.hh QS_Precision.hh QS_Vector.hh DeclareMacro.hh
+MC_Domain.o: QS_atomics.hh gpuPortability.hh qs_assert.hh MemoryControl.hh
+MC_Domain.o: MC_Facet_Adjacency.hh MC_Location.hh macros.hh MC_Vector.hh
+MC_Domain.o: MC_Cell_State.hh MC_Facet_Geometry.hh BulkStorage.hh Globals.hh
+MC_Domain.o: MonteCarlo.hh Parameters.hh MC_RNG_State.hh portability.hh
+MC_Domain.o: PhysicalConstants.hh MeshPartition.hh Long64.hh GlobalFccGrid.hh
+MC_Domain.o: TupleToIndex.hh Tuple.hh IndexToTuple.hh Tuple4ToIndex.hh
+MC_Domain.o: Tuple4.hh IndexToTuple4.hh DecompositionObject.hh
+MC_Domain.o: MaterialDatabase.hh MCT.hh
+MC_Facet_Crossing_Event.o: MC_Facet_Crossing_Event.hh Tallies.hh
+MC_Facet_Crossing_Event.o: QS_Precision.hh portability.hh QS_Vector.hh
+MC_Facet_Crossing_Event.o: DeclareMacro.hh QS_atomics.hh gpuPortability.hh
+MC_Facet_Crossing_Event.o: qs_assert.hh MemoryControl.hh NuclearData.hh
+MC_Facet_Crossing_Event.o: MonteCarlo.hh MC_Domain.hh MC_Facet_Adjacency.hh
+MC_Facet_Crossing_Event.o: MC_Location.hh macros.hh MC_Vector.hh
+MC_Facet_Crossing_Event.o: MC_Cell_State.hh MC_Facet_Geometry.hh
+MC_Facet_Crossing_Event.o: BulkStorage.hh Parameters.hh utils.hh
+MC_Facet_Crossing_Event.o: EnergySpectrum.hh ParticleVaultContainer.hh
+MC_Facet_Crossing_Event.o: ParticleVault.hh MC_Base_Particle.hh
+MC_Facet_Crossing_Event.o: MC_RNG_State.hh MC_Particle.hh DirectionCosine.hh
+MC_Facet_Crossing_Event.o: mc_omp_critical.hh Globals.hh MCT.hh
+MC_Facet_Crossing_Event.o: MC_Particle_Buffer.hh MC_Processor_Info.hh
+MC_Facet_Crossing_Event.o: utilsMpi.hh SendQueue.hh
+MC_Fast_Timer.o: MC_Fast_Timer.hh portability.hh utilsMpi.hh qs_assert.hh
+MC_Fast_Timer.o: MonteCarlo.hh QS_Precision.hh QS_Vector.hh DeclareMacro.hh
+MC_Fast_Timer.o: QS_atomics.hh gpuPortability.hh MemoryControl.hh
+MC_Fast_Timer.o: MC_Domain.hh MC_Facet_Adjacency.hh MC_Location.hh macros.hh
+MC_Fast_Timer.o: MC_Vector.hh MC_Cell_State.hh MC_Facet_Geometry.hh
+MC_Fast_Timer.o: BulkStorage.hh Parameters.hh MC_Processor_Info.hh Globals.hh
+MC_Load_Particle.o: ParticleVault.hh MC_Base_Particle.hh QS_Precision.hh
+MC_Load_Particle.o: portability.hh MC_Vector.hh DeclareMacro.hh
+MC_Load_Particle.o: MC_RNG_State.hh MC_Particle.hh DirectionCosine.hh
+MC_Load_Particle.o: Tallies.hh QS_Vector.hh QS_atomics.hh gpuPortability.hh
+MC_Load_Particle.o: qs_assert.hh MemoryControl.hh NuclearData.hh
+MC_Load_Particle.o: MonteCarlo.hh MC_Domain.hh MC_Facet_Adjacency.hh
+MC_Load_Particle.o: MC_Location.hh macros.hh MC_Cell_State.hh
+MC_Load_Particle.o: MC_Facet_Geometry.hh BulkStorage.hh Parameters.hh
+MC_Load_Particle.o: utils.hh EnergySpectrum.hh mc_omp_critical.hh
+MC_Load_Particle.o: MC_Time_Info.hh
+MC_Location.o: MC_Location.hh DeclareMacro.hh MonteCarlo.hh QS_Precision.hh
+MC_Location.o: QS_Vector.hh QS_atomics.hh gpuPortability.hh qs_assert.hh
+MC_Location.o: MemoryControl.hh MC_Domain.hh MC_Facet_Adjacency.hh macros.hh
+MC_Location.o: MC_Vector.hh MC_Cell_State.hh MC_Facet_Geometry.hh
+MC_Location.o: BulkStorage.hh Parameters.hh
+MC_Particle_Buffer.o: MC_Particle_Buffer.hh QS_Precision.hh
+MC_Particle_Buffer.o: MC_Processor_Info.hh utilsMpi.hh qs_assert.hh
+MC_Particle_Buffer.o: MC_Base_Particle.hh portability.hh MC_Vector.hh
+MC_Particle_Buffer.o: DeclareMacro.hh MC_RNG_State.hh MC_Particle.hh
+MC_Particle_Buffer.o: DirectionCosine.hh Tallies.hh QS_Vector.hh
+MC_Particle_Buffer.o: QS_atomics.hh gpuPortability.hh MemoryControl.hh
+MC_Particle_Buffer.o: NuclearData.hh MonteCarlo.hh MC_Domain.hh
+MC_Particle_Buffer.o: MC_Facet_Adjacency.hh MC_Location.hh macros.hh
+MC_Particle_Buffer.o: MC_Cell_State.hh MC_Facet_Geometry.hh BulkStorage.hh
+MC_Particle_Buffer.o: Parameters.hh utils.hh EnergySpectrum.hh
+MC_Particle_Buffer.o: ParticleVaultContainer.hh SendQueue.hh MCT.hh
+MC_Particle_Buffer.o: Globals.hh MC_Fast_Timer.hh NVTX_Range.hh
+MC_RNG_State.o: MC_RNG_State.hh QS_Precision.hh portability.hh
+MC_RNG_State.o: DeclareMacro.hh
+MC_Segment_Outcome.o: MC_Segment_Outcome.hh DeclareMacro.hh QS_Precision.hh
+MC_Segment_Outcome.o: MC_Nearest_Facet.hh MC_Location.hh MonteCarlo.hh
+MC_Segment_Outcome.o: QS_Vector.hh QS_atomics.hh gpuPortability.hh
+MC_Segment_Outcome.o: qs_assert.hh MemoryControl.hh MC_Domain.hh
+MC_Segment_Outcome.o: MC_Facet_Adjacency.hh macros.hh MC_Vector.hh
+MC_Segment_Outcome.o: MC_Cell_State.hh MC_Facet_Geometry.hh BulkStorage.hh
+MC_Segment_Outcome.o: Parameters.hh Globals.hh MC_Particle.hh
+MC_Segment_Outcome.o: DirectionCosine.hh portability.hh Tallies.hh
+MC_Segment_Outcome.o: NuclearData.hh utils.hh EnergySpectrum.hh
+MC_Segment_Outcome.o: MC_RNG_State.hh MacroscopicCrossSection.hh MCT.hh
+MC_Segment_Outcome.o: PhysicalConstants.hh
+MC_SourceNow.o: MC_SourceNow.hh QS_Precision.hh QS_Vector.hh DeclareMacro.hh
+MC_SourceNow.o: QS_atomics.hh gpuPortability.hh qs_assert.hh MemoryControl.hh
+MC_SourceNow.o: utils.hh utilsMpi.hh MonteCarlo.hh MC_Domain.hh
+MC_SourceNow.o: MC_Facet_Adjacency.hh MC_Location.hh macros.hh MC_Vector.hh
+MC_SourceNow.o: MC_Cell_State.hh MC_Facet_Geometry.hh BulkStorage.hh
+MC_SourceNow.o: Parameters.hh MaterialDatabase.hh initMC.hh Tallies.hh
+MC_SourceNow.o: portability.hh NuclearData.hh EnergySpectrum.hh
+MC_SourceNow.o: ParticleVaultContainer.hh ParticleVault.hh
+MC_SourceNow.o: MC_Base_Particle.hh MC_RNG_State.hh MC_Particle.hh
+MC_SourceNow.o: DirectionCosine.hh mc_omp_critical.hh MC_Processor_Info.hh
+MC_SourceNow.o: MC_Time_Info.hh MCT.hh PhysicalConstants.hh NVTX_Range.hh
+MacroscopicCrossSection.o: MacroscopicCrossSection.hh QS_Precision.hh
+MacroscopicCrossSection.o: DeclareMacro.hh MonteCarlo.hh QS_Vector.hh
+MacroscopicCrossSection.o: QS_atomics.hh gpuPortability.hh qs_assert.hh
+MacroscopicCrossSection.o: MemoryControl.hh MC_Domain.hh
+MacroscopicCrossSection.o: MC_Facet_Adjacency.hh MC_Location.hh macros.hh
+MacroscopicCrossSection.o: MC_Vector.hh MC_Cell_State.hh MC_Facet_Geometry.hh
+MacroscopicCrossSection.o: BulkStorage.hh Parameters.hh MaterialDatabase.hh
+MacroscopicCrossSection.o: NuclearData.hh
+MeshPartition.o: MeshPartition.hh Long64.hh portability.hh qs_assert.hh
+MeshPartition.o: GlobalFccGrid.hh QS_Precision.hh TupleToIndex.hh Tuple.hh
+MeshPartition.o: IndexToTuple.hh Tuple4ToIndex.hh Tuple4.hh IndexToTuple4.hh
+MeshPartition.o: MC_Vector.hh DeclareMacro.hh GridAssignmentObject.hh
+MeshPartition.o: CommObject.hh FacetPair.hh MC_Location.hh
+MonteCarlo.o: MonteCarlo.hh QS_Precision.hh QS_Vector.hh DeclareMacro.hh
+MonteCarlo.o: QS_atomics.hh gpuPortability.hh qs_assert.hh MemoryControl.hh
+MonteCarlo.o: MC_Domain.hh MC_Facet_Adjacency.hh MC_Location.hh macros.hh
+MonteCarlo.o: MC_Vector.hh MC_Cell_State.hh MC_Facet_Geometry.hh
+MonteCarlo.o: BulkStorage.hh Parameters.hh NuclearData.hh MaterialDatabase.hh
+MonteCarlo.o: ParticleVaultContainer.hh portability.hh MC_RNG_State.hh
+MonteCarlo.o: Tallies.hh utils.hh EnergySpectrum.hh MC_Processor_Info.hh
+MonteCarlo.o: utilsMpi.hh MC_Time_Info.hh MC_Particle_Buffer.hh
+MonteCarlo.o: MC_Base_Particle.hh MC_Particle.hh DirectionCosine.hh
+MonteCarlo.o: MC_Fast_Timer.hh
+MpiCommObject.o: MpiCommObject.hh CommObject.hh MeshPartition.hh Long64.hh
+MpiCommObject.o: portability.hh FacetPair.hh MC_Location.hh DeclareMacro.hh
+MpiCommObject.o: utilsMpi.hh qs_assert.hh DecompositionObject.hh
+NuclearData.o: NuclearData.hh QS_Precision.hh QS_Vector.hh DeclareMacro.hh
+NuclearData.o: QS_atomics.hh gpuPortability.hh qs_assert.hh MemoryControl.hh
+NuclearData.o: MC_RNG_State.hh portability.hh
+Parameters.o: Parameters.hh QS_Precision.hh qs_assert.hh cmdLineParser.hh
+Parameters.o: parseUtils.hh InputBlock.hh utilsMpi.hh
+ParticleVault.o: ParticleVault.hh MC_Base_Particle.hh QS_Precision.hh
+ParticleVault.o: portability.hh MC_Vector.hh DeclareMacro.hh MC_RNG_State.hh
+ParticleVault.o: MC_Particle.hh DirectionCosine.hh Tallies.hh QS_Vector.hh
+ParticleVault.o: QS_atomics.hh gpuPortability.hh qs_assert.hh
+ParticleVault.o: MemoryControl.hh NuclearData.hh MonteCarlo.hh MC_Domain.hh
+ParticleVault.o: MC_Facet_Adjacency.hh MC_Location.hh macros.hh
+ParticleVault.o: MC_Cell_State.hh MC_Facet_Geometry.hh BulkStorage.hh
+ParticleVault.o: Parameters.hh utils.hh EnergySpectrum.hh mc_omp_critical.hh
+ParticleVault.o: MC_Processor_Info.hh utilsMpi.hh Globals.hh
+ParticleVaultContainer.o: ParticleVaultContainer.hh DeclareMacro.hh
+ParticleVaultContainer.o: portability.hh QS_Vector.hh QS_atomics.hh
+ParticleVaultContainer.o: gpuPortability.hh qs_assert.hh MemoryControl.hh
+ParticleVaultContainer.o: ParticleVault.hh MC_Base_Particle.hh
+ParticleVaultContainer.o: QS_Precision.hh MC_Vector.hh MC_RNG_State.hh
+ParticleVaultContainer.o: MC_Particle.hh DirectionCosine.hh Tallies.hh
+ParticleVaultContainer.o: NuclearData.hh MonteCarlo.hh MC_Domain.hh
+ParticleVaultContainer.o: MC_Facet_Adjacency.hh MC_Location.hh macros.hh
+ParticleVaultContainer.o: MC_Cell_State.hh MC_Facet_Geometry.hh
+ParticleVaultContainer.o: BulkStorage.hh Parameters.hh utils.hh
+ParticleVaultContainer.o: EnergySpectrum.hh mc_omp_critical.hh SendQueue.hh
+PopulationControl.o: PopulationControl.hh QS_Precision.hh
+PopulationControl.o: MC_Processor_Info.hh utilsMpi.hh qs_assert.hh
+PopulationControl.o: MonteCarlo.hh QS_Vector.hh DeclareMacro.hh QS_atomics.hh
+PopulationControl.o: gpuPortability.hh MemoryControl.hh MC_Domain.hh
+PopulationControl.o: MC_Facet_Adjacency.hh MC_Location.hh macros.hh
+PopulationControl.o: MC_Vector.hh MC_Cell_State.hh MC_Facet_Geometry.hh
+PopulationControl.o: BulkStorage.hh Parameters.hh Globals.hh MC_Particle.hh
+PopulationControl.o: DirectionCosine.hh portability.hh Tallies.hh
+PopulationControl.o: NuclearData.hh utils.hh EnergySpectrum.hh
+PopulationControl.o: ParticleVaultContainer.hh ParticleVault.hh
+PopulationControl.o: MC_Base_Particle.hh MC_RNG_State.hh mc_omp_critical.hh
+PopulationControl.o: NVTX_Range.hh
+SendQueue.o: SendQueue.hh QS_Vector.hh DeclareMacro.hh QS_atomics.hh
+SendQueue.o: gpuPortability.hh qs_assert.hh MemoryControl.hh
+SharedMemoryCommObject.o: SharedMemoryCommObject.hh CommObject.hh
+SharedMemoryCommObject.o: MeshPartition.hh Long64.hh portability.hh
+SharedMemoryCommObject.o: FacetPair.hh MC_Location.hh DeclareMacro.hh
+SharedMemoryCommObject.o: qs_assert.hh
+Tallies.o: Tallies.hh QS_Precision.hh portability.hh QS_Vector.hh
+Tallies.o: DeclareMacro.hh QS_atomics.hh gpuPortability.hh qs_assert.hh
+Tallies.o: MemoryControl.hh NuclearData.hh MonteCarlo.hh MC_Domain.hh
+Tallies.o: MC_Facet_Adjacency.hh MC_Location.hh macros.hh MC_Vector.hh
+Tallies.o: MC_Cell_State.hh MC_Facet_Geometry.hh BulkStorage.hh Parameters.hh
+Tallies.o: utils.hh EnergySpectrum.hh utilsMpi.hh MC_Time_Info.hh
+Tallies.o: MC_Processor_Info.hh Globals.hh MC_Fast_Timer.hh
+cmdLineParser.o: cmdLineParser.hh QS_Precision.hh memUtils.hh
+cudaFunctions.o: gpuPortability.hh cudaFunctions.hh cudaUtils.hh
+cudaFunctions.o: DeclareMacro.hh
+initMC.o: initMC.hh QS_Precision.hh QS_Vector.hh DeclareMacro.hh
+initMC.o: QS_atomics.hh gpuPortability.hh qs_assert.hh MemoryControl.hh
+initMC.o: utilsMpi.hh MonteCarlo.hh MC_Domain.hh MC_Facet_Adjacency.hh
+initMC.o: MC_Location.hh macros.hh MC_Vector.hh MC_Cell_State.hh
+initMC.o: MC_Facet_Geometry.hh BulkStorage.hh Parameters.hh
+initMC.o: MC_Processor_Info.hh DecompositionObject.hh GlobalFccGrid.hh
+initMC.o: TupleToIndex.hh Long64.hh portability.hh Tuple.hh IndexToTuple.hh
+initMC.o: Tuple4ToIndex.hh Tuple4.hh IndexToTuple4.hh MeshPartition.hh
+initMC.o: CommObject.hh FacetPair.hh SharedMemoryCommObject.hh
+initMC.o: MpiCommObject.hh NuclearData.hh MaterialDatabase.hh MC_Time_Info.hh
+initMC.o: Tallies.hh utils.hh EnergySpectrum.hh MC_Base_Particle.hh
+initMC.o: MC_RNG_State.hh MC_Particle.hh DirectionCosine.hh cudaUtils.hh
+initMC.o: cudaFunctions.hh
+main.o: utils.hh Parameters.hh QS_Precision.hh utilsMpi.hh qs_assert.hh
+main.o: MonteCarlo.hh QS_Vector.hh DeclareMacro.hh QS_atomics.hh
+main.o: gpuPortability.hh MemoryControl.hh MC_Domain.hh MC_Facet_Adjacency.hh
+main.o: MC_Location.hh macros.hh MC_Vector.hh MC_Cell_State.hh
+main.o: MC_Facet_Geometry.hh BulkStorage.hh initMC.hh Tallies.hh
+main.o: portability.hh NuclearData.hh EnergySpectrum.hh PopulationControl.hh
+main.o: ParticleVaultContainer.hh ParticleVault.hh MC_Base_Particle.hh
+main.o: MC_RNG_State.hh MC_Particle.hh DirectionCosine.hh mc_omp_critical.hh
+main.o: MC_Particle_Buffer.hh MC_Processor_Info.hh MC_Time_Info.hh
+main.o: MC_Fast_Timer.hh MC_SourceNow.hh SendQueue.hh NVTX_Range.hh
+main.o: cudaUtils.hh cudaFunctions.hh CycleTracking.hh CoralBenchmark.hh
+main.o: mc_omp_parallel_for_schedule_static.hh
+parseUtils.o: parseUtils.hh InputBlock.hh qs_assert.hh
+utils.o: utils.hh qs_assert.hh utilsMpi.hh macros.hh MonteCarlo.hh
+utils.o: QS_Precision.hh QS_Vector.hh DeclareMacro.hh QS_atomics.hh
+utils.o: gpuPortability.hh MemoryControl.hh MC_Domain.hh
+utils.o: MC_Facet_Adjacency.hh MC_Location.hh MC_Vector.hh MC_Cell_State.hh
+utils.o: MC_Facet_Geometry.hh BulkStorage.hh Parameters.hh Globals.hh
+utils.o: MC_Processor_Info.hh
+utilsMpi.o: utilsMpi.hh qs_assert.hh QS_Precision.hh macros.hh MonteCarlo.hh
+utilsMpi.o: QS_Vector.hh DeclareMacro.hh QS_atomics.hh gpuPortability.hh
+utilsMpi.o: MemoryControl.hh MC_Domain.hh MC_Facet_Adjacency.hh
+utilsMpi.o: MC_Location.hh MC_Vector.hh MC_Cell_State.hh MC_Facet_Geometry.hh
+utilsMpi.o: BulkStorage.hh Parameters.hh MC_Processor_Info.hh Globals.hh
+utilsMpi.o: mpi_stubs_internal.hh mpi_stubs.hh

@@ -1,0 +1,100 @@
+#BHEADER**********************************************************************
+# Copyright (c) 2017,  Lawrence Livermore National Security, LLC.
+# Produced at the Lawrence Livermore National Laboratory.
+# Written by Ulrike Yang (yang11@llnl.gov) et al. CODE-LLNL-738-322.
+# This file is part of AMG.  See files COPYRIGHT and README for details.
+#
+# AMG is free software; you can redistribute it and/or modify it under the
+# terms of the GNU Lesser General Public License (as published by the Free
+# Software Foundation) version 2.1 dated February 1999.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the IMPLIED WARRANTY OF MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the terms and conditions of the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+#EHEADER**********************************************************************
+
+
+
+
+
+
+
+
+
+.SUFFIXES:
+.SUFFIXES: .c .f .o
+
+HEADERS =\
+ HYPRE_mv.h\
+ csr_matrix.h\
+ vector.h
+
+FILES =\
+ HYPRE_csr_matrix.c\
+ csr_matrix.c\
+ csr_matop.c\
+ csr_matvec.c\
+ vector.c
+
+OBJS = ${FILES:.c=.o}
+
+CC = cc
+
+CFLAGS =\
+ -I/usr/local/include\
+ -I/home/casc/include\
+ -I..
+
+
+LFLAGS =\
+ -L/usr/local/lib\
+ -L/home/casc/lib\
+ -L/home/casc/g77/lib\
+ -L.\
+ -L../utilities\
+ -lHYPRE_memory\
+ -lf2c\
+ -lcegdb\
+ -lm
+
+
+##################################################################
+# Main rules
+##################################################################
+
+libHYPRE_mv.a: ${OBJS}
+	@echo  "Building $@ ... "
+	ar -ru $@ ${OBJS}
+	ranlib $@
+
+${OBJS}: ${HEADERS}
+
+##################################################################
+# Generic rules
+##################################################################
+
+.c.o:
+	@echo "Making (c) " $@
+	@${CC} -o $@ -c ${CFLAGS} $<
+
+.f.${AMG_ARCH}.o:
+	@echo "Making (f) " $@
+	@${F77} -o $@ -c ${FFLAGS} $<
+
+##################################################################
+# Miscellaneous rules
+##################################################################
+
+veryclean: clean
+	@rm -f libHYPRE_mv.a
+	@rm -f driver driver_internal
+
+clean:
+	@rm -f *.o
+

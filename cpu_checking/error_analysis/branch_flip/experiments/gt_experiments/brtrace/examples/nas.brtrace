@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# nas.brtrace - benchmark config for an NPB single-file fp32/fp64 pair.
+# Lives WITH the benchmarks. The tool knows nothing about NAS.
+#
+# Layout expected:  <B>/<B>_fp32/<B>.c   and  <B>/<B>_fp64/<B>.c
+# Usage:  BRX=/path/to/brtrace  ./nas.brtrace  <B>   (e.g. sp, bt, lu)
+set -euo pipefail
+: "${BRX:?set BRX to the brtrace tool dir}"
+B="${1:?usage: nas.brtrace <benchmark>  e.g. sp}"
+HERE="$(cd "$(dirname "$0")" && pwd)"
+
+"$BRX/brtrace_run.sh" \
+  --brx "$BRX" --cc clang --out "$HERE/$B" --label "$B" --mods "$HERE/$B/${B}_fp64" \
+  --fp32-build "clang \$BRX_CFLAGS '$HERE/$B/${B}_fp32/$B.c' \$BRX_RT -lm -o '$HERE/$B/${B}_fp32/$B.brx'" \
+  --fp64-build "clang \$BRX_CFLAGS '$HERE/$B/${B}_fp64/$B.c' \$BRX_RT -lm -o '$HERE/$B/${B}_fp64/$B.brx'" \
+  --fp32-run   "cd '$HERE/$B/${B}_fp32' && OMP_NUM_THREADS=1 ./$B.brx" \
+  --fp64-run   "cd '$HERE/$B/${B}_fp64' && OMP_NUM_THREADS=1 ./$B.brx"
