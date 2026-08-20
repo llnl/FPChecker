@@ -19,6 +19,17 @@ Place in: branch_flip/experiments/gt_experiments/
     ./run_nas_brtrace.py --opt O0 O2
     ./run_nas_brtrace.py --dry-run
     ./run_nas_brtrace.py --skip-build --skip-run    # re-diff existing traces
+    ./run_nas_brtrace.py --no-brx-build          # keep the existing plugin
+
+The brtrace plugin and runtime are CLEANED AND REBUILT on every run, before
+anything else happens, and llvm-config is checked against the compiler first.
+They are two compiler invocations and take seconds; a stale
+libBranchTrace_mtu.so costs a whole census, because it satisfies every
+existence check and then instruments according to whatever the pass source
+said at the last build -- and here that is twenty-one builds and runs before
+you find out. --skip-build implies --no-brx-build: compiling nothing means the
+.brsites already on disk came from the previous pass, so replacing that pass
+would make the side tables and the binaries disagree.
 
 Layout produced (one subtree per benchmark per optimisation level):
 
@@ -28,6 +39,13 @@ Layout produced (one subtree per benchmark per optimisation level):
         cg/O0/  ...
       build/
         bt/O0/bt_fp32/  bt/O0/bt_fp64/  bt/O0/bt_ld/  ...
+
+Each pair directory holds report.txt, flips.csv and sites.txt. sites.txt is
+the per-site census -- one row per static site, classed TP / TN / DEAD -- and
+is the file adjudicate_cell.py scores tool output against. report.txt is for
+reading; sites.txt is for scoring. Do not generate it under --fast: that skips
+the execution census, so TN and DEAD collapse together and the adjudicator
+refuses the file.
 
 DIFFERENCES FROM THE LULESH AND AMG HARNESSES
 ---------------------------------------------
@@ -361,6 +379,110 @@ def extract_headline(text):
     return got
 
 
+# ----------------------------------------------------------- brtrace build
+
+def _llvm_version(cmd):
+    """Version string from a tool's --version output, or None.
+
+    Uses subprocess directly rather than sh(): sh() always logs the command,
+    and two probe lines in front of every run is noise.
+    """
+    try:
+        out = subprocess.run("%s --version" % cmd, shell=True, text=True,
+                             timeout=60, stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT).stdout
+    except Exception:
+        return None
+    m = re.search(r"(\d+\.\d+\.\d+)", out or "")
+    return m.group(1) if m else None
+
+
+def check_llvm_match(cc):
+    """The plugin must be built against the same LLVM the compiler runs.
+
+    A mismatch is the most expensive failure here: the plugin builds cleanly,
+    then clang dlopens it and either dies with an undefined symbol or segfaults
+    partway through a build. Both read as a broken benchmark rather than a
+    broken toolchain -- and with seven benchmarks queued up, that is a long way
+    to get before finding out.
+    """
+    lv = _llvm_version("llvm-config")
+    cv = _llvm_version(shlex.quote(cc))
+    log("    llvm-config %s   %s %s" % (lv or "?", cc, cv or "?"))
+    if lv is None:
+        die("llvm-config is not on PATH -- activate the conda env "
+            "(fpchecker_env) first.")
+    if cv is None:
+        log("    WARNING: could not read a version from %s; skipping the "
+            "match check" % cc)
+        return
+    if lv != cv:
+        die("LLVM version mismatch: llvm-config is %s but %s is %s.\n"
+            "       The plugin would be built against %s headers and then "
+            "loaded by a\n       %s driver, which segfaults or fails with "
+            "undefined symbols mid-build.\n"
+            "       Activate the conda env whose clang matches llvm-config, "
+            "or point\n       --cc at the matching compiler."
+            % (lv, cc, cv, lv, cv))
+
+
+def build_brx(brx, cc, dry=False):
+    """Clean and rebuild libBranchTrace_mtu.so + brtrace_runtime_mtu.o.
+
+    Always a clean rebuild. The artifacts are two compiler invocations and take
+    seconds, whereas a stale .so is undetectable: the existence check passes,
+    the pass loads, and it instruments according to whatever the source looked
+    like at the last build.
+
+    Removing the artifacts BEFORE building matters too: if the build fails
+    partway, a leftover .so from the previous build would still satisfy the
+    existence check downstream.
+    """
+    script = brx / "build_mtu.sh"
+    plugin = brx / "libBranchTrace_mtu.so"
+    runtime = brx / "brtrace_runtime_mtu.o"
+
+    log("  [brtrace build]")
+    if not script.exists():
+        die("no build_mtu.sh at %s\n"
+            "       Pass --brx <your brtrace dir>, or --no-brx-build if you "
+            "have built\n       the plugin and runtime some other way."
+            % script)
+
+    check_llvm_match(cc)
+
+    if not dry:
+        for f in (plugin, runtime):
+            if f.exists():
+                f.unlink()
+                log("    removed stale %s" % f.name)
+
+    env = os.environ.copy()
+    # Keep the plugin, the runtime and the benchmarks on one toolchain. The
+    # runtime object is linked into every instrumented binary, so an ABI
+    # difference shows up at link time. NAS is C and --cc is a C driver, so
+    # derive the C++ driver the plugin needs.
+    env["CC"] = cc
+    env["CXX"] = cc + "++" if cc.endswith("clang") else "clang++"
+    # Invoked as `bash build_mtu.sh`, not `./build_mtu.sh`: the execute bit is
+    # routinely lost moving this tree between machines, and the failure is an
+    # opaque "exit 126 / Permission denied" from /bin/sh.
+    rc, out = sh("bash build_mtu.sh", cwd=brx, env=env,
+                 logfile=brx / "build_mtu.log", dry=dry)
+    if dry:
+        return
+    if rc != 0:
+        for line in (out or "").strip().splitlines()[-20:]:
+            log("    %s" % line[:200])
+        die("brtrace build failed -- see %s" % (brx / "build_mtu.log"))
+    for f in (plugin, runtime):
+        if not f.exists():
+            die("build_mtu.sh exited 0 but did not produce %s -- see %s"
+                % (f.name, brx / "build_mtu.log"))
+    log("    built %s, %s" % (plugin.name, runtime.name))
+    log()
+
+
 # --------------------------------------------------- one benchmark, one opt
 
 def run_bench(bench, opt, args, cfg, dry=False):
@@ -373,6 +495,9 @@ def run_bench(bench, opt, args, cfg, dry=False):
     variants = args.variants
     binaries, counts_by_variant, vinfo = {}, {}, {}
     warnings = []
+    # Unknown until we build. Under --skip-build we cannot tell, and assuming
+    # False is the safe default: it never suppresses a real check.
+    fp_sites, vacuous = None, False
 
     if args.skip_build:
         for v in variants:
@@ -400,13 +525,53 @@ def run_bench(bench, opt, args, cfg, dry=False):
                 return None
         else:
             log("      matched-build ok")
+
+        # A benchmark with NO FP-controlled branches at all is a different
+        # thing from a broken build. IS is an integer sort: its three trees are
+        # byte-identical by construction, so the variants MUST emit identical
+        # arithmetic, and the precision check cannot say anything useful. There
+        # is also nothing to census either way -- an empty site universe gives
+        # zero flips whether or not the precision flag took.
+        #
+        # So proceed and emit an empty census, but mark the cell VACUOUS. It is
+        # not the same as "executed N sites, none flipped": there is no TN
+        # denominator behind it, so it must not be scored as a correct
+        # rejection or averaged in as a zero.
+        fp_sites = max((v.get("sites_total", 0) for v in vinfo.values()),
+                       default=0)
+        vacuous = (fp_sites == 0)
+
         log("    precision check")
         probs = precision_check(binaries, variants,
                                 args.allow_same_precision, dry)
-        if probs and not args.allow_same_precision:
-            log("      *** variants are not at distinct precisions; skipping")
-            return None
-        warnings += probs
+        if probs:
+            if vacuous:
+                log("      NOTE: no FP-controlled branches instrumented, so "
+                    "identical arithmetic")
+                log("            is expected and proves nothing. Continuing "
+                    "to emit an EMPTY")
+                log("            census -- this cell is VACUOUS, not a "
+                    "measured zero.")
+                warnings.append(
+                    "VACUOUS CELL: zero FP-controlled branches instrumented. "
+                    "The census is empty and has no TN denominator; do not "
+                    "score it as a correct rejection or average it in as a "
+                    "zero. (Precision check reported: %s -- expected here, "
+                    "since with no FP branches the variants need not differ.)"
+                    % "; ".join(probs))
+            elif not args.allow_same_precision:
+                log("      *** variants are not at distinct precisions; "
+                    "skipping")
+                return None
+            else:
+                warnings += probs
+        elif vacuous:
+            warnings.append(
+                "VACUOUS CELL: zero FP-controlled branches instrumented. The "
+                "census is empty and has no TN denominator; do not score it "
+                "as a correct rejection or average it in as a zero.")
+            log("      NOTE: zero FP-controlled branches -- this cell is "
+                "VACUOUS, not a measured zero.")
 
     traces = {v: outdir / "traces" / ("%s_%s.out" % (bench, v))
               for v in variants}
@@ -429,9 +594,17 @@ def run_bench(bench, opt, args, cfg, dry=False):
                 if rc != 0:
                     log("      *** run failed (exit %d)" % rc)
                     return None
+                # The runtime opens $BRTRACE_OUT lazily, on the first
+                # __brtrace_log call. A binary with zero instrumented sites
+                # never makes that call, so the file is never created and the
+                # diff would be handed a nonexistent path. Zero events IS an
+                # empty trace, so materialize it.
+                if not traces[v].exists():
+                    traces[v].touch()
+                    log("      (no events logged -- created an empty trace)")
                 m = VERIFY_RE.search(out)
                 verdict = m.group(1).upper() if m else "?"
-                sz = traces[v].stat().st_size if traces[v].exists() else 0
+                sz = traces[v].stat().st_size
                 log("      verification=%s  %s (%s events)"
                     % (verdict, human(sz), "{:,}".format(sz // 12)))
                 vinfo.setdefault(v, {}).update(
@@ -472,6 +645,8 @@ def run_bench(bench, opt, args, cfg, dry=False):
             % (sum(s["flips"] for s in sites), len(sites)))
         records.append({"benchmark": bench, "opt": opt, "label": label,
                         "a": a, "b": b, "report": str(report),
+                        "sites_txt": str(sites_txt),
+                        "fp_sites": fp_sites, "vacuous": vacuous,
                         "headline": extract_headline(out), "sites": sites,
                         "warnings": warnings})
 
@@ -481,6 +656,15 @@ def run_bench(bench, opt, args, cfg, dry=False):
              % bench.upper(),
              "(-%s, single-threaded, class from npbparams.h)" % opt,
              "scope: %s" % cfg["scope"], ""]
+    if vacuous:
+        lines.append("*** VACUOUS CELL ***")
+        lines.append("Zero FP-controlled branches were instrumented, so the")
+        lines.append("census below is empty. This is NOT the same as 'executed")
+        lines.append("N sites, none flipped': there is no TN denominator, so")
+        lines.append("the cell must not be scored as a correct rejection, nor")
+        lines.append("averaged in as a zero. Report it as 'no FP-controlled")
+        lines.append("branches' rather than as a result.")
+        lines.append("")
     for v in sorted(vinfo):
         lines.append("  %-5s verification=%-13s %s events"
                      % (v, vinfo[v].get("verification", "?"),
@@ -503,6 +687,7 @@ def run_bench(bench, opt, args, cfg, dry=False):
     (outdir / "summary.txt").write_text("\n".join(lines) + "\n")
     (outdir / "summary.json").write_text(
         json.dumps({"benchmark": bench, "opt": opt, "variants": vinfo,
+                    "fp_sites": fp_sites, "vacuous": vacuous,
                     "pairs": records}, indent=2, default=str))
     return records
 
@@ -530,6 +715,11 @@ def main():
     ap.add_argument("--timeout", type=int, default=3600,
                     help="per-run timeout in seconds (instrumented NAS runs "
                          "are much slower than bare ones)")
+    ap.add_argument("--no-brx-build", action="store_true",
+                    help="do not rebuild the brtrace plugin and runtime. By "
+                         "default they are cleaned and rebuilt every run, "
+                         "because a stale .so passes every existence check and "
+                         "silently instruments the wrong thing.")
     ap.add_argument("--all-branches", action="store_true")
     ap.add_argument("--fast", action="store_true")
     ap.add_argument("--skip-build", action="store_true")
@@ -546,13 +736,43 @@ def main():
     RESULT_ROOT = WORK_ROOT / "results"
     dry = args.dry_run
 
+    # --fast skips the per-site execution census, so sites.txt comes back with
+    # executions=0 everywhere and every non-flipping site is written as DEAD.
+    # adjudicate_cell.py cannot tell DEAD from TN in that file and refuses to
+    # score it. Say so now rather than after twenty-one builds and runs.
+    if args.fast:
+        sys.stderr.write(
+            "WARNING: --fast skips the execution census. sites.txt will mark\n"
+            "         every non-flipping site DEAD, and adjudicate_cell.py\n"
+            "         will refuse it. Use --fast only for a quick look at\n"
+            "         flip counts, never to produce a scoreable census.\n")
+
+    # Rebuild the pass and runtime by default, before anything else touches
+    # them. Skipped under --skip-build, which means "compile nothing" -- and
+    # rebuilding the plugin there would be actively wrong, since the .brsites
+    # already on disk came from whatever pass built the benchmarks.
+    brx_build_scheduled = not (args.no_brx_build or args.skip_build)
+    if args.no_brx_build:
+        log("  [brtrace build] skipped (--no-brx-build)")
+        log()
+    elif args.skip_build:
+        log("  [brtrace build] skipped (--skip-build: compiling nothing, and "
+            "the")
+        log("                  .brsites on disk came from the previous pass)")
+        log()
+    else:
+        build_brx(BRX_ROOT, args.cc, dry=dry)
+
     plugin = BRX_ROOT / "libBranchTrace_mtu.so"
     runtime = BRX_ROOT / "brtrace_runtime_mtu.o"
     diff = BRX_ROOT / "tools" / "brtrace_diff_mtu.py"
-    for f in (plugin, runtime, diff):
+    # Under a dry run the build above executed nothing, so only the diff tool
+    # (which ships in the tree) can be expected to exist.
+    check = [diff] if (dry and brx_build_scheduled) else [plugin, runtime, diff]
+    for f in check:
         if not f.exists():
             die("brtrace incomplete: missing %s\n"
-                "       Build it: cd %s && ./build_mtu.sh" % (f, BRX_ROOT))
+                "       Build it: cd %s && bash build_mtu.sh" % (f, BRX_ROOT))
 
     fp_only = not args.all_branches
 
@@ -608,13 +828,22 @@ def main():
     log("=" * 70)
     log("  %-4s %-4s %-14s %8s %6s  %s"
         % ("bench", "opt", "pair", "flips", "sites", "TP/TN/DEAD"))
+    any_vacuous = False
     for r in allrecs:
         h = dict(r["headline"])
-        log("  %-4s %-4s %-14s %8d %6d  %s/%s/%s"
+        mark = "   <- VACUOUS (no FP branches)" if r.get("vacuous") else ""
+        any_vacuous = any_vacuous or bool(r.get("vacuous"))
+        log("  %-4s %-4s %-14s %8d %6d  %s/%s/%s%s"
             % (r["benchmark"], r["opt"], r["label"],
                sum(s["flips"] for s in r["sites"]), len(r["sites"]),
                h.get("TP sites", "?"), h.get("TN sites", "?"),
-               h.get("DEAD sites", "?")))
+               h.get("DEAD sites", "?"), mark))
+    if any_vacuous:
+        log("")
+        log("  VACUOUS cells instrumented zero FP-controlled branches. Their")
+        log("  censuses are empty by construction and carry no TN denominator,")
+        log("  so they must not be scored as correct rejections or averaged in")
+        log("  as zeros. Report them as 'no FP-controlled branches'.")
     log("\nresults under %s/<bench>/<opt>/" % RESULT_ROOT)
     log("\nPrevious census over the OLD trees, for comparison:")
     log("  LU=11  SP=10  BT=10  EP=1  CG=0  MG=0  IS=0  (fp32-vs-fp64 sites)")

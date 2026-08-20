@@ -15,7 +15,8 @@ Place in: branch_flip/experiments/fpchecker_experiments/
 Default eta sweeps (scaled to machine epsilon, which differs by ~9 orders):
     fp32  1e-2  1e-6  1e-10      (eps 1.19e-07)
     fp64  1e-8  1e-14 1e-16      (eps 2.22e-16)
-    ./run_lulesh_fpchecker.py -s 5 -i 20 --opt O0    # cross-check at -O0
+    ./run_lulesh_fpchecker.py -s 10 -i 50            # the census size
+    ./run_lulesh_fpchecker.py --opt O2               # event counts only, see below
 
 Instrumentation variables (set for BOTH compile and link):
     fp32 -> FPC_INSTRUMENT_ERR_TRACKING=1
@@ -32,11 +33,20 @@ never overwrite each other):
       build/
         O0/lulesh_fp32/  O0/lulesh_fp64/  O2/lulesh_fp32/  O2/lulesh_fp64/
 
-NOTE on -O2: this matches the earlier LULESH eta sweep, but FPChecker reads
-DILocation.line without walking getInlinedAt(), so inlined sites are
-attributed to the inlining line.  That is the origin of the known
-lulesh.cc:263 vs stl_algobase.h:263 collision -- same line number, different
-file.  Adjudicate sites by file+line, never line alone.
+WHY -O0 IS THE DEFAULT
+----------------------
+FPChecker reads DILocation.line without walking getInlinedAt(), so from -O1
+upward an inlined branch is attributed to the line that inlined it, not the
+line it came from.  That is the origin of the known lulesh.cc:263 vs
+stl_algobase.h:263 collision -- same line number, different file.  At -O2 the
+site count is inflated by that misattribution, and the sites cannot be joined
+against the brtrace census, which is generated at -O0.  brtrace does not share
+the failure mode: it records locString at instrumentation time, before any
+inlining, so its attribution is stable across levels.
+
+So: -O0 for anything that will be scored per site.  -O2 remains available for
+comparing EVENT counts against the earlier sweep, but its site lists are not
+adjudicable.  Adjudicate sites by file+line, never line alone.
 """
 
 import argparse
@@ -337,8 +347,13 @@ def main():
                     help="override eta for fp64 only")
     ap.add_argument("-s", "--size", type=int, default=5)
     ap.add_argument("-i", "--iter", type=int, default=20)
-    ap.add_argument("--opt", default="O2", choices=["O0", "O1", "O2", "O3"],
-                    help="optimisation level (default O2)")
+    ap.add_argument("--opt", default="O0", choices=["O0", "O1", "O2", "O3"],
+                    help="optimisation level (default O0). Site attribution "
+                         "is only reliable at -O0: FPChecker reads "
+                         "DILocation.line without walking getInlinedAt(), so "
+                         "from -O1 up an inlined branch is reported against "
+                         "the inlining line. Use -O2 for event-count "
+                         "comparisons only, never for site-level results.")
     ap.add_argument("--maxwarn", type=int, default=100000)
     ap.add_argument("-j", "--jobs", type=int, default=1,
                     help="make parallelism (default 1; parallel builds were "

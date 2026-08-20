@@ -13,11 +13,22 @@ diffs, so this costs three builds and three runs per level, not four.
 
 Place in: branch_flip/gt_experiments/lulesh/
 
-    ./run_lulesh_brtrace.py                      # both -O0 and -O2
-    ./run_lulesh_brtrace.py --opt O0             # one level only
+    ./run_lulesh_brtrace.py                      # -O0 only (the default)
+    ./run_lulesh_brtrace.py --opt O0 O2          # both levels, plus the
+                                                 #   cross-level site check
     ./run_lulesh_brtrace.py -s 10 -i 50          # the published census size
     ./run_lulesh_brtrace.py --dry-run            # print every command, run none
     ./run_lulesh_brtrace.py --skip-build --skip-run   # re-diff existing traces
+    ./run_lulesh_brtrace.py --no-brx-build       # keep the existing plugin .so
+
+The brtrace plugin and runtime are CLEANED AND REBUILT on every run, before
+anything else happens, and llvm-config is checked against the compiler first.
+They are two compiler invocations and take seconds; a stale libBranchTrace_mtu.so
+costs a whole census, because it satisfies every existence check and then
+instruments according to whatever the pass source said at the last build.
+--skip-build implies --no-brx-build: compiling nothing means the .brsites
+already on disk came from the previous pass, so replacing that pass would make
+the side tables and the binaries disagree.
 
 Layout produced (one subtree per optimisation level, so -O0 and -O2 runs never
 overwrite each other -- same convention as run_lulesh_fpchecker.py):
@@ -26,12 +37,18 @@ overwrite each other -- same convention as run_lulesh_fpchecker.py):
       results/
         O0/  builds/   fp32.build.log  fp32.run.log  fp32.build_info.txt ...
              traces/   lulesh_fp32.out  lulesh_fp64.out  lulesh_ld.out
-             fp32_vs_fp64/  report.txt  flips.csv  diff.log
-             fp64_vs_ld/    report.txt  flips.csv  diff.log
+             fp32_vs_fp64/  report.txt  flips.csv  sites.txt  diff.log
+             fp64_vs_ld/    report.txt  flips.csv  sites.txt  diff.log
              summary.txt  summary.json
         O2/  ...
       build/
         O0/lulesh_fp32/  O0/lulesh_fp64/  O0/lulesh_ld/  O2/...
+
+sites.txt is the per-site census -- one row per static site, classed TP / TN /
+DEAD -- and is the file adjudicate_cell.py scores tool output against.
+report.txt is for reading; sites.txt is for scoring. Do not generate it under
+--fast: that skips the execution census, so TN and DEAD collapse together and
+the adjudicator refuses the file.
 
 Sources are COPIED out of BENCH_ROOT into build/<opt>/ before compiling. The
 pass writes .brsites/.brmods next to each module, so building in place would
@@ -471,6 +488,109 @@ def precision_check(binaries, variants, allow, dry=False):
     log()
 
 
+# ----------------------------------------------------------- brtrace build
+
+def _llvm_version(cmd):
+    """Version string from a tool's --version output, or None."""
+    try:
+        out = subprocess.run("%s --version" % cmd, shell=True, text=True,
+                             timeout=60, stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT).stdout
+    except Exception:
+        return None
+    m = re.search(r"(\d+\.\d+\.\d+)", out)
+    return m.group(1) if m else None
+
+
+def check_llvm_match(cxx):
+    """The plugin must be built against the same LLVM the compiler runs.
+
+    A mismatch is the single most expensive failure here: the plugin builds
+    cleanly, then clang++ dlopens it and either dies with an undefined symbol
+    or segfaults partway through a build. Both look like a broken benchmark
+    rather than a broken toolchain, so check before spending the time.
+    """
+    lv = _llvm_version("llvm-config")
+    cv = _llvm_version(shlex.quote(cxx))
+    log("    llvm-config %s   %s %s"
+        % (lv or "?", cxx, cv or "?"))
+    if lv is None:
+        die("llvm-config is not on PATH -- activate the conda env "
+            "(fpchecker_env) first.")
+    if cv is None:
+        log("    WARNING: could not read a version from %s; skipping the "
+            "match check" % cxx)
+        return
+    if lv != cv:
+        die("LLVM version mismatch: llvm-config is %s but %s is %s.\n"
+            "       The plugin would be built against %s headers and then "
+            "loaded by a\n       %s driver, which segfaults or fails with "
+            "undefined symbols mid-build.\n"
+            "       Activate the conda env whose clang matches llvm-config, "
+            "or point\n       --cxx at the matching compiler."
+            % (lv, cxx, cv, lv, cv))
+
+
+def build_brx(brx, cxx, dry=False):
+    """Clean and rebuild libBranchTrace_mtu.so + brtrace_runtime_mtu.o.
+
+    Always a clean rebuild. The artifacts are two compiler invocations and take
+    seconds, whereas a stale .so is undetectable: the runner's existence check
+    passes, the pass loads, and it silently instruments according to whatever
+    the source looked like at the last build. That failure mode cost a full
+    census round once already (select instrumentation landed in the pass, the
+    stale .so did not have it, and the run looked normal).
+
+    Removing the artifacts BEFORE building matters too: if the build fails
+    partway, a leftover .so from the previous build would still satisfy the
+    existence check downstream.
+    """
+    script = brx / "build_mtu.sh"
+    plugin = brx / "libBranchTrace_mtu.so"
+    runtime = brx / "brtrace_runtime_mtu.o"
+
+    log("  [brtrace build]")
+    if not script.exists():
+        die("no build_mtu.sh at %s\n"
+            "       Pass --brx <your brtrace dir>, or --no-brx-build if you "
+            "have built\n       the plugin and runtime some other way."
+            % script)
+
+    check_llvm_match(cxx)
+
+    if not dry:
+        for f in (plugin, runtime):
+            if f.exists():
+                f.unlink()
+                log("    removed stale %s" % f.name)
+
+    env = os.environ.copy()
+    # Keep the plugin, the runtime and the benchmark on one compiler. The
+    # runtime object gets linked into the instrumented binary, so an ABI
+    # difference between it and the benchmark shows up at link time.
+    env["CXX"] = cxx
+    env["CC"] = re.sub(r"clang\+\+", "clang", cxx)
+    # Invoked as `bash build_mtu.sh`, not `./build_mtu.sh`. The execute bit is
+    # routinely lost moving this tree between machines (zip, scp -r, tar
+    # without -p, a checkout on a filesystem that ignores modes), and the
+    # failure is an opaque "exit 126 / Permission denied" from /bin/sh. Naming
+    # the interpreter makes the mode irrelevant.
+    rc, out = sh("bash build_mtu.sh", cwd=brx, env=env,
+                 logfile=brx / "build_mtu.log", dry=dry)
+    if dry:
+        return
+    if rc != 0:
+        for line in out.strip().splitlines()[-20:]:
+            log("    %s" % line[:200])
+        die("brtrace build failed -- see %s" % (brx / "build_mtu.log"))
+    for f in (plugin, runtime):
+        if not f.exists():
+            die("build_mtu.sh exited 0 but did not produce %s -- see %s"
+                % (f.name, brx / "build_mtu.log"))
+    log("    built %s, %s" % (plugin.name, runtime.name))
+    log()
+
+
 # ------------------------------------------------------- matched-build check
 
 def check_matched(counts_by_variant, variants, allow, dry=False):
@@ -833,13 +953,20 @@ def run_one_opt(opt, args, cfg, dry=False):
         pdir = outdir / label
         pdir.mkdir(parents=True, exist_ok=True)
         report, csv = pdir / "report.txt", pdir / "flips.csv"
+        # The per-site census. adjudicate_cell.py scores tool output against
+        # this file, not against report.txt -- it needs the TP/TN/DEAD class
+        # per site, which only --sites-txt emits. Without it every downstream
+        # cell reports "no census" after all the builds and runs have
+        # completed, which is an expensive way to find out.
+        sites_txt = pdir / "sites.txt"
         # The reference side supplies the static site universe. Its .brsites
         # files sit in its BUILD dir, written there at compile time.
         mods = BUILD_ROOT / opt / VARIANTS[b]
-        cmd = ("python3 %s %s %s --mods %s --csv %s --report %s"
+        cmd = ("python3 %s %s %s --mods %s --csv %s --report %s --sites-txt %s"
                % (shlex.quote(str(cfg["diff"])), shlex.quote(str(traces[a])),
                   shlex.quote(str(traces[b])), shlex.quote(str(mods)),
-                  shlex.quote(str(csv)), shlex.quote(str(report))))
+                  shlex.quote(str(csv)), shlex.quote(str(report)),
+                  shlex.quote(str(sites_txt))))
         if args.progress:
             cmd += " --progress %d" % args.progress
         if args.fast:
@@ -866,7 +993,8 @@ def run_one_opt(opt, args, cfg, dry=False):
         if not dry:
             pair_records.append({
                 "label": label, "a": a, "b": b, "opt": opt,
-                "report": str(report), "csv": str(csv), "exit": rc,
+                "report": str(report), "csv": str(csv),
+                "sites_txt": str(sites_txt), "exit": rc,
                 "headline": extract_headline(out),
                 "sites": extract_sites(out),
                 "divergence_note": extract_divergence_note(out)})
@@ -933,10 +1061,11 @@ def main():
     ap = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--opt", nargs="+", default=["O0", "O2"],
+    ap.add_argument("--opt", nargs="+", default=["O0"],
                     choices=["O0", "O1", "O2", "O3"],
                     help="optimisation level(s); each gets its own subtree "
-                         "(default: O0 O2)")
+                         "(default: O0). Pass 'O0 O2' to also get the "
+                         "cross-level site-identity check.")
     ap.add_argument("-s", "--size", type=int, default=5,
                     help="LULESH -s (default 5, matching "
                          "run_lulesh_fpchecker.py; the published census "
@@ -978,6 +1107,11 @@ def main():
                          "execution census; TN counts become unavailable)")
     ap.add_argument("--progress", type=int, default=25,
                     help="diff progress every N million events (0=off)")
+    ap.add_argument("--no-brx-build", action="store_true",
+                    help="do not rebuild the brtrace plugin and runtime. By "
+                         "default they are cleaned and rebuilt every run, "
+                         "because a stale .so passes every existence check and "
+                         "silently instruments the wrong thing.")
     ap.add_argument("--skip-probe", action="store_true",
                     help="skip the pre-build plugin probe")
     ap.add_argument("--skip-build", action="store_true")
@@ -996,10 +1130,43 @@ def main():
     RESULT_ROOT = WORK_ROOT / "results"
     dry = args.dry_run
 
+    # --fast skips the per-site execution census, so sites.txt comes back with
+    # executions=0 everywhere and every non-flipping site is written as DEAD.
+    # adjudicate_cell.py cannot tell DEAD from TN in that file and refuses to
+    # score it. Say so now rather than after three builds and three runs.
+    if args.fast:
+        sys.stderr.write(
+            "WARNING: --fast skips the execution census. sites.txt will mark\n"
+            "         every non-flipping site DEAD, and adjudicate_cell.py\n"
+            "         will refuse it. Use --fast only for a quick look at\n"
+            "         flip counts, never to produce a scoreable census.\n")
+
+    # Rebuild the pass and runtime by default, before anything else touches
+    # them. Skipped under --skip-build, which means "compile nothing" -- and
+    # rebuilding the plugin there would be actively wrong, since the .brsites
+    # already on disk came from whatever pass built the benchmark.
+    brx_build_scheduled = not (args.no_brx_build or args.skip_build)
+    if args.no_brx_build:
+        log("  [brtrace build] skipped (--no-brx-build)")
+        log()
+    elif args.skip_build:
+        log("  [brtrace build] skipped (--skip-build: compiling nothing, and "
+            "the")
+        log("                  .brsites on disk came from the previous pass)")
+        log()
+    else:
+        build_brx(BRX_ROOT, args.cxx, dry=dry)
+
     plugin = BRX_ROOT / "libBranchTrace_mtu.so"
     runtime = BRX_ROOT / "brtrace_runtime_mtu.o"
     diff = BRX_ROOT / "tools" / "brtrace_diff_mtu.py"
-    missing = [f for f in (plugin, runtime, diff) if not f.exists()]
+    check = [plugin, runtime, diff]
+    if dry and brx_build_scheduled:
+        # A dry run executes nothing, so the build above did not actually
+        # produce these. Complaining that they are absent would be complaining
+        # about the dry run itself.
+        check = [diff]
+    missing = [f for f in check if not f.exists()]
     if missing:
         parts = ["brtrace is incomplete at %s\n" % BRX_ROOT]
         for f in (plugin, runtime, diff):
