@@ -7,7 +7,7 @@ To build the tool, follow these steps:
 
 1. Make sure the clang++ compiler is available on your system. You can check this by running `clang++ --version` in your terminal. The current supported version is 19.
 
-2. If not available, a conda enviroment like the following can be loaded:
+2. If not available, a conda environment like the following can be loaded:
 
 ```bash
 source ~/.bashrc
