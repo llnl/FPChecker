@@ -1,4 +1,3 @@
-
 #include "Instrumentation_error.h"
 #include "CodeMatching.h"
 #include "Logging.h"
@@ -21,37 +20,8 @@
 #include <list>
 #include <string>
 
-#include <vector>   /* Phase 2 */
-#include <cstdlib>  /* Phase 2 */
-
-namespace {  /* Phase 2: parse "_FPC_PERTURB_INPUTS_" spec strings */
-struct PerturbTarget { int argIndex; long count; };  // count<0 => scalar
-static std::vector<PerturbTarget> parsePerturbSpec(const std::string &spec)
-{
-  std::vector<PerturbTarget> out;
-  size_t i = 0, n = spec.size();
-  while (i < n)
-  {
-    while (i < n && (spec[i] == ';' || spec[i] == ' ' || spec[i] == '\t')) i++;
-    if (i >= n) break;
-    if (spec.compare(i, 3, "arg") != 0) { while (i < n && spec[i] != ';') i++; continue; }
-    i += 3;
-    long idx = 0; bool haveIdx = false;
-    while (i < n && spec[i] >= '0' && spec[i] <= '9') { idx = idx*10 + (spec[i]-'0'); i++; haveIdx = true; }
-    if (!haveIdx) { while (i < n && spec[i] != ';') i++; continue; }
-    long count = -1;
-    if (i < n && spec[i] == '[')
-    {
-      i++; long k = 0; bool haveK = false;
-      while (i < n && spec[i] >= '0' && spec[i] <= '9') { k = k*10 + (spec[i]-'0'); i++; haveK = true; }
-      if (i < n && spec[i] == ']') i++;
-      count = haveK ? k : 0;
-    }
-    out.push_back(PerturbTarget{(int)idx, count});
-  }
-  return out;
-}
-}  // namespace  /* BF Phase 2 */
+#include <vector>
+#include <cstdlib>
 
 using namespace CPUAnalysis;
 using namespace llvm;
@@ -85,9 +55,7 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   fpc_fp32_cmp_function(nullptr),
   fpc_fp32_push_ret_error(nullptr), fpc_fp32_pop_ret_error(nullptr),
   fpc_fp32_push_arg_error(nullptr), fpc_fp32_pop_arg_error(nullptr),
-  fpc_fp32_math_error(nullptr),
-  fpc_fp32_perturb_scalar(nullptr),   /* BF Phase 2 */
-  fpc_fp32_perturb_pointer(nullptr)   /* BF Phase 2 */
+  fpc_fp32_math_error(nullptr)
 {
 
 #ifdef FPC_DEBUG
@@ -188,18 +156,6 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
                    GlobalValue::LinkageTypes::LinkOnceODRLinkage,
                    "_FPC_FP32_MATH_ERROR_");
     }
-    if (f->getName().str().find("_FPC_FP32_PERTURB_SCALAR_") != std::string::npos)
-    {
-      confFunction(f, &fpc_fp32_perturb_scalar,
-                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
-                   "_FPC_FP32_PERTURB_SCALAR_");
-    }
-    if (f->getName().str().find("_FPC_FP32_PERTURB_POINTER_") != std::string::npos)
-    {
-      confFunction(f, &fpc_fp32_perturb_pointer,
-                   GlobalValue::LinkageTypes::LinkOnceODRLinkage,
-                   "_FPC_FP32_PERTURB_POINTER_");
-    }
 
     SET_ODR_LIKAGE("_FPC_FP32_STORE_INST_")
     SET_ODR_LIKAGE("_FPC_FP32_LOAD_INST_")
@@ -216,8 +172,6 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
     SET_ODR_LIKAGE("_FPC_FP32_PUSH_ARG_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP32_POP_ARG_ERROR_")
     SET_ODR_LIKAGE("_FPC_FP32_MATH_ERROR_")
-    SET_ODR_LIKAGE("_FPC_FP32_PERTURB_SCALAR_")   /* BF Phase 2 */
-    SET_ODR_LIKAGE("_FPC_FP32_PERTURB_POINTER_")  /* BF Phase 2 */
 
     // Hash table functions
     SET_ODR_LIKAGE("_FPC_ADDRESS_HT_CREATE_")
@@ -354,8 +308,42 @@ CPUFPInstrumentation_error::CPUFPInstrumentation_error(Module *M)
   assert(arg_buf_count && "Invalid variable!");
   arg_buf_count->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
 
+  /* Site counter table: LinkOnceODR like the other runtime globals, so the
+   * occurrence index is shared across TUs. Not asserted; a runtime without
+   * the counter is still valid. */
+  if (GlobalVariable *site_tab =
+          mod->getGlobalVariable("_FPC_SITE_TAB_", true))
+    site_tab->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  if (GlobalVariable *site_init =
+          mod->getGlobalVariable("_FPC_SITE_TAB_INIT_", true))
+    site_init->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  if (GlobalVariable *site_used =
+          mod->getGlobalVariable("_FPC_SITE_TAB_USED_", true))
+    site_used->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+  if (GlobalVariable *site_ovf =
+          mod->getGlobalVariable("_FPC_SITE_TAB_OVERFLOW_", true))
+    site_ovf->setLinkage(GlobalValue::LinkageTypes::LinkOnceODRLinkage);
+
   // Set module filename
   module_filename = CUDAAnalysis::getFileNameFromModule(M);
+
+  /* Site map, built here on the pristine module: the enumeration is
+   * positional, so it must run before any instrumentation is inserted. Site
+   * count must match brtrace (check_sites.py). */
+  /* Opt level comes from the environment; recorded in the manifest so
+   * check_sites.py can refuse a cross-level comparison. */
+  const char *fpc_opt_env = getenv("FPC_OPT_LEVEL");
+  site_map.reset(new FPCSite::SiteMap(*M, fpc_opt_env ? fpc_opt_env : ""));
+  site_map->writeManifest(*M);
+  if (getenv("FPC_BRANCH_FLIP") != NULL)
+  {
+    errs() << "[FPChecker] " << module_filename << " (mod "
+           << site_map->getModuleId() << "): " << site_map->getNumSites()
+           << " FP-controlled branch sites";
+    if (unsigned n_multi = site_map->countMultiFCmpSites())
+      errs() << ", " << n_multi << " with multiple fcmps";
+    errs() << "\n";
+  }
 }
 
 // ********************************************************************
@@ -454,6 +442,13 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
 
         std::vector<Value *> popArgs;
         popArgs.push_back(paramIndexVal);
+        {
+          // Runtime fallback value.
+          Value *av = &arg;
+          if (av->getType()->isFloatTy())
+            av = popBuilder.CreateFPExt(av, Type::getDoubleTy(mod->getContext()));
+          popArgs.push_back(av);
+        }
         popArgs.push_back(popBuilder.CreateGlobalStringPtr(paramRegName));
         popArgs.push_back(popBuilder.CreateGlobalStringPtr(f->getName()));
 
@@ -467,110 +462,6 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
       }
     }
   }
-
-  /* ===== Phase 2: seed input perturbation for annotated functions =====
-   * Seeds the error tables at function entry for inputs named in the
-   * _FPC_PERTURB_INPUTS_ annotation. Scalars -> register table (via the
-   * spill slot at -O0); pointers -> address table (per element). The live
-   * SSA value is NOT modified: seed-only (mechanism-b) form of Phase 2.
-   * Guarded so the pass stays usable against a runtime lacking the helpers. */
-  if (fpc_fp32_perturb_scalar && fpc_fp32_perturb_pointer)
-  {
-    std::string perturbSpec;
-    if (getPerturbSpec(f, perturbSpec))
-    {
-      std::vector<PerturbTarget> targets = parsePerturbSpec(perturbSpec);
-
-      std::vector<llvm::Argument *> argv;
-      for (auto &a : f->args()) argv.push_back(&a);
-
-      IRBuilder<> pBuilder(first_inst);
-
-      for (const auto &t : targets)
-      {
-        if (t.argIndex < 0 || (size_t)t.argIndex >= argv.size())
-          continue;
-        llvm::Argument *arg = argv[t.argIndex];
-
-        std::string regName;
-        { llvm::raw_string_ostream rso(regName); arg->printAsOperand(rso, false); rso.flush(); }
-        Value *regStr = pBuilder.CreateGlobalStringPtr(regName);
-        Value *fnStr  = pBuilder.CreateGlobalStringPtr(f->getName());
-
-        if (t.count < 0)
-        {
-          // Scalar float parameter.
-          if (!arg->getType()->isFloatTy())
-            continue;
-
-          // At -O0 the parameter is immediately spilled to a stack slot and
-          // every downstream use reloads from it. Seeding the register table
-          // (keyed on the SSA arg) is orphaned: reloads read error from the
-          // ADDRESS table for the slot, which is unseeded. Fix: find the alloca
-          // the arg is stored into and seed that slot via the pointer hook
-          // (n=1), inserting AFTER the spill store so the slot holds the value.
-          llvm::StoreInst *spill = nullptr;
-          for (llvm::User *U : arg->users())
-          {
-            if (auto *SI = llvm::dyn_cast<llvm::StoreInst>(U))
-            {
-              if (SI->getValueOperand() == arg &&
-                  llvm::isa<llvm::AllocaInst>(SI->getPointerOperand()))
-              {
-                spill = SI;
-                break;
-              }
-            }
-          }
-
-          if (spill)
-          {
-            llvm::Value *slot = spill->getPointerOperand();
-            IRBuilder<> slotBuilder(spill->getNextNode());
-            Value *slotRegStr = slotBuilder.CreateGlobalStringPtr(regName);
-            Value *slotFnStr  = slotBuilder.CreateGlobalStringPtr(f->getName());
-            std::vector<Value *> a;
-            a.push_back(slot);      // const float *p  (the stack slot)
-            a.push_back(ConstantInt::get(Type::getInt64Ty(mod->getContext()),
-                                         (uint64_t)1, true));  // long n = 1
-            a.push_back(slotRegStr);
-            a.push_back(slotFnStr);
-            CallInst *c = slotBuilder.CreateCall(fpc_fp32_perturb_pointer, a);
-            (*insrtrumented_instructions)++;
-            setFakeDebugLocation(first_inst, c, f);
-          }
-          else
-          {
-            // No spill (arg stays in a register): seed register table.
-            std::vector<Value *> a;
-            a.push_back(arg);
-            a.push_back(regStr);
-            a.push_back(fnStr);
-            CallInst *c = pBuilder.CreateCall(fpc_fp32_perturb_scalar, a);
-            (*insrtrumented_instructions)++;
-            setFakeDebugLocation(first_inst, c, f);
-          }
-        }
-        else if (t.count > 0)
-        {
-          // Pointer parameter with fixed element count -> seed address table.
-          if (!arg->getType()->isPointerTy())
-            continue;
-          std::vector<Value *> a;
-          a.push_back(arg);       // const float *p
-          a.push_back(ConstantInt::get(Type::getInt64Ty(mod->getContext()),
-                                       (uint64_t)t.count, true));  // long n
-          a.push_back(regStr);
-          a.push_back(fnStr);
-          CallInst *c = pBuilder.CreateCall(fpc_fp32_perturb_pointer, a);
-          (*insrtrumented_instructions)++;
-          setFakeDebugLocation(first_inst, c, f);
-        }
-        // t.count == 0 (symbolic/unresolved length): skip safely for this cut.
-      }
-    }
-  }
-  /* ===== end Phase 2 ===== */
 
   for (auto bb = f->begin(), end = f->end(); bb != end; ++bb)
   {
@@ -879,31 +770,45 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
             cmpInst->getOperand(1)->getType()->isFloatTy())
         {
           int predicateCode = -1;
+          /* Bit 3 marks an unordered predicate (true on NaN); low bits are the
+           * comparison, unchanged. */
           switch (cmpInst->getPredicate())
           {
           case llvm::CmpInst::Predicate::FCMP_OEQ:
-          case llvm::CmpInst::Predicate::FCMP_UEQ:
             predicateCode = 0;
             break;
+          case llvm::CmpInst::Predicate::FCMP_UEQ:
+            predicateCode = 0 | 8;
+            break;
           case llvm::CmpInst::Predicate::FCMP_ONE:
-          case llvm::CmpInst::Predicate::FCMP_UNE:
             predicateCode = 1;
             break;
+          case llvm::CmpInst::Predicate::FCMP_UNE:
+            predicateCode = 1 | 8;
+            break;
           case llvm::CmpInst::Predicate::FCMP_OLT:
-          case llvm::CmpInst::Predicate::FCMP_ULT:
             predicateCode = 2;
             break;
+          case llvm::CmpInst::Predicate::FCMP_ULT:
+            predicateCode = 2 | 8;
+            break;
           case llvm::CmpInst::Predicate::FCMP_OLE:
-          case llvm::CmpInst::Predicate::FCMP_ULE:
             predicateCode = 3;
             break;
+          case llvm::CmpInst::Predicate::FCMP_ULE:
+            predicateCode = 3 | 8;
+            break;
           case llvm::CmpInst::Predicate::FCMP_OGT:
-          case llvm::CmpInst::Predicate::FCMP_UGT:
             predicateCode = 4;
             break;
+          case llvm::CmpInst::Predicate::FCMP_UGT:
+            predicateCode = 4 | 8;
+            break;
           case llvm::CmpInst::Predicate::FCMP_OGE:
-          case llvm::CmpInst::Predicate::FCMP_UGE:
             predicateCode = 5;
+            break;
+          case llvm::CmpInst::Predicate::FCMP_UGE:
+            predicateCode = 5 | 8;
             break;
           default:
             predicateCode = -1;
@@ -916,7 +821,12 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
             ++nextInst;
             IRBuilder<> builder(&(*nextInst));
 
-            int lineNumber = CUDAAnalysis::getLineOfCode(inst);
+            /* File and line from this instruction's own DILocation, walking
+             * getInlinedAt(), so a site in an inlined header is not reported
+             * under the including TU. */
+            int lineNumber = FPCSite::lineOf(inst);
+            std::string siteFile = FPCSite::fileOf(inst);
+            Value *siteFileStr = builder.CreateGlobalStringPtr(siteFile);
             if (lineNumber != -1)
             {
               std::string resultName;
@@ -940,14 +850,22 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
               args.push_back(cmpInst->getOperand(1));
               args.push_back(ConstantInt::get(builder.getInt32Ty(), predicateCode));
               args.push_back(ConstantInt::get(builder.getInt32Ty(), lineNumber));
-              args.push_back(loadInst_filename);
+              args.push_back(siteFileStr);
               args.push_back(builder.CreateGlobalStringPtr(resultName));
               args.push_back(builder.CreateGlobalStringPtr(lhsName));
               args.push_back(builder.CreateGlobalStringPtr(rhsName));
               args.push_back(builder.CreateGlobalStringPtr(f->getName()));
-               // Phase 1: mark whether this compare directly controls a branch.
+               // Whether this compare directly controls a branch.
               int isBrCtrl = isBranchControllingFCmp(inst) ? 1 : 0;
               args.push_back(ConstantInt::get(builder.getInt32Ty(), isBrCtrl));
+
+              /* -1: this comparison controls no numbered branch (select,
+               * zext-to-bool, call). Reported and counted out of scope, not
+               * dropped. */
+              int32_t siteId = site_map ? site_map->siteFor(inst) : -1;
+              uint32_t modId = site_map ? site_map->getModuleId() : 0u;
+              args.push_back(ConstantInt::get(builder.getInt32Ty(), modId));
+              args.push_back(ConstantInt::get(builder.getInt32Ty(), siteId));
 
               ArrayRef<Value *> args_ref(args);
               CallInst *hookCall = builder.CreateCall(fpc_fp32_cmp_function, args_ref);
@@ -1057,6 +975,13 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
 
             std::vector<Value *> args;
             args.push_back(builder.CreateGlobalStringPtr(resultName));
+            // Runtime fallback value; hook takes double.
+            {
+              Value *rv = callInst;
+              if (rv->getType()->isFloatTy())
+                rv = builder.CreateFPExt(rv, Type::getDoubleTy(mod->getContext()));
+              args.push_back(rv);
+            }
             args.push_back(builder.CreateGlobalStringPtr(f->getName()));
             std::string calleeName = "";
             if (calledFunction)
@@ -1397,6 +1322,13 @@ void CPUFPInstrumentation_error::instrumentFunctionErrorAnalysis(Function *f, lo
 
           std::vector<Value *> args;
           args.push_back(builder.CreateGlobalStringPtr(combinedStr));
+          {
+            // Runtime fallback value.
+            Value *pv = phiInst;
+            if (pv->getType()->isFloatTy())
+              pv = builder.CreateFPExt(pv, Type::getDoubleTy(mod->getContext()));
+            args.push_back(pv);
+          }
           args.push_back(builder.CreateGlobalStringPtr(f->getName()));
           ArrayRef<Value *> args_ref(args);
           CallInst *callInst = builder.CreateCall(fpc_fp32_phi_function, args_ref);
@@ -1492,8 +1424,7 @@ bool CPUFPInstrumentation_error::isCmpEqual(const Instruction *inst)
   return false;
 }
 
-
-// Phase 1: returns true if inst is an FCmp on float operands whose result
+// Returns true if inst is an FCmp on float operands whose result
 // directly controls a conditional branch.
 bool CPUFPInstrumentation_error::isBranchControllingFCmp(const Instruction *inst)
 {
@@ -1531,64 +1462,36 @@ bool CPUFPInstrumentation_error::isBranchControllingFCmp(const Instruction *inst
           return true;
       }
     }
+    // fcmp -> phi -> branch/select: the -O0 lowering of a short-circuit `&&`
+    // whose right operand is an FP compare. Followed only when every incoming
+    // is an fcmp or a constant i1, matching FPC_SiteId.h::isFPControlled().
+    if (const PHINode *phi = dyn_cast<PHINode>(U))
+    {
+      bool onlyFCmpOrConst = true;
+      bool sawFCmp = false;
+      for (unsigned i = 0, e = phi->getNumIncomingValues(); i != e; ++i)
+      {
+        const Value *in = phi->getIncomingValue(i);
+        if (isa<FCmpInst>(in))
+          sawFCmp = true;
+        else if (!isa<ConstantInt>(in))
+        {
+          onlyFCmpOrConst = false;
+          break;
+        }
+      }
+      if (onlyFCmpOrConst && sawFCmp)
+      {
+        for (const User *U2 : phi->users())
+        {
+          if (isa<BranchInst>(U2) || isa<SelectInst>(U2))
+            return true;
+        }
+      }
+    }
     // fcmp result is a direct operand of a select or call.
     if (isa<SelectInst>(U) || isa<CallInst>(U))
       return true;
-  }
-  return false;
-}
-
-
-/* Phase 2: returns the payload after "_FPC_PERTURB_INPUTS_:" in outSpec. */
-bool CPUFPInstrumentation_error::getPerturbSpec(const Function *f, std::string &outSpec)
-{
-  const char *TAG = "_FPC_PERTURB_INPUTS_:";
-  assert((f != nullptr) && "Function not initialized!");
-  const llvm::Module *M = f->getParent();
-  if (M == nullptr)
-    return false;
-
-  llvm::GlobalVariable *GV = M->getGlobalVariable("llvm.global.annotations");
-  if (!GV || !GV->hasInitializer())
-    return false;
-
-  llvm::Constant *Initializer = GV->getInitializer();
-  llvm::ConstantArray *CA = llvm::dyn_cast<llvm::ConstantArray>(Initializer);
-  if (!CA)
-    return false;
-
-  for (unsigned i = 0; i < CA->getNumOperands(); ++i)
-  {
-    llvm::ConstantStruct *CS = llvm::dyn_cast<llvm::ConstantStruct>(CA->getOperand(i));
-    if (!CS || CS->getNumOperands() != 5)
-      continue;
-
-    llvm::Value *AnnotatedValue = CS->getOperand(0)->stripPointerCasts();
-    llvm::Function *AnnotatedFunc = llvm::dyn_cast<llvm::Function>(AnnotatedValue);
-    if (!(AnnotatedFunc && AnnotatedFunc == f))
-      continue;
-
-    llvm::Constant *AnnotationStrPtrConstant = CS->getOperand(1);
-    llvm::GlobalVariable *AnnotationStrGV =
-        llvm::dyn_cast<llvm::GlobalVariable>(AnnotationStrPtrConstant->stripPointerCasts());
-    if (!(AnnotationStrGV && AnnotationStrGV->hasInitializer()))
-      continue;
-
-    llvm::Constant *StringInitializer = AnnotationStrGV->getInitializer();
-    llvm::ConstantDataArray *CDA = llvm::dyn_cast<llvm::ConstantDataArray>(StringInitializer);
-    if (!(CDA && CDA->isString()))
-      continue;
-
-    llvm::StringRef s = CDA->getAsString();
-    while (!s.empty() && s.back() == '\0')
-      s = s.drop_back();
-
-    size_t pos = s.find(TAG);
-    if (pos != llvm::StringRef::npos)
-    {
-      outSpec = s.substr(pos + std::string(TAG).size()).str();
-      return true;
-    }
   }
   return false;
 }

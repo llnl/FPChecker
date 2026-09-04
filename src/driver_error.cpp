@@ -1,4 +1,3 @@
-
 #include "CodeMatching.h"
 #include "Instrumentation_error.h"
 #include "Logging.h"
@@ -25,6 +24,7 @@
 #include <iostream>
 #include <set>
 #include <string>
+#include <cstdlib>
 
 using namespace llvm;
 
@@ -140,7 +140,8 @@ namespace CPUAnalysis
             {
               MPM.addPass(CPUPrepareO0ForErrorAnalysis());
               MPM.addPass(createModuleToFunctionPassAdaptor(PromotePass()));
-              MPM.addPass(createModuleToFunctionPassAdaptor(SimplifyCFGPass()));
+              if (getenv("FPC_BRANCH_FLIP") == NULL)
+                MPM.addPass(createModuleToFunctionPassAdaptor(SimplifyCFGPass()));
             }
             // MPM.addPass(createModuleToFunctionPassAdaptor(CPUKernelAnalysis()));
             MPM.addPass(CPUKernelAnalysis());

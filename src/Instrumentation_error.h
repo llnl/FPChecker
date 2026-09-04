@@ -2,7 +2,9 @@
 #define SRC_INSTRUMENTATION_H_
 
 #include "CommonTypes.h"
+#include "FPC_SiteId.h"
 #include "llvm/IR/IRBuilder.h"
+#include <memory>
 #include <string>
 
 using namespace llvm;
@@ -31,8 +33,11 @@ namespace CPUAnalysis
     Function *fpc_fp32_push_arg_error;
     Function *fpc_fp32_pop_arg_error;
     Function *fpc_fp32_math_error;
-    Function *fpc_fp32_perturb_scalar;   /* BF Phase 2 */
-    Function *fpc_fp32_perturb_pointer;  /* BF Phase 2 */
+
+    /* (module_id, site_id) for every FP-controlled branch, built ONCE in the
+     * constructor from the pristine module. Built later it would enumerate
+     * the branches FPChecker itself inserts, and every id would be wrong. */
+    std::unique_ptr<FPCSite::SiteMap> site_map;
 
     void setFakeDebugLocation(Instruction *old_inst, Instruction *new_inst, Function *f);
     Instruction *firstInstrution();
@@ -49,11 +54,10 @@ namespace CPUAnalysis
     static bool isDoubleFPOperation(const Instruction *inst);
     static bool isSingleFPOperation(const Instruction *inst);
     static bool isCmpEqual(const Instruction *inst);
-    static bool isBranchControllingFCmp(const Instruction *inst);  /* BF Phase 1 */
+    static bool isBranchControllingFCmp(const Instruction *inst);
     static bool isFMAOperation(const Instruction *inst);
     static bool isSupportedMathCall(const CallBase *CI, std::string &normalizedName);
     static bool functionisAnnotated(const Function *f, const char *annotation);
-    static bool getPerturbSpec(const Function *f, std::string &outSpec);  /* BF Phase 2 */
     static bool functionCallsFunctionWithFloatingPointValues(const Function *f);
   };
 
@@ -86,8 +90,11 @@ namespace CPUAnalysisFP64
     Function *fpc_fp64_push_arg_error;
     Function *fpc_fp64_pop_arg_error;
     Function *fpc_fp64_math_error;
-    Function *fpc_fp64_perturb_scalar;   /* BF Phase 2 */
-    Function *fpc_fp64_perturb_pointer;  /* BF Phase 2 */
+
+    /* (module_id, site_id) for every FP-controlled branch, built ONCE in the
+     * constructor from the pristine module. Built later it would enumerate
+     * the branches FPChecker itself inserts, and every id would be wrong. */
+    std::unique_ptr<FPCSite::SiteMap> site_map;
 
     void setFakeDebugLocation(Instruction *old_inst, Instruction *new_inst, Function *f);
     Instruction *firstInstrution();
@@ -111,7 +118,7 @@ namespace CPUAnalysisFP64
     static bool isDoubleFPOperation(const Instruction *inst);
     static bool isSingleFPOperation(const Instruction *inst);
     static bool isCmpEqual(const Instruction *inst);
-    static bool isBranchControllingFCmp(const Instruction *inst);  /* BF Phase 1 */
+    static bool isBranchControllingFCmp(const Instruction *inst);
     static bool isFMAOperation(const Instruction *inst);
 
     static bool isSupportedMathCall(const CallBase *CI,
@@ -120,7 +127,6 @@ namespace CPUAnalysisFP64
     static bool functionisAnnotated(const Function *f,
                                     const char *annotation);
 
-    static bool getPerturbSpec(const Function *f, std::string &outSpec);  /* BF Phase 2 */
 
     static bool functionCallsFunctionWithFloatingPointValues(const Function *f);
   };

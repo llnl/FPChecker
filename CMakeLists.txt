@@ -202,6 +202,7 @@ install(FILES
         "src/FPC_Hashtable_Error.h"
         "src/FPC_Hashtable_Error_FP64.h"
         "src/FPC_FloatSeries_List.h"
+        "src/FPC_SiteCounter.h"
         DESTINATION "src"
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ
 )

@@ -3,6 +3,7 @@
 
 #include "FPC_Hashtable_Error.h"
 #include "FPC_FloatSeries_List.h"
+#include "FPC_SiteCounter.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -84,74 +85,57 @@ FPC_SeriesManager *FPC_DATA_MANAGER;
 // Maximum number of warnings to print
 #define MAX_WARNINGS 3
 int _FPC_WARNING_COUNT_;
-/* The "we don't have its error" store warnings are capped at 3 with no
- * override. Left at 3 by default on purpose -- at -O0 these fire on every
- * spill slot and uncapping them produces gigabytes -- but FPC_MAX_WARNINGS
- * can raise it when you actually need to see them. */
+/* Store-miss warnings; FPC_MAX_WARNINGS overrides. */
 long _FPC_MAX_WARNINGS_ = MAX_WARNINGS;
 
 double _FPC_STABILITY_ETA_ABS_ = 0.0;
 double _FPC_STABILITY_ETA_REL_ = 1.0e-6;
 #define _FPC_STABILITY_TAU_ 1.0e-30
 int  _FPC_STABILITY_WARNING_COUNT_ = 0;
+/* Printed-line cap only; 0 or negative = unlimited. #FPC_EVENT records and
+ * #FPC_SITE tables are never capped. */
 long _FPC_STABILITY_MAX_WARNINGS_  = MAX_WARNINGS;
 int  _FPC_NONFINITE_WARNING_COUNT_ = 0;
-/* Was a hard #define of 10 with no override, so the eleventh and every
- * subsequent non-finite comparison vanished silently and could not even be
- * counted from the log afterwards.
- *
- * Default is now UNLIMITED: every non-finite comparison is reported. These
- * are the overflow-driven comparisons the study is about, and a silent cap
- * at ten makes the per-site distribution unrecoverable -- you cannot tell one
- * site overflowing 400,000 times from 400,000 sites overflowing once.
- *
- * Set FPC_NONFINITE_MAX_WARNINGS=<n> to cap it again (10 restores the old
- * behaviour). On a benchmark that overflows heavily this is a lot of output,
- * so pair it with FPC_BF_LOG=<path> to keep it out of the program's stdout. */
-long _FPC_NONFINITE_MAX_WARNINGS_ = 0;   /* 0 or negative = unlimited */
+/* Same convention as FPC_STABILITY_MAX_WARNINGS. */
+long _FPC_NONFINITE_MAX_WARNINGS_ = MAX_WARNINGS;
 
-/* What to do when the shadow state is non-finite at a branch-controlling
- * comparison. This is a real methodological choice, not a printing detail:
- *
- *   0 = ABSTAIN  (default, preserves previous numbers). The comparison is
- *       neither classified stable nor unstable. Reported and counted, but the
- *       tool has declined to answer -- which is NOT the same as saying the
- *       branch is stable, and must not be scored as a correct rejection.
- *
- *   1 = UNSTABLE. A non-finite uncertainty window swallows everything, so the
- *       comparison cannot be resolved, which is exactly what UNSTABLE means.
- *       Falls through to the normal warning path and is scored as a detection.
- *
- * The delta between the two settings is the cost of FPChecker's abstention on
- * overflow-driven flips. Run both. */
+/* Non-finite shadow at a branch-controlling comparison: 0 = abstain
+ * (default), 1 = classify UNSTABLE. An abstention is not a verdict and must
+ * not be scored as a correct rejection. */
 int _FPC_NONFINITE_POLICY_ = 0;
 
-/* Cause bits for a non-finite comparison. The old code ORed five distinct
- * conditions into one message, so a shadow trajectory that genuinely overflowed
- * could not be told apart from error tracking blowing up on a healthy value. */
+/* Shadow-rule tallies. */
+int _FPC_SHADOW_FLIP_COUNT_ = 0;      /* all SFLIP + SFLIPNF          */
+int _FPC_SHADOW_FLIP_NF_COUNT_ = 0;   /* SFLIPNF: shadow non-finite, native finite */
+/* On a shadow miss, seed from the native value (1) or from zero (0). */
+#ifndef FPC_SHADOW_FALLBACK_NATIVE
+#define FPC_SHADOW_FALLBACK_NATIVE 1
+#endif
+#define _FPC_SHADOW_FALLBACK_(v) (FPC_SHADOW_FALLBACK_NATIVE ? (v) : 0.0)
+
+/* Shadow-miss counters: places where no shadow state was found for a value
+ * and it was re-seeded. Printed in the exit summary. */
+long _FPC_SHADOW_MISS_LOAD_  = 0;   /* load: stored shadow failed reconciliation */
+long _FPC_SHADOW_MISS_STORE_ = 0;   /* store: register had no shadow             */
+long _FPC_SHADOW_MISS_RET_   = 0;   /* call result: return stack did not match   */
+long _FPC_SHADOW_MISS_ARG_   = 0;   /* parameter: argument buffer had no entry   */
+long _FPC_SHADOW_MISS_PHI_   = 0;   /* phi: incoming value untracked, not literal */
+
+/* Cause bits for a non-finite comparison. */
 #define _FPC_NF_NAN_VAL   0x01  /* shadow operand is NaN                  */
 #define _FPC_NF_INF_VAL   0x02  /* shadow operand is Inf                  */
 #define _FPC_NF_NAN_ERR   0x04  /* tracked abs/rel error is NaN           */
 #define _FPC_NF_INF_ERR   0x08  /* tracked abs/rel error is Inf           */
 #define _FPC_NF_INF_WIDTH 0x10  /* derived interval half-width non-finite */
 #define _FPC_NF_INF_ETA   0x20  /* eta_rel * magnitude overflowed         */
-/* The LOW-PRECISION operand -- the value the program actually computed.
- *
- * This is the bit that matters and it was missing. The shadow runs at HIGHER
- * precision than the program, so when the program overflows the shadow usually
- * does not: 1e38f*1e38f is inf in fp32 but 1e76 in the double shadow. The
- * non-finite state then shows up only indirectly, as err = shadow - inf = -inf,
- * i.e. as INF_ERR -- which reads like an error-model artifact but is in fact a
- * real program overflow. Checking y/z directly says so outright.
- *
- * Read the tags together:
- *   LOW_INF alone           -> the PROGRAM overflowed; the shadow is fine.
- *                              This is the overflow-driven case of interest.
- *   INF_VAL / NAN_VAL       -> the SHADOW trajectory itself went bad.
- *   INF_ERR without LOW_*   -> error tracking blew up on healthy values;
- *                              a tool artifact.                             */
+/* The program's own operand is non-finite. LOW_INF alone means the program
+ * overflowed while the wider shadow did not. */
 #define _FPC_NF_LOW_NAN   0x40  /* program (low-precision) operand is NaN */
 #define _FPC_NF_LOW_INF   0x80  /* program (low-precision) operand is Inf */
+
+/* Per-cause abstention tallies, indexed by bit position. */
+long _FPC_NF_CAUSE_COUNT_[8];
+static const char *_FPC_NF_CAUSE_NAMES_[8] = {"NAN_VAL", "INF_VAL", "NAN_ERR", "INF_ERR", "INF_WIDTH", "INF_ETA", "LOW_NAN", "LOW_INF"};
 
 static void _FPC_NF_CAUSE_STR_(int why, char *buf, size_t n)
 {
@@ -169,41 +153,13 @@ static void _FPC_NF_CAUSE_STR_(int why, char *buf, size_t n)
   if (!l) strncat(buf, "UNKNOWN", n - 1);
 }
 
-/* Branch-flip diagnostics can be routed to their own file with FPC_BF_LOG.
- * Uncapped output on a real benchmark is large and interleaves with the
- * program's own stdout, which makes both unreadable.
- *
- * NOT static, deliberately. This header is force-included into every TU, so a
- * static here would give each TU its own copy. Only ONE copy of
- * _FPC_INIT_STABILITY_CONFIG_ survives the link (that is what
- * -Wl,--allow-multiple-definition resolves), so it would open the file and set
- * only its own TU's pointer, and every other TU would still see NULL and write
- * to stdout -- splitting the diagnostics across two destinations. It happens to
- * work when the linker takes all the collapsed functions from the same object,
- * which is the usual case, but that is incidental. As a plain global it
- * collapses along with the other counters and there is exactly one. */
+/* FPC_BF_LOG=<path> routes branch-flip diagnostics to a file. Plain global,
+ * not static, so there is one instance per link. */
 FILE *_FPC_BF_LOG_FP_ = NULL;
 
 static FILE *_FPC_BF_OUT_(void)
 {
   return _FPC_BF_LOG_FP_ ? _FPC_BF_LOG_FP_ : stdout;
-}
-
-static int    _FPC_PERTURB_ENABLE_    = 0;
-static double _FPC_PERTURB_DELTA_ABS_ = 0.0;
-static double _FPC_PERTURB_DELTA_REL_ = 1.0e-7;
-static int    _FPC_PERTURB_SIGN_MODE_ = 0;
-static unsigned long _FPC_PERTURB_SIGN_TICK_ = 0;
-
-static double _FPC_PERTURB_NEXT_SIGN_(void)
-{
-  switch (_FPC_PERTURB_SIGN_MODE_)
-  {
-  case 1: return (_FPC_PERTURB_SIGN_TICK_++ % 2 == 0) ? 1.0 : -1.0;
-  case 2: return (rand() & 1) ? 1.0 : -1.0;
-  case 0:
-  default: return 1.0;
-  }
 }
 
 // Last basic block name
@@ -223,6 +179,9 @@ int _FPC_RET_STACK_TOP_;
 double _FPC_ARG_SHADOW_BUF_[_FPC_ARG_BUF_MAX_];
 double _FPC_ARG_ERR_BUF_[_FPC_ARG_BUF_MAX_];
 double _FPC_ARG_REL_ERR_BUF_[_FPC_ARG_BUF_MAX_];
+/* Valid bit per slot, so a callee whose caller did not push does not read a
+ * stale entry. */
+unsigned char _FPC_ARG_VALID_[_FPC_ARG_BUF_MAX_];
 int _FPC_ARG_BUF_COUNT_;
 
 // Forward declaration for lazy initialization helper.
@@ -259,6 +218,40 @@ static inline int _FPC_TRY_PARSE_FP_LITERAL_(const char *text, double *value)
 {
   if (text == NULL || text[0] == '\0')
     return 0;
+
+  /* LLVM prints non-short float constants as the hex bit pattern of the
+   * double ("0x3FB99999A0000000"); decode those. True hex floats ("0x1.8p3")
+   * still go to strtod. */
+  if (text[0] == '0' && (text[1] == 'x' || text[1] == 'X'))
+  {
+    int has_fp_syntax = 0, hex_digits = 0;
+    for (const char *p = text + 2; *p != '\0'; ++p)
+    {
+      if (*p == '.' || *p == 'p' || *p == 'P') { has_fp_syntax = 1; break; }
+      if ((*p >= '0' && *p <= '9') || (*p >= 'a' && *p <= 'f') ||
+          (*p >= 'A' && *p <= 'F')) { hex_digits++; continue; }
+      hex_digits = 0;
+      break;
+    }
+    if (!has_fp_syntax && hex_digits > 0 && hex_digits <= 16)
+    {
+      char *end = NULL;
+      unsigned long long bits = strtoull(text, &end, 16);
+      if (end != text)
+      {
+        while (*end == ' ' || *end == '\t' || *end == '\n' ||
+               *end == '\r' || *end == '\f' || *end == '\v')
+          ++end;
+        if (*end == '\0')
+        {
+          double decoded = 0.0;
+          memcpy(&decoded, &bits, sizeof(decoded));
+          *value = decoded;
+          return 1;
+        }
+      }
+    }
+  }
 
   char *endptr = NULL;
   double parsed = strtod(text, &endptr);
@@ -299,6 +292,10 @@ static double _FPC_STABILITY_WIDTH_(double abs_err, double rel_err, double val)
 static int _FPC_CLASSIFY_STABILITY_COMPRESSED_(int pred, double a, double b,
                                                double wa, double wb, double eta)
 {
+  /* The unordered bit is inert here (this rule abstains on NaN); strip it for
+   * the switch. */
+  pred = _FPC_PRED_BASE_(pred);
+
   double u = wa + wb + eta;
   double g = b - a;
   double diff = a - b;
@@ -329,9 +326,27 @@ static int _FPC_CLASSIFY_STABILITY_COMPRESSED_(int pred, double a, double b,
   }
 }
 
+/* LLVM fcmp semantics: ordered predicates are false on NaN, unordered are
+ * true. */
+static int _FPC_EVAL_PRED_(int pred, double a, double b)
+{
+  if (isnan((double)a) || isnan((double)b))
+    return (pred & _FPC_PRED_UNORD_) ? 1 : 0;
+  switch (_FPC_PRED_BASE_(pred))
+  {
+  case 0: return a == b;
+  case 1: return a != b;
+  case 2: return a <  b;
+  case 3: return a <= b;
+  case 4: return a >  b;
+  case 5: return a >= b;
+  default: return 0;
+  }
+}
+
 static const char *_FPC_PRED_NAME_COMPRESSED_(int pred)
 {
-  switch (pred)
+  switch (_FPC_PRED_BASE_(pred))
   {
   case 0: return "==";
   case 1: return "!=";
@@ -348,6 +363,56 @@ static const char *_FPC_PRED_NAME_COMPRESSED_(int pred)
 /*----------------------------------------------------------------------------*/
 
 /* Printed at exit via atexit(), registered in _FPC_INIT_STABILITY_CONFIG_. */
+#define _FPC_BF_PRECISION_ "fp32"
+
+/* .fpc_logs/branch_flip_<host>_<pid>.json: config, counters, per-site table.
+ * Events stay in the text log. */
+static void _FPC_BF_WRITE_JSON_(void)
+{
+  struct stat st = {0};
+  if (stat(".fpc_logs", &st) == -1)
+    mkdir(".fpc_logs", 0775);
+  char host[256];
+  if (gethostname(host, sizeof(host)) != 0)
+    strcpy(host, "node-unknown");
+  char path[512];
+  snprintf(path, sizeof(path), ".fpc_logs/branch_flip_%s_%d.json", host,
+           (int)getpid());
+  FILE *fp = fopen(path, "w");
+  if (!fp)
+    return;
+  fprintf(fp, "{\n");
+  fprintf(fp, "  \"precision\": \"%s\",\n", _FPC_BF_PRECISION_);
+  fprintf(fp, "  \"config\": {\"rule\": \"%s\", \"eta_abs\": %g, \"eta_rel\": %g, "
+              "\"nonfinite_policy\": \"%s\", \"shadow_fallback_native\": %d, "
+              "\"stability_max_warnings\": %ld, \"nonfinite_max_warnings\": %ld},\n",
+          _FPC_BF_MODE_ == (_FPC_RULE_INTERVAL | _FPC_RULE_SHADOW) ? "both"
+          : _FPC_BF_MODE_ == _FPC_RULE_SHADOW ? "shadow" : "interval",
+          _FPC_STABILITY_ETA_ABS_, _FPC_STABILITY_ETA_REL_,
+          _FPC_NONFINITE_POLICY_ ? "unstable" : "abstain",
+          FPC_SHADOW_FALLBACK_NATIVE ? 1 : 0,
+          _FPC_STABILITY_MAX_WARNINGS_, _FPC_NONFINITE_MAX_WARNINGS_);
+  fprintf(fp, "  \"counts\": {\"unstable\": %d, \"nonfinite\": %d, "
+              "\"shadow_flip\": %d, \"shadow_flip_nonfinite\": %d},\n",
+          _FPC_STABILITY_WARNING_COUNT_, _FPC_NONFINITE_WARNING_COUNT_,
+          _FPC_SHADOW_FLIP_COUNT_, _FPC_SHADOW_FLIP_NF_COUNT_);
+  fprintf(fp, "  \"nonfinite_causes\": {");
+  for (int b = 0; b < 8; ++b)
+    fprintf(fp, "%s\"%s\": %ld", b ? ", " : "", _FPC_NF_CAUSE_NAMES_[b],
+            _FPC_NF_CAUSE_COUNT_[b]);
+  fprintf(fp, "},\n");
+  fprintf(fp, "  \"shadow_misses\": {\"load\": %ld, \"store\": %ld, \"ret\": %ld, "
+              "\"arg\": %ld, \"phi\": %ld},\n",
+          _FPC_SHADOW_MISS_LOAD_, _FPC_SHADOW_MISS_STORE_, _FPC_SHADOW_MISS_RET_,
+          _FPC_SHADOW_MISS_ARG_, _FPC_SHADOW_MISS_PHI_);
+  fprintf(fp, "  \"sites\": ");
+  _FPC_SITE_DUMP_JSON_(fp);
+  fprintf(fp, ",\n  \"site_table_overflow\": %llu\n}\n",
+          (unsigned long long)_FPC_SITE_TAB_OVERFLOW_);
+  fclose(fp);
+  printf("#FPCHECKER: Writing branch-flip JSON to: %s\n", path);
+}
+
 static void _FPC_BF_SUMMARY_(void)
 {
   FILE *o = _FPC_BF_OUT_();
@@ -359,6 +424,19 @@ static void _FPC_BF_SUMMARY_(void)
     fprintf(o, "#FPCHECKER: NOTE: %d comparison(s) were ABSTAINED, not judged "
                "stable. Exclude them from scoring; do not count them as "
                "correct rejections.\n", _FPC_NONFINITE_WARNING_COUNT_);
+  if (_FPC_BF_MODE_ & _FPC_RULE_SHADOW)
+    fprintf(o, "#FPCHECKER: shadow-rule summary: sflip=%d sflip_nonfinite=%d\n",
+            _FPC_SHADOW_FLIP_COUNT_, _FPC_SHADOW_FLIP_NF_COUNT_);
+  fprintf(o, "#FPCHECKER: nonfinite causes:");
+  for (int b = 0; b < 8; ++b)
+    fprintf(o, " %s=%ld", _FPC_NF_CAUSE_NAMES_[b], _FPC_NF_CAUSE_COUNT_[b]);
+  fprintf(o, "\n");
+  fprintf(o, "#FPCHECKER: shadow misses: load=%ld store=%ld ret=%ld arg=%ld "
+             "phi=%ld\n", _FPC_SHADOW_MISS_LOAD_, _FPC_SHADOW_MISS_STORE_,
+          _FPC_SHADOW_MISS_RET_, _FPC_SHADOW_MISS_ARG_, _FPC_SHADOW_MISS_PHI_);
+  /* Per-site full-run execution totals. */
+  _FPC_SITE_DUMP_(o);
+  _FPC_BF_WRITE_JSON_();
   if (_FPC_BF_LOG_FP_) { fflush(_FPC_BF_LOG_FP_); fclose(_FPC_BF_LOG_FP_); }
 }
 
@@ -377,6 +455,18 @@ void _FPC_INIT_STABILITY_CONFIG_()
   char *nfp = getenv("FPC_NONFINITE_POLICY");
   if (nfp != NULL)
     _FPC_NONFINITE_POLICY_ = (strcmp(nfp, "unstable") == 0) ? 1 : 0;
+  /* FPC_BF_MODE = interval (default) | shadow | both */
+  char *bfm = getenv("FPC_BF_MODE");
+  if (bfm != NULL)
+  {
+    if (strcmp(bfm, "shadow") == 0)
+      _FPC_BF_MODE_ = _FPC_RULE_SHADOW;
+    else if (strcmp(bfm, "both") == 0)
+      _FPC_BF_MODE_ = _FPC_RULE_INTERVAL | _FPC_RULE_SHADOW;
+    else
+      _FPC_BF_MODE_ = _FPC_RULE_INTERVAL;
+  }
+
   char *bflog = getenv("FPC_BF_LOG");
   if (bflog != NULL && *bflog)
   {
@@ -388,32 +478,20 @@ void _FPC_INIT_STABILITY_CONFIG_()
       setvbuf(_FPC_BF_LOG_FP_, NULL, _IOFBF, 1 << 20);
   }
 
-  char *p_en = getenv("FPC_PERTURB_ENABLE");
-  if (p_en != NULL) _FPC_PERTURB_ENABLE_ = atoi(p_en);
-  char *p_da = getenv("FPC_PERTURB_DELTA_ABS");
-  if (p_da != NULL) _FPC_PERTURB_DELTA_ABS_ = atof(p_da);
-  char *p_dr = getenv("FPC_PERTURB_DELTA_REL");
-  if (p_dr != NULL) _FPC_PERTURB_DELTA_REL_ = atof(p_dr);
-  char *p_sg = getenv("FPC_PERTURB_SIGN");
-  if (p_sg != NULL)
-  {
-    if      (strcmp(p_sg, "alternate") == 0) _FPC_PERTURB_SIGN_MODE_ = 1;
-    else if (strcmp(p_sg, "random")    == 0) _FPC_PERTURB_SIGN_MODE_ = 2;
-    else                                     _FPC_PERTURB_SIGN_MODE_ = 0;
-  }
-
 #ifndef FPC_QUIET
   printf("#FPCHECKER: Branch-stability tolerances: eta_abs=%g, eta_rel=%g\n",
          _FPC_STABILITY_ETA_ABS_, _FPC_STABILITY_ETA_REL_);
-  printf("#FPCHECKER: Non-finite policy=%s, max warnings=%s\n",
+  printf("#FPCHECKER: Branch-flip rule=%s\n",
+         _FPC_BF_MODE_ == (_FPC_RULE_INTERVAL | _FPC_RULE_SHADOW) ? "both"
+         : _FPC_BF_MODE_ == _FPC_RULE_SHADOW ? "shadow" : "interval");
+  printf("#FPCHECKER: Non-finite policy=%s, max warnings=%s, "
+         "stability max warnings=%s\n",
          _FPC_NONFINITE_POLICY_ ? "unstable" : "abstain",
-         _FPC_NONFINITE_MAX_WARNINGS_ <= 0 ? "unlimited" : "limited");
+         _FPC_NONFINITE_MAX_WARNINGS_ <= 0 ? "unlimited" : "limited",
+         _FPC_STABILITY_MAX_WARNINGS_ <= 0 ? "unlimited" : "limited");
 #endif
 
-  /* A per-run tally, printed at exit. The per-event lines can be capped or
-   * routed elsewhere, but the counts must always survive: an abstention rate
-   * is not recoverable from a truncated log, and scoring needs it to exclude
-   * those comparisons rather than read them as correct rejections. */
+  /* Per-run tallies, printed at exit; never capped. */
   atexit(_FPC_BF_SUMMARY_);
 }
 
@@ -618,6 +696,7 @@ void _FPC_FP32_STORE_INST_(const char *reg, const char *function_name, uintptr_t
              reg, function_name);
     }
 
+    _FPC_SHADOW_MISS_STORE_++;
     shadow_value = _FPC_READ_FP32_VALUE_FROM_ADDRESS_(address);
     error = 0.0;
     relative_error = 0.0;
@@ -676,6 +755,7 @@ void _FPC_FP32_LOAD_INST_(const char *load_reg, const char *function_name, uintp
     {
       // The address appears to have been reused or mutated outside the
       // instrumented shadow path. Fall back to the actual memory value.
+      _FPC_SHADOW_MISS_LOAD_++;
       shadow_value = current_value;
       error = 0.0;
       relative_error = 0.0;
@@ -728,13 +808,153 @@ void _FPC_FP32_BRANCH_(const char *basic_block_name)
 #endif
 }
 
+/* Rule I: interval overlap (FPChecker, Sec 3.4). y/z are the program's own
+ * low-precision operands. */
+static void _FPC_BF_RULE_INTERVAL_(int low_cond, double y, double z,
+                                   double shadow_y, double shadow_z,
+                                   double err_y, double rho_y,
+                                   double err_z, double rho_z,
+                                   int predicate, int loc, char *file_name,
+                                   const char *function_name,
+                                   unsigned mod_id, int site_id, uint64_t bf_k)
+{
+  double wa = _FPC_STABILITY_WIDTH_(err_y, rho_y, shadow_y);
+  double wb = _FPC_STABILITY_WIDTH_(err_z, rho_z, shadow_z);
+
+  double m = fabs(shadow_y) > fabs(shadow_z) ? fabs(shadow_y) : fabs(shadow_z);
+  double eta = _FPC_STABILITY_ETA_ABS_;
+  double eta_scaled = _FPC_STABILITY_ETA_REL_ * m;
+  if (eta_scaled > eta)
+    eta = eta_scaled;
+
+  /* Non-finite shadow state: record the cause, then abstain (not "stable")
+   * unless the policy says UNSTABLE. */
+  int why = 0;
+  if (isnan(shadow_y) || isnan(shadow_z))              why |= _FPC_NF_NAN_VAL;
+  if (isinf(shadow_y) || isinf(shadow_z))              why |= _FPC_NF_INF_VAL;
+  if (isnan(err_y) || isnan(err_z) ||
+      isnan(rho_y) || isnan(rho_z))                    why |= _FPC_NF_NAN_ERR;
+  if (isinf(err_y) || isinf(err_z) ||
+      isinf(rho_y) || isinf(rho_z))                    why |= _FPC_NF_INF_ERR;
+  if (!isfinite(wa) || !isfinite(wb))                  why |= _FPC_NF_INF_WIDTH;
+  if (!isfinite(eta))                                  why |= _FPC_NF_INF_ETA;
+  /* The program's own operands, as computed at the working precision. */
+  if (isnan(y) || isnan(z))                            why |= _FPC_NF_LOW_NAN;
+  if (isinf(y) || isinf(z))                            why |= _FPC_NF_LOW_INF;
+
+  if (why)
+  {
+    for (int b = 0; b < 8; ++b)
+      if (why & (1 << b))
+        _FPC_NF_CAUSE_COUNT_[b]++;
+    char cause[96];
+    _FPC_NF_CAUSE_STR_(why, cause, sizeof(cause));
+    if (_FPC_NONFINITE_MAX_WARNINGS_ <= 0 ||
+        _FPC_NONFINITE_WARNING_COUNT_ < _FPC_NONFINITE_MAX_WARNINGS_)
+    {
+      /* Same "at FILE:LINE in FUNC" shape as the Unstable line so SITE_RE
+       * parses it. */
+      fprintf(_FPC_BF_OUT_(),
+              "#FPCHECKER: Nonfinite branch at %s:%d in %s: "
+              "(%g %s %g) observed=%s cause=%s wa=%g, wb=%g, eta=%g -- %s\n",
+              file_name ? file_name : "Unknown", loc,
+              function_name ? function_name : "Unknown",
+              shadow_y, _FPC_PRED_NAME_COMPRESSED_(predicate), shadow_z,
+              low_cond ? "true" : "false", cause, wa, wb, eta,
+              _FPC_NONFINITE_POLICY_ ? "classified UNSTABLE by policy"
+                                     : "NOT classified (abstain)");
+    }
+    _FPC_NONFINITE_WARNING_COUNT_++;
+
+    /* Event record is never capped. */
+    if (!_FPC_NONFINITE_POLICY_)
+    {
+      _FPC_SITE_MARK_(mod_id, site_id, 1);
+      _FPC_SITE_EMIT_(_FPC_BF_OUT_(), mod_id, site_id, bf_k, "DECLINED",
+                      file_name, loc, function_name, cause);
+    }
+
+    if (!_FPC_NONFINITE_POLICY_)
+      return;   /* abstain: no verdict for this comparison */
+    /* else fall through and treat it as unstable below */
+  }
+
+  int cls = why ? _FPC_UNSTABLE
+                : _FPC_CLASSIFY_STABILITY_COMPRESSED_(predicate,
+                                                      shadow_y, shadow_z,
+                                                      wa, wb, eta);
+
+  if (cls == _FPC_UNSTABLE)
+  {
+    _FPC_SITE_MARK_(mod_id, site_id, 0);
+    _FPC_SITE_EMIT_(_FPC_BF_OUT_(), mod_id, site_id, bf_k, "UNSTABLE",
+                    file_name, loc, function_name, NULL);
+    /* Counted outside the print cap. */
+    _FPC_STABILITY_WARNING_COUNT_++;
+    if (_FPC_STABILITY_MAX_WARNINGS_ <= 0 ||
+        _FPC_STABILITY_WARNING_COUNT_ <= _FPC_STABILITY_MAX_WARNINGS_)
+    {
+      printf("#FPCHECKER: Unstable branch at %s:%d in %s: "
+             "(%g %s %g) observed=%s, uncertainty u=%g (wa=%g, wb=%g, eta=%g)\n",
+             file_name ? file_name : "Unknown", loc,
+             function_name ? function_name : "Unknown",
+             shadow_y, _FPC_PRED_NAME_COMPRESSED_(predicate), shadow_z,
+             low_cond ? "true" : "false",
+             wa + wb + eta, wa, wb, eta);
+    }
+    double mag = rho_y > rho_z ? rho_y : rho_z;
+    FPC_APPEND_ERROR_LOG_ENTRY(loc, mag);
+  }
+}
+
+/* Rule S: shadow-predicate disagreement (Chevalier et al., CC'21). Same predicate
+ * on the shadow operands; a flip iff the two booleans differ. No threshold,
+ * no abstention. Our shadow is one step wider (float->double, double->long
+ * double), not two. */
+static void _FPC_BF_RULE_SHADOW_(int low_cond, int shadow_cond,
+                                 double y, double z,
+                                 double shadow_y, double shadow_z,
+                                 int predicate, int loc, char *file_name,
+                                 const char *function_name,
+                                 unsigned mod_id, int site_id, uint64_t bf_k)
+{
+  if (shadow_cond == low_cond)
+    return;              /* agreement: silent, and NOT an abstention */
+
+  /* SFLIPNF: shadow operand non-finite while native is finite. A flip under
+   * the rule, but caused by the shadow's own pathology; the interval rule
+   * abstains on the same state. */
+  int nf = (!isfinite((double)shadow_y) && isfinite((double)y)) ||
+           (!isfinite((double)shadow_z) && isfinite((double)z));
+  _FPC_SITE_MARK_S_(mod_id, site_id);
+  _FPC_SITE_EMIT_(_FPC_BF_OUT_(), mod_id, site_id, bf_k,
+                  nf ? "SFLIPNF" : "SFLIP", file_name, loc, function_name,
+                  NULL);
+  if (nf)
+    _FPC_SHADOW_FLIP_NF_COUNT_++;
+  _FPC_SHADOW_FLIP_COUNT_++;
+  if (_FPC_STABILITY_MAX_WARNINGS_ <= 0 ||
+      _FPC_SHADOW_FLIP_COUNT_ <= _FPC_STABILITY_MAX_WARNINGS_)
+    fprintf(_FPC_BF_OUT_(),
+            "#FPCHECKER: Shadow branch flip%s at %s:%d in %s: "
+            "native (%.17g %s %.17g)=%s, shadow (%.17g %s %.17g)=%s\n",
+            nf ? " (non-finite shadow)" : "",
+            file_name ? file_name : "Unknown", loc,
+            function_name ? function_name : "Unknown",
+            y, _FPC_PRED_NAME_COMPRESSED_(predicate), z,
+            low_cond ? "true" : "false",
+            shadow_y, _FPC_PRED_NAME_COMPRESSED_(predicate), shadow_z,
+            shadow_cond ? "true" : "false");
+}
+
 void _FPC_FP32_CMP_(int low_cond, float y, float z, int predicate, int loc,
                     char *file_name, const char *result_name,
                     const char *op1_name, const char *op2_name,
-                    const char *function_name, int is_branch_controlling)
+                    const char *function_name, int is_branch_controlling,
+                    unsigned mod_id, int site_id)
 {
   _FPC_ENSURE_RUNTIME_READY_();
-  
+
   double shadow_y = (double)y;
   double shadow_z = (double)z;
   double err_y = 0.0, rho_y = 0.0;
@@ -747,120 +967,40 @@ void _FPC_FP32_CMP_(int low_cond, float y, float z, int predicate, int loc,
                               &shadow_z, &err_z, &rho_z);
 #endif
 
-  int shadow_cond = low_cond;
-  switch (predicate)
-  {
-  case 0: shadow_cond = (shadow_y == shadow_z); break;
-  case 1: shadow_cond = (shadow_y != shadow_z); break;
-  case 2: shadow_cond = (shadow_y <  shadow_z); break;
-  case 3: shadow_cond = (shadow_y <= shadow_z); break;
-  case 4: shadow_cond = (shadow_y >  shadow_z); break;
-  case 5: shadow_cond = (shadow_y >= shadow_z); break;
-  default: shadow_cond = low_cond; break;
-  }
+  int shadow_cond = _FPC_EVAL_PRED_(predicate, shadow_y, shadow_z);
 
   _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_name, function_name,
                            shadow_cond ? 1.0 : 0.0, 0.0, 0.0, file_name,
                            loc);
 
-  /* ---- Phase 1: branch-instability classification ---- */
+  /* ---- Branch-instability classification ---- */
   if (is_branch_controlling)
   {
-    double wa = _FPC_STABILITY_WIDTH_(err_y, rho_y, shadow_y);
-    double wb = _FPC_STABILITY_WIDTH_(err_z, rho_z, shadow_z);
+    /* Occurrence index k. Ticked before any verdict or early return so it
+     * counts executions, not reports. site_id == -1: this comparison controls
+     * no numbered branch. */
+    uint64_t bf_k = _FPC_SITE_TICK_(mod_id, site_id);
 
-    double m = fabs(shadow_y) > fabs(shadow_z) ? fabs(shadow_y) : fabs(shadow_z);
-    double eta = _FPC_STABILITY_ETA_ABS_;
-    double eta_scaled = _FPC_STABILITY_ETA_REL_ * m;
-    if (eta_scaled > eta)
-      eta = eta_scaled;
+    /* Rule S first: the interval rule may abstain and return early. Both get
+     * the same bf_k. */
+    if (_FPC_BF_MODE_ & _FPC_RULE_SHADOW)
+      _FPC_BF_RULE_SHADOW_(low_cond, shadow_cond, (double)y, (double)z,
+                           shadow_y, shadow_z, predicate, loc,
+                           file_name, function_name, mod_id, site_id,
+                           bf_k);
 
-    /* ---- Non-finite shadow state ----
-     *
-     * Five different conditions used to be ORed into one message and then
-     * silently dropped after ten occurrences. Both were wrong:
-     *
-     *  - The cause matters. A NaN/Inf in the SHADOW VALUE means the shadow
-     *    trajectory itself overflowed -- a real numerical event, and exactly
-     *    the overflow-driven case this study is about. A NaN/Inf in the
-     *    TRACKED ERROR means the value is fine and the error model blew up --
-     *    a tool artifact. INF_ETA is eta_rel*magnitude overflowing, also an
-     *    artifact. Reporting them as one thing conflates program behaviour
-     *    with instrument behaviour.
-     *
-     *  - The early `return` is an ABSTENTION, not a prediction of stability.
-     *    Downstream scoring sees only "reported" vs "silent", so an abstention
-     *    at a flipping site was charged as a false negative and at a
-     *    non-flipping site credited as a correct rejection. Neither is what
-     *    the tool said. It is now counted and reported so it can be excluded.
-     */
-    int why = 0;
-    if (isnan(shadow_y) || isnan(shadow_z))              why |= _FPC_NF_NAN_VAL;
-    if (isinf(shadow_y) || isinf(shadow_z))              why |= _FPC_NF_INF_VAL;
-    if (isnan(err_y) || isnan(err_z) ||
-        isnan(rho_y) || isnan(rho_z))                    why |= _FPC_NF_NAN_ERR;
-    if (isinf(err_y) || isinf(err_z) ||
-        isinf(rho_y) || isinf(rho_z))                    why |= _FPC_NF_INF_ERR;
-    if (!isfinite(wa) || !isfinite(wb))                  why |= _FPC_NF_INF_WIDTH;
-    if (!isfinite(eta))                                  why |= _FPC_NF_INF_ETA;
-    /* The program's own operands, as computed at the working precision. */
-    if (isnan(y) || isnan(z))                            why |= _FPC_NF_LOW_NAN;
-    if (isinf(y) || isinf(z))                            why |= _FPC_NF_LOW_INF;
-
-    if (why)
-    {
-      if (_FPC_NONFINITE_MAX_WARNINGS_ <= 0 ||
-          _FPC_NONFINITE_WARNING_COUNT_ < _FPC_NONFINITE_MAX_WARNINGS_)
-      {
-        char cause[96];
-        _FPC_NF_CAUSE_STR_(why, cause, sizeof(cause));
-        /* "at FILE:LINE in FUNC" is kept byte-identical to the Unstable
-         * branch line so the existing SITE_RE in the runner scripts parses
-         * this without modification. Only the leading tag differs. */
-        fprintf(_FPC_BF_OUT_(),
-                "#FPCHECKER: Nonfinite branch at %s:%d in %s: "
-                "(%g %s %g) observed=%s cause=%s wa=%g, wb=%g, eta=%g -- %s\n",
-                file_name ? file_name : "Unknown", loc,
-                function_name ? function_name : "Unknown",
-                shadow_y, _FPC_PRED_NAME_COMPRESSED_(predicate), shadow_z,
-                low_cond ? "true" : "false", cause, wa, wb, eta,
-                _FPC_NONFINITE_POLICY_ ? "classified UNSTABLE by policy"
-                                       : "NOT classified (abstain)");
-      }
-      _FPC_NONFINITE_WARNING_COUNT_++;
-
-      if (!_FPC_NONFINITE_POLICY_)
-        return;   /* abstain: no verdict for this comparison */
-      /* else fall through and treat it as unstable below */
-    }
-
-    int cls = why ? _FPC_UNSTABLE
-                  : _FPC_CLASSIFY_STABILITY_COMPRESSED_(predicate,
-                                                        shadow_y, shadow_z,
-                                                        wa, wb, eta);
-
-    if (cls == _FPC_UNSTABLE)
-    {
-      if (_FPC_STABILITY_WARNING_COUNT_ < _FPC_STABILITY_MAX_WARNINGS_)
-      {
-        _FPC_STABILITY_WARNING_COUNT_++;
-        printf("#FPCHECKER: Unstable branch at %s:%d in %s: "
-               "(%g %s %g) observed=%s, uncertainty u=%g (wa=%g, wb=%g, eta=%g)\n",
-               file_name ? file_name : "Unknown", loc,
-               function_name ? function_name : "Unknown",
-               shadow_y, _FPC_PRED_NAME_COMPRESSED_(predicate), shadow_z,
-               low_cond ? "true" : "false",
-               wa + wb + eta, wa, wb, eta);
-      }
-      double mag = rho_y > rho_z ? rho_y : rho_z;
-      FPC_APPEND_ERROR_LOG_ENTRY(loc, mag);
-    }
+    if (_FPC_BF_MODE_ & _FPC_RULE_INTERVAL)
+      _FPC_BF_RULE_INTERVAL_(low_cond, (double)y, (double)z, shadow_y, shadow_z,
+                             err_y, rho_y, err_z, rho_z, predicate, loc,
+                             file_name, function_name, mod_id, site_id,
+                             bf_k);
   }
 }
 
 // This function is called for PHI nodes in SSA form
 // It is used to log the values that are being merged
-void _FPC_FP32_PHI_(const char *phi_values, const char *function_name)
+void _FPC_FP32_PHI_(const char *phi_values, double phi_value,
+                    const char *function_name)
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
@@ -919,9 +1059,11 @@ void _FPC_FP32_PHI_(const char *phi_values, const char *function_name)
               }
               else
               {
-                // We don't have its error - create with zero error
+                /* Untracked and not a literal: fall back. */
+                _FPC_SHADOW_MISS_PHI_++;
                 _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, register_name,
-                                         function_name, 0.0, 0.0, 0.0, "", 0);
+                                         function_name, _FPC_SHADOW_FALLBACK_(phi_value), 0.0, 0.0,
+                                         "", 0);
               }
               // exit(1);
             }
@@ -997,6 +1139,7 @@ void _FPC_FP32_PUSH_ARG_ERROR_(int arg_index, double arg_value,
     _FPC_ARG_SHADOW_BUF_[arg_index] = shadow_value;
     _FPC_ARG_ERR_BUF_[arg_index] = error;
     _FPC_ARG_REL_ERR_BUF_[arg_index] = relative_error;
+    _FPC_ARG_VALID_[arg_index] = 1;
     if (arg_index >= _FPC_ARG_BUF_COUNT_)
       _FPC_ARG_BUF_COUNT_ = arg_index + 1;
   }
@@ -1004,102 +1147,28 @@ void _FPC_FP32_PUSH_ARG_ERROR_(int arg_index, double arg_value,
 
 // Pop argument error from the buffer into the callee's parameter register.
 // Called once per FP parameter, in order, at callee function entry.
-void _FPC_FP32_POP_ARG_ERROR_(int param_index, const char *param_reg, const char *function_name)
+void _FPC_FP32_POP_ARG_ERROR_(int param_index, double param_value,
+                              const char *param_reg, const char *function_name)
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
-  double shadow_value = 0.0;
+  double shadow_value = _FPC_SHADOW_FALLBACK_(param_value);
   double error = 0.0;
   double relative_error = 0.0;
 
-  if (param_index >= 0 && param_index < _FPC_ARG_BUF_COUNT_)
+  if (param_index >= 0 && param_index < _FPC_ARG_BUF_COUNT_ &&
+      _FPC_ARG_VALID_[param_index])
   {
     shadow_value = _FPC_ARG_SHADOW_BUF_[param_index];
     error = _FPC_ARG_ERR_BUF_[param_index];
     relative_error = _FPC_ARG_REL_ERR_BUF_[param_index];
+    _FPC_ARG_VALID_[param_index] = 0;   /* consumed */
   }
+  else
+    _FPC_SHADOW_MISS_ARG_++;
 
   _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, param_reg, function_name,
                            shadow_value, error, relative_error, "", 0);
-}
-
-static void __attribute__((unused)) _FPC_PERTURB_RECONCILE_(double val, double dx, double sign,
-                                    double r_old, double rho_old,
-                                    double *r_new_out, double *rho_new_out)
-{
-  double r_seed = sign * dx;
-  double r_ref  = (r_old != 0.0) ? r_old : r_seed;
-  double sgn    = (r_ref >= 0.0) ? 1.0 : -1.0;
-  double amag   = fabs(r_old);
-  double bmag   = fabs(r_seed);
-  double mag    = (amag > bmag) ? amag : bmag;
-  double r_new  = sgn * mag;
-
-  double scale = fabs(val);
-  if (scale < _FPC_STABILITY_TAU_)
-    scale = _FPC_STABILITY_TAU_;
-  double rho_new = fabs(r_new) / scale;
-  if (rho_new < rho_old)
-    rho_new = rho_old;
-
-  *r_new_out   = r_new;
-  *rho_new_out = rho_new;
-}
-
-void _FPC_FP32_PERTURB_SCALAR_(float x, const char *param_reg,
-                               const char *function_name)
-{
-  _FPC_ENSURE_RUNTIME_READY_();
-  if (!_FPC_PERTURB_ENABLE_)
-    return;
-
-  double dx = _FPC_PERTURB_DELTA_REL_ * fabs((double)x);
-  if (_FPC_PERTURB_DELTA_ABS_ > dx)
-    dx = _FPC_PERTURB_DELTA_ABS_;
-
-  double sign = _FPC_PERTURB_NEXT_SIGN_();
-
-  double shadow_old = (double)x, r_old = 0.0, rho_old = 0.0;
-  _FPC_FIND_VALUE_BY_REGISTER(_FPC_REGISTER_HT_, param_reg, function_name,
-                              &shadow_old, &r_old, &rho_old);
-
-  double r_new = 0.0, rho_new = 0.0;
-  _FPC_PERTURB_RECONCILE_((double)x, dx, sign, r_old, rho_old, &r_new, &rho_new);
-
-  _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, param_reg, function_name,
-                         (double)x + r_new, r_new, rho_new, "", 0);
-}
-
-void _FPC_FP32_PERTURB_POINTER_(const float *p, long int n,
-                                const char *param_reg,
-                                const char *function_name)
-{
-  _FPC_ENSURE_RUNTIME_READY_();
-  if (!_FPC_PERTURB_ENABLE_)
-    return;
-  if (p == NULL || n <= 0)
-    return;
-
-  for (long int i = 0; i < n; ++i)
-  {
-    double xi = (double)p[i];
-
-    double dx = _FPC_PERTURB_DELTA_REL_ * fabs(xi);
-    if (_FPC_PERTURB_DELTA_ABS_ > dx)
-      dx = _FPC_PERTURB_DELTA_ABS_;
-
-    double sign = _FPC_PERTURB_NEXT_SIGN_();
-
-    uintptr_t addr = (uintptr_t)(&p[i]);
-
-    double shadow_old = xi, r_old = 0.0, rho_old = 0.0;
-    _FPC_FIND_VALUE_BY_ADDRESS(_FPC_ADDRESS_HT_, addr, &shadow_old, &r_old, &rho_old);
-
-    double r_new = 0.0, rho_new = 0.0;
-    _FPC_PERTURB_RECONCILE_(xi, dx, sign, r_old, rho_old, &r_new, &rho_new);
-
-    _FPC_ADDRESS_HT_UPDATE_(_FPC_ADDRESS_HT_, addr, xi + r_new, r_new, rho_new, "", 0);
-  }
 }
 
 // Save error of the value being returned by a function.
@@ -1125,14 +1194,16 @@ void _FPC_FP32_PUSH_RET_ERROR_(const char *ret_reg, const char *function_name)
 }
 
 // Load most recent returned value error into call result register in caller.
-void _FPC_FP32_POP_RET_ERROR_(const char *result_reg, const char *function_name,
+void _FPC_FP32_POP_RET_ERROR_(const char *result_reg, double result_value,
+                              const char *function_name,
                               const char *callee_name, int loc, char *file_name)
 {
   _FPC_ENSURE_RUNTIME_READY_();
 
-  double shadow_value = 0.0;
+  double shadow_value = _FPC_SHADOW_FALLBACK_(result_value);
   double error = 0.0;
   double relative_error = 0.0;
+  int popped = 0;
 
   if (_FPC_RET_STACK_TOP_ > 0)
   {
@@ -1149,8 +1220,11 @@ void _FPC_FP32_POP_RET_ERROR_(const char *result_reg, const char *function_name,
       shadow_value = _FPC_RET_SHADOW_STACK_[_FPC_RET_STACK_TOP_];
       error = _FPC_RET_ERR_STACK_[_FPC_RET_STACK_TOP_];
       relative_error = _FPC_RET_REL_ERR_STACK_[_FPC_RET_STACK_TOP_];
+      popped = 1;
     }
   }
+  if (!popped)
+    _FPC_SHADOW_MISS_RET_++;
 
   _FPC_REGISTER_HT_UPDATE_(_FPC_REGISTER_HT_, result_reg, function_name,
                            shadow_value, error, relative_error, file_name, loc);
