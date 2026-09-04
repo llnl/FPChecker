@@ -10,11 +10,11 @@
 # compare.txt go to $OUT.
 set -uo pipefail
 
-FPC_SRC="${FPC_SRC:-/opt/cgo2026_artifact/FPChecker}"
+FPC_SRC="${FPC_SRC:-/opt/cgo2026_artifact/fpchecker_bf}"
 EXP="${EXP:-$FPC_SRC/cpu_checking/error_analysis/branch_flip/experiments}"
 EXPECTED="$FPC_SRC/cpu_checking/error_analysis/branch_flip/expected"
-OUT="${OUT:-/opt/cgo2026_artifact/results}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+OUT="${OUT:-$HERE/results}"
 
 QUICK=0; SKIP_GT=0; TOOLS="fpchecker,eftsan,nsan"
 while [ $# -gt 0 ]; do

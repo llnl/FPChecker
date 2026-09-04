@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.title="cgo2026-artifact" \
 ENV DEBIAN_FRONTEND=noninteractive \
     ARTIFACT_ROOT=/opt/cgo2026_artifact \
     CONDA_ROOT=/opt/conda \
-    FPC_SRC=/opt/cgo2026_artifact/FPChecker \
+    FPC_SRC=/opt/cgo2026_artifact/fpchecker_bf \
     FPC_REPO=https://github.com/llnl/FPChecker.git \
     FPC_BRANCH=v0.7_new_runtime_branch_flip \
     EFT_HOME=/opt/cgo2026_artifact/EFTSanitizer \
@@ -20,7 +20,8 @@ ENV ENV_SETUP=$FPC_SRC/cpu_checking/error_analysis/env_setup \
 
 SHELL ["/bin/bash", "-c"]
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN echo 'APT::Sandbox::User "root";' > /etc/apt/apt.conf.d/99sandbox \
+    && apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates curl git bzip2 xz-utils build-essential file patch \
     && rm -rf /var/lib/apt/lists/*
 
@@ -77,12 +78,13 @@ RUN source activate_nsan_env.sh \
     && test -f plugin/libNsanBFSites.so && test -f runtime/libnsan_bf.a
 
 # ---------- experiment driver ----------
-COPY run_experiments.sh branch_flip_tables.py $ARTIFACT_ROOT/
-RUN chmod +x "$ARTIFACT_ROOT/run_experiments.sh" "$ARTIFACT_ROOT/branch_flip_tables.py" \
+ENV BF=$ARTIFACT_ROOT/branch_flip
+COPY run_experiments.sh branch_flip_tables.py $BF/
+RUN mkdir -p "$BF/results" && chmod +x "$BF/run_experiments.sh" "$BF/branch_flip_tables.py" \
     && printf '%s\n' \
         'source /opt/conda/etc/profile.d/conda.sh' \
         'echo "cgo2026-artifact  --  ./run_experiments.sh [--quick] [--tools fpchecker,eftsan,nsan]"' \
         >> /root/.bashrc
 
-WORKDIR $ARTIFACT_ROOT
+WORKDIR $BF
 CMD ["/bin/bash", "-l"]

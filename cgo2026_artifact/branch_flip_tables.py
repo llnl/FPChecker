@@ -25,7 +25,9 @@ import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FPC_SRC = os.environ.get("FPC_SRC", os.path.abspath(os.path.join(HERE, "..")))
+FPC_SRC = os.environ.get("FPC_SRC") or next(
+    (d for d in (os.path.join(HERE, "..", "fpchecker_bf"), os.path.join(HERE, ".."))
+     if os.path.isdir(os.path.join(d, "cpu_checking"))), os.path.join(HERE, ".."))
 BF = os.path.join(FPC_SRC, "cpu_checking", "error_analysis", "branch_flip")
 
 BENCH_ORDER = ["BT", "CG", "EP", "LU", "MG", "SP", "IS", "LULESH", "QuickSilver", "AMG"]
