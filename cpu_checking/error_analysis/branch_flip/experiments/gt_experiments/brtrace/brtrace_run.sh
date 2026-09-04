@@ -68,12 +68,11 @@ while [[ $# -gt 0 ]]; do
     --fp32-run)   FP32_RUN="$2"; shift 2;;
     --fp64-run)   FP64_RUN="$2"; shift 2;;
     --mods)       MODS="$2"; shift 2;;
-    -h|--help)    sed -n '2,50p' "$0"; exit 0;;
+    -h|--help)    sed -n '2,12p' "$0"; exit 0;;
     *) echo "unknown arg: $1" >&2; exit 2;;
   esac
 done
 
-# --- resolve core artifacts (the only things this runner hard-requires) ---
 export BRX_PLUGIN="$BRX/libBranchTrace_mtu.so"
 export BRX_RT="$BRX/brtrace_runtime_mtu.o"
 export BRX_CFLAGS="-O0 -g -fpass-plugin=$BRX_PLUGIN"

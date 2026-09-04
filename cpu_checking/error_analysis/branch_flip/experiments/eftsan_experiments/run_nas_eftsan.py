@@ -1,117 +1,26 @@
 #!/usr/bin/env python3
 """
-run_nas_eftsan.py
-
-Build a NAS Parallel Benchmark under EFTSanitizer branch-flip instrumentation
-and run it, keeping fp32 and fp64 results completely separate.  Same structure
-as run_lulesh_eftsan.py / run_amg_eftsan.py / run_quicksilver_eftsan.py.
-
-Place in: branch_flip/experiments/eftsan_experiments/
+run_nas_eftsan.py -- build a NAS benchmark under EFTSanitizer branch-flip
+instrumentation and run it, fp32 and fp64 separately.
 
     ./run_nas_eftsan.py cg                 # both precisions
-    ./run_nas_eftsan.py bt -p fp32         # fp32 only
-    ./run_nas_eftsan.py all                # every benchmark, both precisions
-    ./run_nas_eftsan.py sp --timeout 7200  # SP is slow under EFTSan
-    ./run_nas_eftsan.py ep --no-run        # build and gate only
+    ./run_nas_eftsan.py bt -p fp32
+    ./run_nas_eftsan.py all
+    ./run_nas_eftsan.py sp --timeout 7200
+    ./run_nas_eftsan.py ep --no-run
 
-Layout produced (one subtree per benchmark):
-    nas/
-      cg/results/O0/  fp32/  build.log  run_O0.stdout  run_O0.stderr
-                             summary.txt  summary.json  build_info.txt
-                             instrumented_sites.csv  site_agreement.txt
-                             cg_fp32_eftsan_summary.csv
-                      fp64/  ...
-      cg/build/O0/    cg_fp32/  cg_fp64/
+Same pipeline as run_lulesh_eftsan.py. Precision selection differs per tree:
+BT/CG/LU/SP take -DNAS_FP32, EP takes -DWORKING_T=..., IS/MG bake it in; the
+FP-op gate catches a define that did not take. The RNG stays fp64 in every
+variant. IS exits 26 on successful verification. When *.brsites are present
+in the source tree the instrumented site set is cross-checked against them
+(site_agreement.txt).
 
-THREE PRECISION MECHANISMS, NOT ONE
-
-  The seven benchmarks do not share a precision idiom, so the flag table is
-  per-benchmark and must not be "simplified":
-
-    BT CG LU SP   unified tree + NAS_Precision.h.  fp32/fp64 sources are
-                  byte-identical; precision comes from -DNAS_FP32 (or nothing
-                  for double).  Matches the -DLULESH_FP32 idiom.
-    EP            -DWORKING_T=float -DWORKING_T_IS_FLOAT=1  (from its
-                  Makefile).  ep.c defaults WORKING_T to double if unset.
-    IS            NO precision flag.  IS is an integer sort; its fp32 and
-                  fp64 trees are byte-identical apart from the binary name,
-                  so both builds are the same program.  Expect identical
-                  results, and treat any difference as a bug in the harness.
-    MG            separately-edited trees (392 lines differ between fp32 and
-                  fp64).  Precision is baked into the source, NOT selected by
-                  a flag.  Passing one would do nothing.
-
-  Passing NAS_FP32 to EP, IS or MG is silently ineffective -- the build
-  succeeds and produces the wrong precision -- which is why the IR precision
-  gate below exists.
-
-THE RNG STACK STAYS FP64 IN EVERY VARIANT
-
-  randlc / vranlc / c_randdp.c emulate exact 46-bit modular arithmetic and
-  need the full 53-bit double mantissa.  Converting them to float corrupts
-  the LCG recurrence (the multiplier 1220703125 rounds to 1220703072),
-  producing different matrix sparsity structures and different particle
-  streams -- which would confound every branch comparison.  CG and MG say so
-  in their headers ("generation-double / solve-fp32").  So an fp32 build
-  legitimately contains double-precision arithmetic; the gate warns only when
-  a build has NO float ops at all.
-
-WHY THIS IS NOT THE FPCHECKER HARNESS WITH A DIFFERENT COMPILER
-
-  * No eta sweep.  ERRORTHRESHOLD is a COMPILE-TIME constant in
-    $EFT_HOME/runtime/handleReal.h (45), and that header is not tracked as a
-    make dependency -- `rm -rf obj` before rebuilding or the edit does
-    nothing silently.
-  * -O0 only, enforced.  Adjudicate against the -O0 census.
-  * The Makefiles are not used to build; the TU list is read FROM them.
-
-BUILD PIPELINE (ordering is load-bearing)
-
-    1. clang -O0 -g -emit-llvm -c (each TU)   -> one .bc per TU
-    2. llvm-link                             -> <b>_merged.bc
-    3. opt -load libEFTSanitizer.so -eftsan  -> <b>.opt.bc
-    4. clang -O0 <b>.opt.bc -leftsanitizer   -> <b>_<prec>.eftsan
-
-  Step 2 must precede step 3: instrumenting TUs separately corrupts argument
-  shadow bookkeeping at call sites.  BT/CG/LU/SP/MG are single-TU so the
-  merge is a formality; EP and IS are multi-TU and genuinely need it.
-
-  This is where NAS previously bit: EP's vranlc(x_seed=0x0, a=nan) and IS's
-  c_print_results(t=2.09e-317) were both the separate-instrumentation bug.
-
-KNOWN CRASH: LARGE-ARITY REPORTING FUNCTIONS
-
-  c_print_results takes ~18 arguments and has segfaulted in the EFTSan
-  prologue (IS).  If a run dies with empty stdout and exit 139, check the
-  arity of the function in the backtrace before suspecting the build.  The
-  fix used previously was replacing the CALL with a plain printf in the
-  benchmark source, leaving FP compute and branch structure untouched.
-
-VERIFICATION IS A GATE, NOT DECORATION
-
-  NAS prints "Verification Successful" / "Verification failed" (or
-  "Verification    =    SUCCESSFUL").  The verify block is itself a cluster
-  of FP comparisons and a large part of the interesting branch set, so a run
-  that skips verification is not comparable to the census.
-
-  BT's reference table is NITER-locked to the canonical class: a
-  non-canonical NITER gives class 'U', no verification, and zero verify
-  branches.  This harness never changes NITER.
-
-  IS exits with status 26 on SUCCESSFUL verification.  That is success, not a
-  crash, and is treated as such here.
-
-AUTOMATIC CENSUS CROSS-CHECK
-
-  The benchmark trees carry brtrace's *.brsites files.  When they are found,
-  this harness compares its instrumented site set against them and writes
-  site_agreement.txt: branch counts, unique-site counts, and both set
-  differences.  On LULESH, AMG and QuickSilver the site sets matched exactly
-  (74=74, 544=544, 86=86), which is what licenses reading an EFTSan silence
-  at a census site as a detection failure rather than a coverage gap.
+Env: EFT_HOME, EFT_SETUP, BENCH_ROOT, EFT_WORK_ROOT.
 """
 
 import argparse
+import csv
 import json
 import os
 import re
@@ -122,18 +31,15 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
-# --------------------------------------------------------------------
-EFT_HOME = Path(os.environ.get("EFT_HOME", "/usr/workspace/das9/EFTSanitizer"))
-SETUP_SH = Path(os.environ.get("EFT_SETUP", EFT_HOME / "setup_eftsan.sh"))
-
 HERE = Path(__file__).resolve().parent
+EFT_HOME = Path(os.environ.get("EFT_HOME", HERE.parents[5] / "EFTSanitizer"))
+SETUP_SH = Path(os.environ.get(
+    "EFT_SETUP", HERE.parents[2] / "env_setup" / "activate_eftsan_env.sh"))
 BENCH_ROOT = Path(os.environ.get(
     "BENCH_ROOT", HERE.parent.parent / "benchmarks" / "nas"))
 
-WORK_ROOT = HERE / "nas"
+WORK_ROOT = Path(os.environ.get("EFT_WORK_ROOT", HERE)) / "nas"
 
-# Per-benchmark precision flags.  See the module docstring: three different
-# mechanisms, and an empty string means "this tree already IS that precision".
 UNIFIED = {"fp32": "-DNAS_FP32", "fp64": ""}
 BENCH = {
     "bt": {"define": UNIFIED, "std": "c99", "note": "NAS_Precision.h"},
@@ -145,32 +51,27 @@ BENCH = {
            "std": "c99", "note": "WORKING_T typedef"},
     "is": {"define": {"fp32": "", "fp64": ""},
            "std": "c99", "expect_float": False,
-           "note": "integer sort -- fp32 and fp64 trees are identical; "
-                   "NO float arithmetic by design, and no FP branches"},
+           "note": "integer sort; no FP branches"},
     "mg": {"define": {"fp32": "", "fp64": ""},
            "std": "c99",
            "note": "separately-edited trees; precision baked into the source"},
 }
-IS_SUCCESS_EXIT = {0, 26}      # IS returns 26 on successful verification
+IS_SUCCESS_EXIT = {0, 26}
 
 ERROR_LINE_RE = re.compile(r"\berror:")
 UNDEF_RE = re.compile(r"undefined reference to [`']([^'\"]+)'")
-FLIP_RE = re.compile(r"branch flip @ file\s+(\d+)\s+line\s+(\d+)")
-
-def fnv1a(name):
-    """FNV-1a over the file BASENAME.  Must match handleFcmp in
-    EFTSanitizer.cpp exactly -- EFTSan now prints a file id with every flip,
-    so a bare line number is no longer ambiguous in multi-TU builds."""
-    h = 14695981039346656037
-    for c in name.encode():
-        h = ((h ^ c) * 1099511628211) & 0xFFFFFFFFFFFFFFFF
-    return h
-
 TOTAL_RE = re.compile(r"Total branch flips found\s+(\d+)")
 VERIFY_OK_RE = re.compile(r"Verification\s+(?:Successful|=\s*SUCCESSFUL)", re.I)
 VERIFY_BAD_RE = re.compile(r"Verification\s+(?:failed|=\s*UNSUCCESSFUL)", re.I)
 CLASS_RE = re.compile(r"[Cc]lass\s*=?\s*([A-Z])\b")
 MAKE_SRC_RE = re.compile(r"^\s*SRCS?\s*:?\??=\s*(.+)$", re.M)
+
+
+def fnv1a_32(name):
+    h = 2166136261
+    for c in name.encode():
+        h = ((h ^ c) * 16777619) & 0xFFFFFFFF
+    return h
 
 
 def sh(cmd, cwd=None, env=None, log=None):
@@ -184,7 +85,6 @@ def sh(cmd, cwd=None, env=None, log=None):
 
 
 def sh_split(cmd, cwd=None, env=None, timeout=None):
-    """Flip prints go to stderr, benchmark output to stdout."""
     try:
         p = subprocess.run(cmd, cwd=cwd, env=env, stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE, text=True,
@@ -195,6 +95,7 @@ def sh_split(cmd, cwd=None, env=None, timeout=None):
 
 
 def eftsan_env():
+    """Source the activate script under bash and harvest its environment."""
     if not SETUP_SH.exists():
         print(f"FATAL: no setup script at {SETUP_SH}")
         return None
@@ -217,9 +118,6 @@ NEEDED_LIBS = ["libmpfr.so", "libgmp.so"]
 
 
 def find_lib_dirs(env):
-    """MPFR and GMP are EFTSan's shadow arithmetic but live in the conda env,
-    not in $EFT_HOME/runtime/obj, and setup_eftsan.sh does not export them.
-    Without this the binary links cleanly and dies at exec with exit 127."""
     roots = []
     for prefix in (env.get("CONDA_PREFIX"), os.environ.get("CONDA_PREFIX")):
         if prefix:
@@ -259,121 +157,82 @@ def check_tools(env):
             if sh([t, "--version"], env=env)[0] != 0]
 
 
-# --------------------------------------------------------------------
-# line -> file resolution, restricted to instrumented branch sites.
-# --------------------------------------------------------------------
-DIFILE_RE = re.compile(r'^!(\d+) = !DIFile\(filename: "([^"]+)"')
-SCOPE_RE = re.compile(
-    r'^!(\d+) = (?:distinct )?!DI(?:Subprogram|LexicalBlock|LexicalBlockFile)'
-    r'\((?P<body>.*)\)\s*$')
-LOC_RE = re.compile(r'^!(\d+) = !DILocation\(line: (\d+),.*?scope: !(\d+)')
-FILE_FIELD_RE = re.compile(r'\bfile: !(\d+)')
-SCOPE_FIELD_RE = re.compile(r'\bscope: !(\d+)')
-BRANCH_CALL_RE = re.compile(r'call\b.*@(eftsan_check_branch\w*)')
-DBG_REF_RE = re.compile(r'!dbg !(\d+)')
+def read_sites(path):
+    """{(kind, module_id, site_id): {file, line, col, function, n_fcmp}}"""
+    sites = {}
+    with open(path) as fh:
+        lines = [l.rstrip("\n") for l in fh if l.strip()]
+    if not lines:
+        return sites
+    hdr = lines[0].lstrip("# ").split(",")
+    for l in lines[1:]:
+        if l.startswith("#"):
+            continue
+        rec = dict(zip(hdr, l.split(",")))
+        key = (rec["kind"], int(rec["module_id"]), int(rec["site_id"]))
+        sites[key] = {
+            "file": rec["file"],
+            "line": int(rec["line"]),
+            "col": int(rec["col"]),
+            "function": rec["function"],
+            "n_fcmp": int(rec["n_fcmp"]),
+        }
+    return sites
+
+
+def read_events(path):
+    """[(kind, module_id, site_id, k, verdict)]"""
+    out = []
+    if not Path(path).exists():
+        return out
+    with open(path) as fh:
+        for rec in csv.DictReader(fh):
+            out.append((rec["kind"], int(rec["module_id"]),
+                        int(rec["site_id"]), int(rec["k"]), rec["verdict"]))
+    return out
+
+
+def read_totals(path):
+    """{(kind, module_id, site_id): (executions, flips, nonfinite)}"""
+    out = {}
+    if not Path(path).exists():
+        return out
+    with open(path) as fh:
+        for rec in csv.DictReader(fh):
+            out[(rec["kind"], int(rec["module_id"]), int(rec["site_id"]))] = (
+                int(rec["executions"]), int(rec["flips"]),
+                int(rec["nonfinite"]))
+    return out
+
+
+def verify_module_ids(sites):
+    """Check the FNV-1a-32 convention and basename collisions."""
+    seen, bad = {}, []
+    for (_kind, mod, _sid), s in sites.items():
+        seen.setdefault(s["file"], set()).add(mod)
+    for fname, mods in sorted(seen.items()):
+        for mod in mods:
+            if fnv1a_32(fname) != mod:
+                bad.append((fname, mod, fnv1a_32(fname)))
+        if len(mods) > 1:
+            bad.append((fname, sorted(mods), "one basename, several ids"))
+    by_id = defaultdict(set)
+    for fname, mods in seen.items():
+        for m in mods:
+            by_id[m].add(fname)
+    for mod, names in by_id.items():
+        if len(names) > 1:
+            bad.append((sorted(names), mod, "BASENAME COLLISION"))
+    return seen, bad
+
+
 FP_OP_RE = re.compile(r'\b(?:fadd|fsub|fmul|fdiv|fcmp\s+\w+)\s+'
                       r'(?:fast |nnan |ninf |nsz |arcp |contract |afn |reassoc )*'
                       r'(float|double|x86_fp80)\b')
 
 
-def _parse_debug_info(ll_path):
-    files, scope_file, scope_parent, loc_by_id = {}, {}, {}, {}
-    branch_dbg = set()
-    # Hooks and distinct debug locations are DIFFERENT counts: several hooks
-    # can share one !dbg (compound conditions).  Report both.
-    n_calls = [0]
-    try:
-        with open(ll_path, errors="replace") as fh:
-            for line in fh:
-                if line.startswith("!"):
-                    m = DIFILE_RE.match(line)
-                    if m:
-                        files[m.group(1)] = os.path.basename(m.group(2))
-                        continue
-                    m = LOC_RE.match(line)
-                    if m:
-                        loc_by_id[m.group(1)] = (int(m.group(2)), m.group(3))
-                        continue
-                    m = SCOPE_RE.match(line)
-                    if m:
-                        body = m.group("body")
-                        f = FILE_FIELD_RE.search(body)
-                        sc = SCOPE_FIELD_RE.search(body)
-                        if f:
-                            scope_file[m.group(1)] = f.group(1)
-                        if sc:
-                            scope_parent[m.group(1)] = sc.group(1)
-                    continue
-                if BRANCH_CALL_RE.search(line):
-                    n_calls[0] += 1
-                    d = DBG_REF_RE.search(line)
-                    if d:
-                        branch_dbg.add(d.group(1))
-    except OSError:
-        return None
-    return files, scope_file, scope_parent, loc_by_id, branch_dbg, n_calls[0]
-
-
-def build_line_map(merged_bc, opt_bc, env, mode="branches", log=None,
-                   keep_ll=False):
-    """Returns (line_map, n_hooks, n_locs).  mode="branches" maps only lines
-    carrying an EFTSan branch hook in the INSTRUMENTED module -- exactly the
-    sites that can produce a flip print."""
-    target = opt_bc if mode == "branches" else merged_bc
-    ll = target.with_suffix(".ll")
-    rc, _ = sh(["llvm-dis", str(target), "-o", str(ll)], env=env, log=log)
-    if rc != 0 or not ll.exists():
-        return {}, 0, 0
-    parsed = _parse_debug_info(ll)
-    if not keep_ll:
-        try:
-            ll.unlink()
-        except OSError:
-            pass
-    if parsed is None:
-        return {}, 0, 0
-    files, scope_file, scope_parent, loc_by_id, branch_dbg, n_calls = parsed
-
-    def resolve(scope, depth=0):
-        if scope is None or depth > 32:
-            return None
-        if scope in scope_file:
-            return files.get(scope_file[scope])
-        return resolve(scope_parent.get(scope), depth + 1)
-
-    ids = branch_dbg if mode == "branches" else loc_by_id.keys()
-    out = defaultdict(set)
-    for did in ids:
-        if did not in loc_by_id:
-            continue
-        lineno, scope = loc_by_id[did]
-        fn = resolve(scope)
-        if fn:
-            out[lineno].add(fn)
-    if mode == "branches" and not out:
-        if n_calls == 0:
-            # No hooks in the module at all.  For an integer benchmark that
-            # is the correct answer; do NOT fall back, because mapping every
-            # DILocation would fabricate a site universe that has nothing to
-            # do with what the tool can report.
-            print("  no EFTSan branch hooks in this module -- the tool "
-                  "instrumented zero FP-controlled branches")
-            return {}, 0, 0
-        print("  (hooks present but none resolved to a file -- falling back "
-              "to every DILocation; check BRANCH_CALL_RE against the pass)")
-        return build_line_map(merged_bc, opt_bc, env, mode="all", log=log,
-                              keep_ll=keep_ll)
-    return {k: sorted(v) for k, v in out.items()}, n_calls, len(branch_dbg)
-
-
 def count_fp_ops(merged_bc, env):
-    """{float: n, double: n, x86_fp80: n} over the UNINSTRUMENTED module.
-
-    The precision gate.  BT/CG/LU/SP take -DNAS_FP32, but EP uses WORKING_T
-    and IS/MG take no flag at all -- so a flag typo produces a clean build of
-    the wrong precision, silently.  Note an fp32 NAS build legitimately keeps
-    double arithmetic in the RNG (randlc needs the 53-bit mantissa), so the
-    test is 'has float ops', not 'has no double ops'."""
+    """{float: n, double: n, x86_fp80: n} over the uninstrumented module."""
     ll = merged_bc.with_suffix(".fp.ll")
     rc, _ = sh(["llvm-dis", str(merged_bc), "-o", str(ll)], env=env)
     if rc != 0 or not ll.exists():
@@ -395,79 +254,85 @@ def count_fp_ops(merged_bc, env):
     return dict(counts)
 
 
-def write_site_universe(line_map, outdir, name="instrumented_sites.csv"):
-    rows = []
-    for ln, files in line_map.items():
-        for f in files:
-            rows.append((f, ln, len(files) > 1))
-    rows.sort(key=lambda r: (r[0], r[1]))
-    path = outdir / name
-    with open(path, "w") as fh:
-        fh.write("location,ambiguous\n")
-        for f, ln, amb in rows:
-            fh.write(f"{f}:{ln},{int(amb)}\n")
-    return path
-
-
-def compare_with_brsites(src_tree, line_map, n_hooks, outdir):
+def compare_with_brsites(src_tree, sites, outdir):
     """Cross-check the instrumented site set against brtrace's *.brsites.
-
-    Matching COUNTS does not prove matching SETS, and the difference decides
-    whether an unreported census site is a false negative or a coverage gap.
-    brsites rows are: site_id \\t file:line \\t function, with '#' headers.
-    brtrace stores full paths, we store basenames, so compare basenames."""
+    Compared on file:line:col when the census is fcmp-anchored (v3), else
+    on file:line."""
     files = sorted(src_tree.glob("*.brsites"))
     if not files:
         return None
-    brt_branches, brt_sites = 0, set()
+
+    version, anchor = None, None
+    brt_branches = 0
+    brt_full, brt_line = set(), set()
     for f in files:
         for line in f.read_text(errors="replace").splitlines():
-            if line.startswith("#") or not line.strip():
+            if line.startswith("#"):
+                if "brtrace-table-version" in line:
+                    version = line.split()[-1]
+                elif "loc_anchor" in line:
+                    anchor = line.split()[-1]
+                continue
+            if not line.strip():
                 continue
             parts = line.split("\t")
             if len(parts) < 2:
                 continue
             brt_branches += 1
-            brt_sites.add(os.path.basename(parts[1].strip()))
-    eft_sites = {f"{f}:{ln}" for ln, fl in line_map.items() for f in fl}
+            loc = parts[1].strip()
+            bits = loc.rsplit(":", 2)
+            if len(bits) == 3 and bits[1].isdigit() and bits[2].isdigit():
+                fn, ln, col = os.path.basename(bits[0]), bits[1], bits[2]
+                brt_full.add(f"{fn}:{ln}:{col}")
+                brt_line.add(f"{fn}:{ln}")
+            else:
+                bits = loc.rsplit(":", 1)
+                fn, ln = os.path.basename(bits[0]), bits[-1]
+                brt_line.add(f"{fn}:{ln}")
+
+    exact = (anchor == "fcmp") and bool(brt_full)
+    if exact:
+        brt_sites = brt_full
+        eft_sites = {f"{s['file']}:{s['line']}:{s['col']}"
+                     for k, s in sites.items() if k[0] == "branch"}
+        keyed = "file:line:col"
+    else:
+        brt_sites = brt_line
+        eft_sites = {f"{s['file']}:{s['line']}"
+                     for k, s in sites.items() if k[0] == "branch"}
+        keyed = "file:line"
+
     only_brt = sorted(brt_sites - eft_sites)
     only_eft = sorted(eft_sites - brt_sites)
+    n_eft_branch = sum(1 for k in sites if k[0] == "branch")
 
     lines = [
         "instrumented site agreement: EFTSan vs brtrace census", "",
+        f"  brtrace table    : version {version or '?'}, "
+        f"loc_anchor {anchor or '(not recorded)'}",
+        f"  compared on      : {keyed}",
         f"  brtrace branches : {brt_branches}",
-        f"  EFTSan hooks     : {n_hooks}",
-        f"  brtrace sites    : {len(brt_sites)}",
-        f"  EFTSan sites     : {len(eft_sites)}", "",
+        f"  EFTSan sites     : {n_eft_branch}",
+        f"  brtrace locations: {len(brt_sites)}",
+        f"  EFTSan locations : {len(eft_sites)}", "",
     ]
     if not only_brt and not only_eft:
         lines.append("  SITE SETS IDENTICAL.")
-        lines.append("  An EFTSan silence at a census site is therefore a")
-        lines.append("  detection failure, not a coverage gap.")
     else:
         if only_brt:
-            lines.append(f"  brtrace only ({len(only_brt)}) -- sites EFTSan "
-                         f"cannot see; unreported flips here are COVERAGE "
-                         f"GAPS, not false negatives:")
+            lines.append(f"  brtrace only ({len(only_brt)}):")
             lines += [f"      {s}" for s in only_brt[:40]]
         if only_eft:
             lines.append(f"  EFTSan only ({len(only_eft)}):")
             lines += [f"      {s}" for s in only_eft[:40]]
-    if brt_branches != n_hooks:
-        lines += ["",
-                  "  NOTE: branch counts differ while sites may still match.",
-                  "  brtrace counts source-level conditions, EFTSan counts IR",
-                  "  hooks; a compound condition on one line yields several of",
-                  "  either.  Adjudication is site-keyed, so this is a",
-                  "  counting convention, not a coverage difference."]
     (outdir / "site_agreement.txt").write_text("\n".join(lines) + "\n")
-    return {"brtrace_branches": brt_branches, "brtrace_sites": len(brt_sites),
-            "eftsan_hooks": n_hooks, "eftsan_sites": len(eft_sites),
+    return {"table_version": version, "loc_anchor": anchor, "keyed_on": keyed,
+            "brtrace_branches": brt_branches, "brtrace_sites": len(brt_sites),
+            "eftsan_branches": n_eft_branch, "eftsan_sites": len(eft_sites),
             "only_brtrace": only_brt, "only_eftsan": only_eft,
             "sets_identical": not only_brt and not only_eft}
 
 
-# --------------------------------------------------------------------
 def tu_symbols(bc, env):
     rc, out = sh(["llvm-nm", str(bc)], env=env)
     if rc != 0:
@@ -486,8 +351,8 @@ def tu_symbols(bc, env):
 
 
 def prune_dangling(bcs, missing, env):
-    """Drop TUs referencing symbols nothing in the merge defines (archive
-    semantics).  A TU defining main() is never dropped."""
+    """Drop TUs referencing symbols nothing in the merge defines; never the
+    TU defining main()."""
     tables = {bc: tu_symbols(bc, env) for bc in bcs}
     defined_anywhere = set()
     for d, _ in tables.values():
@@ -508,8 +373,7 @@ def prune_dangling(bcs, missing, env):
 
 
 def makefile_sources(tree):
-    """TU list from the Makefile's SRC=/SRCS= line.  BT/CG/LU/SP use
-    $(wildcard *.c); EP and IS name their files explicitly."""
+    """TU list from the Makefile's SRC=/SRCS= line."""
     mk = next((tree / n for n in ("Makefile", "makefile") if (tree / n).exists()),
               None)
     if mk is None:
@@ -532,7 +396,7 @@ def makefile_sources(tree):
 
 def write_failure_record(bench, precision, outdir, stage, reason, detail,
                          extra=None):
-    """A tool that cannot build is a RESULT, not a missing run."""
+    """Record a build the tool refused as a result, not a missing run."""
     rec = {"benchmark": bench, "precision": precision, "opt": "O0",
            "status": "tool_failure", "failed_stage": stage, "reason": reason,
            "detail": detail, "flips": None, "locations": None, "sites": {},
@@ -542,9 +406,7 @@ def write_failure_record(bench, precision, outdir, stage, reason, detail,
     lines = [f"{bench} {precision} -- EFTSanitizer: NO RESULT", "",
              f"TOOL FAILURE at {stage}.", "", f"  {reason}", ""]
     lines += ["  " + l for l in detail.splitlines()]
-    lines += ["", "This is a tool limitation, not a missing experiment: the",
-              "build was attempted and EFTSan refused it.", ""]
-    (outdir / "summary.txt").write_text("\n".join(lines))
+    (outdir / "summary.txt").write_text("\n".join(lines) + "\n")
     (outdir / "summary.json").write_text(json.dumps([rec], indent=2))
     return rec
 
@@ -553,9 +415,7 @@ VECTOR_TYPE_RE = re.compile(r"<\d+ x (?:float|double|half)>")
 
 
 def diagnose_vector_types(merged_bc, env, limit=6):
-    """EFTSan's pass exits on vector-typed loads.  At -O0 these are SysV
-    argument coercion (a small by-value float struct packed into <2 x float>),
-    not vectorization -- the QuickSilver fp32 failure."""
+    """Vector-typed values in the module and the functions holding them."""
     ll = merged_bc.with_suffix(".diag.ll")
     rc, _ = sh(["llvm-dis", str(merged_bc), "-o", str(ll)], env=env)
     if rc != 0 or not ll.exists():
@@ -581,7 +441,6 @@ def diagnose_vector_types(merged_bc, env, limit=6):
     return hits, funcs[:limit]
 
 
-# --------------------------------------------------------------------
 def build(bench, precision, outdir, env, lib_dirs, args):
     cfg = BENCH[bench]
     src = BENCH_ROOT / bench / f"{bench}_{precision}"
@@ -646,6 +505,7 @@ def build(bench, precision, outdir, env, lib_dirs, args):
     merged = dst / f"{bench}_merged.bc"
     opt_bc = dst / f"{bench}.opt.bc"
     binary = dst / f"{bench}_{precision}.eftsan"
+    sites_csv = outdir / "eftsan_sites.csv"
     pruned_total = []
 
     def attempt(modules):
@@ -657,18 +517,21 @@ def build(bench, precision, outdir, env, lib_dirs, args):
         if rc != 0 or not merged.exists():
             return False, set(), ("llvm-link FAILED.\n" +
                                   "\n".join(out.splitlines()[:4]))
+
+        opt_env = dict(env)
+        opt_env["EFTSAN_SITES"] = str(sites_csv)
+
         print("  opt -eftsan on the merged module")
         rc, out = sh(["opt", "-load", str(pass_so), "-eftsan",
                       str(merged), "-o", str(opt_bc)],
-                     cwd=dst, env=env, log=log)
+                     cwd=dst, env=opt_env, log=log)
         if rc != 0 or not opt_bc.exists() or opt_bc.stat().st_size == 0:
             tail = [l for l in out.splitlines() if l.strip()][-6:]
             msg = ("INSTRUMENTATION FAILED.  Last opt output:\n" +
                    "\n".join("      " + l[:150] for l in tail))
             if "vector" in out.lower():
                 nvec, vfuncs = diagnose_vector_types(merged, env)
-                msg += (f"\n    {nvec} vector-typed value(s): at -O0 this is "
-                        f"SysV argument coercion, not vectorization.")
+                msg += f"\n    {nvec} vector-typed value(s)"
                 if vfuncs:
                     msg += "\n    " + ", ".join(vfuncs)
             return False, set(), msg
@@ -709,8 +572,8 @@ def build(bench, precision, outdir, env, lib_dirs, args):
                 f"{nvec} vector-typed value(s); functions: "
                 f"{', '.join(vfuncs) or '(none identified)'}",
                 extra={"vector_values": nvec})
-            print(f"  NO RESULT: EFTSan refuses this module (vector loads). "
-                  f"Recorded as a tool failure.")
+            print("  NO RESULT: EFTSan refuses this module (vector loads). "
+                  "Recorded as a tool failure.")
             return None
         print(f"  BUILD FAILED -- see {log}")
         for l in msg.splitlines():
@@ -723,54 +586,72 @@ def build(bench, precision, outdir, env, lib_dirs, args):
         return None
     bcs = modules
 
+    # ---- the manifest -----------------------------------------------
+    if not sites_csv.exists() or sites_csv.stat().st_size == 0:
+        if not cfg.get("expect_float", True):
+            print("  no site manifest -- expected: this benchmark has no "
+                  "FP-controlled branches")
+            sites = {}
+        else:
+            print(f"  *** NO SITE MANIFEST at {sites_csv}")
+            return None
+    else:
+        sites = read_sites(sites_csv)
+    n_branch = sum(1 for k in sites if k[0] == "branch")
+    n_select = sum(1 for k in sites if k[0] == "select")
+    print(f"  site manifest: {n_branch} branch, {n_select} select")
+
+    if sites:
+        seen, bad = verify_module_ids(sites)
+        if bad:
+            print("  *** MODULE ID CHECK FAILED:")
+            for entry in bad[:8]:
+                print(f"      {entry}")
+            return None
+        print(f"  module ids verified: {len(seen)} distinct source file(s)")
+
+        multi = [k for k, s in sites.items() if s["n_fcmp"] > 1]
+        if multi:
+            print(f"  note: {len(multi)} site(s) have n_fcmp > 1")
+    else:
+        seen, multi = {}, []
+
     _, nm_out = sh(["nm", str(binary)], env=env)
     nsym = sum(1 for l in nm_out.splitlines() if "eftsan" in l.lower())
     print(f"  eftsan symbol count = {nsym}")
 
+    # ---- precision gate ---------------------------------------------
     fp_ops = count_fp_ops(merged, env)
-    print(f"  FP ops in module: " +
-          ", ".join(f"{k}={v}" for k, v in sorted(fp_ops.items())) or "none")
+    print("  FP ops in module: " +
+          (", ".join(f"{k}={v}" for k, v in sorted(fp_ops.items())) or "none"))
     n_float = fp_ops.get("float", 0)
     n_double = fp_ops.get("double", 0)
     prec_ok = True
     expect_float = cfg.get("expect_float", True)
     if precision == "fp32" and n_float == 0 and not expect_float:
-        print("  precision gate: skipped -- this benchmark has no float "
-              "arithmetic by design")
+        print("  precision gate: skipped -- no float arithmetic by design")
     elif precision == "fp32" and n_float == 0:
         prec_ok = False
-        print("  *** PRECISION GATE: fp32 build has NO float arithmetic. The "
-              "precision flag did not take effect.")
+        print("  *** PRECISION GATE: fp32 build has NO float arithmetic.")
     if precision == "fp64" and n_float > n_double:
-        print("  *** PRECISION GATE: fp64 build is mostly float ops -- check "
-              "the tree.")
+        print("  *** PRECISION GATE: fp64 build is mostly float ops.")
         prec_ok = False
 
-    print(f"  resolving line numbers from debug info (mode={args.resolve})")
-    line_map, n_hooks, n_locs = build_line_map(merged, opt_bc, env,
-                                               mode=args.resolve, log=log,
-                                               keep_ll=args.keep_ll)
-    collisions = sum(1 for v in line_map.values() if len(v) > 1)
-    print(f"  instrumented branch hooks = {n_hooks} "
-          f"({n_locs} distinct debug locations)")
-    print(f"  lines mapped = {len(line_map)} ({collisions} multi-file)")
-    write_site_universe(line_map, outdir)
-    agree = compare_with_brsites(src, line_map, n_hooks, outdir)
+    # ---- census cross-check -----------------------------------------
+    agree = compare_with_brsites(src, sites, outdir) if sites else None
     if agree:
         verdict = ("IDENTICAL" if agree["sets_identical"]
                    else f"{len(agree['only_brtrace'])} brtrace-only, "
                         f"{len(agree['only_eftsan'])} EFTSan-only")
-        print(f"  census cross-check: brtrace {agree['brtrace_branches']} "
-              f"branches / {agree['brtrace_sites']} sites -> site sets "
-              f"{verdict}")
-    else:
-        print("  census cross-check: no *.brsites in the source tree")
+        print(f"  census cross-check ({agree['keyed_on']}, table v"
+              f"{agree['table_version'] or '?'}): brtrace "
+              f"{agree['brtrace_branches']} branches -> site sets {verdict}")
 
     (outdir / "build_info.txt").write_text(
         f"benchmark    = NAS {bench.upper()}\n"
         f"precision    = {precision}\n"
-        f"opt          = -O0  (enforced)\n"
-        f"compiler     = clang (LLVM 10 via {SETUP_SH.name}), C\n"
+        f"opt          = -O0\n"
+        f"compiler     = clang (LLVM 10), C\n"
         f"precision by = {define or cfg['note']}\n"
         f"TUs compiled = {len(bcs)} (from {how})\n"
         f"TUs pruned   = {len(pruned_total)} "
@@ -778,13 +659,11 @@ def build(bench, precision, outdir, env, lib_dirs, args):
         f"cflags       = {' '.join(cflags)}\n"
         f"eftsan_syms  = {nsym}\n"
         f"fp_ops       = {fp_ops}\n"
-        f"branch_hooks = {n_hooks}  (eftsan_check_branch call sites)\n"
-        f"debug_locs   = {n_locs}\n"
-        f"sites        = {sum(len(v) for v in line_map.values())}\n"
-        f"census       = {json.dumps(agree) if agree else 'no brsites found'}\n"
-        f"RNG stays fp64 in every variant (randlc needs the 53-bit mantissa),\n"
-        f"so double ops in an fp32 build are expected.\n"
-        f"ERRORTHRESHOLD is compiled into the runtime (45); no eta sweep.\n")
+        f"branch_sites = {n_branch}\n"
+        f"select_sites = {n_select}\n"
+        f"multi_fcmp   = {len(multi)}\n"
+        f"modules      = {len(seen)} distinct source file(s)\n"
+        f"census       = {json.dumps(agree) if agree else 'no brsites found'}\n")
 
     _, ldd_out = sh(["ldd", str(binary)], env=env)
     if [l for l in ldd_out.splitlines() if "not found" in l]:
@@ -806,46 +685,86 @@ def build(bench, precision, outdir, env, lib_dirs, args):
         for b in bcs:
             b.unlink(missing_ok=True)
     local_files = {p.name for p in dst.iterdir() if p.suffix in (".c", ".h")}
-    return binary, line_map, local_files, n_hooks, n_locs, fp_ops, agree
+    return binary, sites, local_files, fp_ops, agree
 
 
-# --------------------------------------------------------------------
-def run(bench, binary, precision, outdir, line_map, local_files, env,
-        n_hooks, timeout):
+def run(bench, binary, precision, outdir, sites, local_files, env, timeout):
+    events_csv = outdir / "eftsan_events.csv"
+    totals_csv = outdir / "eftsan_totals.csv"
+    run_env = dict(env)
+    run_env["EFTSAN_BF_OUT"] = str(events_csv)
+    run_env["EFTSAN_BF_TOTALS"] = str(totals_csv)
+
     print(f"  running {binary.name}")
     rc, out, err, timed_out = sh_split(
         ["stdbuf", "-i0", "-o0", "-e0", str(binary)],
-        cwd=binary.parent, env=env, timeout=timeout)
+        cwd=binary.parent, env=run_env, timeout=timeout)
     (outdir / "run_O0.stdout").write_text(out)
     (outdir / "run_O0.stderr").write_text(err)
     if timed_out:
-        print(f"  *** TIMEOUT after {timeout}s -- partial output kept. "
-              f"Raise --timeout; EFTSan slows NAS by orders of magnitude.")
+        print(f"  *** TIMEOUT after {timeout}s")
 
-    lines = Counter()
-    for stream in (err, out):
-        for m in FLIP_RE.finditer(stream):
-            lines[(int(m.group(1)), int(m.group(2)))] += 1
-    parsed = sum(lines.values())
-    tm = TOTAL_RE.search(err) or TOTAL_RE.search(out)
+    src_errlog = binary.parent / "error.log"
+    errlog_text = ""
+    if src_errlog.exists():
+        errlog_text = src_errlog.read_text(errors="replace")
+        (outdir / "error.log").write_text(errlog_text)
+
+    if not events_csv.exists() and sites:
+        print(f"  *** NO EVENT LOG at {events_csv}")
+
+    events = read_events(events_csv)
+    totals = read_totals(totals_csv)
+
+    flips = Counter()
+    nonfinite = Counter()
+    ks = defaultdict(list)
+    for kind, mod, sid, k, verdict in events:
+        key = (kind, mod, sid)
+        ks[key].append(k)
+        if verdict in ("FLIP", "FLIP_NONFINITE"):
+            flips[key] += 1
+        if verdict in ("FLIP_NONFINITE", "NONFINITE"):
+            nonfinite[key] += 1
+
+    parsed = sum(flips.values())
+
+    tm = TOTAL_RE.search(errlog_text)
     runtime_total = int(tm.group(1)) if tm else None
+    out_of_scope = (runtime_total - parsed) if runtime_total is not None else None
 
-    sites, foreign, ambiguous, unresolved = Counter(), Counter(), [], []
-    for (fhash, ln), cnt in lines.most_common():
-        cands = [f for f in line_map.get(ln, []) if fnv1a(f) == fhash]
-        if not cands:
-            cands = line_map.get(ln, [])
-        if len(cands) == 1:
-            key = f"{cands[0]}:{ln}"
-            sites[key] = cnt
-            if cands[0] not in local_files:
-                foreign[key] = cnt
-        elif len(cands) > 1:
-            sites[f"AMBIGUOUS:{ln}  [{' | '.join(cands)}]"] = cnt
-            ambiguous.append(ln)
-        else:
-            sites[f"line:{ln}"] = cnt
-            unresolved.append(ln)
+    totals_flips = sum(v[1] for v in totals.values())
+    if totals_flips != parsed:
+        print(f"  *** ACCOUNTING MISMATCH: events.csv has {parsed} detection "
+              f"row(s) but totals.csv sums to {totals_flips}")
+
+    named, foreign, unmapped = Counter(), Counter(), Counter()
+    site_detail = {}
+    for key, cnt in flips.most_common():
+        s = sites.get(key)
+        if s is None:
+            unmapped[f"{key[0]}:mod{key[1]}:site{key[2]}"] = cnt
+            continue
+        loc = f"{s['file']}:{s['line']}"
+        named[loc] += cnt
+        if s["file"] not in local_files:
+            foreign[loc] += cnt
+        site_detail[loc] = {
+            "kind": key[0], "module_id": key[1], "site_id": key[2],
+            "file": s["file"], "line": s["line"], "col": s["col"],
+            "function": s["function"], "n_fcmp": s["n_fcmp"],
+            "flips": cnt,
+            "nonfinite": nonfinite.get(key, 0),
+            "executions": totals.get(key, (None, None, None))[0],
+            "first_flip_k": min(ks[key]) if ks.get(key) else None,
+        }
+
+    if unmapped:
+        print(f"  *** {len(unmapped)} event key(s) absent from the manifest")
+
+    n_nonfinite = sum(nonfinite.values())
+    if n_nonfinite:
+        print(f"  {n_nonfinite} execution(s) with a non-finite shadow")
 
     verified = None
     if VERIFY_OK_RE.search(out):
@@ -859,44 +778,35 @@ def run(bench, binary, precision, outdir, line_map, local_files, env,
     if verified is True:
         print(f"  verification: SUCCESSFUL (class {nas_class})")
     elif verified is False:
-        print(f"  *** verification FAILED (class {nas_class}) -- for fp32 "
-              f"this may be the real result, not a bug")
+        print(f"  verification: FAILED (class {nas_class})")
     else:
-        print("  *** no verification line in the output. The verify block is "
-              "a large part of the interesting branch set; a run that skips "
-              "it is not comparable to the census.")
+        print("  *** no verification line in the output")
     if not ok_exit and not timed_out:
-        # subprocess reports a killing signal as a NEGATIVE return code, so
-        # -11 and 139 are the same SIGSEGV seen from two directions.
-        segv = ("SIGSEGV -- check the ARITY of the function in the backtrace; "
-                "c_print_results takes ~18 args and has crashed the EFTSan "
-                "prologue before")
-        why = {139: segv, -11: segv,
-               134: "abort -- usually an MPFR assertion in the shadow",
-               -6: "abort -- usually an MPFR assertion in the shadow",
-               127: "loader failure"}
-        print(f"  *** exit {rc}: {why.get(rc, 'see the stderr log')}")
+        print(f"  *** exit {rc}")
         for l in (err or out).splitlines()[:3]:
             if l.strip():
                 print("     ", l[:150])
-    elif bench == "is" and rc == 26:
-        print("  exit 26 = IS verification SUCCESSFUL (not a crash)")
 
     return {
         "benchmark": bench, "precision": precision, "opt": "O0",
-        "threshold": 45, "branch_hooks": n_hooks,
-        "flips": parsed, "runtime_total": runtime_total,
-        "locations": len(sites), "sites": dict(sites.most_common()),
+        "threshold": 45,
+        "branch_sites": sum(1 for k in sites if k[0] == "branch"),
+        "select_sites": sum(1 for k in sites if k[0] == "select"),
+        "flips": parsed,
+        "nonfinite": n_nonfinite,
+        "runtime_total": runtime_total,
+        "out_of_scope_flips": out_of_scope,
+        "locations": len(named),
+        "sites": dict(named.most_common()),
+        "site_detail": site_detail,
         "foreign_sites": dict(foreign),
         "foreign_flips": sum(foreign.values()),
-        "ambiguous_lines": sorted(ambiguous),
-        "ambiguous_flips": sum(c for k, c in sites.items()
-                               if k.startswith("AMBIGUOUS:")),
-        "unresolved_lines": sorted(unresolved),
-        "unresolved_flips": sum(c for (_fh, ln), c in lines.items()
-                                if ln in unresolved),
+        "unmapped_sites": dict(unmapped),
+        "unmapped_flips": sum(unmapped.values()),
         "verified": verified, "class": nas_class,
         "timed_out": timed_out, "exit_code": rc, "exit_ok": ok_exit,
+        "events_csv": str(events_csv.relative_to(HERE)),
+        "totals_csv": str(totals_csv.relative_to(HERE)),
     }
 
 
@@ -907,61 +817,66 @@ def verdict_of(v):
 def write_results(bench, precision, records, outdir, fp_ops, agree):
     r0 = records[0]
     lines = [f"NAS {bench.upper()} {precision} -- EFTSanitizer branch flips",
-             f"(-O0 compile+link, merged module, serial, class "
-             f"{r0['class'] or '?'})", ""]
+             f"(-O0, merged module, class {r0['class'] or '?'})", ""]
     for r in records:
-        own = (r["flips"] - r["foreign_flips"] - r["ambiguous_flips"]
-               - r["unresolved_flips"])
-        lines.append(f"{r['flips']} flips @ {r['locations']} loc"
-                     f"   (ERRORTHRESHOLD={r['threshold']}, no sweep)"
-                     f"   [in-TU {own}, foreign {r['foreign_flips']}, "
-                     f"ambiguous {r['ambiguous_flips']}, "
-                     f"unresolved {r['unresolved_flips']}]")
+        own = r["flips"] - r["foreign_flips"] - r["unmapped_flips"]
+        oos = ("n/a" if r["out_of_scope_flips"] is None
+               else str(r["out_of_scope_flips"]))
+        lines.append(f"{r['flips']} in-scope flips @ {r['locations']} loc"
+                     f"   [in-TU {own}, foreign {r['foreign_flips']}]")
+        lines.append(f"{r['nonfinite']} with non-finite shadow"
+                     f"   |   {oos} out-of-scope")
     lines += ["",
-              f"{r0['branch_hooks']} instrumented branch hooks.  "
-              f"FP ops: {fp_ops}.",
+              f"{r0['branch_sites']} branch sites, "
+              f"{r0['select_sites']} select sites.  FP ops: {fp_ops}.",
               f"verification: {verdict_of(r0['verified'])}"
               f"   exit code: {r0['exit_code']}", ""]
     if agree:
-        lines.append(f"census cross-check: brtrace {agree['brtrace_branches']} "
-                     f"branches / {agree['brtrace_sites']} sites vs EFTSan "
-                     f"{agree['eftsan_hooks']} hooks / "
-                     f"{agree['eftsan_sites']} sites -- site sets "
-                     f"{'IDENTICAL' if agree['sets_identical'] else 'DIFFER'}"
-                     f" (see site_agreement.txt)")
+        lines.append(f"census cross-check ({agree['keyed_on']}, table v"
+                     f"{agree['table_version'] or '?'}): brtrace "
+                     f"{agree['brtrace_branches']} branches / "
+                     f"{agree['brtrace_sites']} locations vs EFTSan "
+                     f"{agree['eftsan_branches']} sites / "
+                     f"{agree['eftsan_sites']} locations -- sets "
+                     f"{'IDENTICAL' if agree['sets_identical'] else 'DIFFER'}")
         lines.append("")
-    lines += [
-        "NOTE: EFTSan prints a bare line number.  Files above are recovered",
-        "      from the INSTRUMENTED module: each site is a line carrying an",
-        "      eftsan_check_branch hook, resolved via the debug-info scope",
-        "      chain (-O0, no inlining).  The RNG stays fp64 in every",
-        "      variant, so double ops in an fp32 build are expected.",
-        "      Ground truth is the -O0 census.", "",
-    ]
     for r in records:
         lines.append(f"--- O0 : {r['flips']} flips @ {r['locations']} loc ---")
-        if not r["sites"]:
-            lines.append("    (no flips)")
         for site, cnt in r["sites"].items():
-            lines.append(f"    {cnt:9d}  {site}")
+            d = r["site_detail"].get(site, {})
+            extra = []
+            if d.get("executions") is not None:
+                extra.append(f"of {d['executions']} exec")
+            if d.get("first_flip_k") is not None:
+                extra.append(f"first k={d['first_flip_k']}")
+            if d.get("nonfinite"):
+                extra.append(f"{d['nonfinite']} non-finite")
+            tail = ("   (" + ", ".join(extra) + ")") if extra else ""
+            lines.append(f"    {cnt:9d}  {site}  "
+                         f"[{d.get('function','?')}]{tail}")
         if r["runtime_total"] is not None:
             lines.append(f"    runtime total: {r['runtime_total']}")
-        if r["ambiguous_lines"]:
-            lines.append(f"    AMBIGUOUS lines: {r['ambiguous_lines']}")
-        if r["unresolved_lines"]:
-            lines.append(f"    UNRESOLVED: {r['unresolved_lines']}")
+        if r["unmapped_sites"]:
+            lines.append(f"    UNMAPPED: {list(r['unmapped_sites'])[:6]}")
         if r["timed_out"]:
             lines.append("    *** RUN TIMED OUT -- counts are partial")
         lines.append("")
     (outdir / "summary.txt").write_text("\n".join(lines))
     (outdir / "summary.json").write_text(json.dumps(records, indent=2))
+
     with open(outdir / f"{bench}_{precision}_eftsan_summary.csv", "w") as fh:
-        fh.write("location,flips\n")
+        w = csv.writer(fh)
+        w.writerow(["location", "module_id", "line", "col", "function",
+                    "kind", "flips", "nonfinite", "executions",
+                    "first_flip_k"])
         for site, cnt in records[0]["sites"].items():
-            fh.write(f"{site.split('  [')[0]},{cnt}\n")
+            d = records[0]["site_detail"].get(site, {})
+            w.writerow([site, d.get("module_id"), d.get("line"), d.get("col"),
+                        d.get("function"), d.get("kind"), cnt,
+                        d.get("nonfinite"), d.get("executions"),
+                        d.get("first_flip_k")])
 
 
-# --------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser(
         description=__doc__,
@@ -970,13 +885,9 @@ def main():
     ap.add_argument("-p", "--precision", nargs="+", default=["fp32", "fp64"],
                     choices=["fp32", "fp64"])
     ap.add_argument("--timeout", type=int, default=3600,
-                    help="per-run seconds (default 3600; EFTSan slows NAS by "
-                         "orders of magnitude and SP/BT are the big ones)")
-    ap.add_argument("--resolve", default="branches",
-                    choices=["branches", "all"])
+                    help="per-run seconds (default 3600)")
     ap.add_argument("--link-override", action="store_true")
     ap.add_argument("--keep-bc", action="store_true")
-    ap.add_argument("--keep-ll", action="store_true")
     ap.add_argument("--no-run", action="store_true")
     args = ap.parse_args()
 
@@ -992,8 +903,7 @@ def main():
         return 1
     lib_dirs, missing_libs = find_lib_dirs(env)
     if missing_libs:
-        print(f"FATAL: cannot locate {', '.join(missing_libs)}; is eftsan_env "
-              f"active?")
+        print(f"FATAL: cannot locate {', '.join(missing_libs)}")
         return 1
     env = with_lib_path(env, lib_dirs)
     missing = check_tools(env)
@@ -1002,12 +912,11 @@ def main():
               f"{', '.join(missing)}")
         return 1
 
-    print(f"NAS / EFTSanitizer   -O0 (enforced)   timeout {args.timeout}s")
+    print(f"NAS / EFTSanitizer   -O0   timeout {args.timeout}s")
     print(f"  benchmarks: {' '.join(benches)}")
     print(f"  precisions: {' '.join(args.precision)}")
     print(f"  bench root: {BENCH_ROOT}")
-    print(f"  libs:       {' '.join(str(d) for d in lib_dirs)}")
-    print("  no eta sweep: ERRORTHRESHOLD is compiled into the runtime (45)\n")
+    print(f"  libs:       {' '.join(str(d) for d in lib_dirs)}\n")
 
     grand = {}
     for bench in benches:
@@ -1020,15 +929,19 @@ def main():
             if built is None:
                 print()
                 continue
-            binary, line_map, local_files, n_hooks, n_locs, fp_ops, agree = built
+            binary, sites, local_files, fp_ops, agree = built
             if args.no_run:
                 print(f"  built: {binary}\n")
                 continue
-            rec = run(bench, binary, precision, outdir, line_map, local_files,
-                      env, n_hooks, args.timeout)
+            rec = run(bench, binary, precision, outdir, sites, local_files,
+                      env, args.timeout)
             write_results(bench, precision, [rec], outdir, fp_ops, agree)
             grand[(bench, precision)] = rec
-            print(f"  -> {rec['flips']} flips @ {rec['locations']} loc\n")
+            oos = ("?" if rec["out_of_scope_flips"] is None
+                   else rec["out_of_scope_flips"])
+            print(f"  -> {rec['flips']} in-scope flips @ "
+                  f"{rec['locations']} loc  non-finite {rec['nonfinite']}  "
+                  f"out-of-scope {oos}\n")
 
     if args.no_run:
         return 0
@@ -1042,8 +955,9 @@ def main():
              ("VERIFY FAILED" if r["verified"] is False else "no verify line"))
         t = "  TIMED OUT" if r["timed_out"] else ""
         print(f"  {bench:3s} {precision:5s} {r['flips']:9d} flips @ "
-              f"{r['locations']:3d} loc   {v}   exit={r['exit_code']}{t}")
-    print(f"\nnas/<bench>/results/O0/<precision>/")
+              f"{r['locations']:3d} loc   {r['branch_sites']:4d} sites   "
+              f"{v}   exit={r['exit_code']}{t}")
+    print("\nnas/<bench>/results/O0/<precision>/")
     return 0
 
 

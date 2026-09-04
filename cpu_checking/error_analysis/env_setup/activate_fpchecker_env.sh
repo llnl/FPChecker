@@ -1,10 +1,12 @@
 #!/bin/bash
 
-if [ -z "$CONDA_ROOT" ]; then
+if [ -z "${CONDA_ROOT:-}" ]; then
     if command -v conda >/dev/null 2>&1; then
         CONDA_ROOT="$(conda info --base)"
-    elif [ -n "$CONDA_EXE" ]; then
+    elif [ -n "${CONDA_EXE:-}" ]; then
         CONDA_ROOT="$(dirname "$(dirname "$CONDA_EXE")")"
+    elif [ -d /opt/conda ]; then
+        CONDA_ROOT=/opt/conda
     else
         CONDA_ROOT="$HOME/miniconda3"
     fi

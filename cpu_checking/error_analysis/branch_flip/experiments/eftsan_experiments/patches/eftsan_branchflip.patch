@@ -1,5 +1,5 @@
 diff --git a/llvm_pass/EFTSan/EFTSanitizer.cpp b/llvm_pass/EFTSan/EFTSanitizer.cpp
-index 32a081d..d553607 100644
+index 32a081d..6826e99 100644
 --- a/llvm_pass/EFTSan/EFTSanitizer.cpp
 +++ b/llvm_pass/EFTSan/EFTSanitizer.cpp
 @@ -1285,9 +1285,9 @@ EFTSanitizer::handleError2 (InvokeInst *CI,
@@ -236,171 +236,646 @@ index 32a081d..d553607 100644
      exit(1);
    }
    Type* FCIOpType = FCI->getOperand(0)->getType();
-@@ -4345,46 +4345,55 @@ void EFTSanitizer::handleFcmp(FCmpInst *FCI, BasicBlock *BB, Function *F){
+@@ -4345,46 +4345,60 @@ void EFTSanitizer::handleFcmp(FCmpInst *FCI, BasicBlock *BB, Function *F){
    ConstantInt* debugInfoAvailable = ConstantInt::get(Int1Ty, debugInfoAvail);
    ConstantInt* lineNumber = ConstantInt::get(Int32Ty, lineNum);
    ConstantInt* colNumber = ConstantInt::get(Int32Ty, colNum);
-+  uint64_t fileHash = 0;
++  // FNV-1a-32 over basename(DIFile), matching brtrace.
++  IntegerType* Int8Ty = Type::getInt8Ty(M->getContext());
++  uint32_t modHash = 0;
 +  if (instDebugLoc) {
 +    StringRef fn = instDebugLoc->getScope()->getFilename();
 +    size_t slash = fn.rfind('/');
 +    StringRef base = (slash == StringRef::npos) ? fn : fn.substr(slash + 1);
-+    fileHash = 14695981039346656037ULL;
-+    for (char c : base) { fileHash ^= (uint64_t)(unsigned char)c; fileHash *= 1099511628211ULL; }
++    modHash = 2166136261u;
++    for (char c : base) { modHash ^= (unsigned char)c; modHash *= 16777619u; }
 +  }
-+  Constant* fileId = ConstantInt::get(Int64Ty, fileHash);
++  eftsan_site::SiteInfo bfSite = Sites.lookup(FCI);
++  Constant* modId  = ConstantInt::get(Int32Ty, modHash);
++  Constant* siteId = ConstantInt::get(Int32Ty, (uint32_t)bfSite.id);
++  Constant* kindId = ConstantInt::get(Int8Ty,  (uint8_t)bfSite.kind);
  
    Constant* OpCode = ConstantInt::get(Type::getInt64Ty(M->getContext()), FCI->getPredicate());
    if(isFloat(FCIOpType)){
      if(isa<ConstantFP>(Op1) && !isa<ConstantFP>(Op2)){
        CheckBranch = M->getOrInsertFunction("eftsan_check_branch_f1", Int1Ty, FCIOpType, FCIOpType, 
 -          MPtrTy, Int64Ty, Int1Ty, Int32Ty);
-+          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int64Ty);
++          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int32Ty, Int32Ty, Int8Ty);
        IRB.CreateCall(CheckBranch, {FCI->getOperand(0), FCI->getOperand(1), InsIndex2, 
 -          OpCode, I, lineNumber});
-+          OpCode, I, lineNumber, fileId});
++          OpCode, I, lineNumber, modId, siteId, kindId});
      }
      else if(!isa<ConstantFP>(Op1) && isa<ConstantFP>(Op2)){
        CheckBranch = M->getOrInsertFunction("eftsan_check_branch_f2", Int1Ty, FCIOpType, MPtrTy, FCIOpType, 
 -          Int64Ty, Int1Ty, Int32Ty);
-+          Int64Ty, Int1Ty, Int32Ty, Int64Ty);
++          Int64Ty, Int1Ty, Int32Ty, Int32Ty, Int32Ty, Int8Ty);
        IRB.CreateCall(CheckBranch, {FCI->getOperand(0), InsIndex1, FCI->getOperand(1), 
 -          OpCode, I, lineNumber});
-+          OpCode, I, lineNumber, fileId});
++          OpCode, I, lineNumber, modId, siteId, kindId});
      }
      else{
        CheckBranch = M->getOrInsertFunction("eftsan_check_branch_f", Int1Ty, FCIOpType, MPtrTy, FCIOpType, 
 -          MPtrTy, Int64Ty, Int1Ty, Int32Ty);
-+          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int64Ty);
++          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int32Ty, Int32Ty, Int8Ty);
        IRB.CreateCall(CheckBranch, {FCI->getOperand(0), InsIndex1, FCI->getOperand(1), InsIndex2, 
 -          OpCode, I, lineNumber});
-+          OpCode, I, lineNumber, fileId});
++          OpCode, I, lineNumber, modId, siteId, kindId});
      }
    }
    else if(isDouble(FCIOpType)){
      if(isa<ConstantFP>(Op1) && !isa<ConstantFP>(Op2)){
        CheckBranch = M->getOrInsertFunction("eftsan_check_branch_d1", Int1Ty, FCIOpType, FCIOpType, 
 -          MPtrTy, Int64Ty, Int1Ty, Int32Ty);
-+          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int64Ty);
++          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int32Ty, Int32Ty, Int8Ty);
        IRB.CreateCall(CheckBranch, {FCI->getOperand(0), FCI->getOperand(1), InsIndex2, 
 -          OpCode, I, lineNumber});
-+          OpCode, I, lineNumber, fileId});
++          OpCode, I, lineNumber, modId, siteId, kindId});
      }
      else if(!isa<ConstantFP>(Op1) && isa<ConstantFP>(Op2)){
        CheckBranch = M->getOrInsertFunction("eftsan_check_branch_d2", Int1Ty, FCIOpType, MPtrTy, FCIOpType, 
 -          Int64Ty, Int1Ty, Int32Ty);
-+          Int64Ty, Int1Ty, Int32Ty, Int64Ty);
++          Int64Ty, Int1Ty, Int32Ty, Int32Ty, Int32Ty, Int8Ty);
        IRB.CreateCall(CheckBranch, {FCI->getOperand(0), InsIndex1, FCI->getOperand(1), 
 -          OpCode, I, lineNumber});
-+          OpCode, I, lineNumber, fileId});
++          OpCode, I, lineNumber, modId, siteId, kindId});
      }
      else{
        CheckBranch = M->getOrInsertFunction("eftsan_check_branch_d", Int1Ty, FCIOpType, MPtrTy, FCIOpType, 
 -          MPtrTy, Int64Ty, Int1Ty, Int32Ty);
-+          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int64Ty);
++          MPtrTy, Int64Ty, Int1Ty, Int32Ty, Int32Ty, Int32Ty, Int8Ty);
        IRB.CreateCall(CheckBranch, {FCI->getOperand(0), InsIndex1, FCI->getOperand(1), InsIndex2, 
 -          OpCode, I, lineNumber});
-+          OpCode, I, lineNumber, fileId});
++          OpCode, I, lineNumber, modId, siteId, kindId});
      }
    }
  }
+@@ -4862,6 +4876,14 @@ bool EFTSanitizer::runOnModule(Module &M) {
+   TimeStamp = new GlobalVariable(M, Type::getInt64Ty(M.getContext()), false, GlobalValue::PrivateLinkage, 
+             Constant::getNullValue(Type::getInt64Ty(M.getContext())), "my_global_ts");
+ 
++  // Enumerate FP-controlled branch/select sites on pristine IR, before any
++  // instrumentation, and write the manifest.
++  Sites.build(M);
++  {
++    const char *sp = getenv("EFTSAN_SITES");
++    Sites.writeManifest(sp ? sp : "eftsan_sites.csv");
++  }
++
+   // Find functions that perform floating point computation. No
+   // instrumentation if the function does not perform any FP
+   // computations.
+diff --git a/llvm_pass/EFTSan/EFTSanitizer.h b/llvm_pass/EFTSan/EFTSanitizer.h
+index 1bc800a..a08efef 100644
+--- a/llvm_pass/EFTSan/EFTSanitizer.h
++++ b/llvm_pass/EFTSan/EFTSanitizer.h
+@@ -18,6 +18,7 @@
+ #include <fstream>
+ #include <queue>
+ #include <set>
++#include "EFTSan_SiteId.h"   // EFTSAN_SITEID_PATCH
+ 
+ using namespace llvm;
+ 
+@@ -27,6 +28,7 @@ namespace {
+   public:
+     EFTSanitizer() : ModulePass(ID) {}
+ 
++    eftsan_site::SiteTable Sites;   // EFTSAN_SITEID_PATCH
+     virtual bool runOnModule(Module &module);
+     long countConstants(Function *F);
+     void InvokeSetArgument (InvokeInst *CI, BasicBlock *BB, Function *F);
+diff --git a/runtime/Makefile b/runtime/Makefile
+index 4bf247f..4134c2a 100644
+--- a/runtime/Makefile
++++ b/runtime/Makefile
+@@ -1,7 +1,7 @@
+ TARGET   = libeftsanitizer
+ mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+ TD_ROOT := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+-CXX=g++
++CXX?=g++
+ LINKER=g++
+ LDFLAGS+= -shared
+ OPT=-O0
 diff --git a/runtime/handleReal.cpp b/runtime/handleReal.cpp
-index 0722fb9..3ce4ae7 100644
+index 0722fb9..3d9ac19 100644
 --- a/runtime/handleReal.cpp
 +++ b/runtime/handleReal.cpp
-@@ -232,12 +232,13 @@ extern "C" void eftsan_check_conv_ui(size_t val, smem_entry*res){
+@@ -1,4 +1,5 @@
+ #include "handleReal.h"
++#include "eftsan_bf_counter.h"   // EFTSAN_SITEID_PATCH
+ #include <cmath>
+ #include <limits>
+ #include <iomanip>
+@@ -232,105 +233,138 @@ extern "C" void eftsan_check_conv_ui(size_t val, smem_entry*res){
  extern "C" bool eftsan_check_branch_f1(float op1d,
  				     float op2d, smem_entry* op2,
  				     size_t fcmpFlag, bool computedRes,
 -				     size_t lineNo){
-+				     size_t lineNo, size_t fileId){
++				     uint32_t lineNo, uint32_t modId,
++				     int32_t siteId, uint8_t kindId){
  
-   bool realRes = m_check_branch(op1d, 
-                     op2d + op2->error, fcmpFlag);
+-  bool realRes = m_check_branch(op1d, 
+-                    op2d + op2->error, fcmpFlag);
++  uint64_t k = eftsan_bf_tick(modId, siteId, kindId);
++
++  double op1Total = (double)op1d;
++  double op2Total = (double)op2d + op2->error;
++
++  bool realRes = m_check_branch(op1Total, op2Total, fcmpFlag);
    if(realRes != computedRes){
      flipsCount++;
-+    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
  #if STATIC
      m_bf_map[op2->lineno]++;
  #endif
-@@ -248,12 +249,13 @@ extern "C" bool eftsan_check_branch_f1(float op1d,
+   }
++  eftsan_bf_report(modId, siteId, kindId, k, realRes != computedRes,
++                   !std::isfinite(op1Total) || !std::isfinite(op2Total));
+   return realRes;
+ }
+ 
  extern "C" bool eftsan_check_branch_f2(float op1d, smem_entry* op1,
- 				     float op2d, 
+-				     float op2d, 
++				     float op2d,
  				     size_t fcmpFlag, bool computedRes,
 -				     size_t lineNo){
-+				     size_t lineNo, size_t fileId){
++				     uint32_t lineNo, uint32_t modId,
++				     int32_t siteId, uint8_t kindId){
++
++  uint64_t k = eftsan_bf_tick(modId, siteId, kindId);
  
-   bool realRes = m_check_branch(op1d + op1->error, 
-                     op2d, fcmpFlag);
+-  bool realRes = m_check_branch(op1d + op1->error, 
+-                    op2d, fcmpFlag);
++  double op1Total = (double)op1d + op1->error;
++  double op2Total = (double)op2d;
++
++  bool realRes = m_check_branch(op1Total, op2Total, fcmpFlag);
    if(realRes != computedRes){
      flipsCount++;
-+    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
  #if STATIC
      m_bf_map[op1->lineno]++;
  #endif
-@@ -264,12 +266,13 @@ extern "C" bool eftsan_check_branch_f2(float op1d, smem_entry* op1,
+   }
++  eftsan_bf_report(modId, siteId, kindId, k, realRes != computedRes,
++                   !std::isfinite(op1Total) || !std::isfinite(op2Total));
+   return realRes;
+ }
+ 
  extern "C" bool eftsan_check_branch_f(float op1d, smem_entry* op1,
  				     float op2d, smem_entry* op2,
  				     size_t fcmpFlag, bool computedRes,
 -				     size_t lineNo){
-+				     size_t lineNo, size_t fileId){
++				     uint32_t lineNo, uint32_t modId,
++				     int32_t siteId, uint8_t kindId){
++
++  uint64_t k = eftsan_bf_tick(modId, siteId, kindId);
  
-   bool realRes = m_check_branch(op1d + op1->error, 
-                     op2d + op2->error, fcmpFlag);
+-  bool realRes = m_check_branch(op1d + op1->error, 
+-                    op2d + op2->error, fcmpFlag);
++  double op1Total = (double)op1d + op1->error;
++  double op2Total = (double)op2d + op2->error;
++
++  bool realRes = m_check_branch(op1Total, op2Total, fcmpFlag);
    if(realRes != computedRes){
      flipsCount++;
-+    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
  #if STATIC
      m_bf_map[op1->lineno]++;
  #endif
-@@ -280,7 +283,7 @@ extern "C" bool eftsan_check_branch_f(float op1d, smem_entry* op1,
+   }
++  eftsan_bf_report(modId, siteId, kindId, k, realRes != computedRes,
++                   !std::isfinite(op1Total) || !std::isfinite(op2Total));
+   return realRes;
+ }
+ 
  extern "C" bool eftsan_check_branch_d1(double op1d,
  				     double op2d, smem_entry* op2,
  				     size_t fcmpFlag, bool computedRes,
 -				     size_t lineNo){
-+				     size_t lineNo, size_t fileId){
++				     uint32_t lineNo, uint32_t modId,
++				     int32_t siteId, uint8_t kindId){
++
++  uint64_t k = eftsan_bf_tick(modId, siteId, kindId);
  
    double op1Total = op1d;
    double op2Total = op2d + op2->error;
-@@ -289,6 +292,7 @@ extern "C" bool eftsan_check_branch_d1(double op1d,
-                     op2Total, fcmpFlag);
+ 
+-  bool realRes = m_check_branch(op1Total, 
+-                    op2Total, fcmpFlag);
++  bool realRes = m_check_branch(op1Total, op2Total, fcmpFlag);
    if(realRes != computedRes){
      flipsCount++;
-+    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
  #if STATIC
      m_bf_map[op2->lineno]++;
  #endif
-@@ -299,7 +303,7 @@ extern "C" bool eftsan_check_branch_d1(double op1d,
+   }
++  eftsan_bf_report(modId, siteId, kindId, k, realRes != computedRes,
++                   !std::isfinite(op1Total) || !std::isfinite(op2Total));
+   return realRes;
+ }
+ 
  extern "C" bool eftsan_check_branch_d2(double op1d, smem_entry* op1,
  				     double op2d,
  				     size_t fcmpFlag, bool computedRes,
 -				     size_t lineNo){
-+				     size_t lineNo, size_t fileId){
++				     uint32_t lineNo, uint32_t modId,
++				     int32_t siteId, uint8_t kindId){
++
++  uint64_t k = eftsan_bf_tick(modId, siteId, kindId);
  
    double op1Total = op1d + op1->error;
    double op2Total = op2d;
-@@ -308,6 +312,7 @@ extern "C" bool eftsan_check_branch_d2(double op1d, smem_entry* op1,
-                     op2Total, fcmpFlag);
+ 
+-  bool realRes = m_check_branch(op1Total, 
+-                    op2Total, fcmpFlag);
++  bool realRes = m_check_branch(op1Total, op2Total, fcmpFlag);
    if(realRes != computedRes){
      flipsCount++;
-+    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
  #if STATIC
      m_bf_map[op1->lineno]++;
  #endif
-@@ -318,7 +323,7 @@ extern "C" bool eftsan_check_branch_d2(double op1d, smem_entry* op1,
+   }
++  eftsan_bf_report(modId, siteId, kindId, k, realRes != computedRes,
++                   !std::isfinite(op1Total) || !std::isfinite(op2Total));
+   return realRes;
+ }
+ 
  extern "C" bool eftsan_check_branch_d(double op1d, smem_entry* op1,
  				     double op2d, smem_entry* op2,
  				     size_t fcmpFlag, bool computedRes,
 -				     size_t lineNo){
-+				     size_t lineNo, size_t fileId){
++				     uint32_t lineNo, uint32_t modId,
++				     int32_t siteId, uint8_t kindId){
++
++  uint64_t k = eftsan_bf_tick(modId, siteId, kindId);
  
    double op1Total = op1d + op1->error;
    double op2Total = op2d + op2->error;
-@@ -327,6 +332,7 @@ extern "C" bool eftsan_check_branch_d(double op1d, smem_entry* op1,
-                     op2Total, fcmpFlag);
+ 
+-  bool realRes = m_check_branch(op1Total, 
+-                    op2Total, fcmpFlag);
++  bool realRes = m_check_branch(op1Total, op2Total, fcmpFlag);
    if(realRes != computedRes){
      flipsCount++;
-+    fprintf(stderr, "branch flip @ file %zu line %zu\n", fileId, lineNo);
  #if STATIC
      m_bf_map[op1->lineno]++;
  #endif
+   }
++  eftsan_bf_report(modId, siteId, kindId, k, realRes != computedRes,
++                   !std::isfinite(op1Total) || !std::isfinite(op2Total));
+   return realRes;
+ }
+ extern "C" unsigned int  eftsan_check_conversion(long real, long computed,
+@@ -902,6 +936,7 @@ unsigned long m_ulpd(double x, double y) {
+ 
+ 
+ extern "C" void eftsan_finish() {
++  eftsan_bf_dump_totals();   // EFTSAN_SITEID_PATCH
+   fprintf(m_errfile, "Error above %d bits found %zd\n", ERRORTHRESHOLD, errorCount);
+   fprintf(m_errfile, "Total NaN found %zd\n", nanCount);
+   fprintf(m_errfile, "Total Inf found %zd\n", infCount);
+diff --git a/llvm_pass/EFTSan/EFTSan_SiteId.h b/llvm_pass/EFTSan/EFTSan_SiteId.h
+new file mode 100644
+index 0000000..eeb58c7
+--- /dev/null
++++ b/llvm_pass/EFTSan/EFTSan_SiteId.h
+@@ -0,0 +1,198 @@
++/* EFTSan_SiteId.h -- (module_id, site_id) for FP-controlled branches/selects.
++ *
++ *   module_id = FNV-1a-32 over basename(DIFile), per instruction
++ *   site_id   = ordinal in the module walk, separate spaces for branch/select
++ *
++ * EFTSan runs on one llvm-linked module, so the hash is taken from each
++ * instruction's DILocation rather than the module name. site_id ordinals do
++ * not match brtrace's per-TU ordinals; the cross-tool join key is
++ * (module_id, line, col). Emits a manifest to EFTSAN_SITES for check_sites.py. */
++
++#ifndef EFTSAN_SITEID_H
++#define EFTSAN_SITEID_H
++
++#include "llvm/IR/BasicBlock.h"
++#include "llvm/IR/DebugInfoMetadata.h"
++#include "llvm/IR/Function.h"
++#include "llvm/IR/Instructions.h"
++#include "llvm/IR/Module.h"
++#include "llvm/Support/FileSystem.h"
++#include "llvm/Support/Path.h"
++#include "llvm/Support/raw_ostream.h"
++#include "llvm/ADT/DenseMap.h"
++#include "llvm/ADT/DenseSet.h"
++#include "llvm/ADT/SmallVector.h"
++#include "llvm/ADT/StringRef.h"
++
++#include <string>
++#include <vector>
++#include <cstdint>
++#include <system_error>
++
++namespace eftsan_site {
++
++enum SiteKind : uint8_t {
++  SK_NONE   = 0,   // fcmp controls neither a branch nor a select
++  SK_BRANCH = 1,
++  SK_SELECT = 2
++};
++
++struct SiteInfo {
++  int32_t  id      = -1;      // ordinal within its kind's space, -1 = out of scope
++  uint32_t mod     = 0;       // FNV-1a-32 of basename(DIFile)
++  uint32_t line    = 0;
++  uint32_t col     = 0;
++  SiteKind kind    = SK_NONE;
++  std::string file;
++  std::string func;
++  unsigned nFcmp   = 1;
++};
++
++// FNV-1a-32; constants fixed by the convention shared with brtrace.
++inline uint32_t moduleHash(llvm::StringRef S) {
++  uint32_t H = 2166136261u;
++  for (unsigned char C : S.bytes()) { H ^= C; H *= 16777619u; }
++  return H;
++}
++
++inline std::string fileBasename(const llvm::DILocation *DL) {
++  if (!DL) return std::string();
++  return llvm::sys::path::filename(DL->getFilename()).str();
++}
++
++// Must accept exactly the shapes brtrace's isFPControlled() accepts.
++inline void collectControllingFCmps(llvm::Value *Cond,
++                                    llvm::SmallVectorImpl<llvm::FCmpInst *> &Out,
++                                    llvm::DenseSet<llvm::Value *> &Seen,
++                                    unsigned Depth = 0) {
++  using namespace llvm;
++  if (!Cond || Depth > 16) return;
++  if (!Seen.insert(Cond).second) return;
++
++  if (auto *FC = dyn_cast<FCmpInst>(Cond)) { Out.push_back(FC); return; }
++
++  // -O0 spills i1 through alloca; follow load -> stores into that alloca.
++  if (auto *LI = dyn_cast<LoadInst>(Cond)) {
++    if (auto *AI = dyn_cast<AllocaInst>(LI->getPointerOperand()))
++      for (User *U : AI->users())
++        if (auto *SI = dyn_cast<StoreInst>(U))
++          collectControllingFCmps(SI->getValueOperand(), Out, Seen, Depth + 1);
++    return;
++  }
++
++  if (auto *I = dyn_cast<Instruction>(Cond)) {
++    switch (I->getOpcode()) {
++    case Instruction::ZExt:
++    case Instruction::SExt:
++    case Instruction::Trunc:
++    case Instruction::And:
++    case Instruction::Or:
++    case Instruction::Xor:
++    case Instruction::Select:
++    case Instruction::PHI:
++      for (unsigned i = 0, e = I->getNumOperands(); i != e; ++i)
++        collectControllingFCmps(I->getOperand(i), Out, Seen, Depth + 1);
++      return;
++    default:
++      return;
++    }
++  }
++}
++
++class SiteTable {
++public:
++  llvm::DenseMap<llvm::FCmpInst *, SiteInfo> Map;
++  std::vector<SiteInfo> Branches;
++  std::vector<SiteInfo> Selects;
++
++  // Runs at the top of runOnModule(), before any instrumentation, so the walk
++  // sees pristine IR. Two disjoint ordinal spaces, assigned in module order.
++  void build(llvm::Module &M) {
++    using namespace llvm;
++    int32_t nextBr = 0, nextSel = 0;
++    Map.clear(); Branches.clear(); Selects.clear();
++
++    for (Function &F : M) {
++      if (F.isDeclaration()) continue;
++
++      for (BasicBlock &BB : F)
++        for (Instruction &I : BB) {
++          auto *SI = dyn_cast<SelectInst>(&I);
++          if (!SI) continue;
++          SmallVector<FCmpInst *, 4> Ctl;
++          DenseSet<Value *> Seen;
++          collectControllingFCmps(SI->getCondition(), Ctl, Seen);
++          if (Ctl.empty()) continue;
++          record(Ctl, SK_SELECT, nextSel++, &F, SI, Selects);
++        }
++
++      for (BasicBlock &BB : F) {
++        auto *BI = dyn_cast<BranchInst>(BB.getTerminator());
++        if (!BI || !BI->isConditional()) continue;
++        SmallVector<FCmpInst *, 4> Ctl;
++        DenseSet<Value *> Seen;
++        collectControllingFCmps(BI->getCondition(), Ctl, Seen);
++        if (Ctl.empty()) continue;
++        record(Ctl, SK_BRANCH, nextBr++, &F, BI, Branches);
++      }
++    }
++  }
++
++  // Unmapped fcmps are out of scope: id = -1, which the runtime never counts.
++  SiteInfo lookup(llvm::FCmpInst *FC) const {
++    auto It = Map.find(FC);
++    return It == Map.end() ? SiteInfo() : It->second;
++  }
++
++  void writeManifest(const std::string &Path) const {
++    std::error_code EC;
++    llvm::raw_fd_ostream OS(Path, EC, llvm::sys::fs::F_Text);
++    if (EC) {
++      llvm::errs() << "EFTSan_SiteId: cannot open manifest " << Path
++                   << ": " << EC.message() << "\n";
++      return;
++    }
++    OS << "# kind,site_id,module_id,file,line,col,function,n_fcmp\n";
++    for (const auto &S : Branches) emitRow(OS, "branch", S);
++    for (const auto &S : Selects)  emitRow(OS, "select", S);
++    llvm::errs() << "EFTSan_SiteId: " << Branches.size() << " branch sites, "
++                 << Selects.size() << " select sites -> " << Path << "\n";
++  }
++
++private:
++  static void emitRow(llvm::raw_fd_ostream &OS, const char *K,
++                      const SiteInfo &S) {
++    OS << K << ',' << S.id << ',' << S.mod << ',' << S.file << ','
++       << S.line << ',' << S.col << ',' << S.func << ',' << S.nFcmp << '\n';
++  }
++
++  void record(llvm::SmallVectorImpl<llvm::FCmpInst *> &Ctl, SiteKind K,
++              int32_t Id, llvm::Function *F, llvm::Instruction *Anchor,
++              std::vector<SiteInfo> &Space) {
++    using namespace llvm;
++
++    // Location from the fcmp, not the terminator: at -O0 the br often carries
++    // the enclosing statement's line while the fcmp carries the comparison's
++    // own line/col, which is what brtrace records.
++    const DILocation *DL = Ctl[0]->getDebugLoc();
++    if (!DL) DL = Anchor->getDebugLoc();
++
++    SiteInfo S;
++    S.id    = Id;
++    S.kind  = K;
++    S.file  = fileBasename(DL);
++    S.mod   = DL ? moduleHash(S.file) : 0u;
++    S.line  = DL ? DL->getLine() : 0u;
++    S.col   = DL ? DL->getColumn() : 0u;
++    S.func  = F->getName().str();
++    S.nFcmp = Ctl.size();
++
++    // n_fcmp > 1 sites are excluded from event-level scoring.
++    for (auto *FC : Ctl) Map[FC] = S;
++    Space.push_back(S);
++  }
++};
++
++} // namespace eftsan_site
++
++#endif // EFTSAN_SITEID_H
+diff --git a/runtime/eftsan_bf_counter.h b/runtime/eftsan_bf_counter.h
+new file mode 100644
+index 0000000..29904b9
+--- /dev/null
++++ b/runtime/eftsan_bf_counter.h
+@@ -0,0 +1,136 @@
++/* eftsan_bf_counter.h -- per-site occurrence index and event emission.
++ *
++ * The counter ticks on every execution of an in-scope comparison, whether or
++ * not it flipped, so k lines up with brtrace's execution sequence. Branch and
++ * select are disjoint id spaces. Rows go to EFTSAN_BF_OUT (default
++ * eftsan_events.csv); per-site totals to EFTSAN_BF_TOTALS at eftsan_finish().
++ * EFTSan's own verdict and flipsCount are untouched; the non-finite flag is an
++ * annotation on the row, not a gate. */
++
++#ifndef EFTSAN_BF_COUNTER_H
++#define EFTSAN_BF_COUNTER_H
++
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++
++#define EFTSAN_BF_TABLE_BITS 16
++#define EFTSAN_BF_TABLE_SIZE (1u << EFTSAN_BF_TABLE_BITS)
++
++//   FLIP            shadow and computed disagreed
++//   FLIP_NONFINITE  same, with a non-finite shadow-corrected operand
++//   NONFINITE       no disagreement, but the shadow was non-finite
++#define EFTSAN_V_FLIP           1
++#define EFTSAN_V_FLIP_NONFINITE 2
++#define EFTSAN_V_NONFINITE      3
++
++#define EFTSAN_K_NONE   0
++#define EFTSAN_K_BRANCH 1
++#define EFTSAN_K_SELECT 2
++#define EFTSAN_NKINDS   3
++
++typedef struct {
++  uint64_t key;    // (mod << 32) | (uint32_t)site
++  uint64_t count;  // executions of this site so far
++  uint64_t flips;      // FLIP + FLIP_NONFINITE == upstream's flipsCount
++  uint64_t nonfinite;  // FLIP_NONFINITE + NONFINITE
++  uint8_t  used;       // separate flag: mod = 0, site = 0 is a legal key
++} eftsan_bf_slot;
++
++static eftsan_bf_slot _eftsan_bf_tab[EFTSAN_NKINDS][EFTSAN_BF_TABLE_SIZE];
++static FILE *_eftsan_bf_out  = NULL;
++static int   _eftsan_bf_init = 0;
++
++// splitmix64: site ids are small consecutive integers.
++static inline uint64_t _eftsan_bf_mix(uint64_t k) {
++  k ^= k >> 33; k *= 0xff51afd7ed558ccdULL;
++  k ^= k >> 33; k *= 0xc4ceb9fe1a85ec53ULL;
++  k ^= k >> 33;
++  return k;
++}
++
++static inline uint64_t _eftsan_bf_key(uint32_t mod, int32_t site) {
++  return ((uint64_t)mod << 32) | (uint64_t)(uint32_t)site;
++}
++
++static void _eftsan_bf_setup(void) {
++  if (_eftsan_bf_init) return;
++  _eftsan_bf_init = 1;
++  const char *p = getenv("EFTSAN_BF_OUT");
++  _eftsan_bf_out = fopen(p ? p : "eftsan_events.csv", "w");
++  if (_eftsan_bf_out)
++    fprintf(_eftsan_bf_out, "kind,module_id,site_id,k,verdict\n");
++}
++
++static inline eftsan_bf_slot *_eftsan_bf_find(uint8_t kind, uint64_t key) {
++  eftsan_bf_slot *T = _eftsan_bf_tab[kind];
++  uint64_t i = _eftsan_bf_mix(key) & (EFTSAN_BF_TABLE_SIZE - 1);
++  for (uint32_t probe = 0; probe < EFTSAN_BF_TABLE_SIZE; ++probe) {
++    eftsan_bf_slot *s = &T[i];
++    if (s->used && s->key == key) return s;
++    if (!s->used) {
++      s->used = 1; s->key = key;
++      s->count = 0; s->flips = 0; s->nonfinite = 0;
++      return s;
++    }
++    i = (i + 1) & (EFTSAN_BF_TABLE_SIZE - 1);
++  }
++  return NULL; // table full; drop the event rather than corrupt k
++}
++
++// Call at the top of every eftsan_check_branch_* hook, before any verdict.
++static inline uint64_t eftsan_bf_tick(uint32_t mod, int32_t site, uint8_t kind) {
++  if (site < 0 || kind == EFTSAN_K_NONE || kind >= EFTSAN_NKINDS)
++    return UINT64_MAX;
++  if (!_eftsan_bf_init) _eftsan_bf_setup();
++  eftsan_bf_slot *s = _eftsan_bf_find(kind, _eftsan_bf_key(mod, site));
++  return s ? s->count++ : UINT64_MAX;
++}
++
++static inline void eftsan_bf_emit(uint32_t mod, int32_t site, uint8_t kind,
++                                  uint64_t k, int verdict) {
++  if (k == UINT64_MAX || !_eftsan_bf_out) return;
++  eftsan_bf_slot *s = _eftsan_bf_find(kind, _eftsan_bf_key(mod, site));
++  if (s) {
++    if (verdict != EFTSAN_V_NONFINITE) s->flips++;
++    if (verdict != EFTSAN_V_FLIP)      s->nonfinite++;
++  }
++  fprintf(_eftsan_bf_out, "%s,%u,%d,%llu,%s\n",
++          kind == EFTSAN_K_SELECT ? "select" : "branch",
++          mod, site, (unsigned long long)k,
++          verdict == EFTSAN_V_FLIP ? "FLIP" :
++          verdict == EFTSAN_V_FLIP_NONFINITE ? "FLIP_NONFINITE" : "NONFINITE");
++}
++
++static inline void eftsan_bf_report(uint32_t mod, int32_t site, uint8_t kind,
++                                    uint64_t k, int flipped, int nonFinite) {
++  if (flipped)
++    eftsan_bf_emit(mod, site, kind, k,
++                   nonFinite ? EFTSAN_V_FLIP_NONFINITE : EFTSAN_V_FLIP);
++  else if (nonFinite)
++    eftsan_bf_emit(mod, site, kind, k, EFTSAN_V_NONFINITE);
++}
++
++// Call from eftsan_finish().
++static inline void eftsan_bf_dump_totals(void) {
++  const char *p = getenv("EFTSAN_BF_TOTALS");
++  FILE *f = fopen(p ? p : "eftsan_totals.csv", "w");
++  if (!f) return;
++  fprintf(f, "kind,module_id,site_id,executions,flips,nonfinite\n");
++  for (uint8_t kind = 1; kind < EFTSAN_NKINDS; ++kind)
++    for (uint32_t i = 0; i < EFTSAN_BF_TABLE_SIZE; ++i) {
++      eftsan_bf_slot *s = &_eftsan_bf_tab[kind][i];
++      if (!s->used) continue;
++      fprintf(f, "%s,%u,%d,%llu,%llu,%llu\n",
++              kind == EFTSAN_K_SELECT ? "select" : "branch",
++              (uint32_t)(s->key >> 32),
++              (int32_t)(uint32_t)(s->key & 0xFFFFFFFFULL),
++              (unsigned long long)s->count,
++              (unsigned long long)s->flips,
++              (unsigned long long)s->nonfinite);
++    }
++  fclose(f);
++  if (_eftsan_bf_out) { fclose(_eftsan_bf_out); _eftsan_bf_out = NULL; }
++}
++
++#endif // EFTSAN_BF_COUNTER_H

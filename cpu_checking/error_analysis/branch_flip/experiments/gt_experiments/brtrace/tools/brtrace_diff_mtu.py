@@ -1,51 +1,18 @@
 #!/usr/bin/env python3
-"""brtrace_diff_mtu.py - multi-TU fp32-vs-fp64 branch-flip diff (STREAMING).
+"""brtrace_diff_mtu.py - fp32-vs-fp64 branch-flip diff, streaming.
 
-Records are 12 bytes: (uint32 module_id, uint32 site_id, int32 taken).
-A flip is (module_id, site_id) reached in both runs with different `taken`.
+Records are 12 bytes: (uint32 module_id, uint32 site_id, int32 taken). The
+two traces are walked in lock-step; same id with different `taken` is a flip,
+a different id is a control-flow divergence and adjudication stops there.
 
-This version STREAMS both trace files in fixed-size chunks and compares
-record-by-record, so memory stays constant regardless of trace size. Handles
-multi-GB traces (LULESH -s 10, hypre) without loading them into RAM.
-
-POPULATION STATS (TP / TN)
---------------------------
-Besides "which branches flipped", this also reports "out of how many" -- the
-denominator that gives TN a definition. Because brtrace IS the oracle, TP/TN
-here are properties of the branch population, not of a tool under test:
-
-    TP = the two trajectories DISAGREE  (a flip)
-    TN = the two trajectories AGREE     (a matched decision)
-
-reported at both granularities:
-
-    site-level  : a static instrumented site is TP if it flipped at least once
-                  inside the lock-step window, TN if it executed there and
-                  never flipped.
-    event-level : every lock-step-compared branch evaluation is TP or TN.
-
-Two categories are deliberately NOT counted as TN:
-
-  * instrumented-but-never-executed sites -> DEAD. Folding dead code into TN
-    inflates the negative universe with branches no run ever reached.
-  * events past the divergence point / past min(len32, len64) -> UNADJUDICATED.
-    Once the streams stop visiting the same site sequence there is no oracle
-    verdict, so those events are not correct rejections. The coverage line
-    says how much of the run this costs.
-
-CAVEAT for captions: if the pair was built with -brtrace-fp-only, every count
-here is over FP-CONTROLLED branches, not all branches. The static universe is
-also only as complete as the .brsites files found under --mods; without --mods
-there is no static universe and DEAD cannot be computed.
-
-The report is printed to stdout and, with --report, also written to a .txt
-file. It has two sections: EVENT-BASED (flips per location with TP/TN/executed
-and a TOTAL row) and SITE-BASED (which lines flipped, then TP/TN/DEAD site
-counts with totals).
+TP = the trajectories disagree (a flip), TN = they agree, at event and site
+granularity. Sites never executed inside the window are DEAD and events past
+the divergence are unadjudicated; neither is counted as TN.
 
 Usage:
-    brtrace_diff_mtu.py fp32.out fp64.out [--mods DIR_OR_GLOB] [--csv out.csv]
-                        [--report report.txt] [--fast]
+    brtrace_diff_mtu.py fp32.out fp64.out [--kind branch|select]
+        [--mods DIR_OR_GLOB] [--csv flips.csv] [--window-csv window.csv]
+        [--sites-txt sites.txt] [--report report.txt] [--fast]
 """
 import argparse
 import glob
@@ -84,24 +51,24 @@ def count_records(path):
     return os.path.getsize(path) // RECSZ
 
 
-def load_tables(mods_arg):
-    """Parse .brmods/.brsites side tables.
+def load_tables(mods_arg, kind="branch"):
+    """Read .brmods and the side tables for one stream.
 
-    Returns (mod_name, sites, meta). `sites` is keyed by (module_id, site_id)
-    and its KEY SET is the static universe of instrumented branch sites -- the
-    denominator for the DEAD/TN split. `meta` records how that universe was
-    assembled so it can be sanity-checked in the report.
-    """
+    Returns (mod_name, sites, meta); the key set of `sites` is the static
+    universe for that stream."""
+    ext = ".brselsites" if kind == "select" else ".brsites"
     mod_name, sites = {}, {}
-    meta = {"brmods_files": 0, "brsites_files": 0, "modules": set()}
+    meta = {"brmods_files": 0, "brsites_files": 0, "modules": set(),
+            "kind": kind, "versions": set(), "fp_only": set(),
+            "n_fcmp": {}, "multi_fcmp_sites": 0, "declared_counts": {}}
     if not mods_arg:
         return mod_name, sites, meta
     if os.path.isdir(mods_arg):
         brmods = glob.glob(os.path.join(mods_arg, "**", "*.brmods"), recursive=True)
-        brsites = glob.glob(os.path.join(mods_arg, "**", "*.brsites"), recursive=True)
+        brsites = glob.glob(os.path.join(mods_arg, "**", "*" + ext), recursive=True)
     else:
         brmods = glob.glob(mods_arg + "*.brmods")
-        brsites = glob.glob(mods_arg + "*.brsites")
+        brsites = glob.glob(mods_arg + "*" + ext)
     for p in brmods:
         meta["brmods_files"] += 1
         with open(p) as f:
@@ -113,49 +80,104 @@ def load_tables(mods_arg):
     for p in brsites:
         meta["brsites_files"] += 1
         mid = None
+        seen_here = 0
         with open(p) as f:
             for line in f:
+                if line.startswith("# brtrace-table-version"):
+                    meta["versions"].add(line.split()[2])
+                    continue
+                if line.startswith("# fp_only"):
+                    meta["fp_only"].add(line.split()[2])
+                    continue
                 if line.startswith("# module_id"):
                     try:
                         mid = int(line.split()[2])
                     except (IndexError, ValueError):
                         mid = None
                     continue
+                if line.startswith("# n_sites"):
+                    if mid is not None:
+                        meta["declared_counts"][mid] = int(line.split()[2])
+                    continue
                 if line.startswith("#") or not line.strip():
                     continue
                 parts = line.rstrip("\n").split("\t")
                 if mid is not None and len(parts) >= 3:
-                    sites[(mid, int(parts[0]))] = "%s  [%s]" % (parts[1], parts[2])
+                    sid = int(parts[0])
+                    sites[(mid, sid)] = "%s  [%s]" % (parts[1], parts[2])
                     meta["modules"].add(mid)
+                    seen_here += 1
+                    if len(parts) >= 4:
+                        nf = int(parts[3])
+                        meta["n_fcmp"][(mid, sid)] = nf
+                        if nf > 1:
+                            meta["multi_fcmp_sites"] += 1
+        if mid is not None and mid in meta["declared_counts"]:
+            if seen_here != meta["declared_counts"][mid]:
+                sys.exit("%s: header declares %d sites but file has %d rows"
+                         % (p, meta["declared_counts"][mid], seen_here))
+    if len(meta["fp_only"]) > 1:
+        sys.exit("side tables under --mods were produced with mixed "
+                 "-brtrace-fp-only settings (%s)"
+                 % ", ".join(sorted(meta["fp_only"])))
     return mod_name, sites, meta
+
+
+def write_window_csv(path, kind, per_site_exec, per_site, first_occ,
+                     first_event, sites, meta, loc):
+    """One row per known site with E_S, the number of adjudicated executions;
+    a detection at occurrence index k is in-window iff k < E_S. Static sites
+    that never executed get E_S = 0."""
+    import csv as _csv
+    keys = set(per_site_exec) | set(per_site)
+    if sites:
+        keys |= set(sites)
+    nf = meta.get("n_fcmp", {})
+    with open(path, "w", newline="") as fh:
+        w = _csv.writer(fh)
+        w.writerow(["kind", "module_id", "site_id", "E_S", "flips",
+                    "first_flip_occ", "first_flip_event", "n_fcmp",
+                    "location"])
+        for (mid, sid) in sorted(keys):
+            w.writerow([kind, mid, sid,
+                        per_site_exec.get((mid, sid), 0),
+                        per_site.get((mid, sid), 0),
+                        first_occ.get((mid, sid), -1),
+                        first_event.get((mid, sid), -1),
+                        nf.get((mid, sid), -1),
+                        loc(mid, sid)])
+    print("Wrote per-site adjudication window (%s stream, %d sites) to %s"
+          % (kind, len(keys), path))
+    if meta.get("multi_fcmp_sites"):
+        print("  %d site(s) are controlled by more than one fcmp (see n_fcmp)"
+              % meta["multi_fcmp_sites"])
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("fp32")
     ap.add_argument("fp64")
+    ap.add_argument("--kind", choices=["branch", "select"], default="branch",
+                    help="which stream the inputs are; run once per stream")
     ap.add_argument("--mods")
-    ap.add_argument("--csv")
+    ap.add_argument("--csv", help="per-execution flips")
     ap.add_argument("--max-report", type=int, default=50)
     ap.add_argument("--progress", type=int, default=0,
                     help="print progress every N million events (0=off)")
     ap.add_argument("--sites-txt",
-                    help="dump one line per site (flips, executions, "
-                         "TP/TN/DEAD class, location) to this .txt file. "
-                         "Needed to score another tool against this census: "
-                         "the report gives aggregate TN but not WHICH sites "
-                         "are TN, and without that the negative universe "
-                         "cannot be reconstructed.")
-    ap.add_argument("--report",
-                    help="also write the TP/TN report to this .txt file "
-                         "(it is printed to stdout either way)")
+                    help="per-site table: class, ids, flips, executions, location")
+    ap.add_argument("--window-csv",
+                    help="per-site adjudication window (E_S per site)")
+    ap.add_argument("--report", help="also write the TP/TN report here")
     ap.add_argument("--fast", action="store_true",
-                    help="skip the per-site execution census. Event-level TP "
-                         "and site-level TP stay exact; all TN counts become "
-                         "unavailable. ~40%% faster on traces of 100M+ events.")
+                    help="skip the per-site execution census (no TN counts)")
     args = ap.parse_args()
 
-    mod_name, sites, meta = load_tables(args.mods)
+    if args.fast and (args.csv or args.window_csv):
+        sys.exit("--fast disables the per-site census that --csv and "
+                 "--window-csv depend on")
+
+    mod_name, sites, meta = load_tables(args.mods, args.kind)
     n32 = count_records(args.fp32)
     n64 = count_records(args.fp64)
     n = min(n32, n64)
@@ -164,7 +186,8 @@ def main():
         return sites.get((mid, sid), mod_name.get(mid, "mod%d" % mid) + ":site%d" % sid)
 
     per_site = Counter()
-    first_event = {}          # (mid,sid) -> event index of its FIRST flip
+    first_event = {}
+    first_occ = {}
     first_flips = []
     total_flips = 0
     divergence = None
@@ -174,17 +197,14 @@ def main():
         import csv
         csv_f = open(args.csv, "w", newline="")
         csv_w = csv.writer(csv_f)
-        csv_w.writerow(["event_index", "module_id", "site_id",
-                        "fp32_taken", "fp64_taken", "location"])
+        # occ_index is the 0-based per-site occurrence inside the window.
+        csv_w.writerow(["kind", "event_index", "occ_index", "module_id",
+                        "site_id", "a_taken", "b_taken", "location"])
 
     a = iter_records(args.fp32)
     b = iter_records(args.fp64)
     prog = args.progress * 1_000_000 if args.progress else 0
 
-    # Per-site execution census: how many times each site was adjudicated,
-    # flip or not. This is what separates TN sites (executed, never flipped)
-    # from DEAD sites (instrumented, never executed). It costs one dict
-    # update per event, hence --fast.
     per_site_exec = Counter()
     census = not args.fast
 
@@ -195,22 +215,30 @@ def main():
         if (m32, s32) != (m64, s64):
             divergence = (idx, (m32, s32), (m64, s64))
             break
+        occ = -1
         if census:
             per_site_exec[(m32, s32)] += 1
+            occ = per_site_exec[(m32, s32)] - 1
         if t32 != t64:
             total_flips += 1
             per_site[(m32, s32)] += 1
             first_event.setdefault((m32, s32), idx)
+            first_occ.setdefault((m32, s32), occ)
             if len(first_flips) < args.max_report:
                 first_flips.append((idx, m32, s32, t32, t64))
             if csv_w:
-                csv_w.writerow([idx, m32, s32, t32, t64, loc(m32, s32)])
+                csv_w.writerow([args.kind, idx, occ, m32, s32, t32, t64,
+                                loc(m32, s32)])
         idx += 1
         if prog and idx % prog == 0:
             sys.stderr.write("  ...%dM events, %d flips so far\n" % (idx // 1_000_000, total_flips))
 
     if csv_f:
         csv_f.close()
+
+    if args.window_csv:
+        write_window_csv(args.window_csv, args.kind, per_site_exec, per_site,
+                         first_occ, first_event, sites, meta, loc)
 
     print("fp32 trace: %d events" % n32)
     print("fp64 trace: %d events" % n64)
@@ -221,13 +249,9 @@ def main():
         if n32 == n64:
             print("No branch-decision flips. Identical paths across all TUs.")
         else:
-            # Lock-step held for every event both runs have, but one run kept
-            # going. The shorter trace is a strict prefix of the longer one --
-            # the paths are NOT identical, and the tail is unadjudicated.
             print("No branch-decision flips within the common prefix, but the "
-                  "traces differ in length (%d vs %d). The shorter run is a "
-                  "prefix; its %d-event tail has no counterpart and is "
-                  "UNADJUDICATED." % (n32, n64, abs(n32 - n64)))
+                  "traces differ in length (%d vs %d); the %d-event tail is "
+                  "unadjudicated." % (n32, n64, abs(n32 - n64)))
     else:
         print("FLIP EVENTS: %d  across %d distinct sites" % (total_flips, len(per_site)))
         print()
@@ -246,14 +270,12 @@ def main():
         i, (m1, s1), (m2, s2) = divergence
         print()
         print("CONTROL-FLOW DIVERGENCE at event#%d: fp32 -> %s, fp64 -> %s. "
-              "Lock-step stops (streams no longer aligned)."
+              "Lock-step stops."
               % (i, loc(m1, s1), loc(m2, s2)))
 
     if args.csv and (total_flips or divergence):
         print("\nWrote %d flip rows to %s" % (total_flips, args.csv))
 
-    # Appended below everything the original tool printed, so existing log
-    # scrapers keep working unchanged.
     report_population(args, n32, n64, idx, total_flips, per_site,
                       per_site_exec, sites, loc, meta, divergence, first_event)
 
@@ -263,11 +285,6 @@ def main():
 def report_population(args, n32, n64, adjudicated, tp_events, per_site,
                       per_site_exec, sites, loc, meta, divergence,
                       first_event=None):
-    """Build the TP/TN report, print it, and optionally write it to --report.
-
-    brtrace IS the oracle, so TP/TN are properties of the branch population,
-    not of a tool under test:  TP = trajectories disagree, TN = they agree.
-    """
     census = not args.fast
     tn_events = adjudicated - tp_events
     longest = max(n32, n64)
@@ -293,27 +310,21 @@ def report_population(args, n32, n64, adjudicated, tp_events, per_site,
         % (os.path.basename(args.fp32), os.path.basename(args.fp64)))
     out(bar)
     out()
-    out("  brtrace is the oracle, so:")
-    out("      TP = the two trajectories DISAGREE  (a flip)")
-    out("      TN = the two trajectories AGREE     (a matched decision)")
-    out()
     out("  ADJUDICATION WINDOW")
     out("    lock-step compared      %14s events   (%.2f%% of longer trace)"
         % (num(adjudicated), (100.0 * adjudicated / longest) if longest else 0.0))
-    out("    unadjudicated           %14s events   [no oracle verdict; NOT TN]"
+    out("    unadjudicated           %14s events"
         % num(unadjudicated))
     if unadjudicated:
         if divergence is not None:
             out("      cause: control-flow divergence at event#%s"
                 % num(divergence[0]))
         elif n32 != n64:
-            out("      cause: trace-length mismatch "
-                "(shorter run is a prefix of the longer)")
+            out("      cause: trace-length mismatch")
     out()
 
-    # ------------------------------------------------------------ 1. EVENTS
     out(rule)
-    out("1. EVENT-BASED   (one branch evaluation = one item)")
+    out("1. EVENT-BASED")
     out(rule)
     out()
 
@@ -322,8 +333,6 @@ def report_population(args, n32, n64, adjudicated, tp_events, per_site,
     w = min(max([len(x) for x in labels] + [24]), 46)
 
     if ranked:
-        out("  flips @ location")
-        out()
         out("    %-*s %10s %12s %12s" % (w, "location", "TP", "TN", "executed"))
         out("    " + "-" * (w + 36))
         for (mid, sid), cnt in ranked:
@@ -356,19 +365,14 @@ def report_population(args, n32, n64, adjudicated, tp_events, per_site,
         out("    event flip rate: %.8f %%" % (100.0 * tp_events / adjudicated))
     out()
 
-    # ------------------------------------------------------------- 2. SITES
     out(rule)
-    out("2. SITE-BASED   (one static branch site = one item)")
+    out("2. SITE-BASED")
     out(rule)
     out()
 
     out("  flips @ %d line(s)" % len(tp_sites))
     out()
     fe = first_event or {}
-    # Ordered by FIRST flip, not by frequency. When separating a root cause
-    # from its cascade, what matters is which site flipped first -- and the
-    # site immediately preceding a divergence is the one that caused it, which
-    # frequency ordering buries.
     by_first = sorted(ranked, key=lambda kv: fe.get(kv[0], 1 << 62))
     for (mid, sid), cnt in by_first:
         lab = loc(mid, sid)
@@ -383,33 +387,10 @@ def report_population(args, n32, n64, adjudicated, tp_events, per_site,
     if fe and divergence is not None:
         last_key = max(fe, key=lambda k: fe[k])
         last = fe[last_key]
-        gap = divergence[0] - last
         out()
-        out("    NOTE: the last site to start flipping was")
-        out("            %s" % loc(*last_key))
-        out("          at event#%s, %s event(s) before the divergence at "
-            "event#%s." % (num(last), num(gap), num(divergence[0])))
-        # The gap is the evidence, so state it and let its size speak. A flip
-        # immediately preceding the split is near-conclusive; a larger gap
-        # still identifies the candidate, but the trajectories stayed in
-        # lock-step for a while afterwards, so the link is inferred rather
-        # than observed.
-        if gap <= 2:
-            out("          Adjacent, so that site is almost certainly the "
-                "cause of the split.")
-        elif gap <= 1000:
-            out("          The trajectories stayed in lock-step for those %s "
-                "events, so the" % num(gap))
-            out("          link is inferred, not observed -- the flip changed "
-                "a value that only")
-            out("          altered control flow later. Check the flips CSV "
-                "around that index.")
-        else:
-            out("          That is a wide gap; treat the two as possibly "
-                "unrelated and look")
-            out("          for the real cause near event#%s."
-                % num(divergence[0]))
-        out("          Earlier-flipping sites did not break lock-step.")
+        out("    last site to start flipping: %s at event#%s, %s event(s) "
+            "before the divergence"
+            % (loc(*last_key), num(last), num(divergence[0] - last)))
     out()
 
     out("    %-42s %10s" % ("TP    sites that flipped at least once", num(len(tp_sites))))
@@ -421,18 +402,15 @@ def report_population(args, n32, n64, adjudicated, tp_events, per_site,
         out()
         if static_sites is not None:
             dead = static_sites - exec_sites
-            out("    %-42s %10s   [NOT TN]"
+            out("    %-42s %10s"
                 % ("DEAD  instrumented, never executed", num(len(dead))))
             out("    %-42s %10s"
                 % ("TOTAL sites instrumented", num(len(static_sites))))
             orphan = exec_sites - static_sites
             if orphan:
                 out()
-                out("    [warn] %d executed site(s) are absent from the .brsites"
-                    % len(orphan))
-                out("           tables, so --mods is incomplete and both the")
-                out("           instrumented total and DEAD are understated.")
-                out("           Point --mods at a build dir holding every TU.")
+                out("    [warn] %d executed site(s) are absent from the "
+                    ".brsites tables; --mods is incomplete" % len(orphan))
         else:
             out("    %-42s %10s   [pass --mods]"
                 % ("DEAD  instrumented, never executed", "n/a"))
@@ -451,28 +429,10 @@ def report_population(args, n32, n64, adjudicated, tp_events, per_site,
             out("    %-42s %10s"
                 % ("TOTAL sites instrumented", num(len(static_sites))))
     out()
-
-    # -------------------------------------------------------------- caveats
-    out(rule)
-    out("CAVEATS  (carry these into any caption built from these numbers)")
-    out(rule)
-    out("  * DEAD sites and unadjudicated events are deliberately NOT counted")
-    out("    as TN. Dead code was never reached and post-divergence events")
-    out("    have no oracle verdict; neither is a correct rejection.")
-    out("  * SCOPE: the diff cannot tell from the traces alone which branches")
-    out("    were instrumented. If the pair was built with -brtrace-fp-only,")
-    out("    every count above is over FP-CONTROLLED branches; otherwise it is")
-    out("    over ALL conditional branches. Check the build log and say which")
-    out("    in the caption -- the two give different denominators and, on")
-    out("    LULESH, a different number of ground-truth sites.")
     if static_sites is not None:
-        out("  * Static universe assembled from %d .brsites file(s), %d module(s)."
+        out("  static universe: %d .brsites file(s), %d module(s)"
             % (meta["brsites_files"], len(meta["modules"])))
-    out("  * Event-level TN outnumbers TP by orders of magnitude, so metrics")
-    out("    that divide by it (accuracy, specificity) saturate. Use the")
-    out("    site-based section for tables; use event TN as a denominator for")
-    out("    false-alarm rates in prose.")
-    out()
+        out()
 
     if args.sites_txt:
         rows = []
@@ -483,21 +443,22 @@ def report_population(args, n32, n64, adjudicated, tp_events, per_site,
             nf = per_site.get(key, 0)
             ne = per_site_exec.get(key, 0)
             cls = "TP" if nf else ("TN" if ne else "DEAD")
-            rows.append((cls, nf, ne, fe.get(key, -1), loc(*key)))
-        rows.sort(key=lambda r: ({"TP": 0, "TN": 1, "DEAD": 2}[r[0]], -r[1]))
+            rows.append((cls, key[0], key[1], nf, ne, fe.get(key, -1),
+                         loc(*key)))
+        rows.sort(key=lambda r: ({"TP": 0, "TN": 1, "DEAD": 2}[r[0]], -r[3]))
         with open(args.sites_txt, "w") as fh:
-            fh.write("# class  flips  executions  first_event  location\n")
+            fh.write("# stream: %s\n" % args.kind)
+            fh.write("# class  module_id  site_id  flips  executions  "
+                     "first_event  location\n")
             fh.write("# class: TP = flipped at least once, TN = executed and "
-                     "never flipped,\n")
-            fh.write("#        DEAD = instrumented but never executed "
-                     "(NOT a correct rejection)\n")
+                     "never flipped, DEAD = instrumented but never executed\n")
             fh.write("# first_event: -1 if the site never flipped\n")
             if not census:
                 fh.write("# NOTE: --fast was used, so executions are 0 and "
                          "TN/DEAD cannot be distinguished\n")
-            for cls, nf, ne, first, where in rows:
-                fh.write("%-5s %10d %12d %12d  %s\n"
-                         % (cls, nf, ne, first, where))
+            for cls, mid, sid, nf, ne, first, where in rows:
+                fh.write("%-5s %12d %8d %10d %12d %12d  %s\n"
+                         % (cls, mid, sid, nf, ne, first, where))
         L.append("  wrote per-site table to %s" % args.sites_txt)
         L.append("")
 

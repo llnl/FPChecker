@@ -1,11 +1,13 @@
 #!/bin/bash
 set -e
 
-if [ -z "$CONDA_ROOT" ]; then
+if [ -z "${CONDA_ROOT:-}" ]; then
     if command -v conda >/dev/null 2>&1; then
         CONDA_ROOT="$(conda info --base)"
-    elif [ -n "$CONDA_EXE" ]; then
+    elif [ -n "${CONDA_EXE:-}" ]; then
         CONDA_ROOT="$(dirname "$(dirname "$CONDA_EXE")")"
+    elif [ -d /opt/conda ]; then
+        CONDA_ROOT=/opt/conda
     else
         CONDA_ROOT="$HOME/miniconda3"
     fi
@@ -20,9 +22,13 @@ fi
 
 source "$CONDA_ROOT/etc/profile.d/conda.sh"
 
+if conda env list | grep -qE "^${FPC_ENV}\s"; then
+    echo "$FPC_ENV already exists"
+else
 conda create -y -n "$FPC_ENV" -c conda-forge \
     'clangxx=19.1.7' 'llvmdev=19.1.7' \
     'python=3.12.9' openmpi=5.0.7 cmake make git matplotlib
+fi
 
 conda activate "$FPC_ENV"
 clang++ --version

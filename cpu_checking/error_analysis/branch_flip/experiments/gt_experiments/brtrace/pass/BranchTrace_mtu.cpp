@@ -1,71 +1,29 @@
-//===- BranchTrace.cpp - Log conditional-branch directions (multi-TU) -----===//
+//===- BranchTrace_mtu.cpp - log conditional-branch directions ------------===//
 //
-// New-PM module pass. For each conditional BranchInst (and optionally each
-// SwitchInst) it inserts, before the terminator, a call to:
-//
+// New-PM module pass. Before every conditional branch (and switch, unless
+// -brtrace-fp-only) it inserts
 //     void __brtrace_log(uint32_t module_id, uint32_t site_id, int32_t taken);
+// and before every FP-controlled select
+//     void __brtrace_log_select(uint32_t module_id, uint32_t sel_id, int32_t taken);
 //
-// It ALSO instruments FP-controlled SelectInst conditions, via a separate hook:
+// module_id is FNV-1a-32 over the module's basename, site_id is the ordinal
+// of the branch in a deterministic module walk, so (module_id, site_id) is
+// unique across the link and identical between fp32 and fp64 builds of the
+// same source. Selects use a separate id space, hook and output stream, so
+// branch site_ids are unaffected by them.
 //
-//     void __brtrace_log_select(uint32_t module_id, uint32_t sel_id,
-//                               int32_t taken);
+// With -brtrace-fp-only only branches whose condition derives from an fcmp
+// through i1 logic, i1 casts, freeze and a restricted phi (every incoming an
+// fcmp or constant i1 -- the -O0 lowering of a short-circuit &&) are
+// instrumented. Both builds of a pair must use the same setting.
 //
-// MULTI-TU DESIGN
-// ---------------
-// The single-file version numbered sites 0,1,2,... per module, which collides
-// across translation units when several instrumented .o files are linked into
-// one binary (any multi-TU program). Here each module also
-// carries a `module_id` = stable 32-bit hash of its source path, so the pair
-// (module_id, site_id) is globally unique across the whole link. site_id is
-// still assigned by a deterministic per-module walk, so fp32 and fp64 builds of
-// the SAME source get identical (module_id, site_id) for corresponding
-// branches -- which is what lets the diff line the two traces up.
-//
-// `taken`:
-//   conditional br : 0 or 1 (i1 condition, zero-extended)
-//   switch         : selected successor index (0 = default)
-//   select         : 0 or 1 (i1 condition, zero-extended)
-//
-// FP-ONLY MODE
-// ------------
-// With -brtrace-fp-only, only branches whose condition is derived from a
-// floating-point compare (fcmp) are instrumented. The walk goes one hop
-// through boolean logic / casts / selects / phis, so it catches fcmp->br,
-// (fcmp && fcmp)->br, and fcmp->zext->... patterns -- not just the direct
-// fcmp->br case. Switches are integer-controlled and are skipped in this mode.
-// Both builds of a pair MUST use the same flag, or site_ids won't align.
-//
-// SELECT SITES
-// ------------
-// FPChecker fires at fcmp->select sites (ternaries, std::max once inlined and
-// folded, fmin/fmax idioms). A terminator-only pass cannot see them: a select
-// is not a terminator, so a select-flip has no counterpart in the branch trace
-// and cannot be adjudicated. Instrumenting them closes that gap and makes
-// brtrace's instrumented class a superset of FPChecker's.
-//
-// Select sites use a SEPARATE id space (SelId), a SEPARATE runtime hook, and a
-// SEPARATE output stream. This is deliberate and load-bearing: branch site_ids
-// are BIT-IDENTICAL to what they were before selects existed, so traces and
-// censuses collected with the older pass remain valid, and lock-step
-// adjudication of the branch stream is completely unaffected. Verify after
-// rebuilding by checking that a benchmark's branch-site total is unchanged
-// (LULESH -O0 fp-only: 75).
-//
-// Note on interpretation: a SelectInst has no successors. Both arms are
-// evaluated and one value is chosen, so a select flip cannot change which site
-// executes next, cannot change loop trip count, and cannot end lock-step
-// alignment. Select flips are therefore inert with respect to control flow BY
-// CONSTRUCTION. They are recorded so the claim can be made empirically rather
-// than by argument; they are not scored as TP/FP against the branch oracle.
-//
-// Side tables emitted next to each module:
-//   <module>.brsites    : "site_id \t file:line \t function"
-//   <module>.brselsites : "sel_id  \t file:line \t function"
-//   <module>.brmods     : "module_id \t module_path"   (one line)
-//
-// Build (LLVM 19.x):
-//   clang++ -fPIC -shared -o libBranchTrace.so BranchTrace.cpp \
-//       $(llvm-config --cxxflags --ldflags)
+// Site labels are anchored on the controlling fcmp (falling back to the
+// terminator), so FPChecker and EFTSan, which read DILocation off the fcmp,
+// name the same instruction. Side tables per module:
+//   <module>.brsites    site_id \t file:line:col \t function \t n_fcmp
+//   <module>.brselsites sel_id  \t file:line:col \t function \t n_fcmp
+//   <module>.brmods     module_id \t module_path
+// Table version 4.
 //
 //===----------------------------------------------------------------------===//
 
@@ -95,14 +53,15 @@ static cl::opt<bool> FPOnly(
     "brtrace-fp-only", cl::init(false),
     cl::desc("Only instrument branches controlled by a floating-point compare"));
 
-// Escape hatch to reproduce pre-select behaviour exactly. Branch site_ids are
-// unaffected either way; this only suppresses the select stream and the
-// .brselsites table.
 static cl::opt<bool> NoSelect(
     "brtrace-no-select", cl::init(false),
     cl::desc("Do not instrument SelectInst conditions"));
 
-// FNV-1a 32-bit over the module identifier -> stable module_id across builds.
+static cl::opt<bool> LocFromTerminator(
+    "brtrace-loc-from-terminator", cl::init(false),
+    cl::desc("Label sites by the terminator's debug location (v2 behaviour) "
+             "instead of the controlling fcmp's"));
+
 static uint32_t moduleHash(StringRef s) {
   uint32_t h = 2166136261u;
   for (unsigned char c : s.bytes()) {
@@ -112,55 +71,117 @@ static uint32_t moduleHash(StringRef s) {
   return h;
 }
 
-// Return true iff a branch condition is a boolean expression built from
-// floating-point compares. We walk back ONLY through i1-typed boolean logic
-// (and/or/xor on i1) and i1-narrowing/widening casts -- i.e. predicate flow,
-// not value flow. We deliberately do NOT recurse through select/phi or
-// wider-integer data: those propagate VALUES that may merely depend on an
-// fcmp, which is a different question from whether THIS branch is controlled
-// by a float compare. Recursing through them mislabels an integer loop
-// counter (whose phi can share a block with fcmp-derived selects) as
-// FP-controlled -- the false positive seen on the `for (m=0; m<5; m++)`
-// tolerance loop in verify().
-//
-// Coverage: fcmp->br, (fcmp && fcmp)->br, fcmp->zext->trunc->br. Any FP type
-// (half/float/double/x86_fp80/fp128/...) yields an fcmp, so long-double
-// branches are still caught.
-//
-// This same predicate is applied to a SelectInst's CONDITION operand, which is
-// exactly the right question for a select ("is this choice FP-controlled?") and
-// keeps the select class consistent with the branch class -- including the
-// refusal to recurse through value flow, so an integer select whose arms happen
-// to derive from an fcmp is still correctly excluded.
-//
-// Cycle-guarded (phis make the use-graph cyclic) and depth-capped.
+// True iff V is a predicate built from fcmps through i1 logic, i1 casts,
+// freeze and a restricted phi. Does not recurse through select or wider
+// integers (that would mislabel integer loop counters as FP-controlled).
 static bool isFPControlled(Value *V, SmallPtrSetImpl<Value *> &Seen,
                            unsigned Depth = 0) {
   if (Depth > 16 || !Seen.insert(V).second)
     return false;
   if (isa<FCmpInst>(V))
     return true;
-  // Only predicate (i1) values can carry FP-comparison control; stop as soon
-  // as we leave i1, which is what prevents diving into integer loop counters.
   if (!V->getType()->isIntegerTy(1))
     return false;
   auto *U = dyn_cast<User>(V);
   if (!U)
     return false;
-  if (isa<BinaryOperator>(U)) { // and/or/xor on i1
+  if (isa<BinaryOperator>(U)) {
     for (Value *Op : U->operands())
       if (isFPControlled(Op, Seen, Depth + 1))
         return true;
-  } else if (auto *CI = dyn_cast<CastInst>(U)) { // trunc iN->i1, zext i1->iN
+  } else if (auto *CI = dyn_cast<CastInst>(U)) {
     Value *Src = CI->getOperand(0);
     if (Src->getType()->isIntegerTy(1) || CI->getType()->isIntegerTy(1))
       if (isFPControlled(Src, Seen, Depth + 1))
         return true;
-  } else if (auto *FI = dyn_cast<FreezeInst>(U)) { // freeze i1
+  } else if (auto *FI = dyn_cast<FreezeInst>(U)) {
     if (isFPControlled(FI->getOperand(0), Seen, Depth + 1))
+      return true;
+  } else if (auto *PN = dyn_cast<PHINode>(U)) {
+    // Restricted phi: every incoming an fcmp or a constant i1.
+    bool sawFCmp = false;
+    for (Value *In : PN->incoming_values()) {
+      if (isa<FCmpInst>(In)) {
+        sawFCmp = true;
+      } else if (!isa<ConstantInt>(In)) {
+        return false;
+      }
+    }
+    if (sawFCmp)
       return true;
   }
   return false;
+}
+
+// The fcmp a site's label names: first one reached in operand order (a
+// deterministic walk, unlike iterating the set collectFCmps builds).
+static FCmpInst *firstFCmp(Value *V, SmallPtrSetImpl<Value *> &Seen,
+                           unsigned Depth = 0) {
+  if (Depth > 16 || !Seen.insert(V).second)
+    return nullptr;
+  if (auto *FC = dyn_cast<FCmpInst>(V))
+    return FC;
+  if (!V->getType()->isIntegerTy(1))
+    return nullptr;
+  auto *U = dyn_cast<User>(V);
+  if (!U)
+    return nullptr;
+  if (isa<BinaryOperator>(U)) {
+    for (Value *Op : U->operands())
+      if (FCmpInst *R = firstFCmp(Op, Seen, Depth + 1))
+        return R;
+  } else if (auto *CI = dyn_cast<CastInst>(U)) {
+    Value *Src = CI->getOperand(0);
+    if (Src->getType()->isIntegerTy(1) || CI->getType()->isIntegerTy(1))
+      return firstFCmp(Src, Seen, Depth + 1);
+  } else if (auto *FI = dyn_cast<FreezeInst>(U)) {
+    return firstFCmp(FI->getOperand(0), Seen, Depth + 1);
+  }
+  return nullptr;
+}
+
+// Distinct fcmps reachable through the same chain isFPControlled walks;
+// n_fcmp > 1 means several comparison sites map onto one branch site.
+static void collectFCmps(Value *V, SmallPtrSetImpl<Value *> &Seen,
+                         SmallPtrSetImpl<Value *> &Out, unsigned Depth = 0) {
+  if (Depth > 16 || !Seen.insert(V).second)
+    return;
+  if (isa<FCmpInst>(V)) {
+    Out.insert(V);
+    return;
+  }
+  if (!V->getType()->isIntegerTy(1))
+    return;
+  auto *U = dyn_cast<User>(V);
+  if (!U)
+    return;
+  if (isa<BinaryOperator>(U)) {
+    for (Value *Op : U->operands())
+      collectFCmps(Op, Seen, Out, Depth + 1);
+  } else if (auto *CI = dyn_cast<CastInst>(U)) {
+    Value *Src = CI->getOperand(0);
+    if (Src->getType()->isIntegerTy(1) || CI->getType()->isIntegerTy(1))
+      collectFCmps(Src, Seen, Out, Depth + 1);
+  } else if (auto *FI = dyn_cast<FreezeInst>(U)) {
+    collectFCmps(FI->getOperand(0), Seen, Out, Depth + 1);
+  } else if (auto *PN = dyn_cast<PHINode>(U)) {
+    // Same phi restriction as isFPControlled(); the two walks must agree.
+    bool ok = true;
+    for (Value *In : PN->incoming_values())
+      if (!isa<FCmpInst>(In) && !isa<ConstantInt>(In))
+        ok = false;
+    if (ok)
+      for (Value *In : PN->incoming_values())
+        if (isa<FCmpInst>(In))
+          Out.insert(In);
+  }
+}
+
+static unsigned countFCmps(Value *Cond) {
+  SmallPtrSet<Value *, 16> Seen;
+  SmallPtrSet<Value *, 8> Out;
+  collectFCmps(Cond, Seen, Out);
+  return Out.size();
 }
 
 struct BranchTracePass : PassInfoMixin<BranchTracePass> {
@@ -169,7 +190,6 @@ struct BranchTracePass : PassInfoMixin<BranchTracePass> {
     LLVMContext &Ctx = M.getContext();
     Type *VoidTy = Type::getVoidTy(Ctx);
     Type *I32 = Type::getInt32Ty(Ctx);
-    // void __brtrace_log(i32 module_id, i32 site_id, i32 taken)
     FunctionType *FT = FunctionType::get(VoidTy, {I32, I32, I32}, false);
     return M.getOrInsertFunction("__brtrace_log", FT);
   }
@@ -178,20 +198,40 @@ struct BranchTracePass : PassInfoMixin<BranchTracePass> {
     LLVMContext &Ctx = M.getContext();
     Type *VoidTy = Type::getVoidTy(Ctx);
     Type *I32 = Type::getInt32Ty(Ctx);
-    // void __brtrace_log_select(i32 module_id, i32 sel_id, i32 taken)
     FunctionType *FT = FunctionType::get(VoidTy, {I32, I32, I32}, false);
     return M.getOrInsertFunction("__brtrace_log_select", FT);
   }
 
-  static std::string locString(const Instruction *I, const Function &F) {
+  // file:line:col of one instruction, walking getInlinedAt() to the
+  // outermost frame. False if it carries no debug location.
+  static bool locOf(const Instruction *I, const Function &F,
+                    std::string &Out) {
     if (const DebugLoc &DL = I->getDebugLoc()) {
       if (DILocation *Loc = DL.get()) {
-        return (Loc->getFilename() + ":" + Twine(Loc->getLine()) + "\t" +
-                F.getName())
-            .str();
+        while (DILocation *Up = Loc->getInlinedAt())
+          Loc = Up;
+        Out = (Loc->getFilename() + ":" + Twine(Loc->getLine()) + ":" +
+               Twine(Loc->getColumn()) + "\t" + F.getName())
+                  .str();
+        return true;
       }
     }
-    return ("<no-dbg>:0\t" + F.getName()).str();
+    return false;
+  }
+
+  // Label anchored on the controlling fcmp when Cond is given, else on I.
+  static std::string locString(const Instruction *I, const Function &F,
+                               Value *Cond = nullptr) {
+    std::string S;
+    if (Cond && !LocFromTerminator) {
+      SmallPtrSet<Value *, 16> Seen;
+      if (FCmpInst *FC = firstFCmp(Cond, Seen))
+        if (locOf(FC, F, S))
+          return S;
+    }
+    if (locOf(I, F, S))
+      return S;
+    return ("<no-dbg>:0:0\t" + F.getName()).str();
   }
 
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &) {
@@ -203,10 +243,8 @@ struct BranchTracePass : PassInfoMixin<BranchTracePass> {
     std::string ModName = M.getModuleIdentifier();
     if (ModName.empty())
       ModName = "module";
-    // Hash the BASENAME, not the full path, so the same source compiled from
-    // different directories (e.g. sp_fp32/sp.c, sp_fp64/sp.c, sp_ld/sp.c)
-    // gets the SAME module_id and the diff can align them. The full path is
-    // still recorded in the side tables for readability.
+    // Hash the basename so the same source built from different directories
+    // gets the same module_id.
     StringRef Base = StringRef(ModName);
     size_t Slash = Base.find_last_of("/\\");
     if (Slash != StringRef::npos)
@@ -216,29 +254,16 @@ struct BranchTracePass : PassInfoMixin<BranchTracePass> {
 
     uint32_t SiteId = 0;
     std::string SiteTable;
-
-    // Selects: separate id space, separate table. Never merge these counters
-    // with SiteId -- doing so shifts every branch site_id after the first
-    // select and invalidates every previously collected trace.
     uint32_t SelId = 0;
     std::string SelTable;
-
     bool Changed = false;
 
     for (Function &F : M) {
       if (F.isDeclaration())
         continue;
 
-      // --- Selects, BEFORE the terminator walk for this function. ---
-      //
-      // The ordering is not cosmetic. The switch lowering below synthesises
-      // its own SelectInsts (the CreateSelect compare-chain). Collecting the
-      // pre-existing selects into a vector first, and finishing with them
-      // before any switch in this function is touched, makes it impossible for
-      // the pass to instrument its own generated code. In -brtrace-fp-only
-      // mode switches are skipped so no selects are synthesised, but the
-      // non-fp-only path depends on this ordering. Do not fold this into the
-      // terminator loop.
+      // Selects first, collected before any switch lowering below can
+      // synthesise its own SelectInsts.
       if (!NoSelect) {
         SmallVector<SelectInst *, 32> Sels;
         for (BasicBlock &BB : F)
@@ -248,29 +273,24 @@ struct BranchTracePass : PassInfoMixin<BranchTracePass> {
 
         for (SelectInst *SelI : Sels) {
           Value *Cond = SelI->getCondition();
-
-          // A vector select has an <N x i1> condition: there is no single
-          // outcome to log. Does not arise at -O0; guard regardless so an
-          // -O2 build cannot produce a malformed zext.
           if (!Cond->getType()->isIntegerTy(1))
             continue;
-
           if (FPOnly) {
             SmallPtrSet<Value *, 16> Seen;
             if (!isFPControlled(Cond, Seen))
               continue;
           }
-
-          IRBuilder<> B(SelI); // insert before the select
+          IRBuilder<> B(SelI);
           Value *Taken = B.CreateZExtOrTrunc(Cond, I32);
           B.CreateCall(SelHook, {ModIdC, ConstantInt::get(I32, SelId), Taken});
-          SelTable += (Twine(SelId) + "\t" + locString(SelI, F) + "\n").str();
+          SelTable += (Twine(SelId) + "\t" + locString(SelI, F, Cond) + "\t" +
+                       Twine(countFCmps(Cond)) + "\n")
+                          .str();
           ++SelId;
           Changed = true;
         }
       }
 
-      // --- Terminators. Unchanged from the pre-select version. ---
       for (BasicBlock &BB : F) {
         Instruction *Term = BB.getTerminator();
         if (!Term)
@@ -287,12 +307,13 @@ struct BranchTracePass : PassInfoMixin<BranchTracePass> {
           IRBuilder<> B(BI);
           Value *Taken = B.CreateZExtOrTrunc(BI->getCondition(), I32);
           B.CreateCall(Hook, {ModIdC, ConstantInt::get(I32, SiteId), Taken});
-          SiteTable += (Twine(SiteId) + "\t" + locString(BI, F) + "\n").str();
+          SiteTable += (Twine(SiteId) + "\t" +
+                        locString(BI, F, BI->getCondition()) + "\t" +
+                        Twine(countFCmps(BI->getCondition())) + "\n")
+                           .str();
           ++SiteId;
           Changed = true;
         } else if (kInstrumentSwitch && !FPOnly) {
-          // A switch condition is always integer-controlled, so it is never
-          // FP-controlled -- skip switches entirely in FP-only mode.
           if (auto *SI = dyn_cast<SwitchInst>(Term)) {
             IRBuilder<> B(SI);
             Value *CondV = SI->getCondition();
@@ -304,7 +325,9 @@ struct BranchTracePass : PassInfoMixin<BranchTracePass> {
               ++idx;
             }
             B.CreateCall(Hook, {ModIdC, ConstantInt::get(I32, SiteId), Sel});
-            SiteTable += (Twine(SiteId) + "\t" + locString(SI, F) + "\n").str();
+            SiteTable += (Twine(SiteId) + "\t" + locString(SI, F) +
+                          "\t0\n")
+                             .str();
             ++SiteId;
             Changed = true;
           }
@@ -312,14 +335,20 @@ struct BranchTracePass : PassInfoMixin<BranchTracePass> {
       }
     }
 
-    // Emit side tables next to the module.
+    const char *LocAnchor = LocFromTerminator ? "terminator" : "fcmp";
+
     if (!SiteTable.empty()) {
       std::error_code EC;
       {
         raw_fd_ostream OS(ModName + ".brsites", EC);
         if (!EC) {
+          OS << "# brtrace-table-version 4\n";
+          OS << "# kind branch\n";
+          OS << "# loc_anchor " << LocAnchor << "\n";
+          OS << "# fp_only " << (FPOnly ? 1 : 0) << "\n";
           OS << "# module_id " << ModId << "  module " << ModName << "\n";
-          OS << "# site_id\tfile:line\tfunction\n";
+          OS << "# n_sites " << SiteId << "\n";
+          OS << "# site_id\tfile:line:col\tfunction\tn_fcmp\n";
           OS << SiteTable;
         }
       }
@@ -331,14 +360,17 @@ struct BranchTracePass : PassInfoMixin<BranchTracePass> {
       }
     }
 
-    // Select table is written independently of the branch table: a module can
-    // legitimately have selects but no FP-controlled branches, or the reverse.
     if (!SelTable.empty()) {
       std::error_code EC3;
       raw_fd_ostream OS3(ModName + ".brselsites", EC3);
       if (!EC3) {
+        OS3 << "# brtrace-table-version 4\n";
+        OS3 << "# kind select\n";
+        OS3 << "# loc_anchor " << LocAnchor << "\n";
+        OS3 << "# fp_only " << (FPOnly ? 1 : 0) << "\n";
         OS3 << "# module_id " << ModId << "  module " << ModName << "\n";
-        OS3 << "# sel_id\tfile:line\tfunction\n";
+        OS3 << "# n_sites " << SelId << "\n";
+        OS3 << "# sel_id\tfile:line:col\tfunction\tn_fcmp\n";
         OS3 << SelTable;
       }
     }
@@ -347,7 +379,7 @@ struct BranchTracePass : PassInfoMixin<BranchTracePass> {
            << "): instrumented " << SiteId << " branch sites";
     if (!NoSelect)
       errs() << ", " << SelId << " select sites";
-    errs() << (FPOnly ? " (fp-only)" : "") << "\n";
+    errs() << (FPOnly ? " (fp-only)" : "") << " [loc " << LocAnchor << "]\n";
     return Changed ? PreservedAnalyses::none() : PreservedAnalyses::all();
   }
 

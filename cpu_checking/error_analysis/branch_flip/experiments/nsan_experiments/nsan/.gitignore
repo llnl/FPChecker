@@ -1,0 +1,7 @@
+nsan_setup/
+selftest/
+plugin/*.so
+plugin/build.log
+runtime/*.o
+runtime/*.a
+runtime/build.log

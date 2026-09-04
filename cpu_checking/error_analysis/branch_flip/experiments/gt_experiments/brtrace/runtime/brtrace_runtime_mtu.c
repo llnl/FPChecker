@@ -1,24 +1,10 @@
-/* brtrace_runtime_mtu.c - multi-TU branch trace recorder.
+/* brtrace_runtime_mtu.c - branch trace recorder.
  *
- * Record (little-endian, 12 bytes):
- *     uint32_t module_id
- *     uint32_t site_id
- *     int32_t  taken
+ * 12-byte little-endian records: uint32 module_id, uint32 site_id, int32 taken.
+ * Branches go to $BRTRACE_OUT (default brtrace.out), selects to
+ * $BRTRACE_SEL_OUT (default brtrace_sel.out); the two id spaces are disjoint.
  *
- * (module_id, site_id) is globally unique across all linked TUs, so traces
- * from a multi-file binary are unambiguous.
- *
- * Two independent streams:
- *     branches -> $BRTRACE_OUT      (default brtrace.out)
- *     selects  -> $BRTRACE_SEL_OUT  (default brtrace_sel.out)
- *
- * They are kept separate on purpose. The branch stream is byte-identical to
- * what it was before select instrumentation existed, so previously collected
- * traces stay valid and lock-step adjudication of the branch stream is
- * untouched. A run with no selects simply produces an empty select file.
- *
- * Build:
- *     clang -O2 -c brtrace_runtime_mtu.c -o brtrace_runtime_mtu.o
+ * Build: clang -O2 -c brtrace_runtime_mtu.c -o brtrace_runtime_mtu.o
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -63,16 +49,6 @@ void __brtrace_log(uint32_t module_id, uint32_t site_id, int32_t taken) {
 }
 
 /* ----------------------------------------------------------------- selects */
-/*
- * Same 12-byte record layout, separate file, separate buffer, separate init.
- *
- * site_id here holds the SELECT id, which lives in its own numbering space --
- * a (module_id, id) pair from this stream is NOT comparable to one from the
- * branch stream. Keep the two files apart when diffing.
- *
- * Fires more often than the branch hook in numeric code (ternaries, folded
- * min/max), so the buffering matters more here.
- */
 
 static FILE *g_sel_fp = NULL;
 static int   g_sel_init = 0;
