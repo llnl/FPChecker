@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# run_experiments.sh -- ground truth, three tools, scoring, comparison.
+# run_experiments.sh -- ground truth, then NSan, EFTSan, FPChecker, each scored; then tables.
 #
 #   ./run_experiments.sh                       # everything (QuickSilver dominates)
 #   ./run_experiments.sh --quick               # no QuickSilver, no NAS SP
@@ -9,6 +9,7 @@
 # Per-tool results stay under $EXP/*_experiments/; scorer JSONs, tables and
 # compare.txt go to $OUT.
 set -uo pipefail
+export PYTHONUNBUFFERED=1
 
 FPC_SRC="${FPC_SRC:-/opt/cgo2026_artifact/fpchecker_bf}"
 EXP="${EXP:-$FPC_SRC/cpu_checking/error_analysis/branch_flip/experiments}"
@@ -16,7 +17,7 @@ EXPECTED="$FPC_SRC/cpu_checking/error_analysis/branch_flip/expected"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUT="${OUT:-$HERE/results}"
 
-QUICK=0; SKIP_GT=0; TOOLS="fpchecker,eftsan,nsan"
+QUICK=0; SKIP_GT=0; TOOLS="nsan,eftsan,fpchecker"
 while [ $# -gt 0 ]; do
   case "$1" in
     --quick)   QUICK=1 ;;
@@ -49,17 +50,17 @@ if [ "$SKIP_GT" = 0 ]; then
   run ./run_nas_brtrace.py -b $NAS_BENCHES
 fi
 
-# ---------------------------------------------------------------- FPChecker
-if want fpchecker; then
-  hr "FPChecker"
-  source activate_fpchecker_env.sh >/dev/null
-  cd "$EXP/fpchecker_experiments"
-  run ./run_lulesh_fpchecker.py --bf-mode both
-  run ./run_amg_fpchecker.py --bf-mode both
-  [ "$QUICK" = 1 ] || run ./run_quicksilver_fpchecker.py --bf-mode both
-  run ./run_nas_fpchecker.py --bf-mode both -b $NAS_BENCHES
+# ---------------------------------------------------------------- NSan
+if want nsan; then
+  hr "NSan"
+  source activate_nsan_env.sh >/dev/null
+  cd "$EXP/nsan_experiments"
+  run ./run_lulesh_nsan.py
+  run ./run_amg_nsan.py
+  [ "$QUICK" = 1 ] || run ./run_quicksilver_nsan.py
+  run ./run_nas_nsan.py -b $NAS_BENCHES
   cd "$EXP/gt_experiments"
-  run ./fpc_exact_metrics.py --rule both --json "$OUT/fpc_metrics.json" --text "$OUT/fpc_metrics.txt"
+  run ./nsan_exact_metrics.py --json "$OUT/nsan_metrics.json" --text "$OUT/nsan_metrics.txt"
 fi
 
 # ---------------------------------------------------------------- EFTSanitizer
@@ -75,17 +76,17 @@ if want eftsan; then
   run ./eftsan_exact_metrics.py --json "$OUT/eftsan_metrics.json" --text "$OUT/eftsan_metrics.txt"
 fi
 
-# ---------------------------------------------------------------- NSan
-if want nsan; then
-  hr "NSan"
-  source activate_nsan_env.sh >/dev/null
-  cd "$EXP/nsan_experiments"
-  run ./run_lulesh_nsan.py
-  run ./run_amg_nsan.py
-  [ "$QUICK" = 1 ] || run ./run_quicksilver_nsan.py
-  run ./run_nas_nsan.py -b $NAS_BENCHES
+# ---------------------------------------------------------------- FPChecker
+if want fpchecker; then
+  hr "FPChecker"
+  source activate_fpchecker_env.sh >/dev/null
+  cd "$EXP/fpchecker_experiments"
+  run ./run_lulesh_fpchecker.py --bf-mode both
+  run ./run_amg_fpchecker.py --bf-mode both
+  [ "$QUICK" = 1 ] || run ./run_quicksilver_fpchecker.py --bf-mode both
+  run ./run_nas_fpchecker.py --bf-mode both -b $NAS_BENCHES
   cd "$EXP/gt_experiments"
-  run ./nsan_exact_metrics.py --json "$OUT/nsan_metrics.json" --text "$OUT/nsan_metrics.txt"
+  run ./fpc_exact_metrics.py --rule both --json "$OUT/fpc_metrics.json" --text "$OUT/fpc_metrics.txt"
 fi
 
 # ---------------------------------------------------------------- tables
