@@ -14,7 +14,7 @@ fi
 
 EFT_ENV="${EFT_ENV:-eftsan_env}"
 
-if [ -z "$EFT_HOME" ]; then
+if [ -z "${EFT_HOME:-}" ]; then
     _here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     for _cand in "$_here/../../../../EFTSanitizer" "$_here/../../../EFTSanitizer"; do
         [ -d "$_cand" ] && EFT_HOME="$(cd "$_cand" && pwd)" && break
@@ -39,15 +39,15 @@ export PATH="$LLVM_HOME/bin:$PATH"
 GCC_VER=$(ls "$CONDA_PREFIX/lib/gcc/x86_64-conda-linux-gnu/" 2>/dev/null | head -1)
 if [ -n "$GCC_VER" ]; then
     GXX_INC="$CONDA_PREFIX/lib/gcc/x86_64-conda-linux-gnu/$GCC_VER/include/c++"
-    export CPLUS_INCLUDE_PATH="$GXX_INC:$GXX_INC/x86_64-conda-linux-gnu:$CPLUS_INCLUDE_PATH"
+    export CPLUS_INCLUDE_PATH="$GXX_INC:$GXX_INC/x86_64-conda-linux-gnu:${CPLUS_INCLUDE_PATH:-}"
 else
     echo "WARNING: conda gcc include dir not found -- clang will not find libstdc++ headers" >&2
 fi
 
-export CPATH="$CONDA_PREFIX/include:$CPATH"
-export LIBRARY_PATH="$CONDA_PREFIX/lib:$LIBRARY_PATH"
+export CPATH="$CONDA_PREFIX/include:${CPATH:-}"
+export LIBRARY_PATH="$CONDA_PREFIX/lib:${LIBRARY_PATH:-}"
 export EFT_HOME
-export LD_LIBRARY_PATH="$EFT_HOME/runtime/obj:$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="$EFT_HOME/runtime/obj:$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}"
 export LLVM_PASS_LIB=" $EFT_HOME/llvm_pass/build/EFTSan/libEFTSanitizer.so -eftsan "
 
 export PATH=$(echo "$PATH" | awk -v RS=':' 'NF && !seen[$0]++' | paste -sd:)

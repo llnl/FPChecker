@@ -38,6 +38,32 @@ COUNTS = ["TP", "FP", "TN", "FN"]
 METRICS = ["P", "R", "F1", "Acc"]
 TOLERATED = {"LULESH"}
 
+USE_COLOR = sys.stdout.isatty() and os.environ.get("NO_COLOR") is None
+COLORS = {"match": "\033[32m", "delta": "\033[33m", "MISMATCH": "\033[31m",
+          "missing": "\033[31m", "OK": "\033[32m"}
+
+
+def paint(word):
+    c = COLORS.get(word)
+    return f"{c}{word}\033[0m" if (c and USE_COLOR) else word
+
+
+def colorize(text):
+    if not USE_COLOR:
+        return text
+    out = []
+    for line in text.split("\n"):
+        for st in ("match", "delta", "MISMATCH", "missing"):
+            if line.rstrip().endswith("  " + st) or f"  {st}  (expected" in line:
+                line = line.replace(f"  {st}", "  " + paint(st), 1)
+                break
+        if line.startswith("RESULT: OK"):
+            line = line.replace("OK", paint("OK"), 1)
+        elif line.startswith("RESULT: ") and "MISMATCH" in line:
+            line = line.replace("MISMATCH", paint("MISMATCH"))
+        out.append(line)
+    return "\n".join(out)
+
 
 # ---------------------------------------------------------------- loading
 
@@ -51,7 +77,7 @@ def load(path):
 def cell_key(c):
     return (c["benchmark"], c["precision"], c.get("rule", ""),
             "" if c.get("eta") in (None, "--") else str(c.get("eta")),
-            c.get("policy", "") if c.get("policy", "") not in ("measured",) else "")
+            c.get("policy", "") if c.get("policy", "") not in ("measured", "--") else "")
 
 
 def get(cells, bench, prec, rule="", eta=""):
@@ -126,13 +152,13 @@ def tool_of(row):
 
 
 def compare(rows, exp, prec):
-    """Attach status to each row: ok / delta / DIFF / missing / n/a."""
+    """Attach status to each row: match / delta / MISMATCH / missing / no ref."""
     fails = 0
     for r in rows:
         e = get(exp[tool_of(r)], r["benchmark"], prec, r["rule"], r["eta"])
         c = r["cell"]
         if e is None:
-            r["status"] = "n/a"
+            r["status"] = "no ref"
             continue
         if c is None:
             r["status"] = "missing"
@@ -140,16 +166,16 @@ def compare(rows, exp, prec):
             continue
         if crashed(e) or vacuous(e) or crashed(c) or vacuous(c):
             same = (crashed(e) == crashed(c) and vacuous(e) == vacuous(c))
-            r["status"] = "ok" if same else "DIFF"
+            r["status"] = "match" if same else "MISMATCH"
             fails += 0 if same else 1
             continue
         same = all(e.get(k) == c.get(k) for k in COUNTS)
         if same:
-            r["status"] = "ok"
+            r["status"] = "match"
         elif r["benchmark"] in TOLERATED:
             r["status"] = "delta"
         else:
-            r["status"] = "DIFF"
+            r["status"] = "MISMATCH"
             fails += 1
         if not same:
             r["expected"] = [e.get(k) for k in COUNTS]
@@ -176,9 +202,9 @@ def render_text(rows, title, prec):
         v = row_values(r["cell"])
         st = r.get("status", "")
         if r["cell"] is None:
-            body = f"{'(no result)':>10}"
+            body = f"{'(no result)':>75}"
         elif crashed(r["cell"]):
-            body = f"{'Crashed':>10}"
+            body = f"{'Crashed':>75}"
         else:
             body = (f"{fnum(v[0]):>10}{fnum(v[1]):>11}{fnum(v[2]):>13}{fnum(v[3]):>9}"
                     f"{fnum(v[4]):>8}{fnum(v[5]):>8}{fnum(v[6]):>8}{fnum(v[7]):>8}")
@@ -355,13 +381,13 @@ def main():
             texts.append(render_text(rows, title, prec))
             texs.append(f"% {title} ({prec})\n" + tex_renderer(rows, prec))
             js += to_json(rows, prec)
-            n = len([r for r in rows if r.get("status") not in (None, "n/a")])
-            ok = len([r for r in rows if r.get("status") == "ok"])
+            n = len([r for r in rows if r.get("status") not in (None, "no ref")])
+            ok = len([r for r in rows if r.get("status") == "match"])
             dl = len([r for r in rows if r.get("status") == "delta"])
-            compare_lines.append(f"{name} {prec}: {ok}/{n} exact, {dl} within "
-                                 f"tolerance, {fails} mismatched")
+            compare_lines.append(f"{name} {prec}: {ok}/{n} rows match expected, "
+                                 f"{dl} within tolerance, {fails} mismatched")
         text = "\n\n".join(texts)
-        print(text + "\n")
+        print(colorize(text) + "\n")
         open(os.path.join(out, f"table_{name}.txt"), "w").write(text + "\n")
         open(os.path.join(out, f"table_{name}.tex"), "w").write("\n\n".join(texs) + "\n")
         json.dump({"table": name, "rows": js},
@@ -377,8 +403,9 @@ def main():
 
     if not args.no_compare:
         summary = "\n".join(compare_lines) + "\nRESULT: " + \
-            ("OK" if total_fail == 0 else f"{total_fail} MISMATCH(ES)")
-        print("\n" + summary)
+            ("OK -- all results match expected" if total_fail == 0
+             else f"{total_fail} MISMATCH(ES) against expected")
+        print("\n" + colorize(summary))
         open(os.path.join(out, "compare.txt"), "w").write(summary + "\n")
         return 1 if total_fail else 0
     return 0

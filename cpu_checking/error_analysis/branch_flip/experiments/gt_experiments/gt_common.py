@@ -88,7 +88,7 @@ def ensure_brtrace(rebuild=False):
 def brx_cflags(opt, fp_only=True):
     f = f"-{opt} -g -fpass-plugin={PLUGIN}"
     if fp_only:
-        f += " -mllvm -brtrace-fp-only"
+        f += f" -Xclang -load -Xclang {PLUGIN} -mllvm -brtrace-fp-only"
     return f
 
 
@@ -188,6 +188,9 @@ def run_traced(binary, argv, out_path, cwd=None, env=None, log=None,
     env["OMP_NUM_THREADS"] = "1"
     rc, out = sh([str(binary)] + list(argv), cwd=cwd, env=env, log=log,
                  timeout=timeout)
+    for p in (Path(env["BRTRACE_OUT"]), Path(env["BRTRACE_SEL_OUT"])):
+        if not p.exists():
+            p.touch()
     return rc, out
 
 

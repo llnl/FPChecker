@@ -68,13 +68,13 @@ RUN source activate_eftsan_env.sh \
 RUN source activate_eftsan_env.sh \
     && cd "$EFT_HOME/runtime" && rm -rf obj && make \
     && test -f obj/libeftsanitizer.so \
-    && strings obj/handleReal.o | grep -q "clang version 10"
+    && strings obj/handleReal.o | grep "clang version 10" >/dev/null
 
 # ---------- NSan: compiler-rt runtime, pass plugin, shim ----------
 RUN source activate_nsan_env.sh \
     && cd "$EXP/nsan_experiments/nsan" \
-    && ./nsan_setup.sh -j "$(nproc)" \
-    && ./build_instrumentation.sh \
+    && bash nsan_setup.sh -j "$(nproc)" \
+    && bash build_instrumentation.sh \
     && test -f plugin/libNsanBFSites.so && test -f runtime/libnsan_bf.a
 
 # ---------- experiment driver ----------

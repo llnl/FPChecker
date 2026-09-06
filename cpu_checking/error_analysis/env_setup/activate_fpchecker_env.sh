@@ -27,7 +27,7 @@ conda activate "$FPC_ENV"
 
 export FPC_SRC
 export PATH="$FPC_SRC/install/bin:$PATH"
-export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$FPC_SRC/install/lib64:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$FPC_SRC/install/lib64:${LD_LIBRARY_PATH:-}"
 
 export PATH=$(echo "$PATH" | awk -v RS=':' 'NF && !seen[$0]++' | paste -sd:)
 export LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | awk -v RS=':' 'NF && !seen[$0]++' | paste -sd:)

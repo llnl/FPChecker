@@ -103,7 +103,8 @@ def run_bench(bench, args):
         if not check_site_agreement(banners, bench) \
                 and not args.allow_site_mismatch:
             die(f"{bench}: site counts differ between variants")
-        if not check_precisions(profiles, bench):
+        if any(sum(b[1] for b in banners[v].values()) for v in banners) \
+                and not check_precisions(profiles, bench):
             die(f"{bench}: two variants were built at the same precision")
     else:
         for v in args.variants:
