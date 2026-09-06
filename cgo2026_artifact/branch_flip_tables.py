@@ -14,7 +14,7 @@ have the same layout.
 
 Outputs in --out (default --results): table_main.{txt,tex,json},
 table_full.{txt,tex,json}, compare.txt, and table_*.pdf with --pdf.
-Exit status 1 if any cell outside the tolerance set differs from expected.
+Exit status 1 if any cell differs from expected.
 """
 
 import argparse
@@ -36,10 +36,9 @@ ETAS = {"fp32": ["1e-2", "1e-6", "1e-10"], "fp64": ["1e-8", "1e-14", "1e-16"]}
 MAIN_ETA = {"fp32": "1e-6", "fp64": "1e-14"}
 COUNTS = ["TP", "FP", "TN", "FN"]
 METRICS = ["P", "R", "F1", "Acc"]
-TOLERATED = {"LULESH"}
 
 USE_COLOR = sys.stdout.isatty() and os.environ.get("NO_COLOR") is None
-COLORS = {"match": "\033[32m", "delta": "\033[33m", "MISMATCH": "\033[31m",
+COLORS = {"match": "\033[32m", "MISMATCH": "\033[31m",
           "missing": "\033[31m", "OK": "\033[32m"}
 
 
@@ -53,7 +52,7 @@ def colorize(text):
         return text
     out = []
     for line in text.split("\n"):
-        for st in ("match", "delta", "MISMATCH", "missing"):
+        for st in ("match", "MISMATCH", "missing"):
             if line.rstrip().endswith("  " + st) or f"  {st}  (expected" in line:
                 line = line.replace(f"  {st}", "  " + paint(st), 1)
                 break
@@ -152,7 +151,7 @@ def tool_of(row):
 
 
 def compare(rows, exp, prec):
-    """Attach status to each row: match / delta / MISMATCH / missing / no ref."""
+    """Attach status to each row: match / MISMATCH / missing / no ref."""
     fails = 0
     for r in rows:
         e = get(exp[tool_of(r)], r["benchmark"], prec, r["rule"], r["eta"])
@@ -172,8 +171,6 @@ def compare(rows, exp, prec):
         same = all(e.get(k) == c.get(k) for k in COUNTS)
         if same:
             r["status"] = "match"
-        elif r["benchmark"] in TOLERATED:
-            r["status"] = "delta"
         else:
             r["status"] = "MISMATCH"
             fails += 1
@@ -351,9 +348,16 @@ def main():
                     help="gt_experiments dir (for --score)")
     ap.add_argument("--pdf", action="store_true")
     ap.add_argument("--no-compare", action="store_true")
+    ap.add_argument("--benchmarks", nargs="+", metavar="B",
+                    help="restrict to these benchmarks (LULESH AMG QuickSilver BT ...)")
     args = ap.parse_args()
     if not (args.main or args.full):
         args.main = True
+    if args.benchmarks:
+        want = {b.lower() for b in args.benchmarks}
+        BENCH_ORDER[:] = [b for b in BENCH_ORDER if b.lower() in want]
+        if not BENCH_ORDER:
+            sys.exit("no known benchmark among: " + " ".join(args.benchmarks))
     out = args.out or args.results
     os.makedirs(out, exist_ok=True)
 
@@ -383,9 +387,8 @@ def main():
             js += to_json(rows, prec)
             n = len([r for r in rows if r.get("status") not in (None, "no ref")])
             ok = len([r for r in rows if r.get("status") == "match"])
-            dl = len([r for r in rows if r.get("status") == "delta"])
             compare_lines.append(f"{name} {prec}: {ok}/{n} rows match expected, "
-                                 f"{dl} within tolerance, {fails} mismatched")
+                                 f"{fails} mismatched")
         text = "\n\n".join(texts)
         print(colorize(text) + "\n")
         open(os.path.join(out, f"table_{name}.txt"), "w").write(text + "\n")
