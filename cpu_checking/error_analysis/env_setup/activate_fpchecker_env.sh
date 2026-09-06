@@ -13,7 +13,7 @@ if [ -z "${CONDA_ROOT:-}" ]; then
 fi
 
 FPC_ENV="${FPC_ENV:-fpchecker_env}"
-FPC_SRC="${FPC_SRC:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)}"
+FPC_SRC="${FPC_SRC:-$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/../../.." && pwd)}"
 
 if [ ! -f "$CONDA_ROOT/etc/profile.d/conda.sh" ]; then
     echo "conda.sh not found under $CONDA_ROOT -- set CONDA_ROOT" >&2

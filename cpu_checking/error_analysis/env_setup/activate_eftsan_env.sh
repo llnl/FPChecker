@@ -15,7 +15,7 @@ fi
 EFT_ENV="${EFT_ENV:-eftsan_env}"
 
 if [ -z "${EFT_HOME:-}" ]; then
-    _here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    _here="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
     for _cand in "$_here/../../../../EFTSanitizer" "$_here/../../../EFTSanitizer"; do
         [ -d "$_cand" ] && EFT_HOME="$(cd "$_cand" && pwd)" && break
     done

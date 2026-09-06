@@ -13,7 +13,7 @@ if [ -z "${CONDA_ROOT:-}" ]; then
 fi
 
 NSAN_ENV="${NSAN_ENV:-nsan_env}"
-_here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_here="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
 NSAN_BF_HOME="${NSAN_BF_HOME:-$(cd "$_here/../branch_flip/experiments/nsan_experiments/nsan" && pwd)}"
 unset _here
 
