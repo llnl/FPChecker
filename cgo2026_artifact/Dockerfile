@@ -1,10 +1,9 @@
-FROM ubuntu:22.04
+FROM rockylinux:8
 LABEL org.opencontainers.image.title="cgo2026-artifact" \
       org.opencontainers.image.description="Branch-flip detection: FPChecker, EFTSanitizer, NSan vs brtrace ground truth" \
       org.opencontainers.image.source="https://github.com/llnl/FPChecker"
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    ARTIFACT_ROOT=/opt/cgo2026_artifact \
+ENV ARTIFACT_ROOT=/opt/cgo2026_artifact \
     CONDA_ROOT=/opt/conda \
     FPC_SRC=/opt/cgo2026_artifact/fpchecker_bf \
     FPC_REPO=https://github.com/llnl/FPChecker.git \
@@ -20,10 +19,9 @@ ENV ENV_SETUP=$FPC_SRC/cpu_checking/error_analysis/env_setup \
 
 SHELL ["/bin/bash", "-c"]
 
-RUN echo 'APT::Sandbox::User "root";' > /etc/apt/apt.conf.d/99sandbox \
-    && apt-get update && apt-get install -y --no-install-recommends \
-        ca-certificates curl git bzip2 xz-utils build-essential file patch \
-    && rm -rf /var/lib/apt/lists/*
+# RHEL 8 / glibc 2.28, matching the reference host so libm results are bit-identical
+RUN dnf -y install gcc gcc-c++ make git curl bzip2 xz file patch which binutils \
+    && dnf clean all
 
 RUN curl -fsSL "https://repo.anaconda.com/miniconda/${MINICONDA}" -o /tmp/miniconda.sh \
     && bash /tmp/miniconda.sh -b -p "$CONDA_ROOT" && rm /tmp/miniconda.sh \
