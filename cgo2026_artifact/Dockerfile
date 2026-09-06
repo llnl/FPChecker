@@ -20,7 +20,7 @@ ENV ENV_SETUP=$FPC_SRC/cpu_checking/error_analysis/env_setup \
 SHELL ["/bin/bash", "-c"]
 
 # RHEL 8 / glibc 2.28, matching the reference host so libm results are bit-identical
-RUN dnf -y install gcc gcc-c++ make git curl bzip2 xz file patch which binutils \
+RUN dnf -y install gcc gcc-c++ make git curl bzip2 xz file patch which binutils findutils diffutils \
     && dnf clean all
 
 RUN curl -fsSL "https://repo.anaconda.com/miniconda/${MINICONDA}" -o /tmp/miniconda.sh \
@@ -81,7 +81,7 @@ COPY run_experiments.sh branch_flip_tables.py $BF/
 RUN mkdir -p "$BF/results" && chmod +x "$BF/run_experiments.sh" "$BF/branch_flip_tables.py" \
     && printf '%s\n' \
         'source /opt/conda/etc/profile.d/conda.sh' \
-        'echo "cgo2026-artifact  --  ./run_experiments.sh [--quick] [--tools fpchecker,eftsan,nsan]"' \
+        'echo "cgo2026-artifact  --  bash run_experiments.sh [--quick] [--tools nsan,eftsan,fpchecker]"' \
         >> /root/.bashrc
 
 WORKDIR $BF
