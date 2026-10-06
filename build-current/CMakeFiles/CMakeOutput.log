@@ -1,0 +1,387 @@
+The system is: Linux - 4.18.0-553.126.1.1toss.t4.x86_64 - x86_64
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/lib64/ccache/clang++ 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is Clang, found in "/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/3.24.2/CompilerIdCXX/a.out"
+
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/lib64/ccache/clang 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is Clang, found in "/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/3.24.2/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/lib64/ccache/clang++ 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is Clang, found in "/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/3.24.2/CompilerIdCXX/a.out"
+
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/lib64/ccache/clang 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is Clang, found in "/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/3.24.2/CompilerIdC/a.out"
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_11557/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_11557.dir/build.make CMakeFiles/cmTC_11557.dir/build
+gmake[1]: Entering directory '/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o
+/usr/lib64/ccache/clang++   -v -MD -MT CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -c /usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/share/cmake-3.24/Modules/CMakeCXXCompilerABI.cpp
+clang version 21.1.8 ( 21.1.8-1.module+el8.10.0+23969+c061985f)
+Target: x86_64-redhat-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang++.cfg
+System configuration file directory: /etc/clang/
+Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15
+Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
+Selected multilib: .;@m64
+Found HIP installation: /opt/rocm-7.2.1, version 7.2.53211
+ (in-process)
+ "/usr/bin/clang-21" -cc1 -triple x86_64-redhat-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -dwarf-version=4 -debugger-tuning=gdb -fdebug-compilation-dir=/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp -v -fcoverage-compilation-dir=/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp -resource-dir /usr/bin/../lib/clang/21 -dependency-file CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15 -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward -internal-isystem /usr/bin/../lib/clang/21/include -internal-isystem /usr/local/include -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/share/cmake-3.24/Modules/CMakeCXXCompilerABI.cpp
+clang -cc1 version 21.1.8 based upon LLVM 21.1.8 default target x86_64-redhat-linux-gnu
+ignoring nonexistent directory "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include"
+ignoring nonexistent directory "/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15
+ /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux
+ /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward
+ /usr/bin/../lib/clang/21/include
+ /usr/local/include
+ /usr/include
+End of search list.
+Linking CXX executable cmTC_11557
+/usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/bin/cmake -E cmake_link_script CMakeFiles/cmTC_11557.dir/link.txt --verbose=1
+/usr/lib64/ccache/clang++  -v CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_11557 
+clang version 21.1.8 ( 21.1.8-1.module+el8.10.0+23969+c061985f)
+Target: x86_64-redhat-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang++.cfg
+System configuration file directory: /etc/clang/
+Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15
+Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
+Selected multilib: .;@m64
+Found HIP installation: /opt/rocm-7.2.1, version 7.2.53211
+ "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_11557 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o -L/usr/bin/../lib/clang/21/lib/x86_64-redhat-linux-gnu -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15 -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o /lib/../lib64/crtn.o
+gmake[1]: Leaving directory '/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp'
+
+
+
+Parsed CXX implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15]
+    add: [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux]
+    add: [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward]
+    add: [/usr/bin/../lib/clang/21/include]
+    add: [/usr/local/include]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15] ==> [/opt/rh/gcc-toolset-15/root/usr/include/c++/15]
+  collapse include dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux] ==> [/opt/rh/gcc-toolset-15/root/usr/include/c++/15/x86_64-redhat-linux]
+  collapse include dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward] ==> [/opt/rh/gcc-toolset-15/root/usr/include/c++/15/backward]
+  collapse include dir [/usr/bin/../lib/clang/21/include] ==> [/usr/lib/clang/21/include]
+  collapse include dir [/usr/local/include] ==> [/usr/local/include]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/opt/rh/gcc-toolset-15/root/usr/include/c++/15;/opt/rh/gcc-toolset-15/root/usr/include/c++/15/x86_64-redhat-linux;/opt/rh/gcc-toolset-15/root/usr/include/c++/15/backward;/usr/lib/clang/21/include;/usr/local/include;/usr/include]
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld\.lld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_11557/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_11557.dir/build.make CMakeFiles/cmTC_11557.dir/build]
+  ignore line: [gmake[1]: Entering directory '/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/lib64/ccache/clang++   -v -MD -MT CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -c /usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/share/cmake-3.24/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [clang version 21.1.8 ( 21.1.8-1.module+el8.10.0+23969+c061985f)]
+  ignore line: [Target: x86_64-redhat-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang++.cfg]
+  ignore line: [System configuration file directory: /etc/clang/]
+  ignore line: [Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Candidate multilib: 32]
+  ignore line: [@m32]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  ignore line: [Found HIP installation: /opt/rocm-7.2.1  version 7.2.53211]
+  ignore line: [ (in-process)]
+  ignore line: [ "/usr/bin/clang-21" -cc1 -triple x86_64-redhat-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -dwarf-version=4 -debugger-tuning=gdb -fdebug-compilation-dir=/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp -v -fcoverage-compilation-dir=/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp -resource-dir /usr/bin/../lib/clang/21 -dependency-file CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15 -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward -internal-isystem /usr/bin/../lib/clang/21/include -internal-isystem /usr/local/include -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/share/cmake-3.24/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [clang -cc1 version 21.1.8 based upon LLVM 21.1.8 default target x86_64-redhat-linux-gnu]
+  ignore line: [ignoring nonexistent directory "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include"]
+  ignore line: [ignoring nonexistent directory "/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15]
+  ignore line: [ /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/x86_64-redhat-linux]
+  ignore line: [ /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../include/c++/15/backward]
+  ignore line: [ /usr/bin/../lib/clang/21/include]
+  ignore line: [ /usr/local/include]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [Linking CXX executable cmTC_11557]
+  ignore line: [/usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/bin/cmake -E cmake_link_script CMakeFiles/cmTC_11557.dir/link.txt --verbose=1]
+  ignore line: [/usr/lib64/ccache/clang++  -v CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_11557 ]
+  ignore line: [clang version 21.1.8 ( 21.1.8-1.module+el8.10.0+23969+c061985f)]
+  ignore line: [Target: x86_64-redhat-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang++.cfg]
+  ignore line: [System configuration file directory: /etc/clang/]
+  ignore line: [Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Candidate multilib: 32]
+  ignore line: [@m32]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  ignore line: [Found HIP installation: /opt/rocm-7.2.1  version 7.2.53211]
+  link line: [ "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_11557 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o -L/usr/bin/../lib/clang/21/lib/x86_64-redhat-linux-gnu -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15 -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o /lib/../lib64/crtn.o]
+    arg [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../bin/ld] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_11557] ==> ignore
+    arg [/lib/../lib64/crt1.o] ==> obj [/lib/../lib64/crt1.o]
+    arg [/lib/../lib64/crti.o] ==> obj [/lib/../lib64/crti.o]
+    arg [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o] ==> obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o]
+    arg [-L/usr/bin/../lib/clang/21/lib/x86_64-redhat-linux-gnu] ==> dir [/usr/bin/../lib/clang/21/lib/x86_64-redhat-linux-gnu]
+    arg [-L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15] ==> dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15]
+    arg [-L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64] ==> dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64]
+    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+    arg [-L/usr/lib64] ==> dir [/usr/lib64]
+    arg [-L/lib] ==> dir [/lib]
+    arg [-L/usr/lib] ==> dir [/usr/lib]
+    arg [CMakeFiles/cmTC_11557.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-lstdc++] ==> lib [stdc++]
+    arg [-lm] ==> lib [m]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o] ==> obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o]
+    arg [/lib/../lib64/crtn.o] ==> obj [/lib/../lib64/crtn.o]
+  collapse obj [/lib/../lib64/crt1.o] ==> [/lib64/crt1.o]
+  collapse obj [/lib/../lib64/crti.o] ==> [/lib64/crti.o]
+  collapse obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o] ==> [/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o]
+  collapse obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o] ==> [/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtend.o]
+  collapse obj [/lib/../lib64/crtn.o] ==> [/lib64/crtn.o]
+  collapse library dir [/usr/bin/../lib/clang/21/lib/x86_64-redhat-linux-gnu] ==> [/usr/lib/clang/21/lib/x86_64-redhat-linux-gnu]
+  collapse library dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15] ==> [/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15]
+  collapse library dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64] ==> [/opt/rh/gcc-toolset-15/root/usr/lib64]
+  collapse library dir [/lib/../lib64] ==> [/lib64]
+  collapse library dir [/usr/lib64] ==> [/usr/lib64]
+  collapse library dir [/lib] ==> [/lib]
+  collapse library dir [/usr/lib] ==> [/usr/lib]
+  implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+  implicit objs: [/lib64/crt1.o;/lib64/crti.o;/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o;/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtend.o;/lib64/crtn.o]
+  implicit dirs: [/usr/lib/clang/21/lib/x86_64-redhat-linux-gnu;/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15;/opt/rh/gcc-toolset-15/root/usr/lib64;/lib64;/usr/lib64;/lib;/usr/lib]
+  implicit fwks: []
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_fbbf6/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_fbbf6.dir/build.make CMakeFiles/cmTC_fbbf6.dir/build
+gmake[1]: Entering directory '/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o
+/usr/lib64/ccache/clang   -v -MD -MT CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -c /usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/share/cmake-3.24/Modules/CMakeCCompilerABI.c
+clang version 21.1.8 ( 21.1.8-1.module+el8.10.0+23969+c061985f)
+Target: x86_64-redhat-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
+System configuration file directory: /etc/clang/
+Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15
+Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
+Selected multilib: .;@m64
+Found HIP installation: /opt/rocm-7.2.1, version 7.2.53211
+ (in-process)
+ "/usr/bin/clang-21" -cc1 -triple x86_64-redhat-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model static -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -dwarf-version=4 -debugger-tuning=gdb -fdebug-compilation-dir=/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp -v -fcoverage-compilation-dir=/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp -resource-dir /usr/bin/../lib/clang/21 -dependency-file CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -sys-header-deps -internal-isystem /usr/bin/../lib/clang/21/include -internal-isystem /usr/local/include -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -x c /usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/share/cmake-3.24/Modules/CMakeCCompilerABI.c
+clang -cc1 version 21.1.8 based upon LLVM 21.1.8 default target x86_64-redhat-linux-gnu
+ignoring nonexistent directory "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include"
+ignoring nonexistent directory "/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/bin/../lib/clang/21/include
+ /usr/local/include
+ /usr/include
+End of search list.
+Linking C executable cmTC_fbbf6
+/usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fbbf6.dir/link.txt --verbose=1
+/usr/lib64/ccache/clang  -v CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -o cmTC_fbbf6 
+clang version 21.1.8 ( 21.1.8-1.module+el8.10.0+23969+c061985f)
+Target: x86_64-redhat-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
+System configuration file directory: /etc/clang/
+Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15
+Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
+Selected multilib: .;@m64
+Found HIP installation: /opt/rocm-7.2.1, version 7.2.53211
+ "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_fbbf6 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o -L/usr/bin/../lib/clang/21/lib/x86_64-redhat-linux-gnu -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15 -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o /lib/../lib64/crtn.o
+gmake[1]: Leaving directory '/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/bin/../lib/clang/21/include]
+    add: [/usr/local/include]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/usr/bin/../lib/clang/21/include] ==> [/usr/lib/clang/21/include]
+  collapse include dir [/usr/local/include] ==> [/usr/local/include]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/usr/lib/clang/21/include;/usr/local/include;/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld\.lld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_fbbf6/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_fbbf6.dir/build.make CMakeFiles/cmTC_fbbf6.dir/build]
+  ignore line: [gmake[1]: Entering directory '/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/lib64/ccache/clang   -v -MD -MT CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -c /usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/share/cmake-3.24/Modules/CMakeCCompilerABI.c]
+  ignore line: [clang version 21.1.8 ( 21.1.8-1.module+el8.10.0+23969+c061985f)]
+  ignore line: [Target: x86_64-redhat-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg]
+  ignore line: [System configuration file directory: /etc/clang/]
+  ignore line: [Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Candidate multilib: 32]
+  ignore line: [@m32]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  ignore line: [Found HIP installation: /opt/rocm-7.2.1  version 7.2.53211]
+  ignore line: [ (in-process)]
+  ignore line: [ "/usr/bin/clang-21" -cc1 -triple x86_64-redhat-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model static -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -dwarf-version=4 -debugger-tuning=gdb -fdebug-compilation-dir=/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp -v -fcoverage-compilation-dir=/g/g90/sharmin1/tutorial/FPChecker/build-current/CMakeFiles/CMakeTmp -resource-dir /usr/bin/../lib/clang/21 -dependency-file CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -sys-header-deps -internal-isystem /usr/bin/../lib/clang/21/include -internal-isystem /usr/local/include -internal-isystem /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -x c /usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/share/cmake-3.24/Modules/CMakeCCompilerABI.c]
+  ignore line: [clang -cc1 version 21.1.8 based upon LLVM 21.1.8 default target x86_64-redhat-linux-gnu]
+  ignore line: [ignoring nonexistent directory "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../x86_64-redhat-linux/include"]
+  ignore line: [ignoring nonexistent directory "/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/bin/../lib/clang/21/include]
+  ignore line: [ /usr/local/include]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [Linking C executable cmTC_fbbf6]
+  ignore line: [/usr/tce/backend/installations/linux-rhel8-x86_64/gcc-8.3.1/cmake-3.24.2-ywx52e32uh6gkxzuyubpwkulzgdvxyh6/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fbbf6.dir/link.txt --verbose=1]
+  ignore line: [/usr/lib64/ccache/clang  -v CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -o cmTC_fbbf6 ]
+  ignore line: [clang version 21.1.8 ( 21.1.8-1.module+el8.10.0+23969+c061985f)]
+  ignore line: [Target: x86_64-redhat-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg]
+  ignore line: [System configuration file directory: /etc/clang/]
+  ignore line: [Selected GCC installation: /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15]
+  ignore line: [Candidate multilib: .]
+  ignore line: [@m64]
+  ignore line: [Candidate multilib: 32]
+  ignore line: [@m32]
+  ignore line: [Selected multilib: .]
+  ignore line: [@m64]
+  ignore line: [Found HIP installation: /opt/rocm-7.2.1  version 7.2.53211]
+  link line: [ "/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_fbbf6 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o -L/usr/bin/../lib/clang/21/lib/x86_64-redhat-linux-gnu -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15 -L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o /lib/../lib64/crtn.o]
+    arg [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../bin/ld] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_fbbf6] ==> ignore
+    arg [/lib/../lib64/crt1.o] ==> obj [/lib/../lib64/crt1.o]
+    arg [/lib/../lib64/crti.o] ==> obj [/lib/../lib64/crti.o]
+    arg [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o] ==> obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o]
+    arg [-L/usr/bin/../lib/clang/21/lib/x86_64-redhat-linux-gnu] ==> dir [/usr/bin/../lib/clang/21/lib/x86_64-redhat-linux-gnu]
+    arg [-L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15] ==> dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15]
+    arg [-L/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64] ==> dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64]
+    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+    arg [-L/usr/lib64] ==> dir [/usr/lib64]
+    arg [-L/lib] ==> dir [/lib]
+    arg [-L/usr/lib] ==> dir [/usr/lib]
+    arg [CMakeFiles/cmTC_fbbf6.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o] ==> obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o]
+    arg [/lib/../lib64/crtn.o] ==> obj [/lib/../lib64/crtn.o]
+  collapse obj [/lib/../lib64/crt1.o] ==> [/lib64/crt1.o]
+  collapse obj [/lib/../lib64/crti.o] ==> [/lib64/crti.o]
+  collapse obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o] ==> [/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o]
+  collapse obj [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/crtend.o] ==> [/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtend.o]
+  collapse obj [/lib/../lib64/crtn.o] ==> [/lib64/crtn.o]
+  collapse library dir [/usr/bin/../lib/clang/21/lib/x86_64-redhat-linux-gnu] ==> [/usr/lib/clang/21/lib/x86_64-redhat-linux-gnu]
+  collapse library dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15] ==> [/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15]
+  collapse library dir [/opt/rh/gcc-toolset-15/root//usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64] ==> [/opt/rh/gcc-toolset-15/root/usr/lib64]
+  collapse library dir [/lib/../lib64] ==> [/lib64]
+  collapse library dir [/usr/lib64] ==> [/usr/lib64]
+  collapse library dir [/lib] ==> [/lib]
+  collapse library dir [/usr/lib] ==> [/usr/lib]
+  implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+  implicit objs: [/lib64/crt1.o;/lib64/crti.o;/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtbegin.o;/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15/crtend.o;/lib64/crtn.o]
+  implicit dirs: [/usr/lib/clang/21/lib/x86_64-redhat-linux-gnu;/opt/rh/gcc-toolset-15/root/usr/lib/gcc/x86_64-redhat-linux/15;/opt/rh/gcc-toolset-15/root/usr/lib64;/lib64;/usr/lib64;/lib;/usr/lib]
+  implicit fwks: []
+
+

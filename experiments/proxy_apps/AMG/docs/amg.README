@@ -1,0 +1,474 @@
+#BHEADER**********************************************************************
+# Copyright (c) 2017,  Lawrence Livermore National Security, LLC.
+# Produced at the Lawrence Livermore National Laboratory.
+# Written by Ulrike Yang (yang11@llnl.gov) et al. CODE-LLNL-738322.
+# This file is part of AMG.  See files COPYRIGHT and README for details.
+#
+# AMG is free software; you can redistribute it and/or modify it under the
+# terms of the GNU Lesser General Public License (as published by the Free
+# Software Foundation) version 2.1 dated February 1999.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the IMPLIED WARRANTY OF MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the terms and conditions of the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+#EHEADER**********************************************************************
+
+Code Description
+
+A. General description:
+
+AMG is a parallel algebraic multigrid solver for linear systems arising from
+problems on unstructured grids.
+
+See the following papers for details on the algorithm and its parallel
+implementation/performance:
+
+Van Emden Henson and Ulrike Meier Yang, "BoomerAMG: A Parallel Algebraic
+Multigrid Solver and Preconditioner", Appl. Num. Math. 41 (2002),
+pp. 155-177. Also available as LLNL technical report UCRL-JC-141495.
+
+Hans De Sterck, Ulrike Meier Yang and Jeffrey Heys, "Reducing Complexity in
+Parallel Algebraic Multigrid Preconditioners", SIAM Journal on Matrix Analysis
+and Applications 27 (2006), pp. 1019-1039. Also available as LLNL technical
+reports UCRL-JRNL-206780.
+
+Hans De Sterck, Robert D. Falgout, Josh W. Nolting and Ulrike Meier Yang, 
+"Distance-Two Interpolation for Parallel Algebraic Multigrid", Numerical 
+Linear Algebra with Applications 15 (2008), pp. 115-139. Also available as 
+LLNL technical report UCRL-JRNL-230844.
+
+U. M. Yang, "On Long Range Interpolation Operators for Aggressive Coarsening",
+Numer. Linear Algebra Appl.,  17 (2010), pp. 453-472. LLNL-JRNL-417371.
+
+A. H. Baker, R. D. Falgout, T. V. Kolev, and U. M. Yang, "Multigrid Smoothers 
+for Ultraparallel Computing", SIAM J. Sci. Comput., 33 (2011), pp. 2864-2887. 
+LLNL-JRNL-473191.
+
+J. Park, M. Smelyanskiy, u. M. Yang, D. Mudigere, and P. Dubey, "High-
+Performance Algebraic Multigrid Solver Optimized for Multi-Core Based 
+Distributed Parallel Systems", Proceddings of the International Conference
+for High Performance Computing, Networking, Storage and Analysis 2015 (SC15),
+LLNL-CONF-669961.
+
+
+The driver provided with AMG builds linear systems for various 
+3-dimensional problems, which are described in Section D.
+
+To determine when the solver has converged, the driver uses the
+relative-residual stopping criteria,
+
+  ||r_k||_2 / ||b||_2 < tol
+
+with tol = 10^-8.
+
+B. Coding:
+
+AMG is written in ISO-C.  It is an SPMD code which uses MPI.  Parallelism is
+achieved by data decomposition.  The driver provided with AMG achieves this
+decomposition by simply subdividing the grid into logical P x Q x R (in 3D)
+chunks of equal size.
+
+C. Parallelism:
+
+AMG is a highly synchronous code.  The communications and computations
+patterns exhibit the surface-to-volume relationship common to many parallel
+scientific codes.  Hence, parallel efficiency is largely determined by the size
+of the data "chunks" mentioned above, and the speed of communications and
+computations on the machine.  AMG is also memory-access bound, doing only
+about 1-2 computations per memory access, so memory-access speeds will also have
+a large impact on performance.
+
+D. Test problems
+
+Problem 1 (default): The default problem is a Laplace type problem on a
+cube with a 27-point stencil. This problem should be scaled up to be very
+large (see "Suggested Test Runs") and is solved with AMG-PCG.
+Suggestions for test runs are given in Section "Suggested Test Runs".
+
+Problem 2 (-problem 2): Simulates a non-linear time-dependent problem.
+This problem also applies to 3-dimensional linear systems with 27-point
+stencils on a cube. It runs over 6 time steps. At the beginning of each
+time step it sets up the preconditioner and then solvers the problems
+5 times within each time step, reusing the preconditioner, but making
+small changes to the actual matrix and right hand side.
+This problem is solved with AMG-GMRES.
+Note that this problem needs to not be shortcut in any way by simplifying
+the equations, since the operations used simulate an actual code and
+were specifically chosen to evaluate performance.
+This problem should fill about 5-10% of the total memory of the machine.
+Suggestions for test runs are given in Section "Suggested Test Runs".
+
+%==========================================================================
+%==========================================================================
+
+NOTE: The AMG code is derived directly from the hypre library, a large
+linear solver library that is being developed in the Center for Applied
+Scientific Computing (CASC) at LLNL.
+
+%==========================================================================
+%==========================================================================
+
+Building the Code
+
+AMG uses a simple Makefile system for building the code.  All compiler and
+link options are set by modifying the file 'amg/Makefile.include'
+appropriately.  This file is then included in each of the following makefiles:
+
+  krylov/Makefile
+  IJ_mv/Makefile
+  parcsr_ls/Makefile
+  parcsr_mv/Makefile
+  seq_mv/Makefile
+  test/Makefile
+  utilities/Makefile
+
+To build the code, first modify the 'Makefile.include' file appropriately, then
+type (in the amg directory)
+
+  make
+
+Other available targets are
+
+  make clean        (deletes .o files)
+  make veryclean    (deletes .o files, libraries, and executables)
+
+To configure the code to run with:
+
+1 - MPI only , add '-DTIMER_USE_MPI' to the 'INCLUDE_CFLAGS' line 
+    in the 'Makefile.include' file and use a valid MPI.
+2 - OpenMP with MPI, add vendor dependent compilation flag for OMP
+    and add '-DTIMER_USE_MPI -DHYPRE_USING_OPENMP'
+3 - for additional optimzations in MPI and OpenMP, add also
+    '-DHYPRE_USING_PERSISTENT_COMM' (for MPI) and
+    '-DHYPRE_HOPSCOTCH' (for OpenMP) to 'INCLUDE_CFLAGS'
+4 - to be able to solve problems that are larger than 2^31-1,
+    add '-DHYPRE_BIGINT'
+
+%==========================================================================
+%==========================================================================
+
+Optimization and Improvement Challenges
+
+This code is memory-access bound.  We believe it would be very difficult to
+obtain "good" cache reuse with an optimized version of the code.
+
+%==========================================================================
+%==========================================================================
+
+Parallelism and Scalability Expectations
+
+Previous versions of AMG have been run on the following platforms:
+
+  BG/Q                 - up to over 1,000,000 MPI processes
+  BG/P                 - up to 125,000 MPI processes
+  and more
+
+Consider increasing both problem size and number of processors in tandem.
+On scalable architectures, time-to-solution for AMG will initially
+increase, then it will level off at a modest numbers of processors,
+remaining roughly constant for larger numbers of processors.  Iteration
+counts will also increase slightly for small to modest sized problems,
+then level off at a roughly constant number for larger problem sizes.
+
+For example, we get the following timing results (in seconds) for a system
+with a 3D 27-point stencil, distributed on a logical P x Q x R processor 
+topology, with fixed local problem size per process given as 96 x 96 x 96:
+
+  P x Q x R     procs    setup time   solve time
+  ---------------------------------------------------------------
+   8x 8x 8       512	  14.91		51.05
+  16x16x 8      2048      15.31		53.35
+  32x16x16      8192 	  16.00		57.78
+  32x32x32     32768      17.55		65.19 
+  64x32x32     65536	  17.49		64.93
+
+These results were obtained on BG/Q using MPI and OpenMP with 4 OpenMP 
+threads per MPI task and additional options -DYPRE_HOPSCOTCH 
+-DHYPRE_USING_PERSISTENT_COMM and -DHYPRE-BIGINT .
+
+%==========================================================================
+%==========================================================================
+
+Running the Code
+
+The driver for AMG is called `amg', and is located in the amg/test
+subdirectory.  Type
+
+   mpirun -np 1 amg -help
+
+to get usage information.  This prints out the following:
+
+Usage: amg [<options>]
+ 
+  -P <Px> <Py> <Pz>   : define processor topology per part
+                        Note that for test problem 1, which has 8 parts
+			this leads to 8*Px*Py*Pz MPI processes!
+			For all other test problems, the total amount of
+			MPI processes is Px*Py*Pz.
+
+  -n <nx> <ny> <nz>   : define size per processor for problems on cube
+
+  -problem <p>        : <p> needs to be 1 (default) or 2
+
+  -printstats         : print out detailed info on AMG preconditioner
+			and number of iterations
+ 
+  -printallstats      : print out detailed info on AMG preconditioner,
+			number of iterations and residual norms for
+			each iteration
+ 
+  -printsystem        : print out the system
+ 
+  -keepT              : will store transposes of interpolation and use
+			matvec instead of tmatvec in solve phase
+
+All of the arguments are optional.  The most important option for the AMG
+compact application is the `-P' option. It specifies the MPI process topology 
+on which to run.  
+
+The `-n' option allows one to specify the local problem size per MPI process, 
+leading to a global problem size of <Px>*<nx> by <Py>*<ny> by <Pz>*<nz>.
+
+%==========================================================================
+%==========================================================================
+
+Timing Issues
+
+If using MPI, the whole code is timed using the MPI timers.  If not using MPI,
+standard system timers are used.  Timing results are printed to standard out,
+and are divided into "Setup Phase" times and "Solve Phase" times for Problem
+1. For problem 2, the complete time-dependent loop is timed including
+various setups and solves.
+
+%==========================================================================
+%==========================================================================
+
+Memory Needed
+
+AMG's memory needs are somewhat complicated to describe.  They are very
+dependent on the type of problem solved and the AMG options used.  
+When turning on the '-printstats' option, memory complexities <mc> are displayed, 
+which are defined by the sum of nonzeros of all matrices (both system 
+matrices and interpolation matrices on all levels) divided by the number of 
+nonzeros of the original matrix, i.e. at least about <mc> times as much space is
+needed.  However this does not include memory needed for communication, vectors,
+auxiliary computations, etc.
+
+%==========================================================================
+%==========================================================================
+
+About the Data
+
+AMG generates its own linear system, the size of which can be controlled from
+the command line.
+
+%==========================================================================
+%==========================================================================
+
+Expected Results
+
+Consider the following run, which was compiled using options -DTIMER_USE_MPI 
+-DHYPRE_USING_OPENMP -DHYPRE_HOPSCOTCH -DHYPRE_USING_PERSISTENT_COMM -DHYPRE_BIGINT
+linking with OpenMP and setting OMP_NUM_THREADS to 3:
+
+  mpirun -np 4 amg -P 2 2 1 -n 50 50 50 -printstats
+
+This is what AMG prints out:
+
+Running with these driver parameters:
+  solver ID    = 1
+
+  Laplacian_27pt:
+    (Nx, Ny, Nz) = (100, 100, 50)
+    (Px, Py, Pz) = (2, 2, 1)
+
+=============================================
+Generate Matrix:
+=============================================
+Spatial Operator:
+  wall clock time = 0.075466 seconds
+  wall MFLOPS     = 0.000000
+  cpu clock time  = 0.190000 seconds
+  cpu MFLOPS      = 0.000000
+
+  RHS vector has unit components
+  Initial guess is 0
+=============================================
+IJ Vector Setup:
+=============================================
+RHS and Initial Guess:
+  wall clock time = 0.001849 seconds
+  wall MFLOPS     = 0.000000
+  cpu clock time  = 0.010000 seconds
+  cpu MFLOPS      = 0.000000
+
+Solver: AMG-PCG
+HYPRE_ParCSRPCGGetPrecond got good precond
+
+
+ Num MPI tasks = 4  Num OpenMP threads = 3
+
+
+BoomerAMG SETUP PARAMETERS:
+
+ Max levels = 25
+ Num levels = 5
+
+ Strength Threshold = 0.250000
+ Interpolation Truncation Factor = 0.000000
+ Maximum Row Sum Threshold for Dependency Weakening = 0.900000
+
+ Coarsening Type = PMIS 
+
+ No. of levels of aggressive coarsening: 1
+
+ Interpolation on agg. levels= multipass interpolation
+ measures are determined locally
+
+
+ No global partition option chosen.
+
+ Interpolation = extended+i interpolation
+
+Operator Matrix Information:
+
+            nonzero         entries per row        row sums
+lev   rows  entries  sparse  min  max   avg       min         max
+===================================================================
+ 0  500000 13142992  0.000     8   27  26.3   0.000e+00   1.900e+01
+ 1    7046   174928  0.004     5   42  24.8  -7.567e-13   2.883e+02
+ 2    1265   106427  0.067    18  142  84.1  -5.451e-13   4.359e+02
+ 3     170    13374  0.463    31  140  78.7   8.256e+01   6.706e+02
+ 4      17      287  0.993    16   17  16.9   2.751e+02   1.063e+03
+
+
+
+Interpolation Matrix Information:
+                 entries/row    min     max         row sums
+lev  rows cols    min max     weight   weight     min       max 
+=================================================================
+ 0 500000 x 7046    1  10   2.262e-03 9.985e-01 2.119e-01 1.000e+00
+ 1  7046 x 1265    1   8   4.994e-03 6.801e-01 3.312e-01 1.000e+00
+ 2  1265 x 170     1   8   2.028e-03 7.890e-01 8.586e-02 1.000e+00
+ 3   170 x 17      0   8  -4.880e-02 1.668e-01 0.000e+00 1.000e+00
+
+
+     Complexity:    grid = 1.016996
+                operator = 1.022447
+                memory = 1.090040
+
+
+
+
+BoomerAMG SOLVER PARAMETERS:
+
+  Maximum number of cycles:         1 
+  Stopping Tolerance:               0.000000e+00 
+  Cycle type (1 = V, 2 = W, etc.):  1
+
+  Relaxation Parameters:
+   Visiting Grid:                     down   up  coarse
+            Number of sweeps:            2    2     1 
+   Type 0=Jac, 3=hGS, 6=hSGS, 9=GE:     18   18    18 
+   Point types, partial sweeps (1=C, -1=F):
+                  Pre-CG relaxation (down):   0   0
+                   Post-CG relaxation (up):   0   0
+                             Coarsest grid:   0
+
+=============================================
+Problem 1: AMG Setup Time:
+=============================================
+PCG Setup:
+  wall clock time = 0.258020 seconds
+  wall MFLOPS     = 0.000000
+  cpu clock time  = 0.680000 seconds
+  cpu MFLOPS      = 0.000000
+
+
+nnz_AP / Setup Phase Time: 5.552436e+07
+
+=============================================
+Problem 1: AMG-PCG Solve Time:
+=============================================
+PCG Solve:
+  wall clock time = 1.316479 seconds
+  wall MFLOPS     = 0.000000
+  cpu clock time  = 3.850000 seconds
+  cpu MFLOPS      = 0.000000
+
+
+Iterations = 20
+Final Relative Residual Norm = 7.979902e-09
+
+
+nnz_AP * Iterations / Solve Phase Time: 2.176471e+08
+
+
+
+Figure of Merit (FOM_1): 1.632353e+08
+
+
+%==========================================================================
+%==========================================================================
+
+Figure of Merit
+
+The figures of merit (FOM_1 and FOM_2) include wall clock times of portions of
+the code (AMG setup, AMG-PCG or AMG-GMRES solve phase, or a combination
+of those), number of iterations, number of time steps as well as the total
+number of nonzeros for all system matrices and interpolation operators on
+all levels of AMG, nnz_AP.
+
+FOM_1 is generated through (FOM_Setup+ 3*FOM_Solve)/4 .
+
+The final FOM should be evaluated as follows:
+
+FOM = (FOM_1 + FOM_2)/2
+
+%==========================================================================
+%==========================================================================
+
+Suggested Test Runs
+
+1. For Problem 1, conjugate gradient preconditioned with AMG is used to 
+solve a linear system with a 3D 27-point stencil of size nx*ny*nz*Px*Py*Pz.
+The largest problem we were able to run on Vulcan using 16 cores and 4 OpenMP
+threads was the following:
+mpirun -np <px*py*pz> amg -n 96 96 96 -P px py pz
+This generates a problem with 884,736 grid points per MPI process
+with a global domain of the size 96*px x 96*py x 96*pz .
+For the problem used for the CORAL baseline Figure of Merit calculation on
+BG/Q, px=64, py=pz=32. The problem is sized so that the CORAL-2 problem, which
+needs to be 4 times as large, uses about 200 TiB of memory.
+
+2. For Problem 2, it is expected that the physics code will take up most
+of the machine and only about 5-10% of memory is available for the linear
+solver. On Vulcan, the following run fulfilled this requirement:
+mpirun -np <px*py*pz> amg -problem 2 -n 40 40 40 -P px py pz
+This generates a problem with 64,000 grid points per MPI process
+with a global domain of the size 40*px x 40*py x 40*pz , using about 7.2%
+of the memory the suggested run for Problem 1 uses.
+
+%==========================================================================
+%==========================================================================
+
+For further information on AMG contact
+Ulrike Yang
+ph: (925)422-2850
+email: umyang@llnl.gov
+
+%==========================================================================
+%==========================================================================
+
+Release and Modification Record
+
+LLNL code release number: LLNL-738322
+
+See the files COPYRIGHT and LICENSE for a complete copyright notice, 
+additional contact information, disclaimer and license.

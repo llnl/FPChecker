@@ -1,0 +1,1605 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/IJ_mv/IJMatrix_parcsr.c",
+    "line": 3436,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/IJ_mv/IJMatrix_parcsr.c",
+    "line": 2810,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matrix.c",
+    "line": 283,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matop.c",
+    "line": 547,
+    "error": -1.543632843076236937918e-17,
+    "relative_error": 7.003327529661316577089e-17,
+    "max_relative_error": 1.818159745847981836652e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 164,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 169,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_relax.c",
+    "line": 4225,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 267,
+    "error": -1.675092356490104350542e-17,
+    "relative_error": 1.522811233172822645519e-12,
+    "max_relative_error": 1.025022803904002221231e-11
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 265,
+    "error": -3.258027528318940824192e-17,
+    "relative_error": 5.892722835137081200760e-16,
+    "max_relative_error": 1.378485619302999149182e-12
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 266,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_indepset.c",
+    "line": 67,
+    "error": -9.974659986866640792869e-18,
+    "relative_error": 2.060293899445603889969e-18,
+    "max_relative_error": 9.467820113936450835263e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matop.c",
+    "line": 298,
+    "error": -1.733335697196025648736e-13,
+    "relative_error": 8.633390013055938429482e-16,
+    "max_relative_error": 1.019987578356103111572e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/ams.c",
+    "line": 609,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1874,
+    "error": 2.528901567322439092322e-17,
+    "relative_error": 9.881719419132767782807e-17,
+    "max_relative_error": 7.003327529661316577089e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1658,
+    "error": -8.565197162635485028659e-18,
+    "relative_error": 1.309971330756015357351e-17,
+    "max_relative_error": 1.012250573766011866982e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_relax.c",
+    "line": 4138,
+    "error": -1.733335697196025648736e-13,
+    "relative_error": 8.633390013055938429482e-16,
+    "max_relative_error": 8.633390013055938429482e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 628,
+    "error": -1.030897715685819760859e-16,
+    "relative_error": 3.087752055097707160933e-07,
+    "max_relative_error": 4.857389765279510128355e-06
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_relax.c",
+    "line": 4233,
+    "error": -3.372380369819825468135e-29,
+    "relative_error": 2.027984266410103652606e-17,
+    "max_relative_error": 7.298539122240036807790e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/vector.c",
+    "line": 452,
+    "error": -1.415782066481786784400e-18,
+    "relative_error": 3.298747289099055149160e-08,
+    "max_relative_error": 1.280185364731549610571e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/ams.c",
+    "line": 79,
+    "error": -1.098914837672301282626e-19,
+    "relative_error": 6.597261317333428971739e-08,
+    "max_relative_error": 4.690114669829857073476e-06
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1409,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1863,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1995,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 2027,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 146,
+    "error": -2.291926648467779159546e-10,
+    "relative_error": 1.036013813517513566867e-02,
+    "max_relative_error": 4.913719724522169774651e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 142,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1769,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1931,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matvec.c",
+    "line": 219,
+    "error": 3.456079866737127304077e-10,
+    "relative_error": 2.266762109281794321247e-02,
+    "max_relative_error": 5.185185185185185185205e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matvec.c",
+    "line": 215,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matrix.c",
+    "line": 279,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matrix.c",
+    "line": 281,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1493,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1525,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 295,
+    "error": -7.834751158952713012695e-08,
+    "relative_error": 4.283622939341862389392e-02,
+    "max_relative_error": 4.283622939341862389392e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 291,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_vector.c",
+    "line": 432,
+    "error": -1.484388037817304824045e-26,
+    "relative_error": 7.788479536568868685576e-09,
+    "max_relative_error": 9.907619767374356724551e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_vector.c",
+    "line": 427,
+    "error": -1.484388037817304824045e-26,
+    "relative_error": 7.788479536568868685576e-09,
+    "max_relative_error": 9.907619767374356724551e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 264,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1429,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 327,
+    "error": -5.644335711458501765966e-19,
+    "relative_error": 2.335472862324551466689e-07,
+    "max_relative_error": 4.690114669829857073476e-06
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 526,
+    "error": -1.648459146963432431221e-11,
+    "relative_error": 1.598500716569286737951e-02,
+    "max_relative_error": 1.598500716569286737951e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 522,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 338,
+    "error": -3.258027528318940824192e-17,
+    "relative_error": 5.892722835137081200760e-16,
+    "max_relative_error": 1.378485619302999149182e-12
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 336,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 335,
+    "error": -3.258027528318940824192e-17,
+    "relative_error": 5.892722835137081200760e-16,
+    "max_relative_error": 1.378485619302999149182e-12
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 334,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 1215,
+    "error": -6.720167234525239252919e-19,
+    "relative_error": 3.894239758867906599466e-09,
+    "max_relative_error": 3.894239758867906599466e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 344,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg.c",
+    "line": 2615,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/IJ_mv/IJVector_parcsr.c",
+    "line": 443,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 2281,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 766,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 791,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 749,
+    "error": -6.720167234525239252919e-19,
+    "relative_error": 3.894239758867906599466e-09,
+    "max_relative_error": 7.788479536568868685576e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg.c",
+    "line": 1342,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 491,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 1568,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matop.c",
+    "line": 965,
+    "error": 1.279792244401889433902e-15,
+    "relative_error": 5.032807197298878750726e-16,
+    "max_relative_error": 9.852686689485734994586e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 281,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 110,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 514,
+    "error": 1.606167643330991268158e-09,
+    "relative_error": 1.651974264748762303016e-16,
+    "max_relative_error": 1.651974264748762303016e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 343,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 352,
+    "error": -7.120163697926675773800e-20,
+    "relative_error": 3.802879920436578561377e-08,
+    "max_relative_error": 1.648280774217905420622e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 293,
+    "error": -1.722946763038635253906e-08,
+    "relative_error": 9.420241479245632338908e-18,
+    "max_relative_error": 3.753491664683837758907e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/vector.c",
+    "line": 416,
+    "error": -4.708485529392235656790e-22,
+    "relative_error": 5.291407084190511018430e-10,
+    "max_relative_error": 2.800289175866408405166e-10
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 325,
+    "error": -5.644335711458501765966e-19,
+    "relative_error": 2.335472862324551466689e-07,
+    "max_relative_error": 3.762560301777006962026e-05
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 434,
+    "error": 2.565059276093961670995e-12,
+    "relative_error": 2.227519513193221918932e-17,
+    "max_relative_error": 2.227519513193221918932e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/vector.c",
+    "line": 486,
+    "error": -1.484388037817304824045e-26,
+    "relative_error": 7.788479536568868685576e-09,
+    "max_relative_error": 8.134330658886302322310e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_relax.c",
+    "line": 4211,
+    "error": 1.463922671973705291748e-08,
+    "relative_error": 9.103962789915039903346e-17,
+    "max_relative_error": 1.917626430427008892465e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 524,
+    "error": -3.277591531514190137386e-10,
+    "relative_error": 3.178333249670727082328e-16,
+    "max_relative_error": 4.892110197888158072328e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 1213,
+    "error": -6.720167234525239252919e-19,
+    "relative_error": 3.894239758867906599466e-09,
+    "max_relative_error": 3.894239758867906599466e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matvec.c",
+    "line": 217,
+    "error": -7.566995918750762939453e-10,
+    "relative_error": 4.962969199690456049438e-17,
+    "max_relative_error": 4.962969199690456049438e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 274,
+    "error": -1.551443561118430397611e-18,
+    "relative_error": 3.168380916206373098787e-10,
+    "max_relative_error": 1.496523260768066299199e-06
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 535,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 280,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 503,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1821,
+    "error": -1.024571052998801690137e-16,
+    "relative_error": 6.195080785574149754709e-17,
+    "max_relative_error": 6.195080785574149754709e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_strength.c",
+    "line": 327,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 282,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 357,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_relax.c",
+    "line": 4207,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.267791705269271633418e-17,
+    "max_relative_error": 1.267791705269271633418e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_solve.c",
+    "line": 226,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 304,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1417,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 356,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1.378485619302999149182e-12
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 263,
+    "error": -9.107298248878237245663e-18,
+    "relative_error": 1.063628557249562888977e-17,
+    "max_relative_error": 1.024571052998795299969e-11
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 443,
+    "error": 3.265654413553420454264e-11,
+    "relative_error": 7.038845893237617089064e-17,
+    "max_relative_error": 7.038845893237617089064e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 289,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 141,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 2.894142908984338044946e-17,
+    "max_relative_error": 2.894142908984338044946e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/vector.c",
+    "line": 337,
+    "error": -1.415782066481786784400e-18,
+    "relative_error": 3.298747289099055149160e-08,
+    "max_relative_error": 1.639359813378460672116e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1655,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 349,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matvec.c",
+    "line": 218,
+    "error": -4.110916052013635635376e-10,
+    "relative_error": 2.696228459447216215308e-17,
+    "max_relative_error": 8.546765514480111626672e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matop.c",
+    "line": 959,
+    "error": 5.464378949326942347398e-16,
+    "relative_error": 8.212361426734133007583e-17,
+    "max_relative_error": 1.818159745847981836652e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 513,
+    "error": 1.196895027533173561096e-09,
+    "relative_error": 1.231029520050607794263e-16,
+    "max_relative_error": 2.607389880629457253046e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 419,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timer.c",
+    "line": 42,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 267,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 348,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_strength.c",
+    "line": 326,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 145,
+    "error": -2.291926648467779159546e-10,
+    "relative_error": 1.035971609465983635149e-17,
+    "max_relative_error": 8.268261700993324149156e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 649,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg.c",
+    "line": 1336,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 428,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 82,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_relax.c",
+    "line": 4210,
+    "error": 2.852175384759902954102e-09,
+    "relative_error": 1.773734301017246128658e-17,
+    "max_relative_error": 3.087752055097707160933e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 1526,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 515,
+    "error": 4.092726157978177070618e-10,
+    "relative_error": 4.209541627689429373098e-02,
+    "max_relative_error": 4.209541627689429373098e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_coarsen.c",
+    "line": 2149,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_solve.c",
+    "line": 107,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 1514,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 359,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 1565,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 241,
+    "error": 3.274290560906223390703e-17,
+    "relative_error": 6.548581121812429605142e-12,
+    "max_relative_error": 1.024571052998795299969e-11
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 502,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_strength.c",
+    "line": 342,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 6.642359976389825291477e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 1532,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 396,
+    "error": -6.048623731591162601004e-33,
+    "relative_error": 6.048623731591162347624e-17,
+    "max_relative_error": 6.048623731591162347624e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matrix.c",
+    "line": 280,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1656,
+    "error": 8.565197162635485028659e-18,
+    "relative_error": 1.309971330756015357351e-17,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 538,
+    "error": 6.430012902333692714762e-11,
+    "relative_error": 6.270724336975617887154e-11,
+    "max_relative_error": 6.270724336975617887154e-11
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_strength.c",
+    "line": 109,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 238,
+    "error": -2.347297703431117099626e-17,
+    "relative_error": 2.930609061676212015242e-17,
+    "max_relative_error": 3.874438901488988383235e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 407,
+    "error": -4.149569576838985085487e-12,
+    "relative_error": 3.502103469068519559563e-17,
+    "max_relative_error": 3.502103469068519559563e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 503,
+    "error": -6.430012902333692714762e-11,
+    "relative_error": 6.270724336975617887154e-11,
+    "max_relative_error": 6.270724336975617887154e-11
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1870,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 277,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matvec.c",
+    "line": 214,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 4.265051655983985485698e-17,
+    "max_relative_error": 4.265051655983985485698e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 343,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 402,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 342,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 510,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1819,
+    "error": 8.565197162635485028659e-18,
+    "relative_error": 1.309971330756015357351e-17,
+    "max_relative_error": 1.309971330756015357351e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 520,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 84,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 144,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.924070424598829528658e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1481,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matop.c",
+    "line": 289,
+    "error": 1.279792244401889433902e-15,
+    "relative_error": 5.032807197298878750726e-16,
+    "max_relative_error": 9.852686689485734994586e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matop.c",
+    "line": 285,
+    "error": 2.528901567322439092322e-17,
+    "relative_error": 9.881719419132767782807e-17,
+    "max_relative_error": 1.818159745847981836652e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 151,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 285,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 152,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1626,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1871,
+    "error": -1.334923924872777334372e-17,
+    "relative_error": 8.626849410449509016689e-17,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1983,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 512,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/random.c",
+    "line": 115,
+    "error": -9.812029660993815127767e-18,
+    "relative_error": 1.166186726515865421032e-17,
+    "max_relative_error": 8.940556520254616000213e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 306,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 507,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 318,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 239,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 444,
+    "error": 8.164136033883551135659e-12,
+    "relative_error": 7.038845893237617089064e-17,
+    "max_relative_error": 7.038845893237617089064e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 2015,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 511,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 379,
+    "error": -6.048623731591162601004e-33,
+    "relative_error": 6.048623731591162347624e-17,
+    "max_relative_error": 6.048623731591162347624e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 1564,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1820,
+    "error": -1.024571052998801690137e-16,
+    "relative_error": 6.195080785574149754709e-17,
+    "max_relative_error": 6.195080785574149754709e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 237,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 537,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 735,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 279,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/IJ_mv/IJMatrix_parcsr.c",
+    "line": 2808,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 636,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 7.788479536568868685576e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 236,
+    "error": 2.347297703431117099626e-17,
+    "relative_error": 2.930609061676212015242e-17,
+    "max_relative_error": 3.874438901488988383235e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 525,
+    "error": -3.442437446210533380508e-10,
+    "relative_error": 3.338186985779726667027e-16,
+    "max_relative_error": 3.737465268937771926165e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1837,
+    "error": -5.464378949326942347398e-16,
+    "relative_error": 8.212361426734133007583e-17,
+    "max_relative_error": 8.212361426734133007583e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1936,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 322,
+    "error": -1.415782066481786784400e-18,
+    "relative_error": 3.298747289099055149160e-08,
+    "max_relative_error": 8.718205363936954497852e-08
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/pcg_par.c",
+    "line": 171,
+    "error": -1.484388037817304824045e-26,
+    "relative_error": 7.788479536568868685576e-09,
+    "max_relative_error": 9.907619767374356724551e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1851,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_relax.c",
+    "line": 4206,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1628,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/IJ_mv/IJMatrix_parcsr.c",
+    "line": 2809,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 1560,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_strength.c",
+    "line": 453,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 140,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 380,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_relax.c",
+    "line": 4257,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 533,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 294,
+    "error": -9.557697921991348266602e-08,
+    "relative_error": 5.225688009770713794730e-17,
+    "max_relative_error": 7.984122100302053689646e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 521,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.611511172867375608007e-17,
+    "max_relative_error": 4.611511172867375608007e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 678,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 2.548896550814518207312e-10
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 501,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_relax.c",
+    "line": 4212,
+    "error": 1.178705133497714996338e-08,
+    "relative_error": 7.330316742081447963821e-02,
+    "max_relative_error": 7.347086500180962721670e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1623,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_strength.c",
+    "line": 264,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 440,
+    "error": -6.720167234525239252919e-19,
+    "relative_error": 3.894239758867906599466e-09,
+    "max_relative_error": 3.894239758867906599466e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/ams.c",
+    "line": 726,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_coarsen.c",
+    "line": 2368,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1757,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/ams.c",
+    "line": 721,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_coarsen.c",
+    "line": 2359,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 9.467820113936450835263e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_coarsen.c",
+    "line": 2366,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_coarsen.c",
+    "line": 2364,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 9.467820113936450835263e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 341,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 509,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_cycle.c",
+    "line": 290,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 2.190166362499443737622e-17,
+    "max_relative_error": 2.190166362499443737622e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/mpistubs.c",
+    "line": 687,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 278,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timing.c",
+    "line": 355,
+    "error": -3.258027528318940824192e-17,
+    "relative_error": 5.892722835137081200760e-16,
+    "max_relative_error": 1.378485619302999149182e-12
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 748,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1919,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 500,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matop.c",
+    "line": 940,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_vector.c",
+    "line": 438,
+    "error": -1.484388037817304824045e-26,
+    "relative_error": 7.788479536568868685576e-09,
+    "max_relative_error": 9.907619767374356724551e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 387,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 570,
+    "error": -7.342205115848644658176e-28,
+    "relative_error": 9.907619767374356724551e-09,
+    "max_relative_error": 9.907619767374356724551e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 1197,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 499,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 496,
+    "error": -6.763909476260240884559e-26,
+    "relative_error": 1.921824175115173043307e-10,
+    "max_relative_error": 1.921824175115173043307e-10
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 728,
+    "error": -9.775802485356222329416e-14,
+    "relative_error": 2.491118108565864759946e-10,
+    "max_relative_error": 2.491118108565864759946e-10
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 135,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 265,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_solve.c",
+    "line": 294,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 733,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_strength.c",
+    "line": 261,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_multi_interp.c",
+    "line": 1822,
+    "error": -1.024571052998801690137e-16,
+    "relative_error": 6.195080785574149754709e-17,
+    "max_relative_error": 6.195080785574149754709e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_amg_setup.c",
+    "line": 1267,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 589,
+    "error": -1.484388037817304824045e-26,
+    "relative_error": 7.788479536568868685576e-09,
+    "max_relative_error": 7.788479536568868685576e-09
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_coarsen.c",
+    "line": 2446,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 9.467820113936450835263e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 497,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/seq_mv/csr_matvec.c",
+    "line": 349,
+    "error": -7.120163712560045565650e-20,
+    "relative_error": 4.921529647767699270123e-08,
+    "max_relative_error": 1.268426249527185934197e-07
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_relax.c",
+    "line": 4208,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/test/amg.c",
+    "line": 1513,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/utilities/timer.c",
+    "line": 59,
+    "error": 7.643625316022806259753e-18,
+    "relative_error": 8.926767854145540379289e-18,
+    "max_relative_error": 6.907115422737704215080e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_ls/par_coarsen.c",
+    "line": 2332,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 9.467820113936450835263e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/krylov/pcg.c",
+    "line": 424,
+    "error": 4.464744546295307259243e-15,
+    "relative_error": 6.993647010568850471253e-16,
+    "max_relative_error": 6.993647010568850471253e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/AMG/parcsr_mv/par_csr_matvec.c",
+    "line": 213,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  }
+]

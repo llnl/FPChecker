@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk -F: '{print $1, $2}')",
+      "Bash(awk 'NR==1 || \\($1 < 206 && NR>prev\\) {prev=NR; line=$1; $1=\"\"; func=$0} END {print \"Function containing line 206:\", func, \"starts at line\", line}')"
+    ]
+  }
+}

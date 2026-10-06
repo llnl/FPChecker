@@ -1,0 +1,8 @@
+# CMake generated Testfile for 
+# Source directory: /g/g90/sharmin1/tutorial/FPChecker
+# Build directory: /g/g90/sharmin1/tutorial/FPChecker/build-current
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+add_test(cpu-tests "/usr/tce/bin/python3" "-m" "pytest" "--tb=no")
+set_tests_properties(cpu-tests PROPERTIES  ENVIRONMENT "PATH=/g/g90/sharmin1/tutorial/FPChecker/build-current/install/bin:/g/g90/sharmin1/.codex/tmp/arg0/codex-arg043mpkg:/g/g90/sharmin1/tutorial/install/bin:/g/g90/sharmin1/conda_env/tutorial_env/bin:/g/g90/sharmin1/miniconda3/condabin:/g/g90/sharmin1/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/g/g90/sharmin1/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/g/g90/sharmin1/.vscode-server/cli/servers/Stable-8a7abeba6e03ea3af87bfbce9a1b7e48fed567b8/server/bin/remote-cli:/opt/cray/pe/mpich/9.0.1/ofi/crayclang/20.0/bin:/opt/cray/pe/mpich/9.0.1/bin:/opt/cray/pe/cce/20.0.0/binutils/x86_64/x86_64-pc-linux-gnu/bin:/opt/cray/pe/cce/20.0.0/binutils/cross/x86_64-aarch64/bin:/opt/cray/pe/cce/20.0.0/utils/x86_64/bin:/opt/cray/pe/cce/20.0.0/bin:/usr/global/tools/flux_wrappers/bin:/usr/tce/bin:/opt/cray/pe/craype/2.7.35/bin:/opt/cray/pe/perftools/25.09.0/bin:/opt/cray/pe/papi/7.2.0.2/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/cray/pe/bin:.:." WORKING_DIRECTORY "/g/g90/sharmin1/tutorial/FPChecker/tests/cpu_checking" _BACKTRACE_TRIPLES "/g/g90/sharmin1/tutorial/FPChecker/CMakeLists.txt;66;add_test;/g/g90/sharmin1/tutorial/FPChecker/CMakeLists.txt;0;")

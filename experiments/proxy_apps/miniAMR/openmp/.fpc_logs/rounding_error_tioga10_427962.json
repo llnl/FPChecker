@@ -1,0 +1,1185 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 101,
+    "error": 7.424074376094491611866e-17,
+    "relative_error": 1.528288459018527276850e-16,
+    "max_relative_error": 9.421332318043415452912e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 1960,
+    "error": -2.393376295761751038071e-17,
+    "relative_error": 4.926905183784310805578e-17,
+    "max_relative_error": 1.164486670620041025998e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 1968,
+    "error": -2.393376295761751038071e-17,
+    "relative_error": 4.926905183784310805578e-17,
+    "max_relative_error": 1.344409384824418732447e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 1952,
+    "error": -2.393376295761751038071e-17,
+    "relative_error": 4.926905183784310805578e-17,
+    "max_relative_error": 3.701950364804656474816e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 192,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/init.c",
+    "line": 47,
+    "error": -2.092185338390958669841e-25,
+    "relative_error": 2.092185338390958669841e-17,
+    "max_relative_error": 2.092185338390958669841e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 194,
+    "error": -3.552713678800500929356e-15,
+    "relative_error": 9.257410473995856290534e-17,
+    "max_relative_error": 9.257410473995856290534e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 98,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 267,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 102,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 265,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 103,
+    "error": 3.996802888650563545525e-15,
+    "relative_error": 1.121453850597268636504e-16,
+    "max_relative_error": 1.248918265957699630521e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 135,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 75,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 76,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 152,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 79,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 93,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 322,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 114,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 87,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 122,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 196,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 56,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 131,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 130,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 172,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 173,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 174,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 108,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 169,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 170,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 171,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 257,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/main.c",
+    "line": 356,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 51,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 158,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/util.c",
+    "line": 53,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 48,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 182,
+    "error": -3.552713678800500929356e-15,
+    "relative_error": 9.535028888873473184205e-17,
+    "max_relative_error": 1.245986279666748836048e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 186,
+    "error": -3.552713678800500929356e-15,
+    "relative_error": 9.535028888873473184205e-17,
+    "max_relative_error": 1.245986279666748836048e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 91,
+    "error": 7.424074376094491611866e-17,
+    "relative_error": 1.528288459018527276850e-16,
+    "max_relative_error": 9.421332318043415452912e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 53,
+    "error": -7.363554210826350754360e-14,
+    "relative_error": 2.960544305642245437049e-16,
+    "max_relative_error": 2.103083283846380074731e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/move.c",
+    "line": 81,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/move.c",
+    "line": 82,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/move.c",
+    "line": 83,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/move.c",
+    "line": 84,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/move.c",
+    "line": 85,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/move.c",
+    "line": 86,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 109,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 113,
+    "error": -7.094058673828840255737e-11,
+    "relative_error": 1.721854304635761589435e-02,
+    "max_relative_error": 1.046386192017259978400e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 112,
+    "error": 1.321041054325178265572e-10,
+    "relative_error": 3.206322612208227878640e-17,
+    "max_relative_error": 2.284235366220893924345e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 111,
+    "error": 2.030446921708062291145e-10,
+    "relative_error": 4.928134410846730393700e-17,
+    "max_relative_error": 5.274063422069499923853e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 72,
+    "error": 1.537381333349685519352e-13,
+    "relative_error": 6.181098721806406888495e-16,
+    "max_relative_error": 2.103083283846380074731e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 64,
+    "error": -1.635780790820717811584e-07,
+    "relative_error": 1.099193652206575268331e-15,
+    "max_relative_error": 1.299260391145695719900e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 45,
+    "error": -7.363554210826350754360e-14,
+    "relative_error": 2.960544305642245437049e-16,
+    "max_relative_error": 2.103083283846380074731e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 65,
+    "error": -1.637672539800405502319e-07,
+    "relative_error": 1.100464848495043652567e-15,
+    "max_relative_error": 1.300531587434163904032e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 66,
+    "error": -1.891748979687690734863e-10,
+    "relative_error": 1.271145008311332746667e-03,
+    "max_relative_error": 1.271145008311332746667e-03
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 62,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/init.c",
+    "line": 86,
+    "error": -6.235495675355195999146e-09,
+    "relative_error": 9.133539379729297665787e-02,
+    "max_relative_error": 9.133539379729297665787e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/init.c",
+    "line": 82,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 230,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 303,
+    "error": -7.363554210826350754360e-14,
+    "relative_error": 2.960544305642245437049e-16,
+    "max_relative_error": 5.040625189817573552710e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 302,
+    "error": -7.363554210826350754360e-14,
+    "relative_error": 2.960544305642245437049e-16,
+    "max_relative_error": 5.040625189817573552710e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 99,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 104,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 136,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 153,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 178,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 112,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 116,
+    "error": -1.932676241267472505569e-12,
+    "relative_error": 5.564648117839607201502e-03,
+    "max_relative_error": 5.564648117839607201502e-03
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 183,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 132,
+    "error": -7.363554210826350754360e-14,
+    "relative_error": 2.960544305642245437049e-16,
+    "max_relative_error": 2.103083283846380074731e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 77,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 93,
+    "error": 1.473430752407800525816e-16,
+    "relative_error": 7.582852499205478714797e-17,
+    "max_relative_error": 8.240889513577656609396e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 138,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 54,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 123,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 127,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 1e9999
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 88,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 52,
+    "error": -7.363554210826350754360e-14,
+    "relative_error": 2.960544305642245437049e-16,
+    "max_relative_error": 2.396935714160926382506e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 84,
+    "error": -1.928128767758607864380e-10,
+    "relative_error": 3.573836817262306136226e-02,
+    "max_relative_error": 3.573836817262306136226e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/init.c",
+    "line": 84,
+    "error": -7.501512300223112106323e-09,
+    "relative_error": 1.098774867697014606736e-16,
+    "max_relative_error": 1.098774867697014606736e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 62,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 114,
+    "error": 5.258016244624741375446e-12,
+    "relative_error": 1.513962444803938784703e-17,
+    "max_relative_error": 1.513962444803938784703e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 111,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 97,
+    "error": 7.424074376094491611866e-17,
+    "relative_error": 1.528288459018527276850e-16,
+    "max_relative_error": 9.421332318043415452912e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 83,
+    "error": 9.822542779147624969482e-11,
+    "relative_error": 1.820654461842964393198e-17,
+    "max_relative_error": 8.549487847818057194507e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 108,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 2.190166362499443737622e-17,
+    "max_relative_error": 2.190166362499443737622e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 151,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/init.c",
+    "line": 81,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 79,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 4.265051655983985485698e-17,
+    "max_relative_error": 4.265051655983985485698e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 92,
+    "error": 2.268150944839675275944e-16,
+    "relative_error": 1.556372153376956729315e-16,
+    "max_relative_error": 7.747379982138513665146e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 313,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 53,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 117,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 197,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 69,
+    "error": -2.561137080192565917969e-09,
+    "relative_error": 4.657298770826395064244e-17,
+    "max_relative_error": 4.657298770826395064244e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 66,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.473598439206789041620e-17,
+    "max_relative_error": 1.473598439206789041620e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 61,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 115,
+    "error": 3.325340003357268869877e-12,
+    "relative_error": 9.574789515787062738884e-18,
+    "max_relative_error": 9.885132592039829370092e-18
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 50,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 115,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 74,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 109,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 96,
+    "error": 3.532330677957773445996e-16,
+    "relative_error": 1.038786585194254809959e-16,
+    "max_relative_error": 9.421332318043415452912e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 94,
+    "error": 6.787105599759257756887e-17,
+    "relative_error": 2.794329023374915581309e-17,
+    "max_relative_error": 9.421332318043415452912e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 61,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.761682716782736863420e-17,
+    "max_relative_error": 1.761682716782736863420e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 82,
+    "error": 2.910383045673370361328e-10,
+    "relative_error": 5.394531738793973966924e-17,
+    "max_relative_error": 5.394531738793973966924e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/main.c",
+    "line": 53,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 214,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 111,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 2.894142908984338044946e-17,
+    "max_relative_error": 2.894142908984338044946e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 127,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 139,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 176,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 44,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 155,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 92,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 321,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 70,
+    "error": 2.764863893389701843262e-10,
+    "relative_error": 5.027765718505762370964e-18,
+    "max_relative_error": 6.992115897996119766105e-18
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 67,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 48,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 70,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 102,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/util.c",
+    "line": 38,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 134,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/main.c",
+    "line": 590,
+    "error": 5.551115123125782702118e-15,
+    "relative_error": 5.551115123125782393969e-17,
+    "max_relative_error": 5.551115123125782393969e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 80,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 60,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 315,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 95,
+    "error": 2.105520618966849610842e-16,
+    "relative_error": 7.223891833901627091920e-17,
+    "max_relative_error": 9.421332318043415452912e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 55,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 309,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 261,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/init.c",
+    "line": 80,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/init.c",
+    "line": 85,
+    "error": -1.373700797557830810547e-08,
+    "relative_error": 2.012111493901029585933e-16,
+    "max_relative_error": 2.012111493901029585933e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 711,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 59,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 41,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 160,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 96,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 121,
+    "error": -7.363554210826350754360e-14,
+    "relative_error": 2.960544305642245437049e-16,
+    "max_relative_error": 2.103083283846380074731e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 102,
+    "error": 2.220446049250313080847e-14,
+    "relative_error": 2.467162276944792251232e-17,
+    "max_relative_error": 2.467162276944792251232e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 71,
+    "error": 2.837623469531536102295e-09,
+    "relative_error": 5.160095263297168563136e-02,
+    "max_relative_error": 5.160095263297168563136e-02
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/stencil.c",
+    "line": 107,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 90,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 135,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 311,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 107,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 94,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 78,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 50,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 110,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 125,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 97,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 101,
+    "error": 2.220446049250313080847e-14,
+    "relative_error": 2.467162276944792251232e-17,
+    "max_relative_error": 2.467162276944792251232e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 307,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/init.c",
+    "line": 508,
+    "error": -5.366800753803246948337e-18,
+    "relative_error": 1.932673637122302427192e-17,
+    "max_relative_error": 1.102160342723801038054e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 264,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/init.c",
+    "line": 697,
+    "error": 1.537381333349685519352e-13,
+    "relative_error": 6.181098721806406888495e-16,
+    "max_relative_error": 1.365241192053337620220e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/check_sum.c",
+    "line": 79,
+    "error": -7.363554210826350754360e-14,
+    "relative_error": 2.960544305642245437049e-16,
+    "max_relative_error": 2.103083283846380074731e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 132,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 95,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 113,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 83,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/comm.c",
+    "line": 65,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 129,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/refine.c",
+    "line": 561,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/miniAMR/openmp/driver.c",
+    "line": 80,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  }
+]

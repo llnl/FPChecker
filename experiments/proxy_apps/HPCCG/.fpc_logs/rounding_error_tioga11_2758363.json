@@ -1,0 +1,590 @@
+[
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/waxpby.cpp",
+    "line": 69,
+    "error": 0.0,
+    "relative_error": 0.0,
+    "max_relative_error": 0.0
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPC_sparsemv.cpp",
+    "line": 88,
+    "error": 3.231789998168823514153e-162,
+    "relative_error": 1.546650283783881403200e+20,
+    "max_relative_error": 3.278784051779705788826e+23
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/generate_matrix.cpp",
+    "line": 149,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 172,
+    "error": 0.0,
+    "relative_error": 0.0,
+    "max_relative_error": 0.0
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 215,
+    "error": 1.000000000069955347071e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/ddot.cpp",
+    "line": 80,
+    "error": 7.359164456193280645538e-365,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 4.619781518098095885536e+43
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 220,
+    "error": 0.0,
+    "relative_error": 0.0,
+    "max_relative_error": 0.0
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 203,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 161,
+    "error": 8.578557254103559717794e-183,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 4.619781518098095885536e+43
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 235,
+    "error": 8.389014309606590558133e-18,
+    "relative_error": 5.401881743233390358278e-17,
+    "max_relative_error": 5.401881743233390358278e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 225,
+    "error": 1.740263071451850218629e-16,
+    "relative_error": 1.560634087930992931019e-14,
+    "max_relative_error": 1.560634087930992931019e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 226,
+    "error": -1.000515317296779560508e-17,
+    "relative_error": 4.955499342727981969871e-16,
+    "max_relative_error": 4.955499342727981969871e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 227,
+    "error": -2.570914401506252389140e-17,
+    "relative_error": 2.106098469326003431765e-16,
+    "max_relative_error": 2.106098469326003431765e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 228,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/YAML_Doc.cpp",
+    "line": 429,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 107,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 152,
+    "error": 1.903366353417368372902e-12,
+    "relative_error": 1.420472101712058316884e-12,
+    "max_relative_error": 5.598904511327102069642e-12
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 182,
+    "error": -1.065814103640150278807e-14,
+    "relative_error": 7.293438324208399375233e-15,
+    "max_relative_error": 2.310293091214642044339e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 249,
+    "error": -3.526714510704298533028e-14,
+    "relative_error": 1.551704289333318851384e-14,
+    "max_relative_error": 1.560634087930992931019e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPC_sparsemv.cpp",
+    "line": 87,
+    "error": 3.231789998168823514153e-162,
+    "relative_error": 1.546650283783881403200e+20,
+    "max_relative_error": 4.007520242837537940518e+25
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 119,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 197,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 2.245329363747935474454e-17,
+    "max_relative_error": 2.245329363747935474454e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 78,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 219,
+    "error": 0.0,
+    "relative_error": 0.0,
+    "max_relative_error": 0.0
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/ddot.cpp",
+    "line": 64,
+    "error": 7.359164456193280645538e-365,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 5.675374535886557084482e+47
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 141,
+    "error": 1.577768270850585241583e-16,
+    "relative_error": 1.423464697627738396669e-14,
+    "max_relative_error": 4.662590592732132930278e-13
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 113,
+    "error": -6.140988867593677458245e-21,
+    "relative_error": 7.224692785404326424439e-17,
+    "max_relative_error": 7.635597833651317372124e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 123,
+    "error": 3.339550858072470873594e-13,
+    "relative_error": 2.374130150719124053979e-13,
+    "max_relative_error": 8.212511210522347560529e-13
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 190,
+    "error": -1.000515317296779560508e-17,
+    "relative_error": 4.955499342727981969871e-16,
+    "max_relative_error": 0.0
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/ddot.cpp",
+    "line": 69,
+    "error": 1.600000829868088491555e-363,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 2.920428756100881869710e+46
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 202,
+    "error": 4.481540827327989973128e-08,
+    "relative_error": 5.722172532633048196323e-14,
+    "max_relative_error": 5.722172532633048196323e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 149,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 2.991260931022999850709e-17,
+    "max_relative_error": 2.991260931022999850709e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 201,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 112,
+    "error": -7.326834993749697932941e-20,
+    "relative_error": 1.201120490778639005512e-15,
+    "max_relative_error": 1.201120490778639005512e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 236,
+    "error": 8.389014309606590558133e-18,
+    "relative_error": 5.401881743233390358278e-17,
+    "max_relative_error": 5.401881743233390358278e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 185,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 200,
+    "error": 1.004699795581487364871e-13,
+    "relative_error": 5.715874801844741304880e-14,
+    "max_relative_error": 1.382185668343427979115e-12
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 248,
+    "error": -1.643650493488024721955e-16,
+    "relative_error": 6.294774757775589470238e-17,
+    "max_relative_error": 1.321851517133154629729e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 237,
+    "error": 1.740263071451850218629e-16,
+    "relative_error": 1.560634087930992931019e-14,
+    "max_relative_error": 1.560634087930992931019e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 213,
+    "error": 0.0,
+    "relative_error": 0.0,
+    "max_relative_error": 0.0
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 159,
+    "error": -1.328147661294742931659e-17,
+    "relative_error": 8.640606735376637379567e-17,
+    "max_relative_error": 1.028705666394635519771e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 251,
+    "error": 7.795413620170776880514e-16,
+    "relative_error": 2.781244565487767529995e-16,
+    "max_relative_error": 2.781244565487767529995e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 171,
+    "error": 1.740263071451850218629e-16,
+    "relative_error": 1.560634087930992931019e-14,
+    "max_relative_error": 3.011202127489037203968e-13
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 238,
+    "error": -1.000515317296779560508e-17,
+    "relative_error": 4.955499342727981969871e-16,
+    "max_relative_error": 4.955499342727981969871e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 198,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 250,
+    "error": 9.147413729260200909721e-16,
+    "relative_error": 4.858119823068272741160e-16,
+    "max_relative_error": 4.955499342727981969871e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 126,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 217,
+    "error": 0.0,
+    "relative_error": 0.0,
+    "max_relative_error": 0.0
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 163,
+    "error": -6.248157340744733735395e-150,
+    "relative_error": 3.449866034108396850938e+17,
+    "max_relative_error": 3.449866034108396850938e+17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 136,
+    "error": 1.418780186650953067939e-20,
+    "relative_error": 1.013414419036395048517e-17,
+    "max_relative_error": 1.013414419036395048517e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 169,
+    "error": -2.570914401506252389140e-17,
+    "relative_error": 2.106098469326003431765e-16,
+    "max_relative_error": 1.837870845039234301654e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 124,
+    "error": 7.459149742317094933242e-08,
+    "relative_error": 2.374271695699241913564e-13,
+    "max_relative_error": 2.374271695699241913564e-13
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 232,
+    "error": 8.578557254103559717794e-183,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 142,
+    "error": 3.773445234311110460748e-02,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 4.619781518098095885536e+43
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 179,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 3.689208971911817391935e-17,
+    "max_relative_error": 3.689208971911817391935e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 111,
+    "error": 4.023406499457926610575e-20,
+    "relative_error": 3.627958971558094328716e-17,
+    "max_relative_error": 3.627958971558094328716e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 153,
+    "error": 6.366058187268208712339e-07,
+    "relative_error": 1.420503684796317264351e-12,
+    "max_relative_error": 1.420503684796317264351e-12
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 120,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 4.479375665922188714298e-17,
+    "max_relative_error": 4.479375665922188714298e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 196,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 150,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 125,
+    "error": 7.460150186489045154303e-08,
+    "relative_error": 2.374590140342753017645e-13,
+    "max_relative_error": 2.374590140342753017645e-13
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/mytimer.cpp",
+    "line": 118,
+    "error": 8.389014309606590558133e-18,
+    "relative_error": 5.401881743233390358278e-17,
+    "max_relative_error": 1.077133285925943062374e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 202,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 180,
+    "error": -4.554578936222242191434e-12,
+    "relative_error": 4.555792466240227434331e-01,
+    "max_relative_error": 4.555792466240227434331e-01
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 214,
+    "error": -5.566778439052459457912e+05,
+    "relative_error": 1.210307253392530494057e+07,
+    "max_relative_error": 0.0
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 154,
+    "error": 6.366158231685403734446e-07,
+    "relative_error": 1.420526008416222725855e-12,
+    "max_relative_error": 1.420526008416222725855e-12
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 114,
+    "error": 6.730727086790011526318e-15,
+    "relative_error": 6.208777406184840632219e-17,
+    "max_relative_error": 6.208777406184840632219e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 173,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 189,
+    "error": 0.0,
+    "relative_error": 0.0,
+    "max_relative_error": 0.0
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 178,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 155,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 239,
+    "error": -2.570914401506252389140e-17,
+    "relative_error": 2.106098469326003431765e-16,
+    "max_relative_error": 2.106098469326003431765e-16
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 130,
+    "error": 6.730727086790011526318e-15,
+    "relative_error": 6.208777406184840632219e-17,
+    "max_relative_error": 6.208777406184840632219e-17
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 132,
+    "error": 8.578557254103559717794e-183,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 6.796897467299396826112e+21
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 140,
+    "error": -1.047419169183442673654e-321,
+    "relative_error": 5.370689696919526826862e+41,
+    "max_relative_error": 4.619781518098095885536e+43
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 203,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 148,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/main.cpp",
+    "line": 200,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 183,
+    "error": -1.317474129791662562639e-09,
+    "relative_error": 7.302607701323324001868e-15,
+    "max_relative_error": 7.302607701323324001868e-15
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 121,
+    "error": 1.000444171950221061707e-11,
+    "relative_error": 1.000000000000000000000e+00,
+    "max_relative_error": 1.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 218,
+    "error": 0.0,
+    "relative_error": 0.0,
+    "max_relative_error": 0.0
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/waxpby.cpp",
+    "line": 65,
+    "error": 0.000000000000000000000e+00,
+    "relative_error": 0.000000000000000000000e+00,
+    "max_relative_error": 0.000000000000000000000e+00
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 201,
+    "error": 4.480540383156039752066e-08,
+    "relative_error": 5.720895133992326838878e-14,
+    "max_relative_error": 5.720895133992326838878e-14
+  },
+  {
+    "file": "/g/g90/sharmin1/tutorial/FPChecker/experiments/proxy_apps/HPCCG/HPCCG.cpp",
+    "line": 184,
+    "error": -1.307469688072160352021e-09,
+    "relative_error": 7.247154230552075715945e-15,
+    "max_relative_error": 7.247154230552075715945e-15
+  }
+]
