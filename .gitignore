@@ -24,3 +24,7 @@ fpc_error_log.json
 *.dSYM
 .venv
 temp/
+
+# Generated build files
+*.o
+*.so

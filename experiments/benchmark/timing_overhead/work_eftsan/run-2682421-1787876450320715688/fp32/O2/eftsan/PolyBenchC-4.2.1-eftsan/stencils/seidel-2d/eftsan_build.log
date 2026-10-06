@@ -1,0 +1,20 @@
+rm -f *.bc *.o *.out *.err error.log mathFunc.txt seidel-2d
+/g/g90/sharmin1/conda_env/tutorial_env/bin/clang -g -O2 -fno-inline -fno-vectorize -fno-slp-vectorize -ffp-contract=off -emit-llvm -I. -I/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/timing_overhead/work_eftsan/run-2682421-1787876450320715688/fp32/O2/eftsan/PolyBenchC-4.2.1-eftsan/utilities -DSMALL_DATASET -DPOLYBENCH_TIME -DDATA_TYPE_IS_FLOAT -c seidel-2d.c -o seidel-2d.bc
+/g/g90/sharmin1/conda_env/tutorial_env/bin/clang -g -O2 -fno-inline -fno-vectorize -fno-slp-vectorize -ffp-contract=off -emit-llvm -I. -I/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/timing_overhead/work_eftsan/run-2682421-1787876450320715688/fp32/O2/eftsan/PolyBenchC-4.2.1-eftsan/utilities -DSMALL_DATASET -DPOLYBENCH_TIME -DDATA_TYPE_IS_FLOAT -c /g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/timing_overhead/work_eftsan/run-2682421-1787876450320715688/fp32/O2/eftsan/PolyBenchC-4.2.1-eftsan/utilities/polybench.c -o polybench.bc
+/g/g90/sharmin1/conda_env/tutorial_env/bin/llvm-link seidel-2d.bc polybench.bc -o seidel-2d.linked.bc
+/g/g90/sharmin1/conda_env/tutorial_env/bin/opt -load /g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/llvm_pass/build/EFTSan/libEFTSanitizer.so -eftsan \
+  -eftsan-enable-debugging \
+  -eftsan-detect-all-rounding-errors \
+  -eftsan-detect-all-exceptions \
+  < seidel-2d.linked.bc > seidel-2d.opt.bc
+Error opening '/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/llvm_pass/build/EFTSan/libEFTSanitizer.so': /g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/llvm_pass/build/EFTSan/libEFTSanitizer.so: undefined symbol: _ZN4llvm2cl15GeneralCategoryE
+  -load request ignored.
+opt: Unknown command line argument '-eftsan'.  Try: '/g/g90/sharmin1/conda_env/tutorial_env/bin/opt --help'
+opt: Did you mean '--tbaa'?
+opt: Unknown command line argument '-eftsan-enable-debugging'.  Try: '/g/g90/sharmin1/conda_env/tutorial_env/bin/opt --help'
+opt: Did you mean '--enable-debugify'?
+opt: Unknown command line argument '-eftsan-detect-all-rounding-errors'.  Try: '/g/g90/sharmin1/conda_env/tutorial_env/bin/opt --help'
+opt: Did you mean '--asan-detect-invalid-pointer-cmp'?
+opt: Unknown command line argument '-eftsan-detect-all-exceptions'.  Try: '/g/g90/sharmin1/conda_env/tutorial_env/bin/opt --help'
+opt: Did you mean '--tsan-handle-cxx-exceptions'?
+make: *** [Makefile:58: seidel-2d.opt.bc] Error 1

@@ -1,0 +1,13 @@
+rm -f *.bc *.o *.out *.err error.log mathFunc.txt deriche
+/g/g90/sharmin1/conda_env/llvm10/bin/clang -g -O2 -fno-inline -fno-vectorize -fno-slp-vectorize -ffp-contract=off -emit-llvm -I. -I/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/timing_overhead/work_eftsan/run-2358885/fp32/O2/eftsan/PolyBenchC-4.2.1-eftsan/utilities -DMINI_DATASET -DPOLYBENCH_TIME -DDATA_TYPE_IS_FLOAT -c deriche.c -o deriche.bc
+/g/g90/sharmin1/conda_env/llvm10/bin/clang -g -O2 -fno-inline -fno-vectorize -fno-slp-vectorize -ffp-contract=off -emit-llvm -I. -I/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/timing_overhead/work_eftsan/run-2358885/fp32/O2/eftsan/PolyBenchC-4.2.1-eftsan/utilities -DMINI_DATASET -DPOLYBENCH_TIME -DDATA_TYPE_IS_FLOAT -c /g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/timing_overhead/work_eftsan/run-2358885/fp32/O2/eftsan/PolyBenchC-4.2.1-eftsan/utilities/polybench.c -o polybench.bc
+/g/g90/sharmin1/conda_env/llvm10/bin/llvm-link deriche.bc polybench.bc -o deriche.linked.bc
+/g/g90/sharmin1/conda_env/llvm10/bin/opt -load /g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/llvm_pass/build/EFTSan/libEFTSanitizer.so -eftsan \
+  -eftsan-enable-debugging \
+  -eftsan-detect-all-rounding-errors \
+  -eftsan-detect-all-exceptions \
+  < deriche.linked.bc > deriche.opt.bc
+Check this function call:  %330 = tail call double @exp2(double %64) #7, !dbg !180, !inst_id !181
+Check this function call:  %330 = tail call float @exp2f(float %64) #7, !dbg !178, !inst_id !179
+/g/g90/sharmin1/conda_env/llvm10/bin/llc deriche.opt.bc -filetype=obj -o deriche.o
+/g/g90/sharmin1/conda_env/llvm10/bin/clang -g -O2 deriche.o -o deriche -L/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/runtime/obj -leftsanitizer -L/g/g90/sharmin1/conda_env/llvm10/lib -lmpfr -lgmp -lm -Wl,-rpath,/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/runtime/obj -Wl,-rpath,/g/g90/sharmin1/conda_env/llvm10/lib

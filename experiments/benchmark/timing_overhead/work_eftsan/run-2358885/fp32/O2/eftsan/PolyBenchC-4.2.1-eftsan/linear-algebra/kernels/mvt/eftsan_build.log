@@ -1,0 +1,11 @@
+rm -f *.bc *.o *.out *.err error.log mathFunc.txt mvt
+/g/g90/sharmin1/conda_env/llvm10/bin/clang -g -O2 -fno-inline -fno-vectorize -fno-slp-vectorize -ffp-contract=off -emit-llvm -I. -I/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/timing_overhead/work_eftsan/run-2358885/fp32/O2/eftsan/PolyBenchC-4.2.1-eftsan/utilities -DMINI_DATASET -DPOLYBENCH_TIME -DDATA_TYPE_IS_FLOAT -c mvt.c -o mvt.bc
+/g/g90/sharmin1/conda_env/llvm10/bin/clang -g -O2 -fno-inline -fno-vectorize -fno-slp-vectorize -ffp-contract=off -emit-llvm -I. -I/g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/timing_overhead/work_eftsan/run-2358885/fp32/O2/eftsan/PolyBenchC-4.2.1-eftsan/utilities -DMINI_DATASET -DPOLYBENCH_TIME -DDATA_TYPE_IS_FLOAT -c /g/g90/sharmin1/tutorial/FPChecker/experiments/benchmark/timing_overhead/work_eftsan/run-2358885/fp32/O2/eftsan/PolyBenchC-4.2.1-eftsan/utilities/polybench.c -o polybench.bc
+/g/g90/sharmin1/conda_env/llvm10/bin/llvm-link mvt.bc polybench.bc -o mvt.linked.bc
+/g/g90/sharmin1/conda_env/llvm10/bin/opt -load /g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/llvm_pass/build/EFTSan/libEFTSanitizer.so -eftsan \
+  -eftsan-enable-debugging \
+  -eftsan-detect-all-rounding-errors \
+  -eftsan-detect-all-exceptions \
+  < mvt.linked.bc > mvt.opt.bc
+/g/g90/sharmin1/conda_env/llvm10/bin/llc mvt.opt.bc -filetype=obj -o mvt.o
+/g/g90/sharmin1/conda_env/llvm10/bin/clang -g -O2 mvt.o -o mvt -L/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/runtime/obj -leftsanitizer -L/g/g90/sharmin1/conda_env/llvm10/lib -lmpfr -lgmp -lm -Wl,-rpath,/g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/runtime/obj -Wl,-rpath,/g/g90/sharmin1/conda_env/llvm10/lib
