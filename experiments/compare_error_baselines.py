@@ -38,6 +38,7 @@ DEFAULT_ACTIVATION_MODE = "auto"
 DEFAULT_FPCHECKER_ENVS = ("tutorial_env", "fpchecker_env")
 DEFAULT_NSAN_ENVS = ("fpchecker_env", "nsan_env", "tutorial_env")
 DEFAULT_EFTSAN_ENVS = ("llvm10", "eftsan_env")
+EFTSAN_LLVM_TOOLS = ("clang", "opt", "llvm-link", "llc")
 CONDA_ENV_PREFIX_CACHE: Optional[Dict[str, Path]] = None
 
 
@@ -218,20 +219,35 @@ def candidate_env_prefixes(env_name: str) -> List[Path]:
     candidates = []
     conda_prefix = os.environ.get("CONDA_PREFIX")
     if conda_prefix:
-        candidates.append(Path(conda_prefix).parent / "envs" / env_name)
+        prefix = Path(conda_prefix)
+        if prefix.name == env_name:
+            candidates.append(prefix)
+        candidates.append(prefix / "envs" / env_name)
+        candidates.append(prefix.parent / env_name)
+        candidates.append(prefix.parent / "envs" / env_name)
     home = Path.home()
     candidates.extend(
         [
             home / "conda_env" / env_name,
             home / "miniconda3" / "envs" / env_name,
             home / "anaconda3" / "envs" / env_name,
+            Path("/opt/conda/envs") / env_name,
+            Path("/opt/miniconda3/envs") / env_name,
             Path("/opt/anaconda3/envs") / env_name,
         ]
     )
     conda_prefix = conda_env_prefixes_by_name().get(env_name)
     if conda_prefix is not None:
         candidates.append(conda_prefix)
-    return candidates
+
+    unique = []
+    seen = set()
+    for candidate in candidates:
+        text = str(candidate)
+        if text not in seen:
+            unique.append(candidate)
+            seen.add(text)
+    return unique
 
 
 def resolve_env_prefix(env_name: str) -> Optional[Path]:
@@ -267,8 +283,25 @@ def choose_default_nsan_env() -> str:
     return choose_named_env((fpchecker_env, *DEFAULT_NSAN_ENVS))
 
 
+def has_eftsan_llvm_tools(prefix: Path) -> bool:
+    return all((prefix / "bin" / tool).is_file() for tool in EFTSAN_LLVM_TOOLS)
+
+
 def choose_default_eftsan_env() -> str:
-    return choose_named_env(DEFAULT_EFTSAN_ENVS)
+    searched: List[str] = []
+    for env_name in DEFAULT_EFTSAN_ENVS:
+        prefix = resolve_env_prefix(env_name)
+        if prefix is not None and has_eftsan_llvm_tools(prefix):
+            return env_name
+        searched.append(
+            f"{env_name}: "
+            + ", ".join(str(path) for path in candidate_env_prefixes(env_name))
+        )
+    raise RuntimeError(
+        "proper environment not found; running is not working for EFTSan. "
+        "Expected llvm10 or eftsan_env with clang/opt/llvm-link/llc. "
+        f"Searched {'; '.join(searched)}"
+    )
 
 
 def default_conda_sh() -> Optional[Path]:
@@ -281,6 +314,8 @@ def default_conda_sh() -> Optional[Path]:
         candidates.append(Path(conda_prefix) / "etc" / "profile.d" / "conda.sh")
     candidates.extend(
         [
+            Path("/opt/conda/etc/profile.d/conda.sh"),
+            Path("/opt/miniconda3/etc/profile.d/conda.sh"),
             Path.home() / "miniconda3" / "etc" / "profile.d" / "conda.sh",
             Path.home() / "anaconda3" / "etc" / "profile.d" / "conda.sh",
             Path("/opt/anaconda3/etc/profile.d/conda.sh"),
@@ -296,6 +331,12 @@ def shell_join(command: Sequence[str]) -> str:
     return " ".join(shlex.quote(item) for item in command)
 
 
+def current_env_matches(env_name: str) -> bool:
+    current_name = os.environ.get("CONDA_DEFAULT_ENV", "")
+    current_prefix = os.environ.get("CONDA_PREFIX", "")
+    return current_name == env_name or Path(current_prefix).name == env_name
+
+
 def command_with_activation(
     command: Sequence[str],
     env_name: str,
@@ -306,14 +347,24 @@ def command_with_activation(
     if activation_mode == "none":
         return command, env, "current environment"
 
+    if activation_mode == "auto" and current_env_matches(env_name):
+        return command, env, f"current:{env_name}"
+
     prefix = resolve_env_prefix(env_name)
     conda_sh = default_conda_sh()
-    conda_available = shutil.which("conda", path=env.get("PATH")) is not None
 
-    if activation_mode in {"auto", "conda"} and (conda_sh is not None or conda_available):
+    if activation_mode in {"auto", "path"} and prefix is not None:
+        direct_env = env.copy()
+        direct_env["CONDA_PREFIX"] = str(prefix)
+        direct_env["CONDA_DEFAULT_ENV"] = prefix.name
+        prepend_path(direct_env, "PATH", prefix / "bin")
+        if (prefix / "lib").is_dir():
+            prepend_path(direct_env, "LD_LIBRARY_PATH", prefix / "lib")
+        return command, direct_env, f"path:{prefix}"
+
+    if activation_mode in {"auto", "conda"} and conda_sh is not None:
         setup = []
-        if conda_sh is not None:
-            setup.append(f". {shlex.quote(str(conda_sh))}")
+        setup.append(f". {shlex.quote(str(conda_sh))}")
         target = str(prefix) if prefix is not None else env_name
         setup.append(f"conda activate {shlex.quote(target)}")
         setup.extend(extra_shell)
@@ -325,18 +376,17 @@ def command_with_activation(
             f"could not find conda activation support for environment {env_name!r}"
         )
 
-    if activation_mode in {"auto", "path"} and prefix is not None:
-        direct_env = env.copy()
-        direct_env["CONDA_PREFIX"] = str(prefix)
-        prepend_path(direct_env, "PATH", prefix / "bin")
-        if (prefix / "lib").is_dir():
-            prepend_path(direct_env, "LD_LIBRARY_PATH", prefix / "lib")
-        return command, direct_env, f"path:{prefix}"
-
     if activation_mode == "path":
         raise RuntimeError(f"could not find environment directory for {env_name!r}")
 
-    return command, env, "current environment"
+    searched = "; ".join(
+        f"{name}: " + ", ".join(str(path) for path in candidate_env_prefixes(name))
+        for name in [env_name]
+    )
+    raise RuntimeError(
+        f"proper environment not found; running is not working for {env_name!r}. "
+        f"Searched {searched}"
+    )
 
 
 def run_child(
@@ -435,6 +485,16 @@ def parse_eftsan_rows(json_path: Path, precision: str, opt: str) -> List[Baselin
             )
         )
     return rows
+
+
+def rows_have_ok_data(rows: Sequence[BaselineRow]) -> bool:
+    return any(
+        is_ok_status(row)
+        and row.error is not None
+        and row.baseline is not None
+        and row.diff is not None
+        for row in rows
+    )
 
 
 def parse_nsan_rows(output: str, precision: str, opt: str) -> List[BaselineRow]:
@@ -743,10 +803,14 @@ def eftsan_env_settings(env_name: str) -> Tuple[Dict[str, str], List[str]]:
     extra_shell: List[str] = []
 
     eftsan_prefix = resolve_env_prefix(env_name)
-    if eftsan_prefix is not None:
+    if (
+        eftsan_prefix is not None
+        and has_eftsan_llvm_tools(eftsan_prefix)
+        and (eftsan_prefix / "lib").is_dir()
+    ):
         extra_env["LLVM10"] = str(eftsan_prefix / "bin")
         extra_env["LLVM10_LIB"] = str(eftsan_prefix / "lib")
-    else:
+    elif eftsan_prefix is None:
         extra_shell.append('export LLVM10="$CONDA_PREFIX/bin" LLVM10_LIB="$CONDA_PREFIX/lib"')
     return extra_env, extra_shell
 
@@ -786,6 +850,14 @@ def run_eftsan(
         extra_shell=extra_shell,
     )
     rows = parse_eftsan_rows(json_path, precision, opt) if json_path.is_file() else []
+    if result.returncode == 1 and rows_have_ok_data(rows):
+        result = CommandResult(
+            name=result.name,
+            returncode=0,
+            output=result.output,
+            log_path=result.log_path,
+            activation=result.activation,
+        )
     return result, rows
 
 
@@ -872,8 +944,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         for opt in opt_levels:
             for baseline in baselines:
                 label = BASELINE_LABELS[baseline]
-                print(f"Running {label} {precision} {opt}")
-                result, rows = run_baseline(baseline, args, precision, opt, results_dir)
+                print(f"Running {label} {precision} {opt}", flush=True)
+                try:
+                    result, rows = run_baseline(baseline, args, precision, opt, results_dir)
+                except RuntimeError as exc:
+                    print(f"error: {label}: {exc}", file=sys.stderr)
+                    return 2
                 command_results.append(result)
                 all_rows.extend(rows)
                 print(f"{label} log: {result.log_path}")
@@ -897,8 +973,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     print(f"Wrote combined report: {combined_report}")
     print(f"Wrote combined JSON: {combined_json}")
 
-    if all_rows:
-        return 0
     return 0 if all(result.returncode == 0 for result in command_results) else 1
 
 

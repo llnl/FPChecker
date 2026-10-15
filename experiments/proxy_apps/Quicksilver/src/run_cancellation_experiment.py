@@ -38,6 +38,8 @@ def configure_environment(app_dir):
             "clang++-fpchecker was not found. Add it to PATH or set "
             "FPCHECKER_INSTALL_BIN before running this script from " + str(app_dir)
         )
+    env["OMPI_ALLOW_RUN_AS_ROOT"] = "1"
+    env["OMPI_ALLOW_RUN_AS_ROOT_CONFIRM"] = "1"
     return env
 
 

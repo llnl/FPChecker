@@ -84,6 +84,8 @@ def configure_environment(app_dir):
     env["OMP_NUM_THREADS"] = "1"
     env["OMP_DYNAMIC"] = "FALSE"
     env["OMP_MAX_ACTIVE_LEVELS"] = "1"
+    env["OMPI_ALLOW_RUN_AS_ROOT"] = "1"
+    env["OMPI_ALLOW_RUN_AS_ROOT_CONFIRM"] = "1"
 
     try:
         mpi_show = subprocess.check_output(

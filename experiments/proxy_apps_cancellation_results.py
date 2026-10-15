@@ -15,6 +15,7 @@ from pathlib import Path
 EXPERIMENTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = EXPERIMENTS_DIR.parent
 PROXY_APPS_DIR = EXPERIMENTS_DIR / "proxy_apps"
+DEFAULT_LOG_DIR = EXPERIMENTS_DIR / "RQ_results" / "proxy_apps"
 FPCHECKER_BIN = REPO_ROOT / "bin"
 CPU_CHECKING_DIR = REPO_ROOT / "cpu_checking"
 
@@ -138,6 +139,8 @@ def candidate_env_prefixes(env_name):
         current_prefix = Path(conda_prefix)
         if current_prefix.name == env_name:
             candidates.append(current_prefix)
+        candidates.append(current_prefix / "envs" / env_name)
+        candidates.append(current_prefix.parent / env_name)
         candidates.append(current_prefix.parent / "envs" / env_name)
 
     home = Path.home()
@@ -146,13 +149,23 @@ def candidate_env_prefixes(env_name):
             home / "conda_env" / env_name,
             home / "miniconda3" / "envs" / env_name,
             home / "anaconda3" / "envs" / env_name,
+            Path("/opt/conda/envs") / env_name,
+            Path("/opt/miniconda3/envs") / env_name,
             Path("/opt/anaconda3/envs") / env_name,
         ]
     )
     conda_env_prefix = conda_env_prefixes_by_name().get(env_name)
     if conda_env_prefix is not None:
         candidates.append(conda_env_prefix)
-    return candidates
+
+    unique = []
+    seen = set()
+    for candidate in candidates:
+        text = str(candidate)
+        if text not in seen:
+            unique.append(candidate)
+            seen.add(text)
+    return unique
 
 
 def resolve_env_prefix(env_name):
@@ -169,7 +182,11 @@ def choose_fpchecker_env_name():
     current_env = os.environ.get("CONDA_DEFAULT_ENV")
     if current_env in DEFAULT_FPCHECKER_ENVS:
         return current_env
-    return DEFAULT_FPCHECKER_ENVS[0]
+    raise RuntimeError(
+        "proper environment not found; running is not working for FPChecker. "
+        "Expected tutorial_env or fpchecker_env. Searched "
+        + searched_fpchecker_envs_message()
+    )
 
 
 def default_conda_sh():
@@ -182,6 +199,8 @@ def default_conda_sh():
         candidates.append(Path(conda_prefix) / "etc" / "profile.d" / "conda.sh")
     candidates.extend(
         [
+            Path("/opt/conda/etc/profile.d/conda.sh"),
+            Path("/opt/miniconda3/etc/profile.d/conda.sh"),
             Path.home() / "miniconda3" / "etc" / "profile.d" / "conda.sh",
             Path.home() / "anaconda3" / "etc" / "profile.d" / "conda.sh",
             Path("/opt/anaconda3/etc/profile.d/conda.sh"),
@@ -231,6 +250,8 @@ class FPCheckerEnvironment:
 
 def fpchecker_env():
     env = os.environ.copy()
+    env["OMPI_ALLOW_RUN_AS_ROOT"] = "1"
+    env["OMPI_ALLOW_RUN_AS_ROOT_CONFIRM"] = "1"
     env_name = choose_fpchecker_env_name()
     prefix = resolve_env_prefix(env_name)
     activation_shell = conda_activation_shell(env_name, prefix)
@@ -269,7 +290,7 @@ def fpchecker_env():
     return FPCheckerEnvironment(env_name, env, activation_shell)
 
 
-def run_app(app, fpchecker_runtime):
+def run_app(app, fpchecker_runtime, log_dir):
     cwd = app["cwd"]
     command = app["command"]
     # print("Running {name} in {cwd} with {env_name}".format(name=app["name"],cwd=cwd,env_name=fpchecker_runtime.name,),
@@ -293,12 +314,18 @@ def run_app(app, fpchecker_runtime):
         stderr=subprocess.STDOUT,
         universal_newlines=True,
     )
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_path = log_dir / (app["name"] + ".log")
+    log_path.write_text(completed.stdout, encoding="utf-8", errors="replace")
 
     if completed.returncode != 0:
         raise RuntimeError(
-            "command failed for {name}: {cmd}\n{output}".format(
+            "command failed for {name}: {cmd}\n"
+            "Full log: {log}\n"
+            "{output}".format(
                 name=app["name"],
                 cmd=" ".join(command),
+                log=log_path,
                 output=completed.stdout,
             )
         )
@@ -511,7 +538,7 @@ def main():
     all_rows = []
 
     for app in APP_RUNS:
-        output = run_app(app, fpchecker_runtime)
+        output = run_app(app, fpchecker_runtime, DEFAULT_LOG_DIR)
         path_map = injection_line_map(app["cwd"])
         app_rows = parse_result_rows(output, app["name"], path_map)
         if not app_rows:

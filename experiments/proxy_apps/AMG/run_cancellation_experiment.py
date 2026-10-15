@@ -49,6 +49,8 @@ def configure_environment(app_dir):
         )
     env["CC"] = "FPC_INSTRUMENT_ERR_TRACKING_FP64=1 mpicc-fpchecker"
     env["OMP_NUM_THREADS"] = "1"
+    env["OMPI_ALLOW_RUN_AS_ROOT"] = "1"
+    env["OMPI_ALLOW_RUN_AS_ROOT_CONFIRM"] = "1"
     return env
 
 

@@ -112,6 +112,8 @@ def main():
 
     env = os.environ.copy()
     env["PATH"] = str(INSTALL_BIN) + os.pathsep + env.get("PATH", "")
+    env["OMPI_ALLOW_RUN_AS_ROOT"] = "1"
+    env["OMPI_ALLOW_RUN_AS_ROOT_CONFIRM"] = "1"
 
     print("Running injected build and execution...")
     run_command(["make", "clean"], app_dir, env)

@@ -8,6 +8,7 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 MIXED_PRECISION_DIR = SCRIPT_DIR / "mixed_precision"
+DEFAULT_LOG_DIR = SCRIPT_DIR / "RQ_results" / "mixed_precision"
 
 SEPARATOR = (
     "+--------------------------+------------+--------------+--------------+"
@@ -46,10 +47,17 @@ def run_case(mode, approach, directory, command):
         universal_newlines=True,
         check=False,
     )
+    DEFAULT_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_name = f"{mode}_{approach}".lower()
+    log_name = "".join(ch if ch.isalnum() else "_" for ch in log_name).strip("_")
+    log_path = DEFAULT_LOG_DIR / f"{log_name}.log"
+    log_path.write_text(result.stdout, encoding="utf-8", errors="replace")
 
     if result.returncode != 0:
         raise RuntimeError(
-            f"command failed in {directory}: {' '.join(command)}\n{result.stdout}"
+            f"command failed in {directory}: {' '.join(command)}\n"
+            f"Full log: {log_path}\n"
+            f"{result.stdout}"
         )
 
     for line in result.stdout.splitlines():
@@ -66,7 +74,11 @@ def run_case(mode, approach, directory, command):
 
             return mode, approach, fom, speedup, energy_rel_error
 
-    raise RuntimeError(f"could not find MIXED row in output from {directory}\n{result.stdout}")
+    raise RuntimeError(
+        f"could not find MIXED row in output from {directory}\n"
+        f"Full log: {log_path}\n"
+        f"{result.stdout}"
+    )
 
 
 def main():

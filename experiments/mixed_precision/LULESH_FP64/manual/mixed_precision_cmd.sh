@@ -8,6 +8,68 @@ ITERATIONS="${ITERATIONS:-20}"
 COMPILER="${CXX:-clang++}"
 export CCACHE_DISABLE=1
 
+activate_fpchecker_env_for_compiler() {
+  if command -v "$COMPILER" >/dev/null 2>&1; then
+    return 0
+  fi
+
+  if [ -n "${CXX:-}" ]; then
+    printf "compiler not found: %s\n" "$COMPILER" >&2
+    return 1
+  fi
+
+  local env_name prefix conda_sh
+  for env_name in tutorial_env fpchecker_env; do
+    for prefix in \
+      "${CONDA_PREFIX:-}/../envs/$env_name" \
+      "${CONDA_PREFIX:-}/../$env_name" \
+      "$HOME/conda_env/$env_name" \
+      "$HOME/miniconda3/envs/$env_name" \
+      "$HOME/anaconda3/envs/$env_name" \
+      "/opt/conda/envs/$env_name" \
+      "/opt/miniconda3/envs/$env_name" \
+      "/opt/anaconda3/envs/$env_name"; do
+      if [ ! -d "$prefix" ]; then
+        continue
+      fi
+      export CONDA_PREFIX="$(cd "$prefix" && pwd)"
+      export CONDA_DEFAULT_ENV="$env_name"
+      export PATH="$CONDA_PREFIX/bin:$PATH"
+      if [ -d "$CONDA_PREFIX/lib" ]; then
+        export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}"
+      fi
+      if command -v "$COMPILER" >/dev/null 2>&1; then
+        return 0
+      fi
+    done
+  done
+
+  for conda_sh in \
+    "${CONDA_SH:-}" \
+    "${CONDA_PREFIX:-}/etc/profile.d/conda.sh" \
+    "/opt/conda/etc/profile.d/conda.sh" \
+    "/opt/miniconda3/etc/profile.d/conda.sh" \
+    "$HOME/miniconda3/etc/profile.d/conda.sh" \
+    "$HOME/anaconda3/etc/profile.d/conda.sh" \
+    "/opt/anaconda3/etc/profile.d/conda.sh"; do
+    if [ ! -f "$conda_sh" ]; then
+      continue
+    fi
+    # shellcheck source=/dev/null
+    source "$conda_sh"
+    for env_name in tutorial_env fpchecker_env; do
+      if conda activate "$env_name" >/dev/null 2>&1 && command -v "$COMPILER" >/dev/null 2>&1; then
+        return 0
+      fi
+    done
+  done
+
+  printf "proper environment not found; clang++ is missing. Expected tutorial_env or fpchecker_env.\n" >&2
+  return 1
+}
+
+activate_fpchecker_env_for_compiler
+
 TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/lulesh-fp64-manual.XXXXXX")"
 STAGE_DIR="$TMP_DIR/src"
 mkdir -p "$STAGE_DIR"
