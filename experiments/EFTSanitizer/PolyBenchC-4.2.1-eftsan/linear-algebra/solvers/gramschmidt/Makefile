@@ -63,14 +63,21 @@
 
 
 
-EFT_HOME = /g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer
+# Previous hardcoded path:
+# EFT_HOME = /g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer
+EFT_HOME ?= $(abspath $(CURDIR)/../../../..)
 EFT_PASS = $(EFT_HOME)/llvm_pass/build/EFTSan/libEFTSanitizer.so
 
-POLYBENCH = /g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan
+# Previous hardcoded path:
+# POLYBENCH = /g/g90/sharmin1/tutorial/FPChecker/experiments/EFTSanitizer/PolyBenchC-4.2.1-eftsan
+POLYBENCH ?= $(EFT_HOME)/PolyBenchC-4.2.1-eftsan
 UTIL = $(POLYBENCH)/utilities
 
-LLVM10 ?= /g/g90/sharmin1/conda_env/llvm10/bin
-LLVM10_LIB ?= /g/g90/sharmin1/conda_env/llvm10/lib
+# Previous hardcoded paths:
+# LLVM10 ?= /g/g90/sharmin1/conda_env/llvm10/bin
+# LLVM10_LIB ?= /g/g90/sharmin1/conda_env/llvm10/lib
+LLVM10 ?= $(if $(CONDA_PREFIX),$(CONDA_PREFIX)/bin,$(HOME)/conda_env/llvm10/bin)
+LLVM10_LIB ?= $(if $(CONDA_PREFIX),$(CONDA_PREFIX)/lib,$(HOME)/conda_env/llvm10/lib)
 
 CC = $(LLVM10)/clang
 OPT = $(LLVM10)/opt
